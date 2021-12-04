@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [LF_Light_MainBoard_JDY08.PrjPcb]
+   Generated File[LF_UltraLight_JDY08.TXT]
+   Generated File[LF_UltraLight_JDY08.LDP]
+   Generated File[LF_UltraLight_JDY08.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 20:37:12 On 05.01.2022

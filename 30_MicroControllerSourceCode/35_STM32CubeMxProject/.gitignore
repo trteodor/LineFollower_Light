@@ -1,0 +1,11 @@
+Debug/*
+!Debug/LF_v5_Source_STM32H7.bin
+!Debug/LF_v5_Source_STM32H7.hex
+!Debug/LF_v5_Source_STM32H7.elf
+!Debug/LF_v5_Source_STM32H7.map
+Release/*
+!Release/LF_v5_Source_STM32H7.bin
+!Release/LF_v5_Source_STM32H7.hex
+!Release/LF_v5_Source_STM32H7.elf
+!Release/LF_v5_Source_STM32H7.map
+

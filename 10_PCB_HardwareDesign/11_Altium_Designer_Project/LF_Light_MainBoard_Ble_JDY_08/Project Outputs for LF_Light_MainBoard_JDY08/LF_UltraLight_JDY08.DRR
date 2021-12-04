@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: LF_UltraLight_JDY08.PcbDoc   05.01.2022  20:37:11
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : LF_UltraLight_JDY08.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.3mm (12mil)                                             Round             150       PTH        0.00mm (0.00inch)
+T2      0.4mm (16mil)                                             Round             12        PTH        0.00mm (0.00inch)
+T3      0.9mm (35mil)                                             Round             10        PTH        0.00mm (0.00inch)
+T4      1.2mm (47mil)                                             Round             3         PTH        0.00mm (0.00inch)
+T5      2mm (79mil)                                               Round             2         PTH        0.00mm (0.00inch)
+T6      2.2mm (87mil)                                             Round             2         PTH        0.00mm (0.00inch)
+T7      2.3mm (91mil)                                             Round             4         PTH        0.00mm (0.00inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              183
+
+Total Processing Time (hh:mm:ss) : 00:00:01

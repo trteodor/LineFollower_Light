@@ -1,0 +1,16 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: LF_SensorBoardFixSenBoarFixPlcmnd.PcbDoc   13/06/2023  19:04:58
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : LF_SensorBoardFixSenBoarFixPlcmnd.TXT
+EIA File   : LF_SensorBoardFixSenBoarFixPlcmnd.DRL
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.305mm (12mil)                                           Round             43        PTH        167.22mm (6.58inch)
+T2      2.3mm (91mil)                                             Round             4         PTH        110.85mm (4.36inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              47
+
+Total Processing Time (hh:mm:ss) : 00:00:00

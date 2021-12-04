@@ -1,0 +1,293 @@
+*************************************************************
+FileName = LF_SensorBoardFixSenBoarFixPlcmnd.GBR
+AutoAperture = True
+*************************************************************
+Generating : Top Pad Master
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GPT
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D14
+    D15
+    D16
+    D24
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D14
+    D15
+    D16
+*************************************************************
+
+*************************************************************
+Generating : Top Solder
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GTS
+
+    Adding Layer      : Top Solder
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D17
+    D18
+    D19
+    D20
+    D21
+    D22
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D21
+    D22
+    D28
+    D29
+*************************************************************
+
+*************************************************************
+Generating : Bottom Paste
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GBP
+
+    Adding Layer      : Bottom Paste
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D26
+    D27
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+    D12
+*************************************************************
+
+*************************************************************
+Generating : Keep-Out Layer
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GKO
+
+    Adding Layer      : Keep-Out Layer
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Bottom Pad Master
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GPB
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D24
+    D26
+    D27
+*************************************************************
+
+*************************************************************
+Generating : Milling
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM1
+
+    Adding Layer      : Milling
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : 3DT
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM13
+
+    Adding Layer      : 3DT
+
+
+Used DCodes :
+    D30
+*************************************************************
+
+*************************************************************
+Generating : 3DB
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM14
+
+    Adding Layer      : 3DB
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : MinDistB
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM18
+
+    Adding Layer      : MinDistB
+
+
+Used DCodes :
+    D32
+*************************************************************
+
+*************************************************************
+Generating : SMDSizeT
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM19
+
+    Adding Layer      : SMDSizeT
+
+
+Used DCodes :
+    D32
+    D33
+    D34
+*************************************************************
+
+*************************************************************
+Generating : SMDSizeB
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM20
+
+    Adding Layer      : SMDSizeB
+
+
+Used DCodes :
+    D32
+    D33
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GBL
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D23
+    D24
+    D25
+    D26
+    D27
+*************************************************************
+
+*************************************************************
+Generating : Top Layer
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GTL
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D14
+    D15
+    D16
+    D23
+    D24
+    D25
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 15
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM15
+
+    Adding Layer      : Mechanical 15
+
+
+Used DCodes :
+    D31
+*************************************************************
+
+*************************************************************
+Generating : MinDistT
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GM17
+
+    Adding Layer      : MinDistT
+
+
+Used DCodes :
+    D32
+*************************************************************
+
+*************************************************************
+Generating : Drill Drawing
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GD1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Drawing
+
+
+Used DCodes :
+    D34
+*************************************************************
+
+*************************************************************
+Generating : Drill Guide
+      File : LF_SensorBoardFixSenBoarFixPlcmnd.GG1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Guide
+
+
+Used DCodes :
+    D34
+*************************************************************
+
