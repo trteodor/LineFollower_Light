@@ -1,6 +1,0 @@
-Added Pin To Net: NetName=SenD1 Pin=J1-14
-Added Pin To Net: NetName=SenD1 Pin=STM32H743-42
-Added Net: Name=SenD1
-Added Pin To Net: NetName=SenD2 Pin=J1-15
-Added Pin To Net: NetName=SenD2 Pin=STM32H743-43
-Added Net: Name=SenD2
