@@ -9,4 +9,4 @@ PCB and robot Assembly in SolidWork is prepared, but a real-world prototype has 
 
 The repository contains all the files used to create this project (PCB, Assemblies, Microcontroller Source Code)
 
-[1](Picture.png)
+![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_draft.PNG)
