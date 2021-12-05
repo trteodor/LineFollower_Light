@@ -11,4 +11,4 @@ The repository contains all the files used to create this project (PCB, Assembli
 
 Used MCU - STM32H743
 
-![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_draft.PNG)
+![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_draft_pic.PNG)

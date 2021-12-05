@@ -1,0 +1,138 @@
+Protel Design System Design Rule Check
+PCB File : E:\STM32_Teo\LineFollower_Light\Altium\LF_Light_SensorBoard\LF_SensorBoard.PcbDoc
+Date     : 05.12.2021
+Time     : 14:53:44
+
+Processing Rule : Clearance Constraint (Gap=59.055mil) (InNetClass('ETH_WTÓRNA')),((InNet('GND') AND InPolygon))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNet('VT')),(InNet('GND'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=16mil) (OnLayer('Keep-Out Layer')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=15mil) (InNet('GND_ZAS')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=7mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNetClass('RS_IBIS')),(InNetClass('GND_ZAS-ON_GND'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=6mil) (IsVIA),(IsPAD)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=26mil) (HasFootprint('SW-2') or HasFootprint('SW-4') or HasFootprint('SW-6') or HasFootprint('SW-8')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=20mil) (HasFootprint('NXW-02SMD') or HasFootprint('NXW-03SMD') or HasFootprint('NXW-04SMD') or HasFootprint('NXW-05SMD') or HasFootprint('NXW-06SMD') or HasFootprint('NXW-08SMD') or HasFootprint('NXW-10SMD') or HasFootprint('NXW-12SMD') or HasFootprint('GK2X5D_SMD_(PBMTD10S)')or HasFootprint('WE-PD2SA')   or HasFootprint('LK2X10E_SMD_(BHT20S)')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=7.68mil) (HasFootprint('TQFP64')),(IsPad)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=8mil) (HasFootprint('Designator_blacking') or HasFootprint('Designator')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=15mil) (HasFootprint('Designator_60_blacking') or HasFootprint('Designator_60')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=28mil) (HasFootprint('SFT01')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNet('VT')),(InNetClass('ZAS'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNet('ON_GND')),(InNet('GND'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=15mil) (InNet('ON_GND')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=15mil) (InPolygon),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNetClass('RS_IBIS')),(InNetClass('ZAS'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNet('ON_GND')),(InNet('VT'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=7.6mil) ((InPadClass('Pady 0.5mm'))),(IsTrack  Or IsPad)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=20mil) (InNetClass('3.3V_L2_1')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=12mil) (isvia),(isvia)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=70mil) (InNet('GND_ZAS')),(InNet('GND'))
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=8mil) (Max=100mil) (Preferred=10mil) (All)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=10mil) (Max=102.362mil) (Preferred=10mil) (HasFootprint('hole_frame') or HasFootprint('hole_frame1') or HasFootprint('Designator_blacking_B&T1') or HasFootprint('Designator_blacking_B&T2') or HasFootprint('Designator_blacking_B&T3') or HasFootprint('Designator_blacking_B&T4') or HasFootprint('Designator_blacking_B&T5'))
+Rule Violations :0
+
+Processing Rule : Routing Layers(All)
+Rule Violations :0
+
+Processing Rule : Routing Via (MinHoleWidth=12mil) (MaxHoleWidth=98.425mil) (PreferredHoleWidth=20mil) (MinWidth=24mil) (MaxWidth=118.11mil) (PreferedWidth=40mil) (All)
+Rule Violations :0
+
+Processing Rule : Differential Pairs Uncoupled Length using the Gap Constraints (Min=10mil) (Max=10mil) (Prefered=10mil)  and Width Constraints (Min=15mil) (Max=15mil) (Prefered=15mil) (All)
+Rule Violations :0
+
+Processing Rule : SMD To Corner (Distance=0.01mil) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=12mil) (Max=125.984mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=118.11mil) (Max=118.11mil) (HasFootprint('hole_frame') or HasFootprint('hole_frame1'))
+Rule Violations :0
+
+Processing Rule : Pads and Vias to follow the Drill pairs settings
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=5.5mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=20mil) (IsVia),(IsPad)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0mil) (HasFootprint('LOGO-05X18_so')),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=6mil) (IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=1mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=0mil) (HasFootprint('JMP2_SMD')),(All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+
+Violations Detected : 0
+Waived Violations : 0
+Time Elapsed        : 00:00:01
