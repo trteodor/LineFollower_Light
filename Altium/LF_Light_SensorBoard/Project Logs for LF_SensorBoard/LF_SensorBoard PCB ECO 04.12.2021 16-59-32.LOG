@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator=U? NewDesignator=U7
+Added Member To Class: ClassName=LF_SensorBoard Member=Component U1 KTIR0711S
+Added Member To Class: ClassName=LF_SensorBoard Member=Component U5 KTIR0711S
+Added Member To Class: ClassName=LF_SensorBoard Member=Component U6 KTIR0711S
+Added Member To Class: ClassName=LF_SensorBoard Member=Component U10 KTIR0711S
+Added Member To Class: ClassName=LF_SensorBoard Member=Component U11 KTIR0711S
