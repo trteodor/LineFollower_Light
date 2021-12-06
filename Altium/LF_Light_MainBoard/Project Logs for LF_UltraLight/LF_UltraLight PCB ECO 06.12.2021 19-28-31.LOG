@@ -1,4 +1,0 @@
-Change Component Designator: OldDesignator=DEBUG NewDesignator=P3
-Change Component Designator: OldDesignator=STM32H743 NewDesignator=U5
-Added Member To Class: ClassName=LF_UltraLight Member=Component P3 Header 4
-Added Member To Class: ClassName=LF_UltraLight Member=Component U5 STM32H743VIT6

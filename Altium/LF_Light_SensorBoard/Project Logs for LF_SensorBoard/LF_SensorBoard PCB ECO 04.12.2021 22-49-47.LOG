@@ -1,6 +1,0 @@
-Added Component: Designator=R13(0805R)
-Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
-Add component (AddParameter): Name = "Nazwa"; Value = "160k-1%"; VariantName = "[No Variations]"
-Added Pin To Net: NetName=VCC Pin=R13-1
-Added Pin To Net: NetName=ADC1_11 Pin=R13-2
-Added Member To Class: ClassName=LF_SensorBoard Member=Component R13 18k

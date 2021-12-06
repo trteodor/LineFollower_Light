@@ -1,5 +1,0 @@
-Layer Pairs Export File for PCB: E:\STM32_Teo\LineFollower_Light\Altium\LF_Light_MainBoard\LF_UltraLight.PcbDoc
-LayersSetName=Top_Bot_Thru_Holes|DrillFile=lf_ultralight.txt|DrillLayers=gtl,g1,g2,gbl
-LayersSetName=Top_Int1 (GND)_Blind_Vias|DrillFile=lf_ultralight.tx1|DrillLayers=gtl,g1
-LayersSetName=Top_Int2 (PWR)_Blind_Vias|DrillFile=lf_ultralight.tx2|DrillLayers=gtl,g1,g2
-LayersSetName=Int2 (PWR)_Bot_Blind_Vias|DrillFile=lf_ultralight.tx3|DrillLayers=g2,gbl
