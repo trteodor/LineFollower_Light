@@ -1,0 +1,48 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: LF_UltraLight_HM11.PcbDoc   06.12.2021  20:09:15
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : LF_UltraLight_HM11.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.3mm (12mil)                                             Round             13        PTH        0.00mm (0.00inch)
+T2      0.4mm (16mil)                                             Round             12        PTH        0.00mm (0.00inch)
+T4      0.8mm (31mil)                                             Round             3         PTH        0.00mm (0.00inch)
+T5      0.9mm (35mil)                                             Round             10        PTH        0.00mm (0.00inch)
+T6      2mm (79mil)                                               Round             2         PTH        0.00mm (0.00inch)
+T7      2.2mm (87mil)                                             Round             2         PTH        0.00mm (0.00inch)
+T8      2.3mm (91mil)                                             Round             4         PTH        0.00mm (0.00inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              46
+Layer Pair : Top Layer to Int1 (GND)
+ASCII RoundHoles File : LF_UltraLight_HM11.TX1
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.3mm (12mil)                                             Round             28        PTH        0.00mm (0.00inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              28
+Layer Pair : Top Layer to Int2 (PWR)
+ASCII RoundHoles File : LF_UltraLight_HM11.TX2
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.3mm (12mil)                                             Round             90        PTH        0.00mm (0.00inch)
+T3      0.508mm (20mil)                                           Round             2         PTH        0.00mm (0.00inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              92
+Layer Pair : Int2 (PWR) to Bottom Layer
+ASCII RoundHoles File : LF_UltraLight_HM11.TX3
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.3mm (12mil)                                             Round             83        PTH        0.00mm (0.00inch)
+T3      0.508mm (20mil)                                           Round             2         PTH        0.00mm (0.00inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              85
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              251
+
+Total Processing Time (hh:mm:ss) : 00:00:01
