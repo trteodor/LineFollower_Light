@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [LF_SensorBoard.PrjPcb]
+   Generated File[LF_SensorBoard.TXT]
+   Generated File[LF_SensorBoard.DRL]
+   Generated File[LF_SensorBoard.LDP]
+   Generated File[LF_SensorBoard.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 18:52:12 On 08.12.2021
