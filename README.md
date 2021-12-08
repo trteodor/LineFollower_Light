@@ -2,7 +2,7 @@
 
 This project is in develop and test phase, (its only draft). 
 
-* If i will have time i will continue the project! :) 
+* If i will have time i will continue the project!  :) 
 
 # Here is my previous working and tested Line Follower project:
 * https://github.com/trteodor/Line_Follower_STM32H7
