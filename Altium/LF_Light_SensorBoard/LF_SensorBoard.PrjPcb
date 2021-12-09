@@ -74,118 +74,110 @@ GenerateClassCluster=0
 DocumentUniqueId=VEAKDUEE
 
 [GeneratedDocument1]
-DocumentPath=Project Outputs for LF_SensorBoard\Design Rule Check - LF_SensorBoard.html
-DItemRevisionGUID=
-
-[GeneratedDocument2]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.DRL
 DItemRevisionGUID=
 
-[GeneratedDocument3]
+[GeneratedDocument2]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.DRR
 DItemRevisionGUID=
 
-[GeneratedDocument4]
+[GeneratedDocument3]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.EXTREP
 DItemRevisionGUID=
 
-[GeneratedDocument5]
+[GeneratedDocument4]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GBL
 DItemRevisionGUID=
 
-[GeneratedDocument6]
+[GeneratedDocument5]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GBO
 DItemRevisionGUID=
 
-[GeneratedDocument7]
+[GeneratedDocument6]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GBP
 DItemRevisionGUID=
 
-[GeneratedDocument8]
+[GeneratedDocument7]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GBS
 DItemRevisionGUID=
 
-[GeneratedDocument9]
+[GeneratedDocument8]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GD1
 DItemRevisionGUID=
 
-[GeneratedDocument10]
+[GeneratedDocument9]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GG1
 DItemRevisionGUID=
 
-[GeneratedDocument11]
-DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GKO
-DItemRevisionGUID=
-
-[GeneratedDocument12]
+[GeneratedDocument10]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM1
 DItemRevisionGUID=
 
-[GeneratedDocument13]
+[GeneratedDocument11]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM13
 DItemRevisionGUID=
 
-[GeneratedDocument14]
+[GeneratedDocument12]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM14
 DItemRevisionGUID=
 
-[GeneratedDocument15]
+[GeneratedDocument13]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM15
 DItemRevisionGUID=
 
-[GeneratedDocument16]
+[GeneratedDocument14]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM17
 DItemRevisionGUID=
 
-[GeneratedDocument17]
+[GeneratedDocument15]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM18
 DItemRevisionGUID=
 
-[GeneratedDocument18]
+[GeneratedDocument16]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM19
 DItemRevisionGUID=
 
-[GeneratedDocument19]
+[GeneratedDocument17]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GM20
 DItemRevisionGUID=
 
-[GeneratedDocument20]
+[GeneratedDocument18]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GPB
 DItemRevisionGUID=
 
-[GeneratedDocument21]
+[GeneratedDocument19]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GPT
 DItemRevisionGUID=
 
-[GeneratedDocument22]
+[GeneratedDocument20]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GTL
 DItemRevisionGUID=
 
-[GeneratedDocument23]
+[GeneratedDocument21]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GTO
 DItemRevisionGUID=
 
-[GeneratedDocument24]
+[GeneratedDocument22]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GTP
 DItemRevisionGUID=
 
-[GeneratedDocument25]
+[GeneratedDocument23]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.GTS
 DItemRevisionGUID=
 
-[GeneratedDocument26]
+[GeneratedDocument24]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.LDP
 DItemRevisionGUID=
 
-[GeneratedDocument27]
+[GeneratedDocument25]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.REP
 DItemRevisionGUID=
 
-[GeneratedDocument28]
+[GeneratedDocument26]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.RUL
 DItemRevisionGUID=
 
-[GeneratedDocument29]
+[GeneratedDocument27]
 DocumentPath=Project Outputs for LF_SensorBoard\LF_SensorBoard.TXT
 DItemRevisionGUID=
 
@@ -347,7 +339,7 @@ OutputDefault20=0
 [OutputGroup2]
 Name=Simulator Outputs
 Description=
-TargetPrinter=Microsoft Print to PDF
+TargetPrinter=Samsung M332x 382x 402x Series (USB001)
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|PrintWhat=1
 
 [OutputGroup3]

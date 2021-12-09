@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------
-Gerber File Extension Report For: LF_UltraLight_JDY08.GBR   09.12.2021  00:27:26
+Gerber File Extension Report For: LF_UltraLight_JDY08.GBR   09.12.2021  10:10:15
 ------------------------------------------------------------------------------------------
 
 
@@ -17,19 +17,6 @@ Layer Extension     Layer Description
 .GBP                Bottom Paste                            
 .GBO                Bottom Overlay                          
 .GM1                Milling                                 
-.GM7                Top 3D Body                             
-.GM9                Top Courtyard                           
-.GM13               3DT                                     
-.GM14               3DB                                     
-.GM15               Mechanical 15                           
-.GM16               Top Assembly                            
-.GM17               MinDistT                                
-.GM18               MinDistB                                
-.GM19               SMDSizeT                                
-.GM20               SMDSizeB                                
-.GM26               Top Component Center                    
-.GPT                Top Pad Master                          
-.GPB                Bottom Pad Master                       
 .GD1                Drill Drawing                           
 .GG1                Drill Guide                             
 ------------------------------------------------------------------------------------------
