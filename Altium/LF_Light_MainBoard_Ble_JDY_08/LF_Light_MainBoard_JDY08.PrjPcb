@@ -41,6 +41,40 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
+DocumentPath=v1.4_ThruHolesAndCorrectPlacement.Cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document2]
+DocumentPath=v1.4_ThrHolesAndCorrPlacementDrill.Cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document3]
 DocumentPath=LF_UltraLight_JDY08.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -57,7 +91,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=LJXRPJCI
 
-[Document2]
+[Document4]
 DocumentPath=LF_Light_JDY08.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -73,40 +107,6 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NWCUDYAK
-
-[Document3]
-DocumentPath=ShouldBeOnlyThruHoles.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document4]
-DocumentPath=DrillHoles.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
 
 [GeneratedDocument1]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\Design Rule Check - LF_UltraLight_JDY08.html
@@ -149,130 +149,42 @@ DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GD
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GD2
-DItemRevisionGUID=
-
-[GeneratedDocument12]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GD3
-DItemRevisionGUID=
-
-[GeneratedDocument13]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GD4
-DItemRevisionGUID=
-
-[GeneratedDocument14]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GG1
 DItemRevisionGUID=
 
-[GeneratedDocument15]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GG2
-DItemRevisionGUID=
-
-[GeneratedDocument16]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GG3
-DItemRevisionGUID=
-
-[GeneratedDocument17]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GG4
-DItemRevisionGUID=
-
-[GeneratedDocument18]
+[GeneratedDocument12]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM1
 DItemRevisionGUID=
 
-[GeneratedDocument19]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM7
-DItemRevisionGUID=
-
-[GeneratedDocument20]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM9
-DItemRevisionGUID=
-
-[GeneratedDocument21]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM13
-DItemRevisionGUID=
-
-[GeneratedDocument22]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM14
-DItemRevisionGUID=
-
-[GeneratedDocument23]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM15
-DItemRevisionGUID=
-
-[GeneratedDocument24]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM16
-DItemRevisionGUID=
-
-[GeneratedDocument25]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM17
-DItemRevisionGUID=
-
-[GeneratedDocument26]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM18
-DItemRevisionGUID=
-
-[GeneratedDocument27]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM19
-DItemRevisionGUID=
-
-[GeneratedDocument28]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM20
-DItemRevisionGUID=
-
-[GeneratedDocument29]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GM26
-DItemRevisionGUID=
-
-[GeneratedDocument30]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GPB
-DItemRevisionGUID=
-
-[GeneratedDocument31]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GPT
-DItemRevisionGUID=
-
-[GeneratedDocument32]
+[GeneratedDocument13]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GTL
 DItemRevisionGUID=
 
-[GeneratedDocument33]
+[GeneratedDocument14]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GTO
 DItemRevisionGUID=
 
-[GeneratedDocument34]
+[GeneratedDocument15]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GTP
 DItemRevisionGUID=
 
-[GeneratedDocument35]
+[GeneratedDocument16]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.GTS
 DItemRevisionGUID=
 
-[GeneratedDocument36]
+[GeneratedDocument17]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.LDP
 DItemRevisionGUID=
 
-[GeneratedDocument37]
+[GeneratedDocument18]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.REP
 DItemRevisionGUID=
 
-[GeneratedDocument38]
+[GeneratedDocument19]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.RUL
 DItemRevisionGUID=
 
-[GeneratedDocument39]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.TX1
-DItemRevisionGUID=
-
-[GeneratedDocument40]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.TX2
-DItemRevisionGUID=
-
-[GeneratedDocument41]
-DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.TX3
-DItemRevisionGUID=
-
-[GeneratedDocument42]
+[GeneratedDocument20]
 DocumentPath=Project Outputs for LF_Light_MainBoard_JDY08\LF_UltraLight_JDY08.TXT
 DItemRevisionGUID=
 
