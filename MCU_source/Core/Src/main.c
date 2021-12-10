@@ -35,6 +35,9 @@
 
 #include <stdio.h>
 
+#include "ranging_vl53l0x.h"
+#include "vl53l0x_api.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,6 +95,80 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	Enc_AddEncoderImpulsIntoImpulsSum(GPIO_Pin); //Application/Src/Encoders_Module.c
 }
 
+
+static VL53L0X_Error initSensor( VL53L0X_Dev_t * device )
+{
+    VL53L0X_Error Status=VL53L0X_ERROR_NONE;
+
+
+    static uint32_t refSpadCount     = 0;                  //для процесса конфигурации датчиков
+    static uint8_t  isApertureSpads  = 0;                   //для процесса конфигурации датчиков
+    static uint8_t  VhvSettings      = 0;                     //для процесса конфигурации датчиков
+    static uint8_t  PhaseCal         = 0;                     //для процесса конфигурации датчиков
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetDeviceAddress( device, 0x51 );
+        device->I2cDevAddr=0x51;
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_DataInit( device );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_StaticInit( device );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_PerformRefSpadManagement( device, &refSpadCount, &isApertureSpads);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_PerformRefCalibration( device, &VhvSettings, &PhaseCal);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetReferenceSpads( device, refSpadCount, isApertureSpads);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetRefCalibration( device, VhvSettings, PhaseCal);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetDeviceMode( device, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25*65536) );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32*65536) );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status =VL53L0X_SetMeasurementTimingBudgetMicroSeconds( device,	20000 );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_StartMeasurement( device );
+    }
+
+    return Status;
+}
 /* USER CODE END 0 */
 
 /**
@@ -148,6 +225,28 @@ int main(void)
   HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
   static uint16_t encHtim4Val=0, encHtim8Val=0 ;
   static uint32_t SavedTimeLocalTest =0 ;
+
+
+  static VL53L0X_Dev_t device;
+
+  static volatile uint16_t res = 0;
+
+  // дефолты
+  device.I2cHandle=&hi2c2;
+  device.I2cDevAddr=0x52;
+  device.Present=0;
+  device.Id=0;
+
+
+  initSensor( &device );
+
+
+  static uint8_t data_ready;
+  static VL53L0X_RangingMeasurementData_t result;
+  static VL53L0X_Error Status;
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -156,13 +255,28 @@ int main(void)
   {
 	  if(SavedTimeLocalTest + 100 < HAL_GetTick() )
 		  {
-		  SavedTimeLocalTest = HAL_GetTick() ;
+			  SavedTimeLocalTest = HAL_GetTick() ;
 
-		  encHtim4Val = TIM4->CNT;
-//		  uint16_t wart1 = TIM4->CCR1;
-//		  uint16_t wart2 = TIM4->CCR2;
-//		  HAL_UART_Transmit(&huart2, "SFFS", 20, 100);
-		  encHtim8Val = TIM8->CNT;
+			  encHtim4Val = TIM4->CNT;
+	//		  uint16_t wart1 = TIM4->CCR1;
+	//		  uint16_t wart2 = TIM4->CCR2;
+	//		  HAL_UART_Transmit(&huart2, "SFFS", 20, 100);
+			  encHtim8Val = TIM8->CNT;
+
+
+		        Status=VL53L0X_GetMeasurementDataReady(&device, &data_ready);
+
+		        if( Status == VL53L0X_ERROR_NONE )
+		        {
+		            Status = VL53L0X_GetRangingMeasurementData(&device, &result);
+
+//		            HAL_UART_Transmit(&huart2, "SFFS", 20, 100); result.RangeMilliMeter;
+
+		            if (Status == VL53L0X_ERROR_NONE)
+		            {
+		                Status = VL53L0X_ClearInterruptMask(&device,0);
+		            }
+		        }
 		  }
 
 	  LF_App_MainTask(); //Application/Src/LF_AppMain
