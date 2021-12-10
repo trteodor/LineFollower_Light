@@ -277,9 +277,9 @@ void HM10Ble_ExecuteCommand(HM10BleCommand_t HM10BLE_Command)
 	}
 	case IrSensor ://?
 	{
-		IrModule.Ir_State = atoi((char *)HM10BLE_App.ReceiveBuffer);
-		uint32_t tmpIr_state= IrModule.Ir_State;
-		EEPROM_WRITE_INT(EEPROM_IrSensorState_Addr,(int *)&tmpIr_state);
+//		IrModule.Ir_State = atoi((char *)HM10BLE_App.ReceiveBuffer);
+//		uint32_t tmpIr_state= IrModule.Ir_State;
+//		EEPROM_WRITE_INT(EEPROM_IrSensorState_Addr,(int *)&tmpIr_state);
 	break;
 	}
 	case LedMode :
@@ -437,10 +437,10 @@ static Ble_AppStatus SendActualDataFor_Adv_ScreenToM_AppFun()
 		 }
 
 		  if (DataToSendQueue==1){
-		  itoa(IrModule.Ir_State,after_con_val ,10);
-		  strcat(after_con_val, IrSensor_d);
-		  strcat(BuffToBLE,after_con_val );
-		  HM10BLE_Tx((uint8_t *)BuffToBLE, sizeof(BuffToBLE));
+//		  itoa(IrModule.Ir_State,after_con_val ,10);
+//		  strcat(after_con_val, IrSensor_d);
+//		  strcat(BuffToBLE,after_con_val );
+//		  HM10BLE_Tx((uint8_t *)BuffToBLE, sizeof(BuffToBLE));
 		  DataToSendQueue++;
 		  return BLE_OK;
 		  }

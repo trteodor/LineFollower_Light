@@ -143,12 +143,28 @@ int main(void)
   LL_TIM_EnableCounter(TIM2);
 
   LF_App_MainConfig(); //Application/Src/LF_AppMain
+
+  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
+  static uint16_t encHtim4Val=0, encHtim8Val=0 ;
+  static uint32_t SavedTimeLocalTest =0 ;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(SavedTimeLocalTest + 100 < HAL_GetTick() )
+		  {
+		  SavedTimeLocalTest = HAL_GetTick() ;
+
+		  encHtim4Val = TIM4->CNT;
+//		  uint16_t wart1 = TIM4->CCR1;
+//		  uint16_t wart2 = TIM4->CCR2;
+//		  HAL_UART_Transmit(&huart2, "SFFS", 20, 100);
+		  encHtim8Val = TIM8->CNT;
+		  }
+
 	  LF_App_MainTask(); //Application/Src/LF_AppMain
     /* USER CODE END WHILE */
 

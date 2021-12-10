@@ -8,7 +8,6 @@
 #include "gpio.h"
 
 #include "LF_AppMain.h"
-#include "TSOP2236_T.h"
 #include "PID_Reg_Module.h"
 #include "HM10_BleModule.h"
 #include "EEPROM.h"
@@ -43,7 +42,6 @@ void LF_App_MainConfig(void)
 	EEPROM_WriteEnable();
 	BlinkLedInit();
 	HM10BLE_Init();
-	IR_ModInit();
 	SM_SensorModuleInit();
 	PID_Init();
 
@@ -54,7 +52,6 @@ void LF_App_MainConfig(void)
 void LF_App_MainTask(void) //only one Task without any RTOS, all works fine -- for now the solution is inaf :)
 {
 	HM10Ble_Task();
-	IR_Task();
 	Speed_ProfileFunction();
 	PID_Task();
 	BlinkLedTask();

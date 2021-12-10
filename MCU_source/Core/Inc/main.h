@@ -70,24 +70,30 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define TIM15_CH1_MotPWM_Pin GPIO_PIN_5
-#define TIM15_CH1_MotPWM_GPIO_Port GPIOE
-#define TIM15_CH2_MotPWM_Pin GPIO_PIN_6
-#define TIM15_CH2_MotPWM_GPIO_Port GPIOE
+#define TIM15_CH1_MotPWM1_1_Pin GPIO_PIN_5
+#define TIM15_CH1_MotPWM1_1_GPIO_Port GPIOE
+#define TIM15_CH2_MotPWM1_2_Pin GPIO_PIN_6
+#define TIM15_CH2_MotPWM1_2_GPIO_Port GPIOE
+#define SenD1_Pin GPIO_PIN_12
+#define SenD1_GPIO_Port GPIOE
+#define SenD2_Pin GPIO_PIN_13
+#define SenD2_GPIO_Port GPIOE
+#define VL53_INT_Pin GPIO_PIN_14
+#define VL53_INT_GPIO_Port GPIOE
+#define VL53_XSHUT_Pin GPIO_PIN_15
+#define VL53_XSHUT_GPIO_Port GPIOE
 #define I2C2_SCL_VL53_Pin GPIO_PIN_10
 #define I2C2_SCL_VL53_GPIO_Port GPIOB
 #define I2C2_SDA_VL53_Pin GPIO_PIN_11
 #define I2C2_SDA_VL53_GPIO_Port GPIOB
-#define TIM12_CH1_MotPWM_Pin GPIO_PIN_14
-#define TIM12_CH1_MotPWM_GPIO_Port GPIOB
-#define TIM12_CH2_MotPWM_Pin GPIO_PIN_15
-#define TIM12_CH2_MotPWM_GPIO_Port GPIOB
-#define TIM8_CH1_InCaptureDirect_Pin GPIO_PIN_6
-#define TIM8_CH1_InCaptureDirect_GPIO_Port GPIOC
-#define TIM8_Ch2_InCaptureDirect_Pin GPIO_PIN_7
-#define TIM8_Ch2_InCaptureDirect_GPIO_Port GPIOC
+#define TIM12_CH1_MotPWM2_2_Pin GPIO_PIN_14
+#define TIM12_CH1_MotPWM2_2_GPIO_Port GPIOB
+#define TIM12_CH2_MotPWM2_1_Pin GPIO_PIN_15
+#define TIM12_CH2_MotPWM2_1_GPIO_Port GPIOB
 #define LDD1_Pin GPIO_PIN_15
 #define LDD1_GPIO_Port GPIOA
+#define PWRC_BLE_Pin GPIO_PIN_4
+#define PWRC_BLE_GPIO_Port GPIOD
 #define TIM4_CH1_ENK1_1_Pin GPIO_PIN_6
 #define TIM4_CH1_ENK1_1_GPIO_Port GPIOB
 #define TIM4_CH2_ENK1_2_Pin GPIO_PIN_7

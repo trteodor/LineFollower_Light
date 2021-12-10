@@ -16,20 +16,20 @@ extern uint32_t  us100Timer;
 
 __inline void Enc_AddEncoderImpulsIntoImpulsSum(uint16_t GPIO_Pin)
 {
-	if(GPIO_Pin==ENK1_Pin){
-		Enc_Module.RightEncoderImpulsCount++;
-	}
-	if(GPIO_Pin==ENK2_Pin)
-	{
-		Enc_Module.RightEncoderImpulsCount++;
-	}
-	if( GPIO_Pin==ENK3_Pin){
-		Enc_Module.LeftEncoderImpulsCount++;
-	}
-	if(GPIO_Pin==ENK4_Pin)
-	{
-		Enc_Module.LeftEncoderImpulsCount++;
-	}
+//	if(GPIO_Pin==ENK1_Pin){
+//		Enc_Module.RightEncoderImpulsCount++;
+//	}
+//	if(GPIO_Pin==ENK2_Pin)
+//	{
+//		Enc_Module.RightEncoderImpulsCount++;
+//	}
+//	if( GPIO_Pin==ENK3_Pin){
+//		Enc_Module.LeftEncoderImpulsCount++;
+//	}
+//	if(GPIO_Pin==ENK4_Pin)
+//	{
+//		Enc_Module.LeftEncoderImpulsCount++;
+//	}
 }
 
 void Enc_ResetModule()

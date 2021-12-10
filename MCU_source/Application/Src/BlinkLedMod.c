@@ -26,8 +26,8 @@ void BlinkLedTask()
 
 			 // HAL_GPIO_WritePin(LDD1_GPIO_Port, LDD1_Pin,GPIO_PIN_SET);
 			//  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
-			  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-			  HAL_GPIO_TogglePin(LD4_GPIO_Port, LD4_Pin);
+//			  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+//			  HAL_GPIO_TogglePin(LD4_GPIO_Port, LD4_Pin);
 	  }
 	}
 }

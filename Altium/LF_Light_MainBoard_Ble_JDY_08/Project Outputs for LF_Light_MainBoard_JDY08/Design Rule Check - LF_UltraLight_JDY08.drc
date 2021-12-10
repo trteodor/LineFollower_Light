@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : E:\STM32_Teo\LineFollower_Light\Altium\LF_Light_MainBoard_Ble_JDY_08\LF_UltraLight_JDY08.PcbDoc
-Date     : 09.12.2021
-Time     : 13:58:19
+Date     : 10.12.2021
+Time     : 19:08:10
 
 Processing Rule : Clearance Constraint (Gap=28mil) (HasFootprint('SFT01')),(All)
 Rule Violations :0

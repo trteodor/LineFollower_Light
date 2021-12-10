@@ -23,7 +23,6 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "TSOP2236_T.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,8 +43,6 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 volatile uint32_t  us100Timer=0;
-extern RC5_Status RC5_100usTimer();
-extern RC5Struct TSOP2236;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -253,7 +250,6 @@ void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
 	us100Timer++;
-	RC5_100usTimer();
   /* USER CODE END TIM2_IRQn 0 */
   /* USER CODE BEGIN TIM2_IRQn 1 */
 LL_TIM_ClearFlag_CC1(TIM2);
