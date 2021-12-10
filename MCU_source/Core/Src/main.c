@@ -101,10 +101,10 @@ static VL53L0X_Error initSensor( VL53L0X_Dev_t * device )
     VL53L0X_Error Status=VL53L0X_ERROR_NONE;
 
 
-    static uint32_t refSpadCount     = 0;                  //для процесса конфигурации датчиков
-    static uint8_t  isApertureSpads  = 0;                   //для процесса конфигурации датчиков
-    static uint8_t  VhvSettings      = 0;                     //для процесса конфигурации датчиков
-    static uint8_t  PhaseCal         = 0;                     //для процесса конфигурации датчиков
+    static uint32_t refSpadCount     = 0;
+    static uint8_t  isApertureSpads  = 0;
+    static uint8_t  VhvSettings      = 0;
+    static uint8_t  PhaseCal         = 0;
 
     if (Status == VL53L0X_ERROR_NONE)
     {
@@ -231,7 +231,6 @@ int main(void)
 
   static volatile uint16_t res = 0;
 
-  // дефолты
   device.I2cHandle=&hi2c2;
   device.I2cDevAddr=0x52;
   device.Present=0;
