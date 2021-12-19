@@ -4,3 +4,4 @@
 
 Used MCU: STM32H743VITx
 LQFP100
+* But you can use compatible MCU for example - STM32H750VBTx
