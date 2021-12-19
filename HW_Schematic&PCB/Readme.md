@@ -14,4 +14,4 @@ Some of the most important items or items not shown in the altium schematics:
 * https://botland.com.pl/akumulatory-li-pol-2s-74v-/8973-pakiet-li-pol-dualsky-250mah-30c-2s-74v-eco-s-6941047104631.html or
 * https://botland.com.pl/akumulatory-li-pol-2s-74v-/8248-pakiet-li-pol-dualsky-150mah-30c-2s-74v-eco-s-6941047106321.html 
 * Distance sensor VL53
-* Bluetooth Low Energy Module JDY-10
+* Bluetooth Low Energy Module JDY-08
