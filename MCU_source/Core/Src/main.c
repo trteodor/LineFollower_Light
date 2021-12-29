@@ -219,6 +219,8 @@ int main(void)
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
+/* MPU-6050 Detected at 0x69 */
+
   LF_App_MainConfig(); //Application/Src/LF_AppMain
 
 //  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
