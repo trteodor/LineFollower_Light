@@ -74,6 +74,10 @@ void Error_Handler(void);
 #define TIM15_CH1_MotPWM1_1_GPIO_Port GPIOE
 #define TIM15_CH2_MotPWM1_2_Pin GPIO_PIN_6
 #define TIM15_CH2_MotPWM1_2_GPIO_Port GPIOE
+#define LD1_Pin GPIO_PIN_1
+#define LD1_GPIO_Port GPIOC
+#define LD2_Pin GPIO_PIN_2
+#define LD2_GPIO_Port GPIOC
 #define SenD1_Pin GPIO_PIN_12
 #define SenD1_GPIO_Port GPIOE
 #define SenD2_Pin GPIO_PIN_13

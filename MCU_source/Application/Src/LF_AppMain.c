@@ -186,8 +186,8 @@ static void LF_Robot_Stop()
     __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);
     __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue);
 
-    __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_3,MaxPWMValue);
-    __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_4,MaxPWMValue);
+    __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);
+    __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
 
 }
 
@@ -286,8 +286,8 @@ static void ForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
   __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue);//-->> Forward
   __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed);
 
-  __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_3,MaxPWMValue);
-  __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_4,MaxPWMValue - LeftMotorSpeed); //-->> Forward
+  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);
+  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed); //-->> Forward
 
 }
 
@@ -295,15 +295,15 @@ static void RightMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue - RightMotorSpeed);
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);  //-->> Reverse tylu
-	  __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_3,MaxPWMValue);
-	  __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_4,MaxPWMValue - LeftMotorSpeed); //-->> Forward
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed); //-->> Forward
 }
 static void LeftMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue); //-->> Forward
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed);
-	  __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_3,MaxPWMValue - LeftMotorSpeed); //-->> Reverse
-	  __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_4,MaxPWMValue);
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue - LeftMotorSpeed); //-->> Reverse
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
 }
 
 void Motor_PWM_Init()
@@ -311,14 +311,14 @@ void Motor_PWM_Init()
     HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
 
-    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
-    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
+    HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
 
     __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,0);
     __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,0);
 
-    __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_3,0);
-    __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_4,0);
+    __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,0);
+    __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,0);
 }
 
 static void EEPROM_ReadTryDetectEndLineMarkState()

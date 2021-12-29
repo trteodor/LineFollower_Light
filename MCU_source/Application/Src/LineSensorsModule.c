@@ -14,7 +14,7 @@ static void Read_SensorsValue_From_EEPROM();
 
 void SM_SensorModuleInit()
 {
-	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)SensorModule.SensorADCValues,8); //Turn on Sensor Read
+	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)SensorModule.SensorADCValues,12); //Turn on Sensor Read
 	Read_SensorsValue_From_EEPROM();
 }
 

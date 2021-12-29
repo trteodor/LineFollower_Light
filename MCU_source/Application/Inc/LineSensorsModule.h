@@ -6,7 +6,7 @@
 typedef struct
 {
 	float PositionErrorValue;
-	uint16_t SensorADCValues[8];
+	uint16_t SensorADCValues[12];
 	float SensorErrorValue[7];
 	float SensorErrorMaxValue;
 	int LineDetectValue[8];
