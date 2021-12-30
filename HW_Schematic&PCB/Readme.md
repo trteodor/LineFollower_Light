@@ -1,3 +1,6 @@
+# This PCB have errors (29.12.2021) i'll fix it in next days
+
+
 Altium Designer viewer - is free, so you could be able to open this files, and view schematic and PCB.
 
 Production files are attached in the appropriate folders.

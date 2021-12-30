@@ -20,3 +20,10 @@ The repository contains all the files used to create this project (PCB, Assembli
 Used MCU - STM32H743
 
 ![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_draft_pic.PNG)
+
+
+
+Today (29.12.2021) I assebly frist prototype PCB, but one shame error is detected, anyway LF working, I'll fix the error then i'll contiune...
+
+
+![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/269713901_587788428988135_3599895833345253289_n.jpg)
