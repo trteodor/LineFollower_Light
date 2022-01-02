@@ -1,4 +1,4 @@
-DRC Rules Export File for PCB: E:\STM32_Teo\LineFollower_Light\Altium\LF_Light_MainBoard_Ble_JDY_08\LF_UltraLight_JDY08.PcbDoc
+DRC Rules Export File for PCB: E:\STM32_Teo\LineFollower_Light\HW_Schematic&PCB\Altium\LF_Light_MainBoard_Ble_JDY_08\LF_UltraLight_JDY08.PcbDoc
 RuleKind=Clearance|RuleName=Clearance_7.68mil|Scope=Board|Minimum=7.68
 RuleKind=Width|RuleName=Width_Ramka|Scope=Board|Minimum=10.00
 RuleKind=Clearance|RuleName=VIA-PAD|Scope=Board|Minimum=6.00

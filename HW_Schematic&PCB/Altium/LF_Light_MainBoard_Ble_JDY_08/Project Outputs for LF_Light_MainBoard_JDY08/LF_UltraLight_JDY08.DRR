@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------------------------------------
-NCDrill File Report For: LF_UltraLight_JDY08.PcbDoc   09.12.2021  13:56:46
+NCDrill File Report For: LF_UltraLight_JDY08.PcbDoc   02.01.2022  18:31:08
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Layer Pair : Top Layer to Bottom Layer
@@ -7,7 +7,7 @@ ASCII RoundHoles File : LF_UltraLight_JDY08.TXT
 
 Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
 ----------------------------------------------------------------------------------------------------------------------------------
-T1      0.3mm (12mil)                                             Round             147       PTH        0.00mm (0.00inch)
+T1      0.3mm (12mil)                                             Round             150       PTH        0.00mm (0.00inch)
 T2      0.4mm (16mil)                                             Round             12        PTH        0.00mm (0.00inch)
 T3      0.7mm (28mil)                                             Round             3         PTH        0.00mm (0.00inch)
 T4      0.9mm (35mil)                                             Round             10        PTH        0.00mm (0.00inch)
@@ -15,6 +15,6 @@ T5      2mm (79mil)                                               Round         
 T6      2.2mm (87mil)                                             Round             2         PTH        0.00mm (0.00inch)
 T7      2.3mm (91mil)                                             Round             4         PTH        0.00mm (0.00inch)
 ----------------------------------------------------------------------------------------------------------------------------------
-Totals                                                                              180
+Totals                                                                              183
 
 Total Processing Time (hh:mm:ss) : 00:00:00

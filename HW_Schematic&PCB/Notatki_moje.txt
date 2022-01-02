@@ -1,5 +1,0 @@
-W zamówionym prototypie brakuje:
-* Trzeba dodać powiedzmy wake up do tego modułu zabezpieczajacego Li-on
-* Zamienić 2 piny w PWM bom coś źle popatrzył i do proca jest źle podpięte
-* Dodać rezystory do diod z czujników...
-* Wszystko ot tyle błędów kuwa :( 
