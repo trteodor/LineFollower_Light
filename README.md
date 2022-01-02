@@ -31,4 +31,4 @@ Used MCU - STM32H743
 [29.12.2021] Frist Prototype photo:
 After correct soldering, everything works fine!
 
-![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/269713901_587788428988135_3599895833345253289_n.jpg)
+![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/FristPrototypePhoto.jpg)
