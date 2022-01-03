@@ -22,18 +22,11 @@
 #define EEPROM_ErrW5_Addr 90
 #define EEPROM_ErrW6_Addr 100
 #define EEPROM_ErrW7_Addr 105
-#define EEPROM_ErrW_Max_Addr 115
-
-
-#define EEPROM_S1_LineIsDetV_Addr 265
-#define EEPROM_S2_LineIsDetV_Addr 245
-#define EEPROM_S3_LineIsDetV_Addr 210
-#define EEPROM_S4_LineIsDetV_Addr 215
-#define EEPROM_S5_LineIsDetV_Addr 220
-#define EEPROM_S6_LineIsDetV_Addr 225
-#define EEPROM_S7_LineIsDetV_Addr 230
-#define EEPROM_S8_LineIsDetV_Addr 235
-
+#define EEPROM_ErrW8_Addr 135 /*Cell 110 dont work correctly?*/
+#define EEPROM_ErrW9_Addr 115
+#define EEPROM_ErrW10_Addr 120
+#define EEPROM_ErrW11_Addr 140 /*Cell 125 also?*/
+#define EEPROM_ErrW_Max_Addr 130
 
 #define EEPROM_IrSensorState_Addr 450
 

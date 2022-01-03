@@ -42,23 +42,17 @@ typedef enum
 	SensorErW_5 = '$',
 	SensorErW_6 = '#',
 	SensorErW_7 = '@',
+	SensorErW_8 = 'Y',
+	SensorErW_9 = 'H',
+	SensorErW_10 = 'Q',
+	SensorErW_11 = 'W',
 	SensorErWMax = '!',
-	/* Value from mobile App - when the line is detected*/
-	S1_LineIsDetV = 167,
-	S2_LineIsDetV = 'H',
-	S3_LineIsDetV = 'Q',
-	S4_LineIsDetV = 'W',
-	S5_LineIsDetV = '?',
-	S6_LineIsDetV = 'L',
-	S7_LineIsDetV = 'T',
-	S8_LineIsDetV = 'Y',
 	/*@@@@@ @@@@  Mobile App Screen "Adv" */
 	PrintActualDataFor_Adv_ScreenToM_App ='X',
 	IrSensor ='j', //?
 	LedMode ='J', //?
 	TryDetectEndLineMark='g',
 	ReservAdvScr ='h',
-
 
 }HM10BleCommand_t;
 
@@ -91,16 +85,11 @@ typedef enum
 #define S_LineErWToM_App_5 "$"
 #define S_LineErWToM_App_6 "#"
 #define S_LineErWToM_App_7 "@"
+#define S_LineErWToM_App_8 "Y"
+#define	S_LineErWToM_App_9 "H"
+#define	S_LineErWToM_App_10 "Q"
+#define	S_LineErWToM_App_11 "W"
 #define S_LineErWToM_App_Max "!"
-/* Send actual value when the line is detected to mobile App*/
-#define S_Line_1_DetectValueToMobileAPP "§"
-#define S_Line_2_DetectValueToMobileAPP "H"
-#define S_Line_3_DetectValueToMobileAPP "Q"
-#define S_Line_4_DetectValueToMobileAPP "W"
-#define S_Line_5_DetectValueToMobileAPP "?"
-#define S_Line_6_DetectValueToMobileAPP "L"
-#define S_Line_7_DetectValueToMobileAPP "T"
-#define S_Line_8_DetectValueToMobileAPP "Y"
 /* Actual line sensor data value*/
 #define S_Line_1_Data_ToM_App_Comm "CZ1:"
 #define S_Line_2_Data_ToM_App_Comm "CZ2:"
@@ -110,10 +99,12 @@ typedef enum
 #define S_Line_6_Data_ToM_App_Comm "CZ6:"
 #define S_Line_7_Data_ToM_App_Comm "CZ7:"
 #define S_Line_8_Data_ToM_App_Comm "CZ8:"
+#define S_Line_9_Data_ToM_App_Comm "CZ9:"
+#define S_Line_10_Data_ToM_App_Comm "CZ10:"
+#define S_Line_11_Data_ToM_App_Comm "CZ11:"
+#define S_Line_12_Data_ToM_App_Comm "CZ12:"
 #define ActualPositionError_SS "ERROR:"
 /* Screen Map to File*/
-#define ButtonMapState_d "q"
-
 
 /*@@@@@ @@@@  Mobile App Screen "Adv" (same as commands)*/
 #define IrSensor_d "j" //?
@@ -122,10 +113,8 @@ typedef enum
 #define ReservAdvScr_d "h"
 
 //UNUSED: totally now
-// ` t
-
-
-
+// ` t ? L T q
+/* Send actual value when the line is detected to mobile App*/
 
 
 #endif /* HM10Commands_H_ */

@@ -33,7 +33,7 @@ void PID_Init()
 
 void PID_Task()
 {
-	SM_SensorsCalculateError();
+	SM_GetAndVerifyCalculatedError();
 	calculatePID();
 
 	Enc_CalculateActualSpeed();
