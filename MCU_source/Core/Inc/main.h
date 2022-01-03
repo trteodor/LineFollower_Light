@@ -98,10 +98,6 @@ void Error_Handler(void);
 #define LDD1_GPIO_Port GPIOA
 #define PWRC_BLE_Pin GPIO_PIN_4
 #define PWRC_BLE_GPIO_Port GPIOD
-#define TIM4_CH1_ENK1_1_Pin GPIO_PIN_6
-#define TIM4_CH1_ENK1_1_GPIO_Port GPIOB
-#define TIM4_CH2_ENK1_2_Pin GPIO_PIN_7
-#define TIM4_CH2_ENK1_2_GPIO_Port GPIOB
 #define EEPROM_WC_Pin GPIO_PIN_0
 #define EEPROM_WC_GPIO_Port GPIOE
 #define MPU6050_INT_Pin GPIO_PIN_1

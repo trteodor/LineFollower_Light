@@ -38,6 +38,7 @@ typedef struct
 
 extern Encoders_Module_t Enc_Module;
 
+void Encoder_ModuleInit();
 void Enc_ResetModule();
 void Enc_AddEncoderImpulsIntoImpulsSum(uint16_t GPIO_Pin);
 void Enc_CalculateActualSpeed();

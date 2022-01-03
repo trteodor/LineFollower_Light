@@ -42,6 +42,7 @@ void LF_App_MainConfig(void)
 	EEPROM_WriteEnable();
 	BlinkLedInit();
 	HM10BLE_Init();
+	Encoder_ModuleInit();
 	SM_SensorModuleInit();
 	PID_Init();
 

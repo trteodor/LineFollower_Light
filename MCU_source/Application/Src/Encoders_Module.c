@@ -7,6 +7,7 @@
 #include "Encoders_Module.h"
 #include "math.h"
 #include "main.h"
+#include "tim.h"
 
 Encoders_Module_t Enc_Module;
 extern uint32_t  us100Timer;
@@ -16,20 +17,19 @@ extern uint32_t  us100Timer;
 
 __inline void Enc_AddEncoderImpulsIntoImpulsSum(uint16_t GPIO_Pin)
 {
-//	if(GPIO_Pin==ENK1_Pin){
-//		Enc_Module.RightEncoderImpulsCount++;
-//	}
-//	if(GPIO_Pin==ENK2_Pin)
-//	{
-//		Enc_Module.RightEncoderImpulsCount++;
-//	}
-//	if( GPIO_Pin==ENK3_Pin){
-//		Enc_Module.LeftEncoderImpulsCount++;
-//	}
-//	if(GPIO_Pin==ENK4_Pin)
-//	{
-//		Enc_Module.LeftEncoderImpulsCount++;
-//	}
+	if(GPIO_Pin== GPIO_PIN_7){
+		Enc_Module.RightEncoderImpulsCount++;
+	}
+	if(GPIO_Pin==GPIO_PIN_6)
+	{
+		Enc_Module.RightEncoderImpulsCount++;
+	}
+}
+
+void Encoder_ModuleInit()
+{
+//	  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
+	  HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
 }
 
 void Enc_ResetModule()

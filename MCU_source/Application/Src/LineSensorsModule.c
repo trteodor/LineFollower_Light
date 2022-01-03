@@ -25,17 +25,30 @@ void SM_GetAndVerifyCalculatedError()
 {
 	static float _PreviousPosErrorValue;
 	float _PosErrorValue;
+	static int SavedLineSide;
+	static uint32_t SavedBigErrorTime; /*Big error is when _PosErrorValue > SensorErrorValue[7] */
 
 	_PosErrorValue = SM_SensorsCalculateError();
 
+
+
+
 	if(_PosErrorValue == LineNotDetectedErrorVal ) /*If line not detected */
 	{
-		if( _PreviousPosErrorValue > SensorModule.SensorErrorValue[5] )
+		/*Trzeba by ze tak jezeli w ciagu 30/50 ms byla linia po prawej lub lewej
+		 * wowczas uznaj ze byl np. kat prosty
+		 * no cos takiego trzeba bedzie tutaj do implementowac i wtedy
+		 * mam leganckie wykrywanie katow prostych a i za linia
+		 * legancko powinienem podazac nawet jak sie pojawia przerwy na linii*/
+
+		if(  SavedLineSide == LineOnLeftSide )
 		{
+			SavedBigErrorTime = HAL_GetTick();
 			_PosErrorValue = SensorModule.SensorErrorMaxValue;
 		}
-		else if( _PreviousPosErrorValue < (-SensorModule.SensorErrorValue[5]) )
+		else if( SavedLineSide == LineOnRightSide )
 		{
+			SavedBigErrorTime = HAL_GetTick();
 			_PosErrorValue = -SensorModule.SensorErrorMaxValue;
 		}
 		else
@@ -44,7 +57,25 @@ void SM_GetAndVerifyCalculatedError()
 			/*nothing to do*/ /*Continue with previous error */
 		}
 		SensorModule.PositionErrorValue =  _PosErrorValue ;
+
 		return;
+	}
+
+	else if(_PosErrorValue > SensorModule.SensorErrorValue[5] )
+	{
+		SavedLineSide = LineOnLeftSide;
+		SavedBigErrorTime = HAL_GetTick();
+	}
+
+	else if( _PosErrorValue < (-SensorModule.SensorErrorValue[5]) )
+	{
+		SavedLineSide = LineOnRightSide;
+		SavedBigErrorTime = HAL_GetTick();
+	}
+
+	if(SavedBigErrorTime + TimeMSToClearBigErrorFlag < HAL_GetTick() )
+	{
+		SavedLineSide = LineSideClear ;
 	}
 
 	_PreviousPosErrorValue = _PosErrorValue;
@@ -214,10 +245,6 @@ static float SM_SensorsCalculateError()
 	/*Line not detected */
 	return LineNotDetectedErrorVal;
 }
-
-
-
-
 
 
 static void Read_SensorsValue_From_EEPROM()

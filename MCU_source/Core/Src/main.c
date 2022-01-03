@@ -95,7 +95,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	Enc_AddEncoderImpulsIntoImpulsSum(GPIO_Pin); //Application/Src/Encoders_Module.c
 }
 
-
 static VL53L0X_Error initSensor( VL53L0X_Dev_t * device )
 {
     VL53L0X_Error Status=VL53L0X_ERROR_NONE;
@@ -206,14 +205,13 @@ int main(void)
   MX_SDMMC1_SD_Init();
   MX_ADC1_Init();
   MX_TIM15_Init();
-  MX_TIM4_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
   MX_I2C1_Init();
   MX_TIM5_Init();
   MX_I2C2_Init();
-  MX_TIM8_Init();
   MX_TIM12_Init();
+  MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
   //Activate 100usTimer
   LL_TIM_EnableIT_CC1(TIM2);
@@ -223,12 +221,6 @@ int main(void)
 
   LF_App_MainConfig(); //Application/Src/LF_AppMain
 
-//  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
-//  HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
-//  static uint16_t encHtim4Val=0, encHtim8Val=0 ;
-//  static uint32_t SavedTimeLocalTest =0 ;
-//
-//
 //  static VL53L0X_Dev_t device;
 //
 //  static volatile uint16_t res = 0;
@@ -238,15 +230,20 @@ int main(void)
 //  device.Present=0;
 //  device.Id=0;
 //
-//
 //  initSensor( &device );
-//
-//
+
 //  static uint8_t data_ready;
 //  static VL53L0X_RangingMeasurementData_t result;
 //  static VL53L0X_Error Status;
 
 
+static uint16_t encHtim4Val=0, encHtim8Val=0 ;
+static uint32_t SavedTimeLocalTest =0 ;
+
+char locBlebuf[40];
+int sizelocBleB;
+
+uint8_t MSG[50] = {'\0'};
 
   /* USER CODE END 2 */
 
@@ -254,31 +251,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  if(SavedTimeLocalTest + 100 < HAL_GetTick() )
-//		  {
-//			  SavedTimeLocalTest = HAL_GetTick() ;
-//
+	  if(SavedTimeLocalTest + 1000 < HAL_GetTick() )
+		  {
+			  SavedTimeLocalTest = HAL_GetTick() ;
+
 //			  encHtim4Val = TIM4->CNT;
-//	//		  uint16_t wart1 = TIM4->CCR1;
-//	//		  uint16_t wart2 = TIM4->CCR2;
-//	//		  HAL_UART_Transmit(&huart2, "SFFS", 20, 100);
+	//		  uint16_t wart1 = TIM4->CCR1;
+	//		  uint16_t wart2 = TIM4->CCR2;
 //			  encHtim8Val = TIM8->CNT;
-//
-//
+
+//			  sizelocBleB = sprintf(locBlebuf, "\n\r ImpCou: %ul ", Enc_Module.RightEncoderImpulsCount);
+//			  sizelocBleB = sprintf(locBlebuf, "\n\r encHtim8Val: %ul ", encHtim8Val );
+//			  HAL_UART_Transmit(&huart2, locBlebuf, sizelocBleB, 100);
 //		        Status=VL53L0X_GetMeasurementDataReady(&device, &data_ready);
 //
 //		        if( Status == VL53L0X_ERROR_NONE )
 //		        {
 //		            Status = VL53L0X_GetRangingMeasurementData(&device, &result);
 //
-////		            HAL_UART_Transmit(&huart2, "SFFS", 20, 100); result.RangeMilliMeter;
+//		            HAL_UART_Transmit(&huart2, "SFFS", 20, 100); result.RangeMilliMeter;
 //
 //		            if (Status == VL53L0X_ERROR_NONE)
 //		            {
 //		                Status = VL53L0X_ClearInterruptMask(&device,0);
 //		            }
 //		        }
-//		  }
+		  }
 
 	  LF_App_MainTask(); //Application/Src/LF_AppMain
     /* USER CODE END WHILE */

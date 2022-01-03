@@ -16,7 +16,7 @@
 #define B_FactorMotor 50
 
 //For BleMdule
-#define TimeBeetweenNextDataPart 15
+#define TimeBeetweenNextDataPart 10
 
 //For LedModule
 #define LED_TOGGLE_TIME 500

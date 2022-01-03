@@ -39,7 +39,11 @@ typedef struct
 #define SideR_Max SensorModule.SensorADCValues[11]
 
 
+#define LineSideClear 0
+#define LineOnLeftSide 1
+#define LineOnRightSide 2
 
+#define TimeMSToClearBigErrorFlag 50
 
 extern SensorModule_t SensorModule;
 /*Few field of the structure above are also modified by HM10Ble App Module*/
