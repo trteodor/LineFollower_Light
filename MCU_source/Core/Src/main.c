@@ -212,6 +212,7 @@ int main(void)
   MX_I2C2_Init();
   MX_TIM12_Init();
   MX_TIM8_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   //Activate 100usTimer
   LL_TIM_EnableIT_CC1(TIM2);
@@ -255,14 +256,16 @@ uint8_t MSG[50] = {'\0'};
 		  {
 			  SavedTimeLocalTest = HAL_GetTick() ;
 
-//			  encHtim4Val = TIM4->CNT;
+			  encHtim4Val = TIM4->CNT;
 	//		  uint16_t wart1 = TIM4->CCR1;
 	//		  uint16_t wart2 = TIM4->CCR2;
-//			  encHtim8Val = TIM8->CNT;
+			  encHtim8Val = TIM8->CNT;
 
 //			  sizelocBleB = sprintf(locBlebuf, "\n\r ImpCou: %ul ", Enc_Module.RightEncoderImpulsCount);
-//			  sizelocBleB = sprintf(locBlebuf, "\n\r encHtim8Val: %ul ", encHtim8Val );
-//			  HAL_UART_Transmit(&huart2, locBlebuf, sizelocBleB, 100);
+			  sizelocBleB = sprintf(locBlebuf, "\n\r encT8: %ul \n\r encT4: %ul ", encHtim8Val , encHtim4Val);
+			  HAL_UART_Transmit(&huart2, locBlebuf, sizelocBleB, 100);
+
+
 //		        Status=VL53L0X_GetMeasurementDataReady(&device, &data_ready);
 //
 //		        if( Status == VL53L0X_ERROR_NONE )

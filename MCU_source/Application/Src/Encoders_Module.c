@@ -28,7 +28,7 @@ __inline void Enc_AddEncoderImpulsIntoImpulsSum(uint16_t GPIO_Pin)
 
 void Encoder_ModuleInit()
 {
-//	  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
+	  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
 	  HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
 }
 

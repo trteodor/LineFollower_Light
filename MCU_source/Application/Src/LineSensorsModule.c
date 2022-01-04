@@ -30,16 +30,8 @@ void SM_GetAndVerifyCalculatedError()
 
 	_PosErrorValue = SM_SensorsCalculateError();
 
-
-
-
 	if(_PosErrorValue == LineNotDetectedErrorVal ) /*If line not detected */
 	{
-		/*Trzeba by ze tak jezeli w ciagu 30/50 ms byla linia po prawej lub lewej
-		 * wowczas uznaj ze byl np. kat prosty
-		 * no cos takiego trzeba bedzie tutaj do implementowac i wtedy
-		 * mam leganckie wykrywanie katow prostych a i za linia
-		 * legancko powinienem podazac nawet jak sie pojawia przerwy na linii*/
 
 		if(  SavedLineSide == LineOnLeftSide )
 		{
@@ -66,7 +58,6 @@ void SM_GetAndVerifyCalculatedError()
 		SavedLineSide = LineOnLeftSide;
 		SavedBigErrorTime = HAL_GetTick();
 	}
-
 	else if( _PosErrorValue < (-SensorModule.SensorErrorValue[5]) )
 	{
 		SavedLineSide = LineOnRightSide;
