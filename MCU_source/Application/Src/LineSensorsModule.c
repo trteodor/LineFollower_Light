@@ -94,13 +94,13 @@ static float SM_SensorsCalculateError()
 			&& Mid2 > L_DetVal
 				&& SideL1 > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[0];
+		return SensorModule.SensorErrorValue[0];
 	}
 	if( Mid1 > L_DetVal /*+ER1*/
 			&& Mid2 > L_DetVal
 				&& SideR1 > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[0];
+		return -SensorModule.SensorErrorValue[0];
 	}
 
 	if( Mid1 > L_DetVal /*Error not detected*/
@@ -113,124 +113,124 @@ static float SM_SensorsCalculateError()
 			&& SideR1 > L_DetVal
 				&& Mid2 > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[2];
+		return -SensorModule.SensorErrorValue[2];
 	}
 	if( SideL2 > L_DetVal /*-ER3*/
 			&& SideL1 > L_DetVal
 				&& Mid1 > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[2];
+		return SensorModule.SensorErrorValue[2];
 	}
 
 	if( SideR1 > L_DetVal /*+ER2*/
 			&& Mid2 > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[1];
+		return -SensorModule.SensorErrorValue[1];
 	}
 
 	if( SideL1 > L_DetVal /*-ER2*/
 			&& Mid1 > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[1];
+		return SensorModule.SensorErrorValue[1];
 	}
 
 	if( SideR1 > L_DetVal /*-ER5*/
 			&& SideR2 > L_DetVal
 				&& SideR3 > L_DetVal )
 	{
-		return SensorModule.SensorErrorValue[4];
+		return -SensorModule.SensorErrorValue[4];
 	}
 
 	if( SideL1 > L_DetVal /*+ER5*/
 			&& SideL2 > L_DetVal
 				&& SideL3 > L_DetVal )
 	{
-		return -SensorModule.SensorErrorValue[4];
+		return SensorModule.SensorErrorValue[4];
 	}
 
 	if( SideR1 > L_DetVal /*-ER4*/
 			&& SideR2 > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[3];
+		return -SensorModule.SensorErrorValue[3];
 	}
 
 	if( SideL1 > L_DetVal /*+ER4*/
 			&& SideL2 > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[3];
+		return SensorModule.SensorErrorValue[3];
 	}
 
 	if( SideR2 > L_DetVal /*-ER7*/
 			&& SideR3 > L_DetVal
 				&& SideR4 > L_DetVal )
 	{
-		return SensorModule.SensorErrorValue[6];
+		return -SensorModule.SensorErrorValue[6];
 	}
 
 	if( SideL2> L_DetVal /*+ER7*/
 			&& SideL3 > L_DetVal
 				&& SideL4 > L_DetVal )
 	{
-		return -SensorModule.SensorErrorValue[6];
+		return SensorModule.SensorErrorValue[6];
 	}
 
 	if( SideR2 > L_DetVal /*-ER6*/
 			&& SideR3 > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[5];
+		return -SensorModule.SensorErrorValue[5];
 	}
 	if( SideL2 > L_DetVal /*+ER6*/
 			&& SideL3 > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[5];
+		return SensorModule.SensorErrorValue[5];
 	}
 
 	if( SideR3 > L_DetVal /*-ER9*/
 			&& SideR4 > L_DetVal
 				&& SideR_Max > L_DetVal )
 	{
-		return SensorModule.SensorErrorValue[8];
+		return -SensorModule.SensorErrorValue[8];
 	}
 
 	if( SideL3> L_DetVal /*+ER9*/
 			&& SideL4 > L_DetVal
 				&& SideL_Max  > L_DetVal )
 	{
-		return -SensorModule.SensorErrorValue[8];
+		return SensorModule.SensorErrorValue[8];
 	}
 
 	if( SideR3 > L_DetVal /*-ER8*/
 			&& SideR4 > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[7];
+		return -SensorModule.SensorErrorValue[7];
 	}
 
 	if( SideL3 > L_DetVal /*+ER8*/
 			&& SideL4 > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[7];
+		return SensorModule.SensorErrorValue[7];
 	}
 
 	if( SideR4 > L_DetVal /*-ER10*/
 			&& SideR_Max > L_DetVal)
 	{
-		return SensorModule.SensorErrorValue[9];
+		return -SensorModule.SensorErrorValue[9];
 	}
 
 	if( SideL4 > L_DetVal /*+ER10*/
 			&& SideL_Max > L_DetVal)
 	{
-		return -SensorModule.SensorErrorValue[9];
+		return SensorModule.SensorErrorValue[9];
 	}
 
 	if( SideR_Max > L_DetVal ) /*-ER11*/
 	{
-		return SensorModule.SensorErrorValue[10];
+		return -SensorModule.SensorErrorValue[10];
 	}
 
 	if( SideL_Max > L_DetVal ) /*+ER10*/
 	{
-		return -SensorModule.SensorErrorValue[10];
+		return SensorModule.SensorErrorValue[10];
 	}
 
 	/*Line not detected */

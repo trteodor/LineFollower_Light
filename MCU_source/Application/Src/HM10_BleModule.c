@@ -191,21 +191,25 @@ void HM10Ble_ExecuteCommand(HM10BleCommand_t HM10BLE_Command)
 	{
 		SensorModule.SensorErrorValue[7] = atof((char *)HM10BLE_App.ReceiveBuffer);
 		EEPROM_WRITE_FLOAT(EEPROM_ErrW8_Addr,&SensorModule.SensorErrorValue[7]);
+	break;
 	}
 	case SensorErW_9 :
 	{
 		SensorModule.SensorErrorValue[8] = atof((char *)HM10BLE_App.ReceiveBuffer);
 		EEPROM_WRITE_FLOAT(EEPROM_ErrW9_Addr,&SensorModule.SensorErrorValue[8]);
+	break;
 	}
 	case SensorErW_10 :
 	{
 		SensorModule.SensorErrorValue[9] = atof((char *)HM10BLE_App.ReceiveBuffer);
 		EEPROM_WRITE_FLOAT(EEPROM_ErrW10_Addr,&SensorModule.SensorErrorValue[9]);
+	break;
 	}
 	case SensorErW_11 :
 	{
 		SensorModule.SensorErrorValue[10] = atof((char *)HM10BLE_App.ReceiveBuffer);
 		EEPROM_WRITE_FLOAT(EEPROM_ErrW11_Addr,&SensorModule.SensorErrorValue[10]);
+	break;
 	}
 	case SensorErWMax :
 	{

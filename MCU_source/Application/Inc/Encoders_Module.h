@@ -8,16 +8,16 @@
 
 typedef struct
 {
-	uint32_t LeftEncoderImpulsCount;
-	uint32_t RightEncoderImpulsCount;
+	uint16_t* LeftEncoderImpulsCount;
+	uint16_t* RightEncoderImpulsCount;
 
 	float Distance_LeftWheel;
 	float Distance_RightWheel;
 
 	int ProbeNumber;
 
-	uint32_t PreviousLeftEncoderImpulsCount;
-	uint32_t PreviousRightEncoderImpulsCount;
+	uint16_t PreviousLeftEncoderImpulsCount;
+	uint16_t PreviousRightEncoderImpulsCount;
 
 	float LeftWheelDistanceInProbe[MaxProbeNumber];
 	float RightWheelDistanceInProbe[MaxProbeNumber];

@@ -2,124 +2,33 @@
 FileName = LF_UltraLight_JDY08.GBR
 AutoAperture = True
 *************************************************************
-Generating : Int2 (PWR)
-      File : LF_UltraLight_JDY08.G2
+Generating : Milling
+      File : LF_UltraLight_JDY08.GM1
 
-    Adding Layer      : Int2 (PWR)
-
-    Adding Layer      : Multi-Layer
+    Adding Layer      : Milling
 
 
 Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : LF_UltraLight_JDY08.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D13
+    D14
+    D15
     D16
-    D68
+    D17
     D69
-    D71
-    D78
-    D79
-*************************************************************
-
-*************************************************************
-Generating : Int1 (GND)
-      File : LF_UltraLight_JDY08.G1
-
-    Adding Layer      : Int1 (GND)
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D16
-    D71
-    D72
-    D76
-    D79
-*************************************************************
-
-*************************************************************
-Generating : Top Layer
-      File : LF_UltraLight_JDY08.GTL
-
-    Adding Layer      : Top Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D16
-    D18
-    D19
-    D20
-    D21
-    D22
-    D23
-    D24
-    D25
-    D26
-    D27
-    D28
-    D29
-    D30
-    D31
-    D32
-    D33
-    D34
-    D35
-    D36
-    D37
-    D38
-    D39
-    D68
-    D69
-    D70
-    D71
-    D72
-    D73
-    D74
-    D75
-    D76
-    D77
-    D78
-    D79
-*************************************************************
-
-*************************************************************
-Generating : Bottom Layer
-      File : LF_UltraLight_JDY08.GBL
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D16
-    D18
-    D19
-    D30
-    D32
-    D68
-    D69
-    D70
-    D71
-    D72
-    D73
-    D74
-    D75
-    D76
-    D77
-    D78
-    D79
-    D80
-    D81
-    D82
-    D83
-    D84
-    D85
-    D86
-    D87
-    D88
-    D89
+    D102
 *************************************************************
 
 *************************************************************
@@ -138,8 +47,6 @@ Used DCodes :
     D19
     D30
     D32
-    D80
-    D81
     D82
     D83
     D84
@@ -148,54 +55,8 @@ Used DCodes :
     D87
     D88
     D89
-*************************************************************
-
-*************************************************************
-Generating : Bottom Overlay
-      File : LF_UltraLight_JDY08.GBO
-
-    Adding Layer      : Bottom Overlay
-
-
-Used DCodes :
-    D10
-    D11
-    D13
-    D14
-    D15
-    D16
-    D17
-    D68
-    D100
-*************************************************************
-
-*************************************************************
-Generating : Milling
-      File : LF_UltraLight_JDY08.GM1
-
-    Adding Layer      : Milling
-
-
-Used DCodes :
-    D10
-*************************************************************
-
-*************************************************************
-Generating : Top Overlay
-      File : LF_UltraLight_JDY08.GTO
-
-    Adding Layer      : Top Overlay
-
-
-Used DCodes :
-    D10
-    D11
-    D12
-    D13
-    D14
-    D15
-    D16
-    D17
+    D90
+    D91
 *************************************************************
 
 *************************************************************
@@ -222,8 +83,7 @@ Used DCodes :
     D65
     D66
     D67
-    D90
-    D91
+    D68
     D92
     D93
     D94
@@ -232,6 +92,8 @@ Used DCodes :
     D97
     D98
     D99
+    D100
+    D101
 *************************************************************
 
 *************************************************************
@@ -276,6 +138,7 @@ Used DCodes :
     D65
     D66
     D67
+    D68
 *************************************************************
 
 *************************************************************
@@ -315,6 +178,147 @@ Used DCodes :
 *************************************************************
 
 *************************************************************
+Generating : Top Overlay
+      File : LF_UltraLight_JDY08.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+    D13
+    D14
+    D15
+    D16
+    D17
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer
+      File : LF_UltraLight_JDY08.GBL
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D16
+    D18
+    D19
+    D30
+    D32
+    D69
+    D70
+    D71
+    D72
+    D73
+    D74
+    D75
+    D76
+    D77
+    D78
+    D79
+    D80
+    D81
+    D82
+    D83
+    D84
+    D85
+    D86
+    D87
+    D88
+    D89
+    D90
+    D91
+*************************************************************
+
+*************************************************************
+Generating : Top Layer
+      File : LF_UltraLight_JDY08.GTL
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D16
+    D18
+    D19
+    D20
+    D21
+    D22
+    D23
+    D24
+    D25
+    D26
+    D27
+    D28
+    D29
+    D30
+    D31
+    D32
+    D33
+    D34
+    D35
+    D36
+    D37
+    D38
+    D39
+    D69
+    D70
+    D71
+    D72
+    D73
+    D74
+    D75
+    D76
+    D77
+    D78
+    D79
+    D80
+    D81
+*************************************************************
+
+*************************************************************
+Generating : Int1 (GND)
+      File : LF_UltraLight_JDY08.G1
+
+    Adding Layer      : Int1 (GND)
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D16
+    D73
+    D77
+    D78
+    D81
+*************************************************************
+
+*************************************************************
+Generating : Int2 (PWR)
+      File : LF_UltraLight_JDY08.G2
+
+    Adding Layer      : Int2 (PWR)
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D16
+    D69
+    D70
+    D78
+    D80
+    D81
+*************************************************************
+
+*************************************************************
 Generating : Drill Drawing
       File : LF_UltraLight_JDY08.GD1
 
@@ -324,8 +328,8 @@ Generating : Drill Drawing
 
 
 Used DCodes :
-    D101
-    D102
+    D103
+    D104
 *************************************************************
 
 *************************************************************
@@ -338,6 +342,6 @@ Generating : Drill Guide
 
 
 Used DCodes :
-    D101
+    D103
 *************************************************************
 

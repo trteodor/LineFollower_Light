@@ -12,30 +12,25 @@
 Encoders_Module_t Enc_Module;
 extern uint32_t  us100Timer;
 
+#define LeftEncoder htim8.Instance->CNT
+#define RightEncoder htim4.Instance->CNT
 
 
-
-__inline void Enc_AddEncoderImpulsIntoImpulsSum(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin== GPIO_PIN_7){
-		Enc_Module.RightEncoderImpulsCount++;
-	}
-	if(GPIO_Pin==GPIO_PIN_6)
-	{
-		Enc_Module.RightEncoderImpulsCount++;
-	}
-}
 
 void Encoder_ModuleInit()
 {
-	  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
-	  HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
+	Enc_Module.LeftEncoderImpulsCount = (uint16_t*)&LeftEncoder;
+	Enc_Module.RightEncoderImpulsCount = (uint16_t*)&RightEncoder;
+	HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
+	HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
 }
 
 void Enc_ResetModule()
 {
-	Enc_Module.LeftEncoderImpulsCount = 0;
-	Enc_Module.RightEncoderImpulsCount = 0;
+	LeftEncoder = 0;
+	RightEncoder = 0;
+
+
 	Enc_Module.Distance_LeftWheel = 0;
 	Enc_Module.Distance_RightWheel = 0;
 	Enc_Module.ProbeNumber = 0;
@@ -55,12 +50,20 @@ void Enc_CalculateActualSpeed()
 	{
 		EncodersSavedTime=us100Timer;
 
+		/*uint overflow isn't problem becuse for example 2-255=3 so diffrent is 3 that's true*/
+
+		uint16_t TmpLeftEncImpCnt= UINT16_MAX - *Enc_Module.LeftEncoderImpulsCount;
+		uint16_t TmpRightEncImpCnt= UINT16_MAX - *Enc_Module.RightEncoderImpulsCount;
+//				uint32_t TmpLeftEncImpCnt= 0;
+//				uint32_t TmpRightEncImpCnt= 0;
+
+
 		Enc_Module.Distance_LeftWheel=
-			((Enc_Module.LeftEncoderImpulsCount-Enc_Module.PreviousLeftEncoderImpulsCount)*OneImpulsDistance);
+			((TmpLeftEncImpCnt-Enc_Module.PreviousLeftEncoderImpulsCount)*OneImpulsDistance);
 		Enc_Module.LeftWheelDistanceInProbe[Enc_Module.ProbeNumber]=Enc_Module.Distance_LeftWheel;
 
 		Enc_Module.Distance_RightWheel=
-			((Enc_Module.RightEncoderImpulsCount-Enc_Module.PreviousRightEncoderImpulsCount)*OneImpulsDistance);
+			((TmpRightEncImpCnt-Enc_Module.PreviousRightEncoderImpulsCount)*OneImpulsDistance);
 		Enc_Module.RightWheelDistanceInProbe[Enc_Module.ProbeNumber]=Enc_Module.Distance_RightWheel;
 
 		Enc_Module.LeftWheelSpeed=Enc_Module.Distance_LeftWheel/EncodersProbeTimeInSeconds;
@@ -69,8 +72,8 @@ void Enc_CalculateActualSpeed()
 		Enc_Module.RightWheelSpeed=Enc_Module.Distance_RightWheel/EncodersProbeTimeInSeconds;
 		Enc_Module.RightWheelSpeedInProbe[Enc_Module.ProbeNumber]=Enc_Module.RightWheelSpeed;
 
-		Enc_Module.PreviousLeftEncoderImpulsCount=Enc_Module.LeftEncoderImpulsCount;
-		Enc_Module.PreviousRightEncoderImpulsCount=Enc_Module.RightEncoderImpulsCount;
+		Enc_Module.PreviousLeftEncoderImpulsCount=TmpLeftEncImpCnt;
+		Enc_Module.PreviousRightEncoderImpulsCount=TmpRightEncImpCnt;
 
 		if(Enc_Module.ProbeNumber > MaxProbeNumber)
 		{

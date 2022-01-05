@@ -90,84 +90,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 	}
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	Enc_AddEncoderImpulsIntoImpulsSum(GPIO_Pin); //Application/Src/Encoders_Module.c
-}
-
-static VL53L0X_Error initSensor( VL53L0X_Dev_t * device )
-{
-    VL53L0X_Error Status=VL53L0X_ERROR_NONE;
-
-
-    static uint32_t refSpadCount     = 0;
-    static uint8_t  isApertureSpads  = 0;
-    static uint8_t  VhvSettings      = 0;
-    static uint8_t  PhaseCal         = 0;
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetDeviceAddress( device, 0x51 );
-        device->I2cDevAddr=0x51;
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_DataInit( device );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_StaticInit( device );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_PerformRefSpadManagement( device, &refSpadCount, &isApertureSpads);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_PerformRefCalibration( device, &VhvSettings, &PhaseCal);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetReferenceSpads( device, refSpadCount, isApertureSpads);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetRefCalibration( device, VhvSettings, PhaseCal);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetDeviceMode( device, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25*65536) );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32*65536) );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status =VL53L0X_SetMeasurementTimingBudgetMicroSeconds( device,	20000 );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_StartMeasurement( device );
-    }
-
-    return Status;
-}
 /* USER CODE END 0 */
 
 /**
@@ -256,14 +178,11 @@ uint8_t MSG[50] = {'\0'};
 		  {
 			  SavedTimeLocalTest = HAL_GetTick() ;
 
-			  encHtim4Val = TIM4->CNT;
-	//		  uint16_t wart1 = TIM4->CCR1;
-	//		  uint16_t wart2 = TIM4->CCR2;
-			  encHtim8Val = TIM8->CNT;
 
-//			  sizelocBleB = sprintf(locBlebuf, "\n\r ImpCou: %ul ", Enc_Module.RightEncoderImpulsCount);
-			  sizelocBleB = sprintf(locBlebuf, "\n\r encT8: %ul \n\r encT4: %ul ", encHtim8Val , encHtim4Val);
-			  HAL_UART_Transmit(&huart2, locBlebuf, sizelocBleB, 100);
+//			  sizelocBleB = sprintf(locBlebuf, "\n\r *LEnc: : %ul \n\r *REnc: %ul "
+//					  , *Enc_Module.LeftEncoderImpulsCount
+//					  , *Enc_Module.RightEncoderImpulsCount);
+//			  HAL_UART_Transmit(&huart2, locBlebuf, sizelocBleB, 100);
 
 
 //		        Status=VL53L0X_GetMeasurementDataReady(&device, &data_ready);
@@ -364,7 +283,79 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+static VL53L0X_Error initSensor( VL53L0X_Dev_t * device )
+{
+    VL53L0X_Error Status=VL53L0X_ERROR_NONE;
 
+
+    static uint32_t refSpadCount     = 0;
+    static uint8_t  isApertureSpads  = 0;
+    static uint8_t  VhvSettings      = 0;
+    static uint8_t  PhaseCal         = 0;
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetDeviceAddress( device, 0x51 );
+        device->I2cDevAddr=0x51;
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_DataInit( device );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_StaticInit( device );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_PerformRefSpadManagement( device, &refSpadCount, &isApertureSpads);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_PerformRefCalibration( device, &VhvSettings, &PhaseCal);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetReferenceSpads( device, refSpadCount, isApertureSpads);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetRefCalibration( device, VhvSettings, PhaseCal);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_SetDeviceMode( device, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25*65536) );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32*65536) );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status =VL53L0X_SetMeasurementTimingBudgetMicroSeconds( device,	20000 );
+    }
+
+    if (Status == VL53L0X_ERROR_NONE)
+    {
+        Status=VL53L0X_StartMeasurement( device );
+    }
+
+    return Status;
+}
 /* USER CODE END 4 */
 
 /**
