@@ -294,8 +294,9 @@ static void ForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
 
 static void RightMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
+
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue );
-	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue- RightMotorSpeed);  //-->> Reverse tylu
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed);  //-->> Reverse tylu
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue  - LeftMotorSpeed);  //-->> Forward
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
 }

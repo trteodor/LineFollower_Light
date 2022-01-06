@@ -28,6 +28,31 @@ void SM_GetAndVerifyCalculatedError()
 	static int SavedLineSide;
 	static uint32_t SavedBigErrorTime; /*Big error is when _PosErrorValue > SensorErrorValue[7] */
 
+
+	/*Try detect big error position*/
+	for(int i=0; i<3; i++)
+	{
+		if(SensorModule.SensorADCValues[i] > L_DetVal)
+		{
+			SavedBigErrorTime = HAL_GetTick();
+			SavedLineSide = LineOnRightSide;
+		}
+	}
+
+	for(int i=11; i>9; i--)
+	{
+		if(SensorModule.SensorADCValues[i] > L_DetVal)
+		{
+			SavedBigErrorTime = HAL_GetTick();
+			SavedLineSide = LineOnLeftSide ;
+		}
+	}
+
+	if( SavedLineSide != LineSideClear && (SavedBigErrorTime + TimeMSToClearBigErrorFlag) < HAL_GetTick() )
+	{
+		SavedLineSide = LineSideClear;
+	}
+	 /*Get Actual position error */
 	_PosErrorValue = SM_SensorsCalculateError();
 
 	if(_PosErrorValue == LineNotDetectedErrorVal ) /*If line not detected */
@@ -36,12 +61,12 @@ void SM_GetAndVerifyCalculatedError()
 		if(  SavedLineSide == LineOnLeftSide )
 		{
 			SavedBigErrorTime = HAL_GetTick();
-			_PosErrorValue = SensorModule.SensorErrorMaxValue;
+			_PosErrorValue = -SensorModule.SensorErrorMaxValue;
 		}
 		else if( SavedLineSide == LineOnRightSide )
 		{
 			SavedBigErrorTime = HAL_GetTick();
-			_PosErrorValue = -SensorModule.SensorErrorMaxValue;
+			_PosErrorValue = SensorModule.SensorErrorMaxValue;
 		}
 		else
 		{
@@ -53,23 +78,8 @@ void SM_GetAndVerifyCalculatedError()
 		return;
 	}
 
-	else if(_PosErrorValue > SensorModule.SensorErrorValue[5] )
-	{
-		SavedLineSide = LineOnLeftSide;
-		SavedBigErrorTime = HAL_GetTick();
-	}
-	else if( _PosErrorValue < (-SensorModule.SensorErrorValue[5]) )
-	{
-		SavedLineSide = LineOnRightSide;
-		SavedBigErrorTime = HAL_GetTick();
-	}
-
-	if(SavedBigErrorTime + TimeMSToClearBigErrorFlag < HAL_GetTick() )
-	{
-		SavedLineSide = LineSideClear ;
-	}
-
 	_PreviousPosErrorValue = _PosErrorValue;
+
 	SensorModule.PositionErrorValue =  _PosErrorValue ;
 	return;
 }
@@ -88,6 +98,80 @@ static float SM_SensorsCalculateError()
 {
 	//I could use cross table to minimalize the function volume but it is done as is :)
 //	static int OST_KIER_BL=0;
+
+	if( SideR_Max > L_DetVal ) /*-ER11*/
+	{
+		return -SensorModule.SensorErrorValue[10];
+	}
+
+	if( SideL_Max > L_DetVal ) /*+ER11*/
+	{
+		return SensorModule.SensorErrorValue[10];
+	}
+
+	if( SideR4 > L_DetVal /*-ER10*/
+			&& SideR_Max > L_DetVal)
+	{
+		return -SensorModule.SensorErrorValue[9];
+	}
+
+	if( SideL4 > L_DetVal /*+ER10*/
+			&& SideL_Max > L_DetVal)
+	{
+		return SensorModule.SensorErrorValue[9];
+	}
+
+
+	if( SideR3 > L_DetVal /*-ER9*/
+			&& SideR4 > L_DetVal
+				&& SideR_Max > L_DetVal )
+	{
+		return -SensorModule.SensorErrorValue[8];
+	}
+
+	if( SideL3> L_DetVal /*+ER9*/
+			&& SideL4 > L_DetVal
+				&& SideL_Max  > L_DetVal )
+	{
+		return SensorModule.SensorErrorValue[8];
+	}
+
+	if( SideR3 > L_DetVal /*-ER8*/
+			&& SideR4 > L_DetVal)
+	{
+		return -SensorModule.SensorErrorValue[7];
+	}
+
+	if( SideL3 > L_DetVal /*+ER8*/
+			&& SideL4 > L_DetVal)
+	{
+		return SensorModule.SensorErrorValue[7];
+	}
+
+	if( SideR2 > L_DetVal /*-ER7*/
+			&& SideR3 > L_DetVal
+				&& SideR4 > L_DetVal )
+	{
+		return -SensorModule.SensorErrorValue[6];
+	}
+
+	if( SideL2> L_DetVal /*+ER7*/
+			&& SideL3 > L_DetVal
+				&& SideL4 > L_DetVal )
+	{
+		return SensorModule.SensorErrorValue[6];
+	}
+
+	if( SideR2 > L_DetVal /*-ER6*/
+			&& SideR3 > L_DetVal)
+	{
+		return -SensorModule.SensorErrorValue[5];
+	}
+	if( SideL2 > L_DetVal /*+ER6*/
+			&& SideL3 > L_DetVal)
+	{
+		return SensorModule.SensorErrorValue[5];
+	}
 
 
 	if( Mid1 > L_DetVal /*-ER1*/
@@ -160,78 +244,6 @@ static float SM_SensorsCalculateError()
 		return SensorModule.SensorErrorValue[3];
 	}
 
-	if( SideR2 > L_DetVal /*-ER7*/
-			&& SideR3 > L_DetVal
-				&& SideR4 > L_DetVal )
-	{
-		return -SensorModule.SensorErrorValue[6];
-	}
-
-	if( SideL2> L_DetVal /*+ER7*/
-			&& SideL3 > L_DetVal
-				&& SideL4 > L_DetVal )
-	{
-		return SensorModule.SensorErrorValue[6];
-	}
-
-	if( SideR2 > L_DetVal /*-ER6*/
-			&& SideR3 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[5];
-	}
-	if( SideL2 > L_DetVal /*+ER6*/
-			&& SideL3 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[5];
-	}
-
-	if( SideR3 > L_DetVal /*-ER9*/
-			&& SideR4 > L_DetVal
-				&& SideR_Max > L_DetVal )
-	{
-		return -SensorModule.SensorErrorValue[8];
-	}
-
-	if( SideL3> L_DetVal /*+ER9*/
-			&& SideL4 > L_DetVal
-				&& SideL_Max  > L_DetVal )
-	{
-		return SensorModule.SensorErrorValue[8];
-	}
-
-	if( SideR3 > L_DetVal /*-ER8*/
-			&& SideR4 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[7];
-	}
-
-	if( SideL3 > L_DetVal /*+ER8*/
-			&& SideL4 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[7];
-	}
-
-	if( SideR4 > L_DetVal /*-ER10*/
-			&& SideR_Max > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[9];
-	}
-
-	if( SideL4 > L_DetVal /*+ER10*/
-			&& SideL_Max > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[9];
-	}
-
-	if( SideR_Max > L_DetVal ) /*-ER11*/
-	{
-		return -SensorModule.SensorErrorValue[10];
-	}
-
-	if( SideL_Max > L_DetVal ) /*+ER10*/
-	{
-		return SensorModule.SensorErrorValue[10];
-	}
 
 	/*Line not detected */
 	return LineNotDetectedErrorVal;

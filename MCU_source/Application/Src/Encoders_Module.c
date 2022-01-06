@@ -54,8 +54,7 @@ void Enc_CalculateActualSpeed()
 
 		uint16_t TmpLeftEncImpCnt= UINT16_MAX - *Enc_Module.LeftEncoderImpulsCount;
 		uint16_t TmpRightEncImpCnt= UINT16_MAX - *Enc_Module.RightEncoderImpulsCount;
-//				uint32_t TmpLeftEncImpCnt= 0;
-//				uint32_t TmpRightEncImpCnt= 0;
+
 
 
 		Enc_Module.Distance_LeftWheel=
