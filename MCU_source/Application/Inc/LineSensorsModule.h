@@ -43,7 +43,7 @@ typedef struct
 #define LineOnLeftSide 1
 #define LineOnRightSide 2
 
-#define TimeMSToClearBigErrorFlag 2000
+#define TimeMSToClearBigErrorFlag 100
 
 extern SensorModule_t SensorModule;
 /*Few field of the structure above are also modified by HM10Ble App Module*/

@@ -75,7 +75,7 @@ GenerateClassCluster=0
 DocumentUniqueId=NWCUDYAK
 
 [Document3]
-DocumentPath=Cam_CorrPlacHolesResist.Cam
+DocumentPath=Outall.Cam
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -92,7 +92,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document4]
-DocumentPath=Cam_CorrPlacHolesResistDril.Cam
+DocumentPath=Drills.Cam
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
