@@ -1,5 +1,8 @@
 # Light Follower Light
 
+Demonstration video:
+https://www.youtube.com/watch?v=ulPPqBeZhOw
+
 This project is in develop and test phase, (its only draft). 
 
 * If i will have time i will continue the project!  :) 
