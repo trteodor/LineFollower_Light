@@ -20,9 +20,9 @@ PCB and 3D Assemblyis prepared, real world prototype prepared
 
 TODO:
 
-* Write MCU Source code
-	
-* Update 3D Assemblies
+* Add support for MPU-6050
+* Add support for VL53l0
+* Generally do more tests!
 
 The repository contains all the files used to create this project (PCB, Assemblies, Microcontroller Source Code)
 
