@@ -5,7 +5,7 @@ Demonstration video:
 
 * If i will have time i will continue the project!  :) 
 
-  * The estimated cost of all components needed to recreate this design (in full) is around 150 $ (PCB order included) ( Just for information )
+  * The estimated cost of all components needed to recreate this design (in full) 150 $ (around) (PCB order included) ( Just for information )
 
 # Here is my previous working and tested Line Follower project:
 * https://github.com/trteodor/Line_Follower_STM32H7
