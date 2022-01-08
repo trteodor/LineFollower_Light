@@ -27,7 +27,11 @@ The repository contains all the files used to create this project (PCB, Assembli
 
 # Few Photos
 
+Assembly without VL53
+
 ![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/RobotFotoMain.png)
+
+Small Family:
 
 ![SmallFamily](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/SweetFamily.jpg)
 
