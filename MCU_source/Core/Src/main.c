@@ -21,6 +21,7 @@
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
+#include "fatfs.h"
 #include "i2c.h"
 #include "sdmmc.h"
 #include "tim.h"
@@ -57,6 +58,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+FRESULT FatFsResult;
+FATFS SdFatFs;
+FIL SdCardFile;
+
+uint8_t bytes;
+char data[128];
 
 /* USER CODE END PV */
 
@@ -135,6 +142,7 @@ int main(void)
   MX_TIM12_Init();
   MX_TIM8_Init();
   MX_TIM4_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
   //Activate 100usTimer
   LL_TIM_EnableIT_CC1(TIM2);
@@ -159,14 +167,92 @@ int main(void)
 //  static VL53L0X_RangingMeasurementData_t result;
 //  static VL53L0X_Error Status;
 
-
-static uint16_t encHtim4Val=0, encHtim8Val=0 ;
 static uint32_t SavedTimeLocalTest =0 ;
 
-char locBlebuf[40];
-int sizelocBleB;
+//
+  // FatFS mount init
+  //
+  FatFsResult = f_mount(&SdFatFs, "", 1);
 
-uint8_t MSG[50] = {'\0'};
+  //
+  // FatFS mount init error check
+  //
+  if(FatFsResult != FR_OK)
+  {
+  	  bytes = sprintf(data, "FatFS mount error.\n\r");
+  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+  }
+  else
+  {
+  	  bytes = sprintf(data, "FatFS mounted.\n\r");
+  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+
+  	  //
+  	  // Open file on SD for writing
+  	  //
+  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_WRITE|FA_CREATE_ALWAYS);
+
+  	  //
+  	  // File open error check
+  	  //
+  	  if(FatFsResult != FR_OK)
+  	  {
+  		  bytes = sprintf(data, "No test.txt file. Can't create.\n\r");
+  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+  	  }
+  	  else
+  	  {
+  		  bytes = sprintf(data, "File opened.\n\r");
+  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+
+  		  //
+		  //	Print something to this file
+		  //
+		  for(uint8_t i = 0; i < 10; i++)
+		  {
+			  f_printf(&SdCardFile, "Line number %d.\n", i);
+		  }
+
+		  //
+		  // Close file
+		  //
+		  FatFsResult = f_close(&SdCardFile);
+
+		  bytes = sprintf(data, "File closed.\n\r");
+		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+
+
+	  	  //
+	  	  // Open file on SD for writing
+	  	  //
+	  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_READ);
+
+	  	  //
+	  	  // File open error check
+	  	  //
+	  	  if(FatFsResult != FR_OK)
+	  	  {
+	  		  bytes = sprintf(data, "No test.txt file. Can't open. \n\r");
+	  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+	  	  }
+	  	  else
+	  	  {
+	  		  UINT len;
+	  		  do
+	  		  {
+	  			  len = 0;
+		  		  f_read(&SdCardFile, data, 10, &len);
+		  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, len, 1000);
+	  		  }while(len > 0);
+
+			  //
+			  // Close file
+			  //
+			  FatFsResult = f_close(&SdCardFile);
+	  	  }
+  	  }
+  }
+
 
   /* USER CODE END 2 */
 
@@ -236,7 +322,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 60;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 8;
+  RCC_OscInitStruct.PLL.PLLQ = 16;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_3;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
