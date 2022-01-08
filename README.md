@@ -1,9 +1,7 @@
 # Light Follower Light
 
 Demonstration video:
-https://www.youtube.com/watch?v=ulPPqBeZhOw
-
-This project is in develop and test phase, (its only draft). 
+* https://www.youtube.com/watch?v=ulPPqBeZhOw
 
 * If i will have time i will continue the project!  :) 
 
@@ -20,20 +18,17 @@ PCB and 3D Assemblyis prepared, real world prototype prepared
 
 TODO:
 
+* Save map in Sd Card
 * Add support for MPU-6050
 * Add support for VL53l0
-* Generally do more tests!
+* Generally much things..
 
 The repository contains all the files used to create this project (PCB, Assemblies, Microcontroller Source Code)
 
-Used MCU - STM32H743
-
-![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Final_SimuAssebly.PNG)
-
-
-[29.12.2021] Frist Prototype photo:
-After correct soldering, everything works fine!
+# Few Photos
 
 ![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/RobotFotoMain.png)
 
 ![SmallFamily](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/SweetFamily.jpg)
+
+![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Final_SimuAssebly.PNG)
