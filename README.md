@@ -31,4 +31,6 @@ The repository contains all the files used to create this project (PCB, Assembli
 
 ![SmallFamily](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/SweetFamily.jpg)
 
+Simulation:
+
 ![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Final_SimuAssebly.PNG)
