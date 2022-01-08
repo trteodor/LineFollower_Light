@@ -58,12 +58,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-FRESULT FatFsResult;
-FATFS SdFatFs;
-FIL SdCardFile;
-
-uint8_t bytes;
-char data[128];
+//FRESULT FatFsResult;
+//FATFS SdFatFs;
+//FIL SdCardFile;
+//
+//uint8_t bytes;
+//char data[128];
 
 /* USER CODE END PV */
 
@@ -172,86 +172,86 @@ static uint32_t SavedTimeLocalTest =0 ;
 //
   // FatFS mount init
   //
-  FatFsResult = f_mount(&SdFatFs, "", 1);
-
-  //
-  // FatFS mount init error check
-  //
-  if(FatFsResult != FR_OK)
-  {
-  	  bytes = sprintf(data, "FatFS mount error.\n\r");
-  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-  }
-  else
-  {
-  	  bytes = sprintf(data, "FatFS mounted.\n\r");
-  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-
-  	  //
-  	  // Open file on SD for writing
-  	  //
-  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_WRITE|FA_CREATE_ALWAYS);
-
-  	  //
-  	  // File open error check
-  	  //
-  	  if(FatFsResult != FR_OK)
-  	  {
-  		  bytes = sprintf(data, "No test.txt file. Can't create.\n\r");
-  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-  	  }
-  	  else
-  	  {
-  		  bytes = sprintf(data, "File opened.\n\r");
-  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-
-  		  //
-		  //	Print something to this file
-		  //
-		  for(uint8_t i = 0; i < 10; i++)
-		  {
-			  f_printf(&SdCardFile, "Line number %d.\n", i);
-		  }
-
-		  //
-		  // Close file
-		  //
-		  FatFsResult = f_close(&SdCardFile);
-
-		  bytes = sprintf(data, "File closed.\n\r");
-		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-
-
-	  	  //
-	  	  // Open file on SD for writing
-	  	  //
-	  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_READ);
-
-	  	  //
-	  	  // File open error check
-	  	  //
-	  	  if(FatFsResult != FR_OK)
-	  	  {
-	  		  bytes = sprintf(data, "No test.txt file. Can't open. \n\r");
-	  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-	  	  }
-	  	  else
-	  	  {
-	  		  UINT len;
-	  		  do
-	  		  {
-	  			  len = 0;
-		  		  f_read(&SdCardFile, data, 10, &len);
-		  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, len, 1000);
-	  		  }while(len > 0);
-
-			  //
-			  // Close file
-			  //
-			  FatFsResult = f_close(&SdCardFile);
-	  	  }
-  	  }
-  }
+//  FatFsResult = f_mount(&SdFatFs, "", 1);
+//
+//  //
+//  // FatFS mount init error check
+//  //
+//  if(FatFsResult != FR_OK)
+//  {
+//  	  bytes = sprintf(data, "FatFS mount error.\n\r");
+//  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+//  }
+//  else
+//  {
+//  	  bytes = sprintf(data, "FatFS mounted.\n\r");
+//  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+//
+//  	  //
+//  	  // Open file on SD for writing
+//  	  //
+//  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_WRITE|FA_CREATE_ALWAYS);
+//
+//  	  //
+//  	  // File open error check
+//  	  //
+//  	  if(FatFsResult != FR_OK)
+//  	  {
+//  		  bytes = sprintf(data, "No test.txt file. Can't create.\n\r");
+//  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+//  	  }
+//  	  else
+//  	  {
+//  		  bytes = sprintf(data, "File opened.\n\r");
+//  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+//
+//  		  //
+//		  //	Print something to this file
+//		  //
+//		  for(uint8_t i = 0; i < 10; i++)
+//		  {
+//			  f_printf(&SdCardFile, "Line number %d.\n", i);
+//		  }
+//
+//		  //
+//		  // Close file
+//		  //
+//		  FatFsResult = f_close(&SdCardFile);
+//
+//		  bytes = sprintf(data, "File closed.\n\r");
+//		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+//
+//
+//	  	  //
+//	  	  // Open file on SD for writing
+//	  	  //
+//	  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_READ);
+//
+//	  	  //
+//	  	  // File open error check
+//	  	  //
+//	  	  if(FatFsResult != FR_OK)
+//	  	  {
+//	  		  bytes = sprintf(data, "No test.txt file. Can't open. \n\r");
+//	  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
+//	  	  }
+//	  	  else
+//	  	  {
+//	  		  UINT len;
+//	  		  do
+//	  		  {
+//	  			  len = 0;
+//		  		  f_read(&SdCardFile, data, 10, &len);
+//		  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, len, 1000);
+//	  		  }while(len > 0);
+//
+//			  //
+//			  // Close file
+//			  //
+//			  FatFsResult = f_close(&SdCardFile);
+//	  	  }
+//  	  }
+//  }
 
 
   /* USER CODE END 2 */
@@ -263,13 +263,6 @@ static uint32_t SavedTimeLocalTest =0 ;
 	  if(SavedTimeLocalTest + 1000 < HAL_GetTick() )
 		  {
 			  SavedTimeLocalTest = HAL_GetTick() ;
-
-
-//			  sizelocBleB = sprintf(locBlebuf, "\n\r *LEnc: : %ul \n\r *REnc: %ul "
-//					  , *Enc_Module.LeftEncoderImpulsCount
-//					  , *Enc_Module.RightEncoderImpulsCount);
-//			  HAL_UART_Transmit(&huart2, locBlebuf, sizelocBleB, 100);
-
 
 //		        Status=VL53L0X_GetMeasurementDataReady(&device, &data_ready);
 //
