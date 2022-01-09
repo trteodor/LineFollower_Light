@@ -1,5 +1,3 @@
-# This PCB have errors (29.12.2021) i'll fix it in next days
-
 
 Altium Designer viewer - is free, so you could be able to open this files, and view schematic and PCB.
 
@@ -13,9 +11,8 @@ Some of the most important items or items not shown in the altium schematics:
 * https://www.tme.eu/pl/details/ffc0520150/tasmy-ffc-fpc/riverdi/
 * https://www.tme.eu/pl/details/mx-15266-0209/tasmy-ffc-fpc/molex/15266-0209/
 * https://botland.com.pl/kola-z-oponami/24-kolo-solarbotics-rw2i-mocowane-wewnetrznie-pololu-1127.html
-* https://abc-rc.pl/product-pol-7891-Modul-BMS-PCM-PCB-ladowania-i-ochrony-ogniw-Li-ion-2S-8-4V-5A-18650.html
+* https://abc-rc.pl/product-pol-7891-Modul-BMS-PCM-PCB-ladowania-i-ochrony-ogniw-Li-ion-2S-8-4V-5A-18650.html (to get lion protection circuit elements)
 * https://botland.com.pl/akumulatory-li-pol-2s-74v-/8973-pakiet-li-pol-dualsky-250mah-30c-2s-74v-eco-s-6941047104631.html or
 * https://botland.com.pl/akumulatory-li-pol-2s-74v-/8248-pakiet-li-pol-dualsky-150mah-30c-2s-74v-eco-s-6941047106321.html 
 * Distance sensor VL53
 * Bluetooth Low Energy Module JDY-08 
-    * (for me info (i would buy HM-11 but i get from provider JDY-08... ))
