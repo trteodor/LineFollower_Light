@@ -7,10 +7,10 @@ Demonstration video:
 
   * The estimated cost of all components needed to recreate this design (in full) 150 $ (around) (PCB order included) ( Just for information )
 
+In Embedded source code is implemented many algorithms but generally - PID Controller is used to follow for the black line on white theme. But rly many things still can be done much better :) ( Let's say the truth - prepared Control Code in my opinion it's only draft )
+
 # You can also check my previous Line Follower Project:
 * https://github.com/trteodor/Line_Follower_STM32H7
-
-
 
 # In this project:
 
