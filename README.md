@@ -33,7 +33,7 @@ Assembly without VL53
 
 Small Family:
 
-![SmallFamily](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/SweetFamily.jpg)
+![SmallFamily](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/Sweet_Family.jpg)
 
 Simulation:
 
