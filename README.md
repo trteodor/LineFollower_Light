@@ -38,3 +38,7 @@ Small Family:
 Simulation:
 
 ![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Final_SimuAssebly.PNG)
+
+General Concept:
+
+![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_Gen_Concept.png)
