@@ -45,4 +45,4 @@ General Concept:
 
 Simplified view MCU application layers:
 
-![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/Simplified_view_MCU_application_layers.png)
+![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/Simplified_view_MCU_application_layers_N.png)
