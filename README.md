@@ -39,6 +39,10 @@ Simulation:
 
 ![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Final_SimuAssebly.PNG)
 
+Mobile App:
+
+![mobApp](https://github.com/trteodor/LineFollower_Light/blob/master/Mobile_AppView.jpg)
+
 General Concept:
 
 ![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_Gen_Concept.png)
