@@ -41,7 +41,7 @@ Simulation:
 
 Mobile App:
 
-![mobApp](https://github.com/trteodor/LineFollower_Light/blob/master/Mobile_AppView.jpg)
+![mobApp](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/Mobile_AppView.jpg)
 
 General Concept:
 
