@@ -42,3 +42,7 @@ Simulation:
 General Concept:
 
 ![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/LF_Light_Gen_Concept.png)
+
+Simplified view MCU application layers:
+
+![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/Pictures/Simplified_view_MCU_application_layers.png)
