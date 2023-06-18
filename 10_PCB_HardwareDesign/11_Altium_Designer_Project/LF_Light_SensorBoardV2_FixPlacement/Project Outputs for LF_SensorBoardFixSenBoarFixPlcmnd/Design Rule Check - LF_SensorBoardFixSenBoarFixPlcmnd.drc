@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
-PCB File : D:\STM32WorkSpace\LineFollower_Light\HW_Schematic&PCB\Altium\LF_Light_SensorBoardV2_FixPlacement\LF_SensorBoardFixSenBoarFixPlcmnd.PcbDoc
-Date     : 13/06/2023
-Time     : 19:04:04
+PCB File : E:\STM32_VSCodeWorkSpace\LineFollower_Light\10_PCB_HardwareDesign\11_Altium_Designer_Project\LF_Light_SensorBoardV2_FixPlacement\LF_SensorBoardFixSenBoarFixPlcmnd.PcbDoc
+Date     : 13.06.2023
+Time     : 23:00:14
 
 Processing Rule : Clearance Constraint (Gap=1.5mm) (InNetClass('ETH_WTÓRNA')),((InNet('GND') AND InPolygon))
 Rule Violations :0

@@ -84,7 +84,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	{
 		// Start listening again
 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, HM10BLE_App.ReceiveBuffer, ReceiveBufferSize);
-		HM10BLE_RxEventCallback(Size); //Application/Src/HM10_BleModule.c
+//		HM10BLE_RxEventCallback(Size); //Application/Src/HM10_BleModule.c
+		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 	}
 }
 
@@ -93,7 +94,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 	// Check if UART2 triggered the Callback
 	if(huart->Instance == USART2)
 	{
-		HM10BLE_TxCmpltEventCallback(); //Application/Src/HM10_BleModule.c
+//		HM10BLE_TxCmpltEventCallback(); //Application/Src/HM10_BleModule.c
 	}
 }
 
@@ -252,7 +253,8 @@ static uint32_t SavedTimeLocalTest =0 ;
 //	  	  }
 //  	  }
 //  }
-
+static uint8_t bufferData[100];
+volatile uint8_t MyInterator = 0;
 
   /* USER CODE END 2 */
 
@@ -278,8 +280,10 @@ static uint32_t SavedTimeLocalTest =0 ;
 //		            }
 //		        }
 		  }
-
-	  LF_App_MainTask(); //Application/Src/LF_AppMain
+	  uint8_t size = sprintf(bufferData,"HelloWorld %d AAAA\n\r",MyInterator++);
+	  HAL_UART_Transmit_DMA(&huart2, bufferData, size);
+	  HAL_Delay(200);
+//	  LF_App_MainTask(); //Application/Src/LF_AppMain
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
