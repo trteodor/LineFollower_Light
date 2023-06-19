@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include "qcustomplot.h"
 #include "bluetoothleuart.h"
+//#include <QInputDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,6 +23,21 @@ private slots:
     void DataHandler(const QString &s);
     void connectDevice();
     void sendData();
+
+
+    void titleDoubleClick(QMouseEvent *event);
+    void axisLabelDoubleClick(QCPAxis* axis, QCPAxis::SelectablePart part);
+    void legendDoubleClick(QCPLegend* legend, QCPAbstractLegendItem* item);
+    void selectionChanged();
+    void mousePress();
+    void mouseWheel();
+    void addRandomGraph();
+    void removeSelectedGraph();
+    void removeAllGraphs();
+    void contextMenuRequest(QPoint pos);
+    void moveLegend();
+    void graphClicked(QCPAbstractPlottable *plottable, int dataIndex);
+
 
 signals:
     void connectToDevice(int i);

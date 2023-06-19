@@ -1,6 +1,6 @@
 QT       += core gui bluetooth
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
@@ -12,12 +12,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     bluetoothleuart.cpp \
-    deviceinfo.cpp
+    deviceinfo.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
     mainwindow.h \
     bluetoothleuart.h \
-    deviceinfo.h
+    deviceinfo.h \
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui
