@@ -21,24 +21,14 @@
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
-#include "fatfs.h"
 #include "i2c.h"
-#include "sdmmc.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "HM10_BleModule.h"
 #include "LF_AppMain.h"
-#include "Encoders_Module.h"
-
-#include <stdio.h>
-
-#include "ranging_vl53l0x.h"
-#include "vl53l0x_api.h"
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -83,8 +73,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	if(huart->Instance == USART2)
 	{
 		// Start listening again
-		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, HM10BLE_App.ReceiveBuffer, ReceiveBufferSize);
-//		HM10BLE_RxEventCallback(Size); //Application/Src/HM10_BleModule.c
+// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, BLE_App.ReceiveBuffer, ReceiveBufferSize);
+//		BLE_RxEventCallback(Size); //Application/Src/BLE_ServiceModule.c
 		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 	}
 }
@@ -94,7 +84,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 	// Check if UART2 triggered the Callback
 	if(huart->Instance == USART2)
 	{
-//		HM10BLE_TxCmpltEventCallback(); //Application/Src/HM10_BleModule.c
+//		BLE_TxCmpltEventCallback(); //Application/Src/BLE_ServiceModule.c
 	}
 }
 
@@ -132,7 +122,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_SDMMC1_SD_Init();
   MX_ADC1_Init();
   MX_TIM15_Init();
   MX_USART2_UART_Init();
@@ -143,147 +132,20 @@ int main(void)
   MX_TIM12_Init();
   MX_TIM8_Init();
   MX_TIM4_Init();
-  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
   //Activate 100usTimer
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
-/* MPU-6050 Detected at 0x69 &i2c1 */
-
-  LF_App_MainConfig(); //Application/Src/LF_AppMain
-
-//  static VL53L0X_Dev_t device;
-//
-//  static volatile uint16_t res = 0;
-//
-//  device.I2cHandle=&hi2c2;
-//  device.I2cDevAddr=0x52;
-//  device.Present=0;
-//  device.Id=0;
-//
-//  initSensor( &device );
-
-//  static uint8_t data_ready;
-//  static VL53L0X_RangingMeasurementData_t result;
-//  static VL53L0X_Error Status;
-
-static uint32_t SavedTimeLocalTest =0 ;
-
-//
-  // FatFS mount init
-  //
-//  FatFsResult = f_mount(&SdFatFs, "", 1);
-//
-//  //
-//  // FatFS mount init error check
-//  //
-//  if(FatFsResult != FR_OK)
-//  {
-//  	  bytes = sprintf(data, "FatFS mount error.\n\r");
-//  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-//  }
-//  else
-//  {
-//  	  bytes = sprintf(data, "FatFS mounted.\n\r");
-//  	  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-//
-//  	  //
-//  	  // Open file on SD for writing
-//  	  //
-//  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_WRITE|FA_CREATE_ALWAYS);
-//
-//  	  //
-//  	  // File open error check
-//  	  //
-//  	  if(FatFsResult != FR_OK)
-//  	  {
-//  		  bytes = sprintf(data, "No test.txt file. Can't create.\n\r");
-//  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-//  	  }
-//  	  else
-//  	  {
-//  		  bytes = sprintf(data, "File opened.\n\r");
-//  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-//
-//  		  //
-//		  //	Print something to this file
-//		  //
-//		  for(uint8_t i = 0; i < 10; i++)
-//		  {
-//			  f_printf(&SdCardFile, "Line number %d.\n", i);
-//		  }
-//
-//		  //
-//		  // Close file
-//		  //
-//		  FatFsResult = f_close(&SdCardFile);
-//
-//		  bytes = sprintf(data, "File closed.\n\r");
-//		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-//
-//
-//	  	  //
-//	  	  // Open file on SD for writing
-//	  	  //
-//	  	  FatFsResult = f_open(&SdCardFile, "test.txt", FA_READ);
-//
-//	  	  //
-//	  	  // File open error check
-//	  	  //
-//	  	  if(FatFsResult != FR_OK)
-//	  	  {
-//	  		  bytes = sprintf(data, "No test.txt file. Can't open. \n\r");
-//	  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, bytes, 1000);
-//	  	  }
-//	  	  else
-//	  	  {
-//	  		  UINT len;
-//	  		  do
-//	  		  {
-//	  			  len = 0;
-//		  		  f_read(&SdCardFile, data, 10, &len);
-//		  		  HAL_UART_Transmit(&huart2, (uint8_t*)data, len, 1000);
-//	  		  }while(len > 0);
-//
-//			  //
-//			  // Close file
-//			  //
-//			  FatFsResult = f_close(&SdCardFile);
-//	  	  }
-//  	  }
-//  }
-static uint8_t bufferData[100];
-volatile uint8_t MyInterator = 0;
-
+  //LF_App_MainConfig(); //Application/Src/LF_AppMain
+BLE_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(SavedTimeLocalTest + 1000 < HAL_GetTick() )
-		  {
-			  SavedTimeLocalTest = HAL_GetTick() ;
-
-//		        Status=VL53L0X_GetMeasurementDataReady(&device, &data_ready);
-//
-//		        if( Status == VL53L0X_ERROR_NONE )
-//		        {
-//		            Status = VL53L0X_GetRangingMeasurementData(&device, &result);
-//
-//		            HAL_UART_Transmit(&huart2, "SFFS", 20, 100); result.RangeMilliMeter;
-//
-//		            if (Status == VL53L0X_ERROR_NONE)
-//		            {
-//		                Status = VL53L0X_ClearInterruptMask(&device,0);
-//		            }
-//		        }
-		  }
-	  uint8_t size = sprintf(bufferData,"HelloWorld %d AAAA\n\r",MyInterator++);
-	  HAL_UART_Transmit_DMA(&huart2, bufferData, size);
-	  HAL_Delay(200);
-//	  LF_App_MainTask(); //Application/Src/LF_AppMain
+      BLE_Task();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -366,79 +228,7 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-static VL53L0X_Error initSensor( VL53L0X_Dev_t * device )
-{
-    VL53L0X_Error Status=VL53L0X_ERROR_NONE;
 
-
-    static uint32_t refSpadCount     = 0;
-    static uint8_t  isApertureSpads  = 0;
-    static uint8_t  VhvSettings      = 0;
-    static uint8_t  PhaseCal         = 0;
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetDeviceAddress( device, 0x51 );
-        device->I2cDevAddr=0x51;
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_DataInit( device );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_StaticInit( device );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_PerformRefSpadManagement( device, &refSpadCount, &isApertureSpads);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_PerformRefCalibration( device, &VhvSettings, &PhaseCal);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetReferenceSpads( device, refSpadCount, isApertureSpads);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetRefCalibration( device, VhvSettings, PhaseCal);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_SetDeviceMode( device, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25*65536) );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status = VL53L0X_SetLimitCheckValue( device, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32*65536) );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status =VL53L0X_SetMeasurementTimingBudgetMicroSeconds( device,	20000 );
-    }
-
-    if (Status == VL53L0X_ERROR_NONE)
-    {
-        Status=VL53L0X_StartMeasurement( device );
-    }
-
-    return Status;
-}
 /* USER CODE END 4 */
 
 /**

@@ -1,0 +1,1 @@
+This is Bluetooth low energy module to communicate wireless with Line Follower
