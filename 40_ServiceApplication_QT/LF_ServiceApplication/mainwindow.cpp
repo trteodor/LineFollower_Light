@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->MapViewWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint)));
 
 
+    ui->tableWidget_2->setRowCount(1);
 }
 
 MainWindow::~MainWindow()
@@ -90,7 +91,7 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
 
         ui->B_Connect->setEnabled(false);
         ui->B_Search->setEnabled(false);
-        ui->DetectedDeviceSelector->setEnabled(false);
+        ui->DetectedDeviceSelector->setEnabled(true);
 
         ui->statusbar->showMessage("Searching for low energy devices...",1000);
         break;
@@ -152,7 +153,7 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
         ui->lineSendDataEdit->setEnabled(true);
 
         /* Initialise Slot DataHandler(QString) - gets new data */
-        connect(&bleConnection, SIGNAL(newData(QString)), this, SLOT(DataHandler(QString)));
+        connect(&bleConnection, SIGNAL(newData(QByteArray)), this, SLOT(DataHandler(QByteArray)));
         ui->statusbar->showMessage("Aquire data",1000);
         break;
     }
@@ -166,9 +167,46 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
 
 }
 
-void MainWindow::DataHandler(const QString &s){
+void MainWindow::DataHandler(const QByteArray &value){
 
-    qDebug() << "ReceivedData:" << s;
+    uint8_t SyncId = ((uint8_t)value.at(1) );
+    uint16_t PosX = ((uint8_t)value.at(7) ) | ( (uint8_t)value.at(6) << 6);
+    uint16_t PosY = ((uint8_t)value.at(9) ) | ( (uint8_t)value.at(8) << 8);
+    float    LftWhlSpdSimu = ((uint8_t)value.at(13) ) | ( (uint8_t)value.at(12) << 8)
+                          | ((uint8_t)value.at(11) <<16 ) | ( (uint8_t)value.at(10) << 24);
+
+    float    RightWhlSpdSimu = ((uint8_t)value.at(17) ) | ( (uint8_t)value.at(16) << 8)
+                            | ((uint8_t)value.at(15) <<16 ) | ( (uint8_t)value.at(14) << 24);
+
+    uint32_t ucTime = ((uint8_t)value.at(5) ) | ( (uint8_t)value.at(4) << 8)
+                       | ( (uint8_t)value.at(3) << 16) | ( (uint8_t)value.at(2) << 24);
+
+    static uint8_t PrevSyncId;
+
+    if(SyncId != (uint8_t)(PrevSyncId + 1))
+    {
+        ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
+        ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,1,new QTableWidgetItem(QString("SyncErr") ));
+        ui->tableWidget_2->item(ui->tableWidget_2->rowCount() -1 , 1) -> setData(Qt::BackgroundRole, QColor (250,0,0));
+    }
+
+
+
+    PrevSyncId = SyncId;
+
+    static uint32_t FrameID =0u;
+    FrameID++;
+
+    ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
+//  ui->tableWidget_2->setItem(0,0,new QTableWidgetItem(QString("This is a bit crazy world")));
+    ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,1,new QTableWidgetItem(QString::number(ucTime) ));
+    ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,3,new QTableWidgetItem(QString::number(SyncId) ));
+    ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,2,new QTableWidgetItem(QString::number(FrameID) ));
+
+    ui->tableWidget_2->scrollToBottom();
+//    ui->tableWidget_2-
+    qDebug("SyncID: %d ucTime: %d PosX: %d  PosY: %d LftWhlSpd: %f RightWheelSpd: %f",SyncId, ucTime,PosX,PosY,LftWhlSpdSimu, RightWhlSpdSimu);
+    qDebug("-------------------");
 }
 
 

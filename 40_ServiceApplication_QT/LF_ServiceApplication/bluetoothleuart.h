@@ -98,7 +98,7 @@ private slots:
 
 signals:
     /* Signals for user */
-    void newData(QString s);
+    void newData(QByteArray value);
     void changedState(bluetoothleUART::bluetoothleState newState);
 
 

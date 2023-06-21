@@ -222,7 +222,7 @@
    <property name="minimumSize">
     <size>
      <width>137</width>
-     <height>77</height>
+     <height>107</height>
     </size>
    </property>
    <property name="sizeIncrement">
@@ -255,25 +255,38 @@
    <widget class="QWidget" name="dockWidgetContents_10">
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
-      <widget class="QTableView" name="tableView_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QTableWidget" name="tableWidget_2">
+       <property name="autoScroll">
+        <bool>false</bool>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>1</width>
-         <height>0</height>
-        </size>
-       </property>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>100</number>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>SystemTime</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>uC_Time</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>FrameID</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>SyncID</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Decoded Data</string>
+        </property>
+       </column>
       </widget>
      </item>
     </layout>
@@ -556,7 +569,7 @@
           <rect>
            <x>10</x>
            <y>0</y>
-           <width>261</width>
+           <width>340</width>
            <height>26</height>
           </rect>
          </property>

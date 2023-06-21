@@ -94,6 +94,7 @@ void bluetoothleUART::startScan(){
 
     m_qlFoundDevices.clear();
 
+
     m_deviceDiscoveryAgent->start();
     setState(Scanning);
 
@@ -249,9 +250,13 @@ void bluetoothleUART::updateData(const QLowEnergyCharacteristic &c,const QByteAr
     if (c.uuid() != QBluetoothUuid(QUuid(TXUUID)))
            return;
 
-    emit newData((QString) value);
+//    uint32_t ucTime = ((uint8_t)value.at(5) ) | ( (uint8_t)value.at(4) << 8) | ( (uint8_t)value.at(3) << 16);
+//    qDebug("NewData: %x  %x   %x",value.at(5),value.at(4),value.at(3) );
 
+//    qDebug("NewData: %d", ucTime);
 
+//    qDebug("-------------------\n\r");
+    emit newData(value);
 }
 
 void bluetoothleUART::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,

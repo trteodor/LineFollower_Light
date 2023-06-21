@@ -20,7 +20,7 @@ public:
 
 private slots:
     void changedState(bluetoothleUART::bluetoothleState state);
-    void DataHandler(const QString &s);
+    void DataHandler(const QByteArray &value);
     void connectDevice();
     void sendData();
 
