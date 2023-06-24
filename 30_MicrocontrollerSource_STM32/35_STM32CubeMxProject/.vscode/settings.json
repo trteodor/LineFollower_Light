@@ -61,7 +61,8 @@
         "utility": "c",
         "lv_gpu_stm32_dma2d.h": "c",
         "lv_gpu_swm341_dma2d.h": "c",
-        "functional": "c"
+        "functional": "c",
+        "usart.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

@@ -45,8 +45,8 @@
 
 
 #define UARTSERVICEUUID "0000FFE0-0000-1000-8000-00805F9B34FB"
-#define RXUUID "0000FFE1-0000-1000-8000-00805F9B34FB"
-#define TXUUID "0000FFE1-0000-1000-8000-00805F9B34FB"
+#define RXUUID          "0000FFE1-0000-1000-8000-00805F9B34FB"
+#define TXUUID          "0000FFE1-0000-1000-8000-00805F9B34FB"
 
 class bluetoothleUART : public QObject
 {
@@ -57,11 +57,14 @@ public:
     enum bluetoothleState {
         Idle = 0,
         Scanning,
+        NewDeviceDiscovered,
         ScanFinished,
         Connecting,
         Connected,
+        Disconnected,
         ServiceFound,
-        AcquireData
+        AcquireData,
+        SignalsBlocked,
     };
     Q_ENUM(bluetoothleState)
 
@@ -95,12 +98,15 @@ private slots:
     /* Slots for user */
     void startScan();
     void startConnect(int i);
+    void DisconnectDevice();
+    void BlockData(bool Flag);
+
+
 
 signals:
     /* Signals for user */
     void newData(QByteArray value);
     void changedState(bluetoothleUART::bluetoothleState newState);
-
 
 private:
     DeviceInfo m_currentDevice;
@@ -113,6 +119,7 @@ private:
     QLowEnergyDescriptor m_notificationDescTx;
     QLowEnergyService *m_UARTService;
     bool m_bFoundUARTService;
+    QString m_previousAddress;
 
     bluetoothleUART::bluetoothleState m_state;
 

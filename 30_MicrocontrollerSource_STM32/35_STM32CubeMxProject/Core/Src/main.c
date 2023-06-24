@@ -66,14 +66,15 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+static uint8_t FakeBuffer[50];
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
 	// Check if UART2 trigger the Callback
 	if(huart->Instance == USART2)
 	{
 		// Start listening again
-// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, BLE_App.ReceiveBuffer, ReceiveBufferSize);
+
+ 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, FakeBuffer, 20);
 //		BLE_RxEventCallback(Size); //Application/Src/BLE_ServiceModule.c
 		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 	}
@@ -103,7 +104,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -138,13 +139,34 @@ int main(void)
   LL_TIM_EnableCounter(TIM2);
 
   //LF_App_MainConfig(); //Application/Src/LF_AppMain
-BLE_Init();
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, FakeBuffer, 20);
+	BLE_Init();
+
+	static uint8_t ReceiveBuffer[50];
+	static uint8_t TransmitBuffer[50];
+	static uint8_t RecDataNumber= 0U;
+
+//  uint8_t size = sprintf(TransmitBuffer,"AT+NEIN0");
+//  HAL_UARTEx_ReceiveToIdle(&huart2, ReceiveBuffer, 50, &RecDataNumber, 500);
+//  HAL_UART_Transmit(&huart2, TransmitBuffer, size, 200);
+//  HAL_Delay(50);
+//
+//  size = sprintf(TransmitBuffer,"AT+ADVEN2");
+//  HAL_UARTEx_ReceiveToIdle(&huart2, ReceiveBuffer, 50, &RecDataNumber, 500);
+//  HAL_UART_Transmit(&huart2, TransmitBuffer, size, 200);
+//  HAL_Delay(50);
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+
+
       BLE_Task();
     /* USER CODE END WHILE */
 

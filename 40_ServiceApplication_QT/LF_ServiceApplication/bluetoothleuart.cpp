@@ -30,15 +30,7 @@ bluetoothleUART::~bluetoothleUART(){
 
 void bluetoothleUART::getDeviceList(QList<QString> &qlDevices){
 
-    if(m_state == bluetoothleState::ScanFinished)
-    {
         qlDevices = m_qlFoundDevices;
-    }
-    else
-    {
-        qlDevices.clear();
-    }
-
 }
 
 
@@ -51,7 +43,12 @@ void bluetoothleUART::addDevice(const QBluetoothDeviceInfo &device)
                    << device.address().toString();
         DeviceInfo *dev = new DeviceInfo(device);
         m_qlDevices.append(dev);
+//                dev->getName()
+        m_qlFoundDevices.append(((DeviceInfo*) m_qlDevices.at(m_qlDevices.size() -1  ))->getName());
         qDebug() << "Low Energy device found. Scanning for more...\n\r";
+
+        qDebug() << "emit\n\r";
+        emit changedState(NewDeviceDiscovered);
     }
 
 }
@@ -59,19 +56,7 @@ void bluetoothleUART::addDevice(const QBluetoothDeviceInfo &device)
 
 void bluetoothleUART::scanFinished()
 {
-    if (m_qlDevices.size() == 0)
-    {
-        qWarning() << "No Low Energy devices found \n\r";
-    }
-    else
-    {
-        for (int i = 0; i < m_qlDevices.size(); i++) {
-           m_qlFoundDevices.append(((DeviceInfo*) m_qlDevices.at(i))->getName());
-        }
-
-    }
-    setState(ScanFinished);
-
+    qDebug() << "scanFinished\n\r";
 }
 
 
@@ -105,43 +90,79 @@ void bluetoothleUART::startScan(){
 
 void bluetoothleUART::startConnect(int i){
 
-    m_qvMeasurements.clear();
+    m_deviceDiscoveryAgent->stop();
+    qDebug() << "Discovery agent stopped";
 
     m_currentDevice.setDevice(((DeviceInfo*)m_qlDevices.at(i))->getDevice());
 
     if (m_control) {
         m_control->disconnectFromDevice();
         delete m_control;
-        m_control = 0;
+        m_control = nullptr;
+    }
+
+    if (!m_control)
+    {
+        /* 2 Step: QLowEnergyController */
+        m_control = QLowEnergyController::createCentral(m_currentDevice.getDevice(), this);
+
+
+        //    QLowEnergyController
+
+        m_control ->setRemoteAddressType(QLowEnergyController::RandomAddress);
+
+        connect(m_control, SIGNAL(serviceDiscovered(QBluetoothUuid)),
+                this, SLOT(serviceDiscovered(QBluetoothUuid)));
+        connect(m_control, SIGNAL(discoveryFinished()),
+                this, SLOT(serviceScanDone()));
+        connect(m_control, SIGNAL(error(QLowEnergyController::Error)),
+                this, SLOT(controllerError(QLowEnergyController::Error)));
+        connect(m_control, SIGNAL(connected()),
+                this, SLOT(deviceConnected()));
+        connect(m_control, SIGNAL(disconnected()),
+                this, SLOT(deviceDisconnected()));
 
     }
 
-    /* 2 Step: QLowEnergyController */
-//    m_control = new QLowEnergyController::createCentral(m_currentDevice.getDevice(), this);
-    m_control = QLowEnergyController::createCentral(m_currentDevice.getDevice(), this);
 
-    //    QLowEnergyController
-
-    m_control ->setRemoteAddressType(QLowEnergyController::RandomAddress);
-
-    connect(m_control, SIGNAL(serviceDiscovered(QBluetoothUuid)),
-            this, SLOT(serviceDiscovered(QBluetoothUuid)));
-    connect(m_control, SIGNAL(discoveryFinished()),
-            this, SLOT(serviceScanDone()));
-    connect(m_control, SIGNAL(error(QLowEnergyController::Error)),
-            this, SLOT(controllerError(QLowEnergyController::Error)));
-    connect(m_control, SIGNAL(connected()),
-            this, SLOT(deviceConnected()));
-    connect(m_control, SIGNAL(disconnected()),
-            this, SLOT(deviceDisconnected()));
+    m_control->setRemoteAddressType(QLowEnergyController::PublicAddress);
 
     /* Start connecting to device */
     m_control->connectToDevice();
     setState(Connecting);
 
+
+    m_previousAddress = m_currentDevice.getAddress();
 }
 
+void bluetoothleUART::DisconnectDevice()
+{
+    qDebug() << "DisconnectDevice";
+    //disable notifications
+    if (m_notificationDescTx.isValid() && m_service
+        && m_notificationDescTx.value() == QByteArray::fromHex("0100")) {
+        m_service->writeDescriptor(m_notificationDescTx, QByteArray::fromHex("0000"));
+    } else {
+        if (m_control)
+            m_control->disconnectFromDevice();
 
+        delete m_service;
+        m_service = nullptr;
+    }
+
+    setState(Disconnected);
+    setState(Idle);
+}
+
+void bluetoothleUART::BlockData(bool Flag)
+{
+    if(true == Flag && m_service){
+        m_service->blockSignals(true);
+    }
+    else if(false == Flag && m_service){
+        m_service->blockSignals(false);
+    }
+}
 
 void bluetoothleUART::serviceDiscovered(const QBluetoothUuid &gatt){
 
@@ -154,6 +175,7 @@ void bluetoothleUART::serviceDiscovered(const QBluetoothUuid &gatt){
 
 
 void bluetoothleUART::serviceScanDone(){
+
 
     delete m_service;
     m_service=0;
@@ -183,6 +205,7 @@ void bluetoothleUART::serviceScanDone(){
 
 void bluetoothleUART::deviceDisconnected()
 {
+
     qDebug() << "UART service disconnected";
     qWarning() << "Remote device disconnected";
 }
@@ -234,7 +257,9 @@ void bluetoothleUART::serviceStateChanged(QLowEnergyService::ServiceState s)
             // enable notification
             m_service->writeDescriptor(m_notificationDescTx, QByteArray::fromHex("0100"));
             setState(AcquireData);
+
             }
+
 
         break;
     }
@@ -250,6 +275,8 @@ void bluetoothleUART::updateData(const QLowEnergyCharacteristic &c,const QByteAr
     if (c.uuid() != QBluetoothUuid(QUuid(TXUUID)))
            return;
 
+
+
 //    uint32_t ucTime = ((uint8_t)value.at(5) ) | ( (uint8_t)value.at(4) << 8) | ( (uint8_t)value.at(3) << 16);
 //    qDebug("NewData: %x  %x   %x",value.at(5),value.at(4),value.at(3) );
 
@@ -257,6 +284,7 @@ void bluetoothleUART::updateData(const QLowEnergyCharacteristic &c,const QByteAr
 
 //    qDebug("-------------------\n\r");
     emit newData(value);
+
 }
 
 void bluetoothleUART::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,

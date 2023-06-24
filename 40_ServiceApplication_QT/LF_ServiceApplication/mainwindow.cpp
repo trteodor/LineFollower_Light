@@ -1,6 +1,30 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
+
+
+/*****************************************/
+/*Tools functions start*/
+/**/
+
+uint32_t ConvToUint32(const QByteArray &value, uint8_t ShiftValue)
+{
+    return (((uint8_t)value.at(ShiftValue) ) | ( (uint8_t)value.at(ShiftValue+1) << 8) \
+            | ( (uint8_t)value.at(ShiftValue+2) << 16) | ( (uint8_t)value.at(ShiftValue+3) << 24));
+
+}
+
+
+float ieee_uint32_AsBitsTo_float32(uint32_t f)
+{
+    float ret;
+    std::memcpy(&ret, &f, sizeof(float));
+    return ret;
+}
+
+/*Tools functions end */
+/**************************************************************/
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -8,20 +32,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
 
-
+    connect(this, SIGNAL(BLE_BlockData(bool)),&bleConnection,SLOT(BlockData(bool)));
     /* Signal and Slots */
     /* Search Button */
-    connect(ui->B_Search, SIGNAL(clicked()),&bleConnection, SLOT(startScan()));
+    connect(ui->BLE_ScanButton, SIGNAL(clicked()),&bleConnection, SLOT(startScan()));
+
     /* Connect Button */
-    connect(ui->B_Connect,SIGNAL(clicked()), this, SLOT(connectDevice()));
+    connect(ui->BLE_ConnectButton,SIGNAL(clicked()), this, SLOT(connectDevice()));
+    connect(this, SIGNAL(DisconnectBLE_Dev() ),&bleConnection,SLOT(DisconnectDevice() ));
 //    /* Send Data Button */
-    connect(ui->B_Send,SIGNAL(clicked()),this, SLOT(sendData()));
+//    connect(ui->B_Send,SIGNAL(clicked()),this, SLOT(sendData()));
 //    /* Bleutooth States */
     connect(&bleConnection, SIGNAL(changedState(bluetoothleUART::bluetoothleState)),this,SLOT(changedState(bluetoothleUART::bluetoothleState)));
-
-
-
-
 
 
 //    ui->MapViewWidget
@@ -44,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->MapViewWidget->legend->setSelectedFont(legendFont);
     ui->MapViewWidget->legend->setSelectableParts(QCPLegend::spItems); // legend box shall not be selectable, only legend items
 
-    addRandomGraph();
+    InitializeMapGraph();
     ui->MapViewWidget->rescaleAxes();
 
     // connect slot that ties some axis selections together (especially opposite axes):
@@ -70,16 +92,24 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->MapViewWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint)));
 
 
-    ui->tableWidget_2->setRowCount(1);
-}
+    ui->tableWidge_2->setRowCount(1);
+    ui->tableWidge_2->setColumnWidth(0,50);
+    ui->tableWidge_2->setColumnWidth(1,50);
+    ui->tableWidge_2->setColumnWidth(2,28);
+    ui->tableWidge_2->setColumnWidth(3,10);
+    ui->tableWidge_2->setColumnWidth(4,400);
 
+    ui->tableWidge_2->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+}
+/*********************************************************************************************************/
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
+/*********************************************************************************************************/
 void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
+
+    static uint8_t deviceCounter_l = 0;
 
     qDebug() << state;
 
@@ -87,78 +117,89 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
 
     case bluetoothleUART::Scanning:
     {
-        ui->DetectedDeviceSelector->clear();
+        ui->BLE_StatusLabel->setText("State:Scanning");
+        ui->BLE_DetectedDeviceComboBox->clear();
 
-        ui->B_Connect->setEnabled(false);
-        ui->B_Search->setEnabled(false);
-        ui->DetectedDeviceSelector->setEnabled(true);
+        ui->BLE_ConnectButton->setEnabled(false);
+        ui->BLE_ScanButton->setEnabled(false);
+        ui->BLE_DetectedDeviceComboBox->setEnabled(true);
 
         ui->statusbar->showMessage("Searching for low energy devices...",1000);
         break;
     }
 
-
-    case bluetoothleUART::ScanFinished:
+    case bluetoothleUART::NewDeviceDiscovered:
     {
+        ui->BLE_StatusLabel->setText("State:NewDevDet");
         bleConnection.getDeviceList(FoundDevices);
 
         if(!FoundDevices.empty()){
 
-            for (int i = 0; i < FoundDevices.size(); i++)
-            {
-                ui->DetectedDeviceSelector->addItem(FoundDevices.at(i));
-                qDebug() << ui->DetectedDeviceSelector->itemText(i);
-            }
-
-            /* Initialise Slot startConnect(int) -> button press ui->B_Connect */
+            ui->BLE_DetectedDeviceComboBox->addItem(FoundDevices.at(deviceCounter_l));
+            /* Initialise Slot startConnect(int) -> button press ui->BLE_ConnectButton */
             connect(this, SIGNAL(connectToDevice(int)),&bleConnection,SLOT(startConnect(int)));
 
-            ui->B_Connect->setEnabled(true);
-            ui->B_Search->setEnabled(true);
-            ui->DetectedDeviceSelector->setEnabled(true);
+            ui->BLE_ConnectButton->setEnabled(true);
+            ui->BLE_ScanButton->setEnabled(true);
+            ui->BLE_DetectedDeviceComboBox->setEnabled(true);
 
-            ui->statusbar->showMessage("Please select BLE device",1000);
-        }
-        else
-        {
-            ui->statusbar->showMessage("No Low Energy devices found",1000);
-            ui->B_Search->setEnabled(true);
+            QString AutoConnDevName = ui->BLE_AutoConnDevNameL->text();
+
+            if( ui->BLE_DetectedDeviceComboBox->itemText(deviceCounter_l) ==  AutoConnDevName
+                && ui->BLE_AutoConnCheckBox->isChecked() )
+            {
+                ui->tableWidge_2->insertRow(ui->tableWidge_2->rowCount() );
+                ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,4,new QTableWidgetItem(QString("Expected dev. name Matched: Autoconnection ") ));
+                emit connectToDevice(deviceCounter_l);
+            }
+            else
+            {
+                ui->statusbar->showMessage("Please select BLE device",1000);
+            }
+            deviceCounter_l++;
         }
 
         break;
     }
 
+    case bluetoothleUART::ScanFinished:
+    {
+        ui->BLE_StatusLabel->setText("State:ScanFinished");
+    }
     case bluetoothleUART::Connecting:
     {
-        ui->B_Connect->setEnabled(false);
-        ui->B_Search->setEnabled(false);
-        ui->DetectedDeviceSelector->setEnabled(false);
+                ui->BLE_StatusLabel->setText("State:Connecting");
+        ui->BLE_ConnectButton->setEnabled(false);
+        ui->BLE_ScanButton->setEnabled(false);
+//        ui->BLE_DetectedDeviceComboBox->setEnabled(false);
 
         ui->statusbar->showMessage("Connecting to device...",1000);
         break;
     }
     case bluetoothleUART::Connected:
     {
-        ui->statusbar->showMessage("Device connected. Looking for service...",1000);
+        ui->BLE_StatusLabel->setText("State:Connected");
+        break;
+    }
+    case bluetoothleUART::Disconnected:
+    {
+        ui->BLE_StatusLabel->setText("State:Disconnected");
+        ui->BLE_ConnectButton->setEnabled(true);
+        ui->BLE_ScanButton->setEnabled(true);
+        deviceCounter_l = 0;
         break;
     }
     case bluetoothleUART::ServiceFound:
     {
-        ui->statusbar->showMessage("Service found",1000);
         break;
     }
     case bluetoothleUART::AcquireData:
     {
-        ui->B_Send->setEnabled(true);
-        ui->lineSendDataEdit->setEnabled(true);
-
-        /* Initialise Slot DataHandler(QString) - gets new data */
         connect(&bleConnection, SIGNAL(newData(QByteArray)), this, SLOT(DataHandler(QByteArray)));
         ui->statusbar->showMessage("Aquire data",1000);
         break;
     }
     default:
-        //nothing for now
         break;
 
 
@@ -167,77 +208,190 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
 
 }
 
-void MainWindow::DataHandler(const QByteArray &value){
+void MainWindow::BLE_CommunicationStatistics_Handler(const QByteArray &value)
+{
+//    static uint8_t SyncIDCommStatistics;
+}
 
-    uint8_t SyncId = ((uint8_t)value.at(1) );
-    uint16_t PosX = ((uint8_t)value.at(7) ) | ( (uint8_t)value.at(6) << 6);
-    uint16_t PosY = ((uint8_t)value.at(9) ) | ( (uint8_t)value.at(8) << 8);
-    float    LftWhlSpdSimu = ((uint8_t)value.at(13) ) | ( (uint8_t)value.at(12) << 8)
-                          | ((uint8_t)value.at(11) <<16 ) | ( (uint8_t)value.at(10) << 24);
 
-    float    RightWhlSpdSimu = ((uint8_t)value.at(17) ) | ( (uint8_t)value.at(16) << 8)
-                            | ((uint8_t)value.at(15) <<16 ) | ( (uint8_t)value.at(14) << 24);
 
-    uint32_t ucTime = ((uint8_t)value.at(5) ) | ( (uint8_t)value.at(4) << 8)
-                       | ( (uint8_t)value.at(3) << 16) | ( (uint8_t)value.at(2) << 24);
 
-    static uint8_t PrevSyncId;
+void MainWindow::BLE_MapData_Handler(const QByteArray &value,BLE_MessageID_t BLE_MessID)
+{
+    static volatile uint8_t DupaTable[50];
+    static uint32_t PrevSyncId = 0U;
+    uint8_t _inputSyncId = ((uint8_t)value.at(1)) ;
 
-    if(SyncId != (uint8_t)(PrevSyncId + 1))
+
+
+    static uint16_t FrameCounter = 0U;
+    static volatile bool ExpectingExtraData = false;
+    static MainWindow::BLE_MapData_t IncomingMapData;
+    static MainWindow::BLE_MapData_t FullMapData;
+
+    if( (false == ExpectingExtraData) && (BLE_MessID == BLE_MessageID_t::BLE_BaseMapData)  && (PrevSyncId != _inputSyncId))
     {
-        ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
-        ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,1,new QTableWidgetItem(QString("SyncErr") ));
-        ui->tableWidget_2->item(ui->tableWidget_2->rowCount() -1 , 1) -> setData(Qt::BackgroundRole, QColor (250,0,0));
+        IncomingMapData.ucTimeStamp = ConvToUint32(value,2);
+        IncomingMapData.WhLftSp = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6)) ;
+        IncomingMapData.WhRhtSp =ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10)) ;
+        IncomingMapData.SyncId = _inputSyncId;
+        ExpectingExtraData = true;
+    }
+    else
+    {
+        if( (true == ExpectingExtraData) && (PrevSyncId == _inputSyncId) && (BLE_MessID == BLE_MessageID_t::BLE_ExtraMapData) )
+        {
+                IncomingMapData.PosX = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2)) ;
+                IncomingMapData.PosY = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6)) ;
+
+                /*Copy full input MapData*/
+                FullMapData = IncomingMapData;
+                ExpectingExtraData = false;
+
+
+                QString RgtWhlSpdSimu_s = QString::number(FullMapData.WhLftSp,'f',3);
+                QString LftWhlSpdSimu_s = QString::number(FullMapData.WhRhtSp,'f',3);
+                QString MyData = QString("pX: %1 |pY: %2 |L_sp: %3 |R_Sp: %4")
+                                     .arg(FullMapData.PosX).arg(FullMapData.PosY)
+                                     .arg(LftWhlSpdSimu_s)
+                                     .arg(RgtWhlSpdSimu_s) ;
+
+                ui->tableWidge_2->insertRow(ui->tableWidge_2->rowCount() );
+                ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,1,new QTableWidgetItem(QString::number(FullMapData.ucTimeStamp) ));
+                ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,2,new QTableWidgetItem(QString::number(FrameCounter) ));
+                ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,3,new QTableWidgetItem(QString::number(FullMapData.SyncId)));
+                ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,4,
+                                          new QTableWidgetItem((QString)MyData.data() ) );
+
+                GraphAppendData(FullMapData.PosX,FullMapData.PosY);
+        }
+        else
+        {
+                if(PrevSyncId != _inputSyncId)  /*Frame Already handled ignore*/
+                {
+                    /*Ignore synchronization error detected*/
+                    QString ExpectingExtraData_s = QString::number(ExpectingExtraData);
+                    QString SyncErroMessage = QString("MapDatSyncErr cID:'%1'|pID:'%2'|mID:'%3' eeData:'%4' ")
+                                                  .arg(_inputSyncId).arg(PrevSyncId).arg(BLE_MessID),arg(ExpectingExtraData_s);
+                    ui->tableWidge_2->insertRow(ui->tableWidge_2->rowCount() );
+                    ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,4,new QTableWidgetItem(SyncErroMessage));
+                    ui->tableWidge_2->item(ui->tableWidge_2->rowCount() -1 , 4) -> setData(Qt::BackgroundRole, QColor (250,0,0));
+                    ExpectingExtraData = false;
+                }
+
+        }
     }
 
 
-
-    PrevSyncId = SyncId;
-
-    static uint32_t FrameID =0u;
-    FrameID++;
-
-    ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
-//  ui->tableWidget_2->setItem(0,0,new QTableWidgetItem(QString("This is a bit crazy world")));
-    ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,1,new QTableWidgetItem(QString::number(ucTime) ));
-    ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,3,new QTableWidgetItem(QString::number(SyncId) ));
-    ui->tableWidget_2->setItem(ui->tableWidget_2->rowCount() -1 ,2,new QTableWidgetItem(QString::number(FrameID) ));
-
-    ui->tableWidget_2->scrollToBottom();
-//    ui->tableWidget_2-
-    qDebug("SyncID: %d ucTime: %d PosX: %d  PosY: %d LftWhlSpd: %f RightWheelSpd: %f",SyncId, ucTime,PosX,PosY,LftWhlSpdSimu, RightWhlSpdSimu);
-    qDebug("-------------------");
+    PrevSyncId = _inputSyncId;
 }
 
 
+
+/*********************************************************************************************************/
+void MainWindow::DataHandler(const QByteArray &value){
+
+    static volatile BLE_MessageID_t BLE_MessageID;
+    BLE_MessageID = ((BLE_MessageID_t)value.at(0) );
+
+    qDebug() <<  "NewFrameID:" << BLE_MessageID << "SyncID:" << ((uint8_t)value.at(1) );
+    QString message = QString("NewFrID '%1'").arg(BLE_MessageID);
+    ui->statusbar->showMessage(message, 500);
+
+    switch(BLE_MessageID)
+    {
+        case BLE_MessageID_t::BLE_CommunicationStatistics:
+        {
+            BLE_CommunicationStatistics_Handler(value);
+            break;
+        }
+
+        case BLE_MessageID_t::BLE_BaseMapData:
+        {
+            BLE_MapData_Handler(value,BLE_MessageID);
+            break;
+        }
+        case BLE_MessageID_t::BLE_ExtraMapData:
+        {
+            BLE_MapData_Handler(value,BLE_MessageID);
+            break;
+        }
+
+        default:
+        {
+        break;
+        }
+    }
+
+    ui->tableWidge_2->scrollToBottom();
+}
+/*********************************************************************************************************/
 void MainWindow::sendData(){
 
-    bleConnection.writeData((QString)ui->lineSendDataEdit->text());
+//    bleConnection.writeData((QString)ui->lineSendDataEdit->text());
+}
+/*********************************************************************************************************/
+void MainWindow::connectDevice()
+{
+    //    ui->BLE_AutoConnCheckBox->isChecked();
+    emit connectToDevice(ui->BLE_DetectedDeviceComboBox->currentIndex());
+}
+/*********************************************************************************************************/
+void MainWindow::on_BLE_DisconnectButton_clicked()
+{
+    emit DisconnectBLE_Dev();
 }
 
-void MainWindow::connectDevice(){
+/*********************************************************************************************************/
+void MainWindow::InitializeMapGraph(void)
+{
+    mGraph1 = ui->MapViewWidget->addGraph();
 
-    emit connectToDevice(ui->DetectedDeviceSelector->currentIndex());
+    mGraph1->setScatterStyle(QCPScatterStyle::ssDot);
+    mGraph1->setLineStyle(QCPGraph::lsNone);
+
+    ui->MapViewWidget->graph()->setName(QString("New graph %1").arg(ui->MapViewWidget->graphCount()-1));
+//    ui->MapViewWidget->graph()->setLineStyle((QCPGraph::LineStyle)(std::rand()%5+1));
+//    if (std::rand()%100 > 50)
+//        ui->MapViewWidget->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(std::rand()%14+1)));
+    QPen graphPen;
+    graphPen.setColor(QColor(std::rand()%245+10, std::rand()%245+10, std::rand()%245+10));
+    graphPen.setWidthF(std::rand()/(double)RAND_MAX*2+1);
+    ui->MapViewWidget->graph()->setPen(graphPen);
+    ui->MapViewWidget->replot();
+}
+
+/*********************************************************************************************************/
+void MainWindow::GraphAppendData(uint32_t X_Pos,uint32_t Y_Pos)
+{
+    qv_x.append( ((float)X_Pos) /4);
+    qv_y.append( ((float)Y_Pos) /4);
+    mGraph1->setData(qv_x,qv_y);
+
+    ui->MapViewWidget->xAxis->setRange
+            ( *std::min_element(qv_x.begin(),qv_x.end() ) -3,
+              *std::max_element(qv_x.begin(),qv_x.end() ) +3);
+
+    ui->MapViewWidget->yAxis->setRange
+        (  *std::min_element(qv_y.begin() ,qv_y.end() ) -3,
+           *std::max_element(qv_y.begin() ,qv_y.end() ) +10 );
+
+    ui->MapViewWidget->replot();
+    ui->MapViewWidget->update();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    qv_x.clear();
+    qv_y.clear();
+    ui->MapViewWidget->update();
+    ui->MapViewWidget->replot();
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*********************************************************************************************************/
 void MainWindow::titleDoubleClick(QMouseEvent* event)
 {
     Q_UNUSED(event)
@@ -253,7 +407,7 @@ void MainWindow::titleDoubleClick(QMouseEvent* event)
         }
     }
 }
-
+/*********************************************************************************************************/
 void MainWindow::axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part)
 {
     // Set an axis label by double clicking on it
@@ -268,7 +422,7 @@ void MainWindow::axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart par
         }
     }
 }
-
+/*********************************************************************************************************/
 void MainWindow::legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item)
 {
     // Rename a graph by double clicking on its legend item
@@ -285,7 +439,7 @@ void MainWindow::legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *ite
         }
     }
 }
-
+/*********************************************************************************************************/
 void MainWindow::selectionChanged()
 {
     /*
@@ -328,7 +482,7 @@ void MainWindow::selectionChanged()
         }
     }
 }
-
+/*********************************************************************************************************/
 void MainWindow::mousePress()
 {
     // if an axis is selected, only allow the direction of that axis to be dragged
@@ -341,7 +495,7 @@ void MainWindow::mousePress()
     else
         ui->MapViewWidget->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
 }
-
+/*********************************************************************************************************/
 void MainWindow::mouseWheel()
 {
     // if an axis is selected, only allow the direction of that axis to be zoomed
@@ -354,7 +508,7 @@ void MainWindow::mouseWheel()
     else
         ui->MapViewWidget->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
 }
-
+/*********************************************************************************************************/
 void MainWindow::addRandomGraph()
 {
     int n = 50; // number of points in graph
@@ -385,7 +539,7 @@ void MainWindow::addRandomGraph()
     ui->MapViewWidget->graph()->setPen(graphPen);
     ui->MapViewWidget->replot();
 }
-
+/*********************************************************************************************************/
 void MainWindow::removeSelectedGraph()
 {
     if (ui->MapViewWidget->selectedGraphs().size() > 0)
@@ -394,13 +548,13 @@ void MainWindow::removeSelectedGraph()
         ui->MapViewWidget->replot();
     }
 }
-
+/*********************************************************************************************************/
 void MainWindow::removeAllGraphs()
 {
     ui->MapViewWidget->clearGraphs();
     ui->MapViewWidget->replot();
 }
-
+/*********************************************************************************************************/
 void MainWindow::contextMenuRequest(QPoint pos)
 {
     QMenu *menu = new QMenu(this);
@@ -424,7 +578,7 @@ void MainWindow::contextMenuRequest(QPoint pos)
 
     menu->popup(ui->MapViewWidget->mapToGlobal(pos));
 }
-
+/*********************************************************************************************************/
 void MainWindow::moveLegend()
 {
     if (QAction* contextAction = qobject_cast<QAction*>(sender())) // make sure this slot is really called by a context menu action, so it carries the data we need
@@ -438,7 +592,7 @@ void MainWindow::moveLegend()
         }
     }
 }
-
+/*********************************************************************************************************/
 void MainWindow::graphClicked(QCPAbstractPlottable *plottable, int dataIndex)
 {
     // since we know we only have QCPGraphs in the plot, we can immediately access interface1D()
@@ -448,10 +602,14 @@ void MainWindow::graphClicked(QCPAbstractPlottable *plottable, int dataIndex)
     ui->statusbar->showMessage(message, 2500);
 }
 
-
-
-
-
-
-
+void MainWindow::on_BLE_BlockSignalsCheckBox_stateChanged(int arg1)
+{
+    (void)arg1;
+    if(ui->BLE_BlockSignalsCheckBox->isChecked()){
+        emit BLE_BlockData(true);
+    }
+    else{
+        emit BLE_BlockData(false);
+    }
+}
 
