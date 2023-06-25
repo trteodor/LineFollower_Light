@@ -55,6 +55,17 @@ MainWindow::MainWindow(QWidget *parent)
 /*********************************************************************************************************/
 MainWindow::~MainWindow()
 {
+    on_BLE_SuspendFakeProdButton_clicked();
+    QThread::msleep(10);
+    on_BLE_SuspendFakeProdButton_clicked();
+    QThread::msleep(10);
+    on_BLE_SuspendFakeProdButton_clicked();
+    QThread::msleep(10);
+    /*Send the command 3x to be sure that fakeProducer will be stopped, if not then re-connection may be impossible
+     * - HW reset may be required
+    */
+
+    emit BLE_DisconnectDevice();
     delete ui;
 }
 
