@@ -386,19 +386,19 @@ void BLE_Task(void)
 	}
 
 
-//	TransmitWindowActiv = true;
+	TransmitWindowActiv = true;
 	(void)BLE_DataTransmitWindow;
 /*Fajnie wyszlo na 200 wobec 60*/
-	if(HAL_GetTick() - BLE_DataTransmitWindow > 300)
-	{
-		BLE_DataTransmitWindow = HAL_GetTick();
-		TransmitWindowActiv = true;
-	}
-
-	if(HAL_GetTick() - BLE_DataTransmitWindow > 40)
-	{
-		TransmitWindowActiv = false;
-	}
+//	if(HAL_GetTick() - BLE_DataTransmitWindow > 300)
+//	{
+//		BLE_DataTransmitWindow = HAL_GetTick();
+//		TransmitWindowActiv = true;
+//	}
+//
+//	if(HAL_GetTick() - BLE_DataTransmitWindow > 40)
+//	{
+//		TransmitWindowActiv = false;
+//	}
 
 	if( HAL_UART_STATE_READY == huart2.gState && (true == TransmitWindowActiv))
 	{
