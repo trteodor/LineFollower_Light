@@ -66,28 +66,7 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static uint8_t FakeBuffer[50];
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-{
-	// Check if UART2 trigger the Callback
-	if(huart->Instance == USART2)
-	{
-		// Start listening again
 
- 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, FakeBuffer, 20);
-//		BLE_RxEventCallback(Size); //Application/Src/BLE_ServiceModule.c
-		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-	}
-}
-
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-	// Check if UART2 triggered the Callback
-	if(huart->Instance == USART2)
-	{
-//		BLE_TxCmpltEventCallback(); //Application/Src/BLE_ServiceModule.c
-	}
-}
 
 /* USER CODE END 0 */
 
@@ -139,12 +118,12 @@ int main(void)
   LL_TIM_EnableCounter(TIM2);
 
   //LF_App_MainConfig(); //Application/Src/LF_AppMain
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, FakeBuffer, 20);
+
 	BLE_Init();
 
-	static uint8_t ReceiveBuffer[50];
-	static uint8_t TransmitBuffer[50];
-	static uint8_t RecDataNumber= 0U;
+//	static uint8_t ReceiveBuffer[50];
+//	static uint8_t TransmitBuffer[50];
+//	static uint8_t RecDataNumber= 0U;
 
 //  uint8_t size = sprintf(TransmitBuffer,"AT+NEIN0");
 //  HAL_UARTEx_ReceiveToIdle(&huart2, ReceiveBuffer, 50, &RecDataNumber, 500);
@@ -155,8 +134,6 @@ int main(void)
 //  HAL_UARTEx_ReceiveToIdle(&huart2, ReceiveBuffer, 50, &RecDataNumber, 500);
 //  HAL_UART_Transmit(&huart2, TransmitBuffer, size, 200);
 //  HAL_Delay(50);
-
-
 
   /* USER CODE END 2 */
 

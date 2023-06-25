@@ -95,6 +95,8 @@ void bluetoothleUART::startConnect(int i){
 
     m_currentDevice.setDevice(((DeviceInfo*)m_qlDevices.at(i))->getDevice());
 
+    qDebug() << &m_currentDevice;
+
     if (m_control) {
         m_control->disconnectFromDevice();
         delete m_control;
@@ -146,8 +148,11 @@ void bluetoothleUART::DisconnectDevice()
         if (m_control)
             m_control->disconnectFromDevice();
 
-        delete m_service;
-        m_service = nullptr;
+        if(m_service)
+        {
+            delete m_service;
+            m_service = nullptr;
+        }
     }
 
     setState(Disconnected);
@@ -299,12 +304,16 @@ void bluetoothleUART::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
 }
 
 
-void bluetoothleUART::writeData(QString s){
+void bluetoothleUART::writeData(QByteArray value){
+    if(m_control && m_service)
+    {
+        const QLowEnergyCharacteristic  RxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+        //    qDebug()<< s;
+        QByteArray Data = value;
+        //    Data.append("HelloWorld\n\r");
+        m_service->writeCharacteristic(RxChar, Data,QLowEnergyService::WriteWithoutResponse);
+    }
 
-    const QLowEnergyCharacteristic  RxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
-    qDebug()<< s;
-    QByteArray Data = s.toUtf8();
-    m_service->writeCharacteristic(RxChar, Data,QLowEnergyService::WriteWithoutResponse);
 }
 
 

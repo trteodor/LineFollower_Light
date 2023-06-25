@@ -22,7 +22,7 @@
  * Defines configuration start
  * */
 
-#define BLE_RING_BUFFER_SIZE     7000
+#define BLE_RING_BUFFER_SIZE     3000
 
 
 
@@ -36,6 +36,13 @@
  * Type defs
  * */
 
+typedef struct
+{
+	uint8_t BLE_Data[18];
+	/*as i know Max size of one BLE message is 20bytes
+	 * - |FrameID|SyncID|18bytesData|
+	 * */
+}BLE_MessageBuffer_t;
 
 /*
  * Type definition of Common Header or message ID for Embedded software and desktop application
@@ -45,11 +52,11 @@ typedef enum
 	BLE_None = 0,
 	BLE_ConfirmationTag,
 	BLE_CommunicationStatistics,
-	BLE_BaseSensorData, /*FRAME: Line Sensors 1-12 as 8bit, PosError, ConfidenceLine Position Left and Right*/
-	BLE_ExtraSensorData,
-	BLE_BaseMapData,
-	BLE_ExtraMapData,
-
+	BLE_BaseDataReport_part1, /*Divide most necessary data into 1 compressed buffor to effienctly communicate*/
+	BLE_BaseDataReport_part2,
+	BLE_BaseDataReport_part3,
+	BLE_SuspendFakeProducer,
+	BLE_StartFakeProducer,
 }BLE_MessageID_t;
 
 typedef enum
@@ -59,36 +66,50 @@ typedef enum
 }BLE_CallStatus_t;
 
 
-typedef struct
-{
-	uint8_t BLE_Data[18];
-	/*as i know Max size of one BLE message is 20bytes
-	 * - |FrameID|SyncID|18bytesData|
-	 * */
-}BLE_MessageBuffer_t;
+
+/*
+ * Modules should report the newest data then BLE module will transmit it
+ * */
+
+
 
 typedef struct
 {
-	uint8_t SyncId;
-	uint32_t ucTimeStamp;
 	float WhLftSp;
 	float WhRhtSp;
 	float YawRate;
 	float PosX;
 	float PosY;
 	float TravelledDistance;
-}BLE_MapData_t;
+}BLE_MapDataReport_t; /*Current size 6*4 = 24*/
+
+typedef struct
+{
+	uint8_t SensorData[12];
+	float PosError;
+	uint8_t LastLeftLinePosConfidence;
+	uint8_t LastRightLinePosConfidence;
+}BLE_SensorDataReport_t;  /*Current size= 12+4+1+1 = 18*/
+
 
 typedef struct
 {
 	uint8_t SyncId;
 	uint32_t ucTimeStamp;
-	uint8_t SensorData[12];
-	float PosError;
-	uint8_t LastLeftLinePosConfidence;
-	uint8_t LastRightLinePosConfidence;
-}BLE_SensorData_t;
+	BLE_MapDataReport_t CurrMapData;
+	BLE_SensorDataReport_t CurrSensorData;
+}BLE_LfDataReport_t ; /*47bytes total size + 3*2 = 6*/
 
+
+typedef struct
+{
+	uint8_t SyncId;
+	uint32_t ucTimeStamp;
+	uint16_t RingBufferRemainingSize;
+	uint16_t RingBufferOverFlowCounter;
+	uint16_t TransmisstedMessagesCounter;
+	uint16_t RetransmissionCounter;
+}BLE_StatisticData_t ;
 
 
 /*
@@ -111,16 +132,15 @@ void BLE_Task(void); /*Runnable of BLE communication module (Call as often as po
 BLE_CallStatus_t BLE_MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BLE_MessageBuffer_t *MessageData);
 
 
-/* brief BLE_SensorDataWrite
+/* brief BLE_ReportSensorData
  * LineEstimator: Dedicated interface for  to transmit sensor data
  */
-BLE_CallStatus_t BLE_SensorDataWrite(BLE_SensorData_t *SensorData);
+void BLE_ReportSensorData(BLE_SensorDataReport_t *SensorData);
 
-
-/* brief BLE_MapDataWrite
+/* brief BLE_ReportMapData
 *LF_AppMain: Dedicated interface to create XY map in desktop application
 */
-BLE_CallStatus_t BLE_MapDataWrite(BLE_MapData_t *MapData);
+void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
 
 
 

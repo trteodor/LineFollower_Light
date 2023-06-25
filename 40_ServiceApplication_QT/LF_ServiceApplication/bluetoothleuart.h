@@ -71,7 +71,7 @@ public:
     bluetoothleUART();
     ~bluetoothleUART();
 
-    void writeData(QString s);
+    void writeData(QByteArray value);
     void setState(bluetoothleUART::bluetoothleState newState);
     bluetoothleUART::bluetoothleState getState() const;
     void getDeviceList(QList<QString> &qlDevices);
