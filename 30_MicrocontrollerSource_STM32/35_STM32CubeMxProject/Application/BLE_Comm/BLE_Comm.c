@@ -356,7 +356,7 @@ void TemporaryFakeProducer(void)
 
 	BLE_TransmitLfDataReport();
 
-	WaveHelper = WaveHelper + 0.05;
+	WaveHelper = WaveHelper + 0.01;
 	ProbeIterator++;
 	SyncIdIter++;
 }

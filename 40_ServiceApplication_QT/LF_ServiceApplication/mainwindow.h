@@ -76,12 +76,9 @@ public:
 
 
 private slots:
-    void changedState(bluetoothleUART::bluetoothleState state);
-    void DataHandler(const QByteArray &value);
-    void connectDevice();
-    void sendData();
-
-
+    void BLE_changedState(bluetoothleUART::bluetoothleState state);
+    void BLE_DataHandler(const QByteArray &value);
+    void BLE_connectDevice();
 
 
     void MapGraph_titleDoubleClick(QMouseEvent *event);
@@ -102,7 +99,7 @@ private slots:
 
 
 
-
+    void BLE_InitializeQTConnections(void);
     void on_BLE_DisconnectButton_clicked();
     void on_BLE_BlockSignalsCheckBox_stateChanged(int arg1);
     void on_BLE_SuspendFakeProdButton_clicked();
@@ -111,8 +108,8 @@ private slots:
     void on_GeneralPlotDataClear_pb_clicked();
 
 signals:
-    void connectToDevice(int i);
-    void DisconnectBLE_Dev();
+    void BLE_connectToDevice(int i);
+    void BLE_DisconnectDevice();
     void BLE_BlockData(bool Flag);
 
 private:

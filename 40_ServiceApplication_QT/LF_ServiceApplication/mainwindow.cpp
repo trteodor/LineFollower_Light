@@ -36,23 +36,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
+    BLE_InitializeQTConnections();
     MapGraph_Initialize();
 
 
-    /*BLE Signals*/
-    connect(this, SIGNAL(BLE_BlockData(bool)),&bleConnection,SLOT(BlockData(bool)));
-    /* Signal and Slots */
-    /* Search Button */
-    connect(ui->BLE_ScanButton, SIGNAL(clicked()),&bleConnection, SLOT(startScan()));
-
-    /* Connect Button */
-    connect(ui->BLE_ConnectButton,SIGNAL(clicked()), this, SLOT(connectDevice()));
-    connect(this, SIGNAL(DisconnectBLE_Dev() ),&bleConnection,SLOT(DisconnectDevice() ));
-//    /* Send Data Button */
-//    connect(ui->B_Send,SIGNAL(clicked()),this, SLOT(sendData()));
-//    /* Bleutooth States */
-    connect(&bleConnection, SIGNAL(changedState(bluetoothleUART::bluetoothleState)),this,SLOT(changedState(bluetoothleUART::bluetoothleState)));
 
 
     /*Debug Table configure*/
@@ -88,7 +75,22 @@ void MainWindow::on_GeneralPlotDataClear_pb_clicked()
 /*********************************************************************************************************/
 /*********************************************************************************************************/
 /*********************************************************************************************************/
-void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
+void MainWindow::BLE_InitializeQTConnections(void)
+{
+    /*BLE Signals*/
+    connect(this, SIGNAL(BLE_BlockData(bool)),&bleConnection,SLOT(BlockData(bool)));
+    /* Signal and Slots */
+    /* Search Button */
+    connect(ui->BLE_ScanButton, SIGNAL(clicked()),&bleConnection, SLOT(startScan()));
+
+    /* Connect Button */
+    connect(ui->BLE_ConnectButton,SIGNAL(clicked()), this, SLOT(BLE_connectDevice()));
+    connect(this, SIGNAL(BLE_DisconnectDevice() ),&bleConnection,SLOT(DisconnectDevice() ));
+    //    /* Bleutooth States */
+    connect(&bleConnection, SIGNAL(changedState(bluetoothleUART::bluetoothleState)),this,SLOT(BLE_changedState(bluetoothleUART::bluetoothleState)));
+}
+/*********************************************************************************************************/
+void MainWindow::BLE_changedState(bluetoothleUART::bluetoothleState state){
 
     static uint8_t deviceCounter_l = 0;
 
@@ -118,7 +120,7 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
 
             ui->BLE_DetectedDeviceComboBox->addItem(FoundDevices.at(deviceCounter_l));
             /* Initialise Slot startConnect(int) -> button press ui->BLE_ConnectButton */
-            connect(this, SIGNAL(connectToDevice(int)),&bleConnection,SLOT(startConnect(int)));
+            connect(this, SIGNAL(BLE_connectToDevice(int)),&bleConnection,SLOT(startConnect(int)));
 
             ui->BLE_ConnectButton->setEnabled(true);
             ui->BLE_ScanButton->setEnabled(true);
@@ -132,7 +134,7 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
                 ui->BLE_DetectedDeviceComboBox->setCurrentIndex(deviceCounter_l);
                 ui->tableWidge_2->insertRow(ui->tableWidge_2->rowCount() );
                 ui->tableWidge_2->setItem(ui->tableWidge_2->rowCount() -1 ,4,new QTableWidgetItem(QString("Expected dev. name Matched: Autoconnection ") ));
-                emit connectToDevice(deviceCounter_l);
+                emit BLE_connectToDevice(deviceCounter_l);
             }
             else
             {
@@ -177,7 +179,7 @@ void MainWindow::changedState(bluetoothleUART::bluetoothleState state){
     }
     case bluetoothleUART::AcquireData:
     {
-        connect(&bleConnection, SIGNAL(newData(QByteArray)), this, SLOT(DataHandler(QByteArray)));
+        connect(&bleConnection, SIGNAL(newData(QByteArray)), this, SLOT(BLE_DataHandler(QByteArray)));
         ui->statusbar->showMessage("Aquire data",1000);
         break;
     }
@@ -654,7 +656,7 @@ void MainWindow::BLE_LfAppBaseData(const QByteArray &value,BLE_MessageID_t BLE_M
     PrevSyncId = _inputSyncId;
 }
 /*********************************************************************************************************/
-void MainWindow::DataHandler(const QByteArray &value){
+void MainWindow::BLE_DataHandler(const QByteArray &value){
 
     static volatile BLE_MessageID_t BLE_MessageID;
     BLE_MessageID = ((BLE_MessageID_t)value.at(0) );
@@ -714,21 +716,16 @@ void MainWindow::on_BLE_ActivFakeProdButton_clicked()
     bleConnection.writeData(Helper);
 }
 /*********************************************************************************************************/
-void MainWindow::sendData(){
-
-//    bleConnection.writeData((QString)ui->lineSendDataEdit->text());
-}
-/*********************************************************************************************************/
-void MainWindow::connectDevice()
+void MainWindow::BLE_connectDevice()
 {
     //    ui->BLE_AutoConnCheckBox->isChecked();
-    emit connectToDevice(ui->BLE_DetectedDeviceComboBox->currentIndex());
+    emit BLE_connectToDevice(ui->BLE_DetectedDeviceComboBox->currentIndex());
 }
 /*********************************************************************************************************/
 void MainWindow::on_BLE_DisconnectButton_clicked()
 {
     on_BLE_SuspendFakeProdButton_clicked();
-    emit DisconnectBLE_Dev();
+    emit BLE_DisconnectDevice();
 }
 /*********************************************************************************************************/
 void MainWindow::on_BLE_BlockSignalsCheckBox_stateChanged(int arg1)
