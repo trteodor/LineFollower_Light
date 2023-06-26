@@ -29,6 +29,9 @@ TRANSLATIONS += \
 CONFIG += lrelease
 CONFIG += embed_translations
 
+RESOURCES += qdarkstyle/dark/darkstyle.qrc
+RESOURCES += qdarkstyle/light/lightstyle.qrc
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

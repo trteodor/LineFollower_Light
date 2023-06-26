@@ -213,6 +213,7 @@ void bluetoothleUART::deviceDisconnected()
 
     qDebug() << "UART service disconnected";
     qWarning() << "Remote device disconnected";
+    setState(Disconnected);
 }
 
 void bluetoothleUART::deviceConnected()

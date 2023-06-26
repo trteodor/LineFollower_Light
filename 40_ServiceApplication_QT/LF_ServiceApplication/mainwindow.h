@@ -80,11 +80,13 @@ private slots:
     void BLE_DataHandler(const QByteArray &value);
     void BLE_connectDevice();
 
+    /******************************************************************************/
+    void MapGraph_Initialize(void);
+    void MapGraph_AppendData(uint32_t X_Pos,uint32_t Y_Pos);
 
-    void MapGraph_titleDoubleClick(QMouseEvent *event);
     void MapGraph_axisLabelDoubleClick(QCPAxis* axis, QCPAxis::SelectablePart part);
     void MapGraph_legendDoubleClick(QCPLegend* legend, QCPAbstractLegendItem* item);
-    void MapGraph_selectionChanged_selectionChanged();
+    void MapGraph_selectionChanged();
     void MapGraph_mousePress();
     void MapGraph_mouseWheel();
     void MapGraph_addRandomGraph();
@@ -93,9 +95,26 @@ private slots:
     void MapGraph_contextMenuRequest(QPoint pos);
     void MapGraph_moveLegend();
     void MapGraph_Clicked(QCPAbstractPlottable *plottable, int dataIndex);
+    /******************************************************************************/
 
-    void MapGraph_Initialize(void);
-    void MapGraph_AppendData(uint32_t X_Pos,uint32_t Y_Pos);
+
+
+    /******************************************************************************/
+    void YawRateGraph_Initialize(void);
+    void YawRateGraph_AppendData(float X_Pos,float Y_Pos);
+
+    void YawRateGraph_axisLabelDoubleClick(QCPAxis* axis, QCPAxis::SelectablePart part);
+    void YawRateGraph_legendDoubleClick(QCPLegend* legend, QCPAbstractLegendItem* item);
+    void YawRateGraph_selectionChanged();
+    void YawRateGraph_mousePress();
+    void YawRateGraph_mouseWheel();
+    void YawRateGraph_addRandomGraph();
+    void YawRateGraph_removeSelectedGraph();
+    void YawRateGraph_removeAllGraphs();
+    void YawRateGraph_contextMenuRequest(QPoint pos);
+    void YawRateGraph_moveLegend();
+    void YawRateGraph_graphClicked(QCPAbstractPlottable *plottable, int dataIndex);
+    /******************************************************************************/
 
 
 
@@ -118,10 +137,14 @@ private:
     QList<QString> FoundDevices;
 
 
-    QPointer<QCPGraph> mGraph1;
-    QPointer<QCPGraph> mGraph2;
+    QPointer<QCPGraph> MapGraph1;
+    QPointer<QCPGraph> MapGraph2;
 
-    QVector<double> qv_x, qv_y;
+    QPointer<QCPGraph> YawRateGraph1;
+    QPointer<QCPGraph> YawRateGraph2;
+
+    QVector<double> MapDataVector_X, MapDataVector_Y;
+    QVector<double> YawRateVector_X, YawRateVector_Y;
 
     BLE_LfDataReport_t FullBaseData;
 
