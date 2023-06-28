@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtConcurrent>
 #include "qcustomplot.h"
 #include "bluetoothleuart.h"
+#include "lfserviceappPlots.h"
+
 //#include <QInputDialog>
 
 QT_BEGIN_NAMESPACE
@@ -80,43 +83,6 @@ private slots:
     void BLE_DataHandler(const QByteArray &value);
     void BLE_connectDevice();
 
-    /******************************************************************************/
-    void MapGraph_Initialize(void);
-    void MapGraph_AppendData(uint32_t X_Pos,uint32_t Y_Pos);
-
-    void MapGraph_axisLabelDoubleClick(QCPAxis* axis, QCPAxis::SelectablePart part);
-    void MapGraph_legendDoubleClick(QCPLegend* legend, QCPAbstractLegendItem* item);
-    void MapGraph_selectionChanged();
-    void MapGraph_mousePress();
-    void MapGraph_mouseWheel();
-    void MapGraph_addRandomGraph();
-    void MapGraph_removeSelectedGraph();
-    void MapGraph_removeAllGraphs();
-    void MapGraph_contextMenuRequest(QPoint pos);
-    void MapGraph_moveLegend();
-    void MapGraph_Clicked(QCPAbstractPlottable *plottable, int dataIndex);
-    /******************************************************************************/
-
-
-
-    /******************************************************************************/
-    void YawRateGraph_Initialize(void);
-    void YawRateGraph_AppendData(float X_Pos,float Y_Pos);
-
-    void YawRateGraph_axisLabelDoubleClick(QCPAxis* axis, QCPAxis::SelectablePart part);
-    void YawRateGraph_legendDoubleClick(QCPLegend* legend, QCPAbstractLegendItem* item);
-    void YawRateGraph_selectionChanged();
-    void YawRateGraph_mousePress();
-    void YawRateGraph_mouseWheel();
-    void YawRateGraph_addRandomGraph();
-    void YawRateGraph_removeSelectedGraph();
-    void YawRateGraph_removeAllGraphs();
-    void YawRateGraph_contextMenuRequest(QPoint pos);
-    void YawRateGraph_moveLegend();
-    void YawRateGraph_graphClicked(QCPAbstractPlottable *plottable, int dataIndex);
-    /******************************************************************************/
-
-
 
     void BLE_InitializeQTConnections(void);
     void on_BLE_DisconnectButton_clicked();
@@ -134,17 +100,21 @@ signals:
 private:
     Ui::MainWindow *ui;
     bluetoothleUART bleConnection;
+
+
+    LF_ServiceAppPlot *YawRatePlot;
+    LF_ServiceAppPlot *SpdPlot;
+    LF_ServiceAppPlot *MapPlot;
+
     QList<QString> FoundDevices;
 
 
     QPointer<QCPGraph> MapGraph1;
     QPointer<QCPGraph> MapGraph2;
 
-    QPointer<QCPGraph> YawRateGraph1;
-    QPointer<QCPGraph> YawRateGraph2;
+
 
     QVector<double> MapDataVector_X, MapDataVector_Y;
-    QVector<double> YawRateVector_X, YawRateVector_Y;
 
     BLE_LfDataReport_t FullBaseData;
 

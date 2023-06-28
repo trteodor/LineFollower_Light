@@ -1,11 +1,80 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+/**************************************************************/
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
 
+    BLE_InitializeQTConnections();
+
+
+    SpdPlot = new LF_ServiceAppPlot(ui->SpdPlotW,QCPGraph::lsLine) ;
+
+    YawRatePlot = new LF_ServiceAppPlot(ui->YawRatePlotW,QCPGraph::lsLine);
+
+    MapPlot = new LF_ServiceAppPlot(ui->MapViewWidget,QCPGraph::lsNone);
+
+
+
+
+    QFuture<void> f1 = QtConcurrent::run(&(MapPlot->LfGraph_AppendData(10,10)  ) ) ;
+    f1.waitForFinished();
+
+
+    /*Debug Table configure*/
+    ui->tableWidge_2->setRowCount(1);
+    ui->tableWidge_2->setColumnWidth(0,50);
+    ui->tableWidge_2->setColumnWidth(1,50);
+    ui->tableWidge_2->setColumnWidth(2,28);
+    ui->tableWidge_2->setColumnWidth(3,10);
+    ui->tableWidge_2->setColumnWidth(4,400);
+
+    ui->tableWidge_2->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
+    QFile f(":qdarkstyle/dark/darkstyle.qss");
+
+    if (!f.exists())   {
+        qDebug() << "Unable to set stylesheet, file not found\n";
+    }
+
+    else   {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+        qApp->setStyleSheet(ts.readAll());
+    }
+
+}
+/*********************************************************************************************************/
+MainWindow::~MainWindow()
+{
+    on_BLE_SuspendFakeProdButton_clicked();
+    QThread::msleep(25);
+    on_BLE_SuspendFakeProdButton_clicked();
+    QThread::msleep(25);
+    on_BLE_SuspendFakeProdButton_clicked();
+    QThread::msleep(25);
+    /*Send the command 3x to be sure that fakeProducer will be stopped, if not then re-connection may be impossible
+     * - HW reset may be required
+    */
+
+    emit BLE_DisconnectDevice();
+
+    delete SpdPlot;
+    delete YawRatePlot;
+    delete MapPlot;
+
+
+    delete ui;
+
+    qDebug("Reached end");
+}
 
 
 /*****************************************/
-/*Tools functions start*/
+/*Tools functions start for Main Window and BLE*/
 /**/
 uint32_t ConvToUint32(const QByteArray &value, uint8_t ShiftValue)
 {
@@ -29,73 +98,6 @@ float ieee_uint32_AsBitsTo_float32(uint32_t f)
 
 
 
-/**************************************************************/
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-
-    BLE_InitializeQTConnections();
-    MapGraph_Initialize();
-    YawRateGraph_Initialize();
-
-
-
-
-    /*Debug Table configure*/
-    ui->tableWidge_2->setRowCount(1);
-    ui->tableWidge_2->setColumnWidth(0,50);
-    ui->tableWidge_2->setColumnWidth(1,50);
-    ui->tableWidge_2->setColumnWidth(2,28);
-    ui->tableWidge_2->setColumnWidth(3,10);
-    ui->tableWidge_2->setColumnWidth(4,400);
-
-    ui->tableWidge_2->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
-
-
-//    QString stylesheetLight = ("QPushButton { color: #191919; background-color: #ffffff; }");
-//    QString stylesheetDark = ("QPushButton { color: #ffffff; background-color: #353535; }");
-
-
-
-//    QString stylesheetDark2 = ("QMainWindow { color: #ffffff; background-color: #353535; }");
-//    QString stylesheetDark3 = ("QMenuBar { color: #ffffff; background-color: #353535; }");
-
-
-    printf("hello world");
-
-    QFile f(":qdarkstyle/dark/darkstyle.qss");
-
-    if (!f.exists())   {
-        qDebug() << "Unable to set stylesheet, file not found\n";
-    }
-
-    else   {
-        qDebug() << "i'am here";
-        f.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&f);
-        qApp->setStyleSheet(ts.readAll());
-    }
-
-}
-/*********************************************************************************************************/
-MainWindow::~MainWindow()
-{
-    on_BLE_SuspendFakeProdButton_clicked();
-    QThread::msleep(25);
-    on_BLE_SuspendFakeProdButton_clicked();
-    QThread::msleep(25);
-    on_BLE_SuspendFakeProdButton_clicked();
-    QThread::msleep(25);
-    /*Send the command 3x to be sure that fakeProducer will be stopped, if not then re-connection may be impossible
-     * - HW reset may be required
-    */
-
-    emit BLE_DisconnectDevice();
-    delete ui;
-}
-
 /*********************************************************************************************************/
 /*********************************************************************************************************/
 /*********************************************************************************************************/
@@ -103,12 +105,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_GeneralPlotDataClear_pb_clicked()
 {
-    MapDataVector_X.clear();
-    MapDataVector_Y.clear();
-    ui->MapViewWidget->update();
-    ui->MapViewWidget->replot();
-    ui->YawRatePlotW->update();
-    ui->YawRatePlotW->replot();
+
 }
 
 
@@ -696,13 +693,16 @@ void MainWindow::BLE_LfAppBaseData(const QByteArray &value,BLE_MessageID_t BLE_M
                 qDebug() << "UpdateDebugTableWithNewLfAppBaseData TOOK: " << timer.elapsed() << "milliseconds";
 
                 timer.start();
-                MapGraph_AppendData(FullBaseData.CurrMapData.PosX,FullBaseData.CurrMapData.PosY);
+                MapPlot->LfGraph_AppendData(FullBaseData.CurrMapData.PosX,FullBaseData.CurrMapData.PosY);
                 qDebug() << "MapGraph_AppendData TOOK: " << timer.elapsed() << "milliseconds";
 
                 timer.start();
-                YawRateGraph_AppendData((float)FullFrameCounter,FullBaseData.CurrMapData.YawRate);
+
+                YawRatePlot->LfGraph_AppendData((float)FullFrameCounter,FullBaseData.CurrMapData.YawRate);
                 qDebug() << "YawRateGraph_AppendData TOOK: " << timer.elapsed() << "milliseconds";
 
+//                SpdPlot->LfGraph_AppendData(FullFrameCounter,FullBaseData.CurrMapData.WhLftSp);
+                SpdPlot->LfGraph_AppendData((float)FullFrameCounter,FullBaseData.CurrMapData.YawRate);
         }
         else
         {
@@ -829,630 +829,6 @@ void MainWindow::on_BLE_BlockSignalsCheckBox_stateChanged(int arg1)
 /*********************************************************************************************************/
 /*********************************************************************************************************/
 
-
-
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-void MainWindow::MapGraph_Initialize(void)
-{
-    //    ui->MapViewWidget
-    ui->MapViewWidget->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
-                                       QCP::iSelectLegend | QCP::iSelectPlottables);
-    ui->MapViewWidget->xAxis->setRange(-8, 8);
-    ui->MapViewWidget->yAxis->setRange(-5, 5);
-    ui->MapViewWidget->axisRect()->setupFullAxesBox();
-    //    ui->MapViewWidget->plotLayout()->insertRow(0);
-    //    QCPTextElement *title = new QCPTextElement(ui->MapViewWidget, "Interaction Example", QFont("sans", 17, QFont::Bold));
-    //    ui->MapViewWidget->plotLayout()->addElement(0, 0, title);
-    ui->MapViewWidget->xAxis->setLabel("x Axis");
-    ui->MapViewWidget->yAxis->setLabel("y Axis");
-    ui->MapViewWidget->legend->setVisible(true);
-    QFont legendFont = font();
-    legendFont.setPointSize(10);
-    ui->MapViewWidget->legend->setFont(legendFont);
-    ui->MapViewWidget->legend->setSelectedFont(legendFont);
-    ui->MapViewWidget->legend->setSelectableParts(QCPLegend::spItems); // legend box shall not be selectable, only legend items
-
-    ui->MapViewWidget->rescaleAxes();
-    // connect slot that ties some axis selections together (especially opposite axes):
-    connect(ui->MapViewWidget, SIGNAL(selectionChangedByUser()), this, SLOT(MapGraph_selectionChanged()));
-    // connect slots that takes care that when an axis is selected, only that direction can be dragged and zoomed:
-    connect(ui->MapViewWidget, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(MapGraph_mousePress()));
-    connect(ui->MapViewWidget, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(MapGraph_mouseWheel()));
-    // make bottom and left axes transfer their ranges to top and right axes:
-    connect(ui->MapViewWidget->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->MapViewWidget->xAxis2, SLOT(setRange(QCPRange)));
-    connect(ui->MapViewWidget->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->MapViewWidget->yAxis2, SLOT(setRange(QCPRange)));
-    // connect some interaction slots:
-    connect(ui->MapViewWidget, SIGNAL(axisDoubleClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(MapGraph_axisLabelDoubleClick(QCPAxis*,QCPAxis::SelectablePart)));
-    connect(ui->MapViewWidget, SIGNAL(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*,QMouseEvent*)), this, SLOT(MapGraph_legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*)));
-    //    connect(title, SIGNAL(doubleClicked(QMouseEvent*)), this, SLOT(MapGraph_titleDoubleClick(QMouseEvent*)));
-    // connect slot that shows a message in the status bar when a graph is clicked:
-    connect(ui->MapViewWidget, SIGNAL(plottableClick(QCPAbstractPlottable*,int,QMouseEvent*)), this, SLOT(MapGraph_Clicked(QCPAbstractPlottable*,int)));
-
-    // setup policy and connect slot for context menu popup:
-    ui->MapViewWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->MapViewWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(MapGraph_contextMenuRequest(QPoint)));
-
-    MapGraph1 = ui->MapViewWidget->addGraph();
-
-    MapGraph1->setScatterStyle(QCPScatterStyle::ssDot);
-    MapGraph1->setLineStyle(QCPGraph::lsNone);
-
-    MapGraph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::white), 7));
-    MapGraph1->setPen(QPen(QColor(120, 120, 120), 2));
-
-
-    ui->MapViewWidget->xAxis->setBasePen(QPen(Qt::white, 1));
-    ui->MapViewWidget->yAxis->setBasePen(QPen(Qt::white, 1));
-    ui->MapViewWidget->xAxis->setTickPen(QPen(Qt::white, 1));
-    ui->MapViewWidget->yAxis->setTickPen(QPen(Qt::white, 1));
-    ui->MapViewWidget->xAxis->setSubTickPen(QPen(Qt::white, 1));
-    ui->MapViewWidget->yAxis->setSubTickPen(QPen(Qt::white, 1));
-    ui->MapViewWidget->xAxis->setTickLabelColor(Qt::white);
-    ui->MapViewWidget->yAxis->setTickLabelColor(Qt::white);
-    ui->MapViewWidget->xAxis->grid()->setPen(QPen(QColor(140, 140, 140), 1, Qt::DotLine));
-    ui->MapViewWidget->yAxis->grid()->setPen(QPen(QColor(140, 140, 140), 1, Qt::DotLine));
-    ui->MapViewWidget->xAxis->grid()->setSubGridPen(QPen(QColor(80, 80, 80), 1, Qt::DotLine));
-    ui->MapViewWidget->yAxis->grid()->setSubGridPen(QPen(QColor(80, 80, 80), 1, Qt::DotLine));
-    ui->MapViewWidget->xAxis->grid()->setSubGridVisible(true);
-    ui->MapViewWidget->yAxis->grid()->setSubGridVisible(true);
-    ui->MapViewWidget->xAxis->grid()->setZeroLinePen(Qt::NoPen);
-    ui->MapViewWidget->yAxis->grid()->setZeroLinePen(Qt::NoPen);
-    ui->MapViewWidget->xAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
-    ui->MapViewWidget->yAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
-
-    QLinearGradient plotGradient;
-    plotGradient.setStart(0, 0);
-    plotGradient.setFinalStop(0, 350);
-    plotGradient.setColorAt(0, QColor(5, 5, 5));
-    plotGradient.setColorAt(1, QColor(5, 5, 5));
-    ui->MapViewWidget->setBackground(plotGradient);
-    QLinearGradient axisRectGradient;
-    axisRectGradient.setStart(0, 0);
-    axisRectGradient.setFinalStop(0, 350);
-    axisRectGradient.setColorAt(0, QColor(5, 5, 5));
-    axisRectGradient.setColorAt(1, QColor(5, 5, 5));
-    ui->MapViewWidget->axisRect()->setBackground(axisRectGradient);
-
-
-
-    ui->MapViewWidget->graph()->setName(QString("New graph %1").arg(ui->MapViewWidget->graphCount()-1));
-//    ui->MapViewWidget->graph()->setLineStyle((QCPGraph::LineStyle)(std::rand()%5+1));
-//    if (std::rand()%100 > 50)
-//        ui->MapViewWidget->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(std::rand()%14+1)));
-    QPen graphPen;
-    graphPen.setColor(QColor(std::rand()%245+10, std::rand()%245+10, std::rand()%245+10));
-    graphPen.setWidthF(std::rand()/(double)RAND_MAX*2+1);
-    ui->MapViewWidget->graph()->setPen(graphPen);
-    ui->MapViewWidget->replot();
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_AppendData(uint32_t X_Pos,uint32_t Y_Pos)
-{
-    MapDataVector_X.append( ((float)X_Pos));
-    MapDataVector_Y.append( ((float)Y_Pos));
-    MapGraph1->setData(MapDataVector_X,MapDataVector_Y);
-
-    ui->MapViewWidget->xAxis->setRange
-            ( *std::min_element(MapDataVector_X.begin(),MapDataVector_X.end() ) -3,
-              *std::max_element(MapDataVector_X.begin(),MapDataVector_X.end() ) +3);
-
-    ui->MapViewWidget->yAxis->setRange
-        (  *std::min_element(MapDataVector_Y.begin() ,MapDataVector_Y.end() ) -3,
-           *std::max_element(MapDataVector_Y.begin() ,MapDataVector_Y.end() ) +10 );
-
-    ui->MapViewWidget->replot();
-    ui->MapViewWidget->update();
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part)
-{
-    // Set an axis label by double clicking on it
-    if (part == QCPAxis::spAxisLabel) // only react when the actual axis label is clicked, not tick label or axis backbone
-    {
-        bool ok;
-        QString newLabel = QInputDialog::getText(this, "QCustomPlot example", "New axis label:", QLineEdit::Normal, axis->label(), &ok);
-        if (ok)
-        {
-            axis->setLabel(newLabel);
-            ui->MapViewWidget->replot();
-        }
-    }
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item)
-{
-    // Rename a graph by double clicking on its legend item
-    Q_UNUSED(legend)
-    if (item) // only react if item was clicked (user could have clicked on border padding of legend where there is no item, then item is 0)
-    {
-        QCPPlottableLegendItem *plItem = qobject_cast<QCPPlottableLegendItem*>(item);
-        bool ok;
-        QString newName = QInputDialog::getText(this, "QCustomPlot example", "New graph name:", QLineEdit::Normal, plItem->plottable()->name(), &ok);
-        if (ok)
-        {
-            plItem->plottable()->setName(newName);
-            ui->MapViewWidget->replot();
-        }
-    }
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_selectionChanged()
-{
-    /*
-   normally, axis base line, axis tick labels and axis labels are selectable separately, but we want
-   the user only to be able to select the axis as a whole, so we tie the selected states of the tick labels
-   and the axis base line together. However, the axis label shall be selectable individually.
-
-   The selection state of the left and right axes shall be synchronized as well as the state of the
-   bottom and top axes.
-
-   Further, we want to synchronize the selection of the graphs with the selection state of the respective
-   legend item belonging to that graph. So the user can select a graph by either clicking on the graph itself
-   or on its legend item.
-  */
-
-    // make top and bottom axes be selected synchronously, and handle axis and tick labels as one selectable object:
-    if (ui->MapViewWidget->xAxis->selectedParts().testFlag(QCPAxis::spAxis) || ui->MapViewWidget->xAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
-        ui->MapViewWidget->xAxis2->selectedParts().testFlag(QCPAxis::spAxis) || ui->MapViewWidget->xAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
-    {
-        ui->MapViewWidget->xAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-        ui->MapViewWidget->xAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-    }
-    // make left and right axes be selected synchronously, and handle axis and tick labels as one selectable object:
-    if (ui->MapViewWidget->yAxis->selectedParts().testFlag(QCPAxis::spAxis) || ui->MapViewWidget->yAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
-        ui->MapViewWidget->yAxis2->selectedParts().testFlag(QCPAxis::spAxis) || ui->MapViewWidget->yAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
-    {
-        ui->MapViewWidget->yAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-        ui->MapViewWidget->yAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-    }
-
-    // synchronize selection of graphs with selection of corresponding legend items:
-    for (int i=0; i<ui->MapViewWidget->graphCount(); ++i)
-    {
-        QCPGraph *graph = ui->MapViewWidget->graph(i);
-        QCPPlottableLegendItem *item = ui->MapViewWidget->legend->itemWithPlottable(graph);
-        if (item->selected() || graph->selected())
-        {
-            item->setSelected(true);
-            graph->setSelection(QCPDataSelection(graph->data()->dataRange()));
-        }
-    }
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_mousePress()
-{
-    // if an axis is selected, only allow the direction of that axis to be dragged
-    // if no axis is selected, both directions may be dragged
-
-    if (ui->MapViewWidget->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->MapViewWidget->axisRect()->setRangeDrag(ui->MapViewWidget->xAxis->orientation());
-    else if (ui->MapViewWidget->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->MapViewWidget->axisRect()->setRangeDrag(ui->MapViewWidget->yAxis->orientation());
-    else
-        ui->MapViewWidget->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_mouseWheel()
-{
-    // if an axis is selected, only allow the direction of that axis to be zoomed
-    // if no axis is selected, both directions may be zoomed
-
-    if (ui->MapViewWidget->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->MapViewWidget->axisRect()->setRangeZoom(ui->MapViewWidget->xAxis->orientation());
-    else if (ui->MapViewWidget->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->MapViewWidget->axisRect()->setRangeZoom(ui->MapViewWidget->yAxis->orientation());
-    else
-        ui->MapViewWidget->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_addRandomGraph()
-{
-    int n = 50; // number of points in graph
-    double xScale = (std::rand()/(double)RAND_MAX + 0.5)*2;
-    double yScale = (std::rand()/(double)RAND_MAX + 0.5)*2;
-    double xOffset = (std::rand()/(double)RAND_MAX - 0.5)*4;
-    double yOffset = (std::rand()/(double)RAND_MAX - 0.5)*10;
-    double r1 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    double r2 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    double r3 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    double r4 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    QVector<double> x(n), y(n);
-    for (int i=0; i<n; i++)
-    {
-        x[i] = (i/(double)n-0.5)*10.0*xScale + xOffset;
-        y[i] = (qSin(x[i]*r1*5)*qSin(qCos(x[i]*r2)*r4*3)+r3*qCos(qSin(x[i])*r4*2))*yScale + yOffset;
-    }
-
-    ui->MapViewWidget->addGraph();
-    ui->MapViewWidget->graph()->setName(QString("New graph %1").arg(ui->MapViewWidget->graphCount()-1));
-    ui->MapViewWidget->graph()->setData(x, y);
-    ui->MapViewWidget->graph()->setLineStyle((QCPGraph::LineStyle)(std::rand()%5+1));
-    if (std::rand()%100 > 50)
-        ui->MapViewWidget->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(std::rand()%14+1)));
-    QPen graphPen;
-    graphPen.setColor(QColor(std::rand()%245+10, std::rand()%245+10, std::rand()%245+10));
-    graphPen.setWidthF(std::rand()/(double)RAND_MAX*2+1);
-    ui->MapViewWidget->graph()->setPen(graphPen);
-    ui->MapViewWidget->replot();
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_removeSelectedGraph()
-{
-    if (ui->MapViewWidget->selectedGraphs().size() > 0)
-    {
-        ui->MapViewWidget->removeGraph(ui->MapViewWidget->selectedGraphs().first());
-        ui->MapViewWidget->replot();
-    }
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_removeAllGraphs()
-{
-    ui->MapViewWidget->clearGraphs();
-    ui->MapViewWidget->replot();
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_contextMenuRequest(QPoint pos)
-{
-    QMenu *menu = new QMenu(this);
-    menu->setAttribute(Qt::WA_DeleteOnClose);
-
-    if (ui->MapViewWidget->legend->selectTest(pos, false) >= 0) // context menu on legend requested
-    {
-        menu->addAction("Move to top left", this, SLOT(MapGraph_moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignLeft));
-        menu->addAction("Move to top center", this, SLOT(MapGraph_moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignHCenter));
-        menu->addAction("Move to top right", this, SLOT(MapGraph_moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignRight));
-        menu->addAction("Move to bottom right", this, SLOT(MapGraph_moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignRight));
-        menu->addAction("Move to bottom left", this, SLOT(MapGraph_moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignLeft));
-    } else  // general context menu on graphs requested
-    {
-        menu->addAction("Add random graph", this, SLOT(MapGraph_addRandomGraph()));
-        if (ui->MapViewWidget->selectedGraphs().size() > 0)
-            menu->addAction("Remove selected graph", this, SLOT(MapGraph_removeSelectedGraph()));
-        if (ui->MapViewWidget->graphCount() > 0)
-            menu->addAction("Remove all graphs", this, SLOT(MapGraph_removeAllGraphs()));
-    }
-
-    menu->popup(ui->MapViewWidget->mapToGlobal(pos));
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_moveLegend()
-{
-    if (QAction* contextAction = qobject_cast<QAction*>(sender())) // make sure this slot is really called by a context menu action, so it carries the data we need
-    {
-        bool ok;
-        int dataInt = contextAction->data().toInt(&ok);
-        if (ok)
-        {
-            ui->MapViewWidget->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)dataInt);
-            ui->MapViewWidget->replot();
-        }
-    }
-}
-/*********************************************************************************************************/
-void MainWindow::MapGraph_Clicked(QCPAbstractPlottable *plottable, int dataIndex)
-{
-    // since we know we only have QCPGraphs in the plot, we can immediately access interface1D()
-    // usually it's better to first check whether interface1D() returns non-zero, and only then use it.
-    double dataValue = plottable->interface1D()->dataMainValue(dataIndex);
-    QString message = QString("Clicked on graph '%1' at data point #%2 with value %3.").arg(plottable->name()).arg(dataIndex).arg(dataValue);
-    ui->statusbar->showMessage(message, 2500);
-}
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-
-void MainWindow::YawRateGraph_Initialize(void)
-{
-    //    ui->MapViewWidget
-    ui->YawRatePlotW->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
-                                       QCP::iSelectLegend | QCP::iSelectPlottables);
-    ui->YawRatePlotW->xAxis->setRange(-8, 8);
-    ui->YawRatePlotW->yAxis->setRange(-3, 3);
-    ui->YawRatePlotW->axisRect()->setupFullAxesBox();
-    //    ui->YawRatePlotW->plotLayout()->insertRow(0);
-    //    QCPTextElement *title = new QCPTextElement(ui->MapViewWidget, "Interaction Example", QFont("sans", 17, QFont::Bold));
-    //    ui->YawRatePlotW->plotLayout()->addElement(0, 0, title);
-    ui->YawRatePlotW->xAxis->setLabel("x Axis");
-    ui->YawRatePlotW->yAxis->setLabel("y Axis");
-    ui->YawRatePlotW->legend->setVisible(true);
-    QFont legendFont = font();
-    legendFont.setPointSize(10);
-    ui->YawRatePlotW->legend->setFont(legendFont);
-    ui->YawRatePlotW->legend->setSelectedFont(legendFont);
-    ui->YawRatePlotW->legend->setSelectableParts(QCPLegend::spItems); // legend box shall not be selectable, only legend items
-
-    ui->YawRatePlotW->rescaleAxes();
-    // connect slot that ties some axis selections together (especially opposite axes):
-    connect(ui->YawRatePlotW, SIGNAL(selectionChangedByUser()), this, SLOT(YawRateGraph_selectionChanged()));
-    // connect slots that takes care that when an axis is selected, only that direction can be dragged and zoomed:
-    connect(ui->YawRatePlotW, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(YawRateGraph_mousePress()));
-    connect(ui->YawRatePlotW, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(YawRateGraph_mouseWheel()));
-    // make bottom and left axes transfer their ranges to top and right axes:
-    connect(ui->YawRatePlotW->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->YawRatePlotW->xAxis2, SLOT(setRange(QCPRange)));
-    connect(ui->YawRatePlotW->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->YawRatePlotW->yAxis2, SLOT(setRange(QCPRange)));
-    // connect some interaction slots:
-    connect(ui->YawRatePlotW, SIGNAL(axisDoubleClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(YawRateGraph_axisLabelDoubleClick(QCPAxis*,QCPAxis::SelectablePart)));
-    connect(ui->YawRatePlotW, SIGNAL(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*,QMouseEvent*)), this, SLOT(YawRateGraph_legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*)));
-    //    connect(title, SIGNAL(doubleClicked(QMouseEvent*)), this, SLOT(YawRateGraph_titleDoubleClick(QMouseEvent*)));
-    // connect slot that shows a message in the status bar when a graph is clicked:
-    connect(ui->YawRatePlotW, SIGNAL(plottableClick(QCPAbstractPlottable*,int,QMouseEvent*)), this, SLOT(YawRateGraph_graphClicked(QCPAbstractPlottable*,int)));
-
-    // setup policy and connect slot for context menu popup:
-    ui->YawRatePlotW->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->YawRatePlotW, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(YawRateGraph_contextMenuRequest(QPoint)));
-
-    YawRateGraph1 = ui->YawRatePlotW->addGraph();
-
-    YawRateGraph1->setScatterStyle(QCPScatterStyle::ssDot);
-    YawRateGraph1->setLineStyle(QCPGraph::lsLine);
-
-    YawRateGraph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::black, 1.5), QBrush(Qt::white), 3));
-    YawRateGraph1->setPen(QPen(QColor(120, 120, 120), 2));
-
-
-    ui->YawRatePlotW->xAxis->setBasePen(QPen(Qt::white, 1));
-    ui->YawRatePlotW->yAxis->setBasePen(QPen(Qt::white, 1));
-    ui->YawRatePlotW->xAxis->setTickPen(QPen(Qt::white, 1));
-    ui->YawRatePlotW->yAxis->setTickPen(QPen(Qt::white, 1));
-    ui->YawRatePlotW->xAxis->setSubTickPen(QPen(Qt::white, 1));
-    ui->YawRatePlotW->yAxis->setSubTickPen(QPen(Qt::white, 1));
-    ui->YawRatePlotW->xAxis->setTickLabelColor(Qt::white);
-    ui->YawRatePlotW->yAxis->setTickLabelColor(Qt::white);
-    ui->YawRatePlotW->xAxis->grid()->setPen(QPen(QColor(140, 140, 140), 1, Qt::DotLine));
-    ui->YawRatePlotW->yAxis->grid()->setPen(QPen(QColor(140, 140, 140), 1, Qt::DotLine));
-    ui->YawRatePlotW->xAxis->grid()->setSubGridPen(QPen(QColor(80, 80, 80), 1, Qt::DotLine));
-    ui->YawRatePlotW->yAxis->grid()->setSubGridPen(QPen(QColor(80, 80, 80), 1, Qt::DotLine));
-    ui->YawRatePlotW->xAxis->grid()->setSubGridVisible(true);
-    ui->YawRatePlotW->yAxis->grid()->setSubGridVisible(true);
-    ui->YawRatePlotW->xAxis->grid()->setZeroLinePen(Qt::NoPen);
-    ui->YawRatePlotW->yAxis->grid()->setZeroLinePen(Qt::NoPen);
-    ui->YawRatePlotW->xAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
-    ui->YawRatePlotW->yAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
-
-    QLinearGradient plotGradient;
-    plotGradient.setStart(0, 0);
-    plotGradient.setFinalStop(0, 350);
-    plotGradient.setColorAt(0, QColor(5, 5, 5));
-    plotGradient.setColorAt(1, QColor(5, 5, 5));
-    ui->YawRatePlotW->setBackground(plotGradient);
-    QLinearGradient axisRectGradient;
-    axisRectGradient.setStart(0, 0);
-    axisRectGradient.setFinalStop(0, 350);
-    axisRectGradient.setColorAt(0, QColor(5, 5, 5));
-    axisRectGradient.setColorAt(1, QColor(5, 5, 5));
-    ui->YawRatePlotW->axisRect()->setBackground(axisRectGradient);
-
-
-
-    ui->YawRatePlotW->graph()->setName(QString("New graph %1").arg(ui->YawRatePlotW->graphCount()-1));
-    //    ui->YawRatePlotW->graph()->setLineStyle((QCPGraph::LineStyle)(std::rand()%5+1));
-    //    if (std::rand()%100 > 50)
-    //        ui->YawRatePlotW->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(std::rand()%14+1)));
-    QPen graphPen;
-    graphPen.setColor(QColor(std::rand()%245+10, std::rand()%245+10, std::rand()%245+10));
-    graphPen.setWidthF(std::rand()/(double)RAND_MAX*2+1);
-    ui->YawRatePlotW->graph()->setPen(graphPen);
-    ui->YawRatePlotW->replot();}
-
-void MainWindow::YawRateGraph_AppendData(float X_Pos,float Y_Pos)
-{
-    YawRateVector_X.append( ((float)X_Pos));
-    YawRateVector_Y.append( ((float)Y_Pos));
-    YawRateGraph1->setData(YawRateVector_X,YawRateVector_Y);
-
-    ui->YawRatePlotW->xAxis->setRange
-        ( *std::min_element(YawRateVector_X.begin(),YawRateVector_X.end() ) -1,
-         *std::max_element(YawRateVector_X.begin(),YawRateVector_X.end() ) +1);
-
-    ui->YawRatePlotW->yAxis->setRange
-        (  *std::min_element(YawRateVector_Y.begin() ,YawRateVector_Y.end() ) -1,
-         *std::max_element(YawRateVector_Y.begin() ,YawRateVector_Y.end() ) +2 );
-
-    ui->YawRatePlotW->replot();
-    ui->YawRatePlotW->update();
-}
-
-void MainWindow::YawRateGraph_axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part)
-{
-    // Set an axis label by double clicking on it
-    if (part == QCPAxis::spAxisLabel) // only react when the actual axis label is clicked, not tick label or axis backbone
-    {
-        bool ok;
-        QString newLabel = QInputDialog::getText(this, "QCustomPlot example", "New axis label:", QLineEdit::Normal, axis->label(), &ok);
-        if (ok)
-        {
-            axis->setLabel(newLabel);
-            ui->YawRatePlotW->replot();
-        }
-    }
-}
-
-void MainWindow::YawRateGraph_legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item)
-{
-    // Rename a graph by double clicking on its legend item
-    Q_UNUSED(legend)
-    if (item) // only react if item was clicked (user could have clicked on border padding of legend where there is no item, then item is 0)
-    {
-        QCPPlottableLegendItem *plItem = qobject_cast<QCPPlottableLegendItem*>(item);
-        bool ok;
-        QString newName = QInputDialog::getText(this, "QCustomPlot example", "New graph name:", QLineEdit::Normal, plItem->plottable()->name(), &ok);
-        if (ok)
-        {
-            plItem->plottable()->setName(newName);
-            ui->YawRatePlotW->replot();
-        }
-    }
-}
-
-void MainWindow::YawRateGraph_selectionChanged()
-{
-    /*
-   normally, axis base line, axis tick labels and axis labels are selectable separately, but we want
-   the user only to be able to select the axis as a whole, so we tie the selected states of the tick labels
-   and the axis base line together. However, the axis label shall be selectable individually.
-
-   The selection state of the left and right axes shall be synchronized as well as the state of the
-   bottom and top axes.
-
-   Further, we want to synchronize the selection of the graphs with the selection state of the respective
-   legend item belonging to that graph. So the user can select a graph by either clicking on the graph itself
-   or on its legend item.
-  */
-
-    // make top and bottom axes be selected synchronously, and handle axis and tick labels as one selectable object:
-    if (ui->YawRatePlotW->xAxis->selectedParts().testFlag(QCPAxis::spAxis) || ui->YawRatePlotW->xAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
-        ui->YawRatePlotW->xAxis2->selectedParts().testFlag(QCPAxis::spAxis) || ui->YawRatePlotW->xAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
-    {
-        ui->YawRatePlotW->xAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-        ui->YawRatePlotW->xAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-    }
-    // make left and right axes be selected synchronously, and handle axis and tick labels as one selectable object:
-    if (ui->YawRatePlotW->yAxis->selectedParts().testFlag(QCPAxis::spAxis) || ui->YawRatePlotW->yAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
-        ui->YawRatePlotW->yAxis2->selectedParts().testFlag(QCPAxis::spAxis) || ui->YawRatePlotW->yAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
-    {
-        ui->YawRatePlotW->yAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-        ui->YawRatePlotW->yAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-    }
-
-    // synchronize selection of graphs with selection of corresponding legend items:
-    for (int i=0; i<ui->YawRatePlotW->graphCount(); ++i)
-    {
-        QCPGraph *graph = ui->YawRatePlotW->graph(i);
-        QCPPlottableLegendItem *item = ui->YawRatePlotW->legend->itemWithPlottable(graph);
-        if (item->selected() || graph->selected())
-        {
-            item->setSelected(true);
-            graph->setSelection(QCPDataSelection(graph->data()->dataRange()));
-        }
-    }
-}
-
-void MainWindow::YawRateGraph_mousePress()
-{
-    // if an axis is selected, only allow the direction of that axis to be dragged
-    // if no axis is selected, both directions may be dragged
-
-    if (ui->YawRatePlotW->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->YawRatePlotW->axisRect()->setRangeDrag(ui->YawRatePlotW->xAxis->orientation());
-    else if (ui->YawRatePlotW->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->YawRatePlotW->axisRect()->setRangeDrag(ui->YawRatePlotW->yAxis->orientation());
-    else
-        ui->YawRatePlotW->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
-}
-
-void MainWindow::YawRateGraph_mouseWheel()
-{
-    // if an axis is selected, only allow the direction of that axis to be zoomed
-    // if no axis is selected, both directions may be zoomed
-
-    if (ui->YawRatePlotW->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->YawRatePlotW->axisRect()->setRangeZoom(ui->YawRatePlotW->xAxis->orientation());
-    else if (ui->YawRatePlotW->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        ui->YawRatePlotW->axisRect()->setRangeZoom(ui->YawRatePlotW->yAxis->orientation());
-    else
-        ui->YawRatePlotW->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
-}
-
-void MainWindow::YawRateGraph_addRandomGraph()
-{
-    int n = 50; // number of points in graph
-    double xScale = (std::rand()/(double)RAND_MAX + 0.5)*2;
-    double yScale = (std::rand()/(double)RAND_MAX + 0.5)*2;
-    double xOffset = (std::rand()/(double)RAND_MAX - 0.5)*4;
-    double yOffset = (std::rand()/(double)RAND_MAX - 0.5)*10;
-    double r1 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    double r2 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    double r3 = (std::rand()/(double)RAND_MAX - 0.5)*2;
-    double r4 = (std::rand()/(double)RAND_MAX - 0.5)*2;    QVector<double> x(n), y(n);
-    for (int i=0; i<n; i++)
-    {
-        x[i] = (i/(double)n-0.5)*10.0*xScale + xOffset;
-        y[i] = (qSin(x[i]*r1*5)*qSin(qCos(x[i]*r2)*r4*3)+r3*qCos(qSin(x[i])*r4*2))*yScale + yOffset;
-    }
-
-    ui->YawRatePlotW->addGraph();
-    ui->YawRatePlotW->graph()->setName(QString("New graph %1").arg(ui->YawRatePlotW->graphCount()-1));
-    ui->YawRatePlotW->graph()->setData(x, y);
-    ui->YawRatePlotW->graph()->setLineStyle((QCPGraph::LineStyle)(std::rand()%5+1));
-    if (std::rand()%100 > 50)
-        ui->YawRatePlotW->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(std::rand()%14+1)));
-    QPen graphPen;
-    graphPen.setColor(QColor(std::rand()%245+10, std::rand()%245+10, std::rand()%245+10));
-    graphPen.setWidthF(std::rand()/(double)RAND_MAX*2+1);
-    ui->YawRatePlotW->graph()->setPen(graphPen);
-    ui->YawRatePlotW->replot();
-}
-
-void MainWindow::YawRateGraph_removeSelectedGraph()
-{
-    if (ui->YawRatePlotW->selectedGraphs().size() > 0)
-    {
-        ui->YawRatePlotW->removeGraph(ui->YawRatePlotW->selectedGraphs().first());
-        ui->YawRatePlotW->replot();
-    }
-}
-
-void MainWindow::YawRateGraph_removeAllGraphs()
-{
-    ui->YawRatePlotW->clearGraphs();
-    ui->YawRatePlotW->replot();
-}
-
-void MainWindow::YawRateGraph_contextMenuRequest(QPoint pos)
-{
-    QMenu *menu = new QMenu(this);
-    menu->setAttribute(Qt::WA_DeleteOnClose);
-
-    if (ui->YawRatePlotW->legend->selectTest(pos, false) >= 0) // context menu on legend requested
-    {
-        menu->addAction("Move to top left", this, SLOT(YawRateGraph_moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignLeft));
-        menu->addAction("Move to top center", this, SLOT(YawRateGraph_moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignHCenter));
-        menu->addAction("Move to top right", this, SLOT(YawRateGraph_moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignRight));
-        menu->addAction("Move to bottom right", this, SLOT(YawRateGraph_moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignRight));
-        menu->addAction("Move to bottom left", this, SLOT(YawRateGraph_moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignLeft));
-    } else  // general context menu on graphs requested
-    {
-        menu->addAction("Add random graph", this, SLOT(YawRateGraph_addRandomGraph()));
-        if (ui->YawRatePlotW->selectedGraphs().size() > 0)
-            menu->addAction("Remove selected graph", this, SLOT(YawRateGraph_removeSelectedGraph()));
-        if (ui->YawRatePlotW->graphCount() > 0)
-            menu->addAction("Remove all graphs", this, SLOT(YawRateGraph_removeAllGraphs()));
-    }
-
-    menu->popup(ui->YawRatePlotW->mapToGlobal(pos));
-}
-
-void MainWindow::YawRateGraph_moveLegend()
-{
-    if (QAction* contextAction = qobject_cast<QAction*>(sender())) // make sure this slot is really called by a context menu action, so it carries the data we need
-    {
-        bool ok;
-        int dataInt = contextAction->data().toInt(&ok);
-        if (ok)
-        {
-            ui->YawRatePlotW->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)dataInt);
-            ui->YawRatePlotW->replot();
-        }
-    }
-}
-
-void MainWindow::YawRateGraph_graphClicked(QCPAbstractPlottable *plottable, int dataIndex)
-{
-    // since we know we only have QCPGraphs in the plot, we can immediately access interface1D()
-    // usually it's better to first check whether interface1D() returns non-zero, and only then use it.
-    double dataValue = plottable->interface1D()->dataMainValue(dataIndex);
-    QString message = QString("Clicked on graph '%1' at data point #%2 with value %3.").arg(plottable->name()).arg(dataIndex).arg(dataValue);
-}
-
-
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-/*********************************************************************************************************/
-/*********************************************************************************************************/
 
 
 
