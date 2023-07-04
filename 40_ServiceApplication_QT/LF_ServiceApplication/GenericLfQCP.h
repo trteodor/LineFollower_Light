@@ -1,5 +1,5 @@
-#ifndef LFSERVICEAPPPLOTS_H
-#define LFSERVICEAPPPLOTS_H
+#ifndef GENERICLFQCP_H
+#define GENERICLFQCP_H
 
 
 #include <QMainWindow>
@@ -7,15 +7,18 @@
 #include "QWidget"
 #include "qcustomplot.h"
 
-class LF_ServiceAppPlot : public QMainWindow
+class GenericLfQCP : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit LF_ServiceAppPlot(QCustomPlot *UIPassedplot, QCPGraph::LineStyle LineStyle);
-    ~LF_ServiceAppPlot();
+    explicit GenericLfQCP(void);
+    ~GenericLfQCP();
 
-    void LfGraph_Initialize(void);
+    void LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineStyle LineStyle);
     void LfGraph_AppendData(float X_Pos,float Y_Pos);
+    void LfGraph_UpdateReplot(void);
+
+
 
 
 signals:
@@ -44,7 +47,7 @@ private:
     QPointer<QCPGraph> Graph1;
     QPointer<QCPGraph> Graph2;
 
-    QVector<double> *DataVector_X, *DataVector_Y;
+    QVector<double> DataVector_X, DataVector_Y;
 
 
 
@@ -55,4 +58,4 @@ private:
 
 
 
-#endif // LFSERVICEAPPPLOTS_H
+#endif // GENERICLFQCP_H

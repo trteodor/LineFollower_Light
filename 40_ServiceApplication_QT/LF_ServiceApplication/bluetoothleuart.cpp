@@ -19,6 +19,8 @@ bluetoothleUART::bluetoothleUART() :
     connect(m_deviceDiscoveryAgent, SIGNAL(finished()), this, SLOT(scanFinished()));
 
 
+
+
 }
 
 bluetoothleUART::~bluetoothleUART(){
@@ -289,6 +291,7 @@ void bluetoothleUART::updateData(const QLowEnergyCharacteristic &c,const QByteAr
 //    qDebug("NewData: %d", ucTime);
 
 //    qDebug("-------------------\n\r");
+
     emit newData(value);
 
 }

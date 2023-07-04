@@ -1,15 +1,15 @@
-#include "lfserviceappPlots.h"
+#include "GenericLfQCP.h"
 
 
-LF_ServiceAppPlot::LF_ServiceAppPlot(QCustomPlot *UIPassedplot, QCPGraph::LineStyle LineStyle)
+GenericLfQCP::GenericLfQCP(void)
 {
+    qDebug() << "Construct Called Class:GenericLfQCP";
+}
 
-    qDebug() << "LF_ServiceAppPlot: Hello world";
 
+void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineStyle LineStyle)
+{
     UIplotP = UIPassedplot;
-
-    DataVector_Y = new QVector<double>;
-    DataVector_X = new QVector<double>;
 
     //    ui->MapViewWidget
     UIplotP->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
@@ -57,11 +57,11 @@ LF_ServiceAppPlot::LF_ServiceAppPlot(QCustomPlot *UIPassedplot, QCPGraph::LineSt
 
     if(LineStyle == QCPGraph::LineStyle::lsNone)
     {
-           Graph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::white), 5));
+        Graph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::white), 5));
     }
     else
     {
-           Graph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::black, 1.5), QBrush(Qt::white), 3));
+        Graph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::black, 1.5), QBrush(Qt::white), 3));
     }
 
     Graph1->setPen(QPen(QColor(120, 120, 120), 2));
@@ -110,18 +110,12 @@ LF_ServiceAppPlot::LF_ServiceAppPlot(QCustomPlot *UIPassedplot, QCPGraph::LineSt
     UIplotP->graph()->setPen(graphPen);
     UIplotP->replot();
 
-
 }
 
-LF_ServiceAppPlot::~LF_ServiceAppPlot()
+
+GenericLfQCP::~GenericLfQCP()
 {
     qDebug() << "Plot X Deconstructed";
-
-    if(DataVector_Y){
-            delete DataVector_Y;   }
-
-    if(DataVector_X){
-              delete DataVector_X;  }
 
     if(Graph1){
             delete Graph1;      }
@@ -133,27 +127,34 @@ LF_ServiceAppPlot::~LF_ServiceAppPlot()
 
 
 
-void LF_ServiceAppPlot::LfGraph_AppendData(float X_Pos,float Y_Pos)
+void GenericLfQCP::LfGraph_AppendData(float X_Pos,float Y_Pos)
 {
     float XposVal = X_Pos;
     float YposVal = Y_Pos;
-    DataVector_X->append( ((float)XposVal));
-    DataVector_Y->append( ((float)YposVal));
-    Graph1->setData(*DataVector_X,*DataVector_Y);
+    DataVector_X.append( ((float)XposVal));
+    DataVector_Y.append( ((float)YposVal));
+
+}
+
+void GenericLfQCP::LfGraph_UpdateReplot(void)
+{
+
+    Graph1->setData(DataVector_X,DataVector_Y);
 
     UIplotP->xAxis->setRange
-        ( *std::min_element(DataVector_X->begin(),DataVector_X->end() ) -1,
-                             *std::max_element(DataVector_X->begin(),DataVector_X->end() ) +1);
+        ( *std::min_element(DataVector_X.begin(),DataVector_X.end() ) -1,
+         *std::max_element(DataVector_X.begin(),DataVector_X.end() ) +1);
 
     UIplotP->yAxis->setRange
-        (  *std::min_element(DataVector_Y->begin() ,DataVector_Y->end() ) -1,
-                             *std::max_element(DataVector_Y->begin() ,DataVector_Y->end() ) +2 );
+        (  *std::min_element(DataVector_Y.begin() ,DataVector_Y.end() ) -1,
+         *std::max_element(DataVector_Y.begin() ,DataVector_Y.end() ) +2 );
+
 
     UIplotP->replot();
     UIplotP->update();
 }
 
-void LF_ServiceAppPlot::LfGraph_axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part)
+void GenericLfQCP::LfGraph_axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part)
 {
     // Set an axis label by double clicking on it
     if (part == QCPAxis::spAxisLabel) // only react when the actual axis label is clicked, not tick label or axis backbone
@@ -168,7 +169,7 @@ void LF_ServiceAppPlot::LfGraph_axisLabelDoubleClick(QCPAxis *axis, QCPAxis::Sel
     }
 }
 
-void LF_ServiceAppPlot::LfGraph_legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item)
+void GenericLfQCP::LfGraph_legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item)
 {
     // Rename a graph by double clicking on its legend item
     Q_UNUSED(legend)
@@ -185,7 +186,7 @@ void LF_ServiceAppPlot::LfGraph_legendDoubleClick(QCPLegend *legend, QCPAbstract
     }
 }
 
-void LF_ServiceAppPlot::LfGraph_selectionChanged()
+void GenericLfQCP::LfGraph_selectionChanged()
 {
     /*
    normally, axis base line, axis tick labels and axis labels are selectable separately, but we want
@@ -228,7 +229,7 @@ void LF_ServiceAppPlot::LfGraph_selectionChanged()
     }
 }
 
-void LF_ServiceAppPlot::LfGraph_mousePress()
+void GenericLfQCP::LfGraph_mousePress()
 {
     // if an axis is selected, only allow the direction of that axis to be dragged
     // if no axis is selected, both directions may be dragged
@@ -241,7 +242,7 @@ void LF_ServiceAppPlot::LfGraph_mousePress()
         UIplotP->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
 }
 
-void LF_ServiceAppPlot::LfGraph_mouseWheel()
+void GenericLfQCP::LfGraph_mouseWheel()
 {
     // if an axis is selected, only allow the direction of that axis to be zoomed
     // if no axis is selected, both directions may be zoomed
@@ -254,7 +255,7 @@ void LF_ServiceAppPlot::LfGraph_mouseWheel()
         UIplotP->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
 }
 
-void LF_ServiceAppPlot::LfGraph_addRandomGraph()
+void GenericLfQCP::LfGraph_addRandomGraph()
 {
     int n = 50; // number of points in graph
     double xScale = (std::rand()/(double)RAND_MAX + 0.5)*2;
@@ -284,7 +285,7 @@ void LF_ServiceAppPlot::LfGraph_addRandomGraph()
     UIplotP->replot();
 }
 
-void LF_ServiceAppPlot::LfGraph_removeSelectedGraph()
+void GenericLfQCP::LfGraph_removeSelectedGraph()
 {
     if (UIplotP->selectedGraphs().size() > 0)
     {
@@ -293,13 +294,13 @@ void LF_ServiceAppPlot::LfGraph_removeSelectedGraph()
     }
 }
 
-void LF_ServiceAppPlot::LfGraph_removeAllGraphs()
+void GenericLfQCP::LfGraph_removeAllGraphs()
 {
     UIplotP->clearGraphs();
     UIplotP->replot();
 }
 
-void LF_ServiceAppPlot::LfGraph_contextMenuRequest(QPoint pos)
+void GenericLfQCP::LfGraph_contextMenuRequest(QPoint pos)
 {
     QMenu *menu = new QMenu(this);
     menu->setAttribute(Qt::WA_DeleteOnClose);
@@ -323,7 +324,7 @@ void LF_ServiceAppPlot::LfGraph_contextMenuRequest(QPoint pos)
     menu->popup(UIplotP->mapToGlobal(pos));
 }
 
-void LF_ServiceAppPlot::LfGraph_moveLegend()
+void GenericLfQCP::LfGraph_moveLegend()
 {
     if (QAction* contextAction = qobject_cast<QAction*>(sender())) // make sure this slot is really called by a context menu action, so it carries the data we need
     {
@@ -337,7 +338,7 @@ void LF_ServiceAppPlot::LfGraph_moveLegend()
     }
 }
 
-void LF_ServiceAppPlot::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dataIndex)
+void GenericLfQCP::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dataIndex)
 {
     // since we know we only have QCPGraphs in the plot, we can immediately access interface1D()
     // usually it's better to first check whether interface1D() returns non-zero, and only then use it.

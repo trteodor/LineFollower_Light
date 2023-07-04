@@ -859,7 +859,7 @@
       </widget>
      </item>
      <item row="1" column="0" colspan="3">
-      <widget class="QTableWidget" name="tableWidge_2">
+      <widget class="QTableWidget" name="DebugDataTable">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -957,7 +957,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>tableWidget_76443</tabstop>
-  <tabstop>tableWidge_2</tabstop>
+  <tabstop>DebugDataTable</tabstop>
   <tabstop>pushButton_4</tabstop>
   <tabstop>pushButton_2</tabstop>
   <tabstop>GeneralPlotDataClear_pb</tabstop>
