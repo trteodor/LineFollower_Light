@@ -91,15 +91,22 @@ typedef struct
 	uint8_t LastRightLinePosConfidence;
 }BLE_SensorDataReport_t;  /*Current size= 12+4+1+1 = 18*/
 
+typedef struct
+{
+    float PidRegCorrValue;
+}BLE_PidRegData_t; /*Current size= 4*/
 
 typedef struct
 {
-	uint8_t SyncId;
-	uint32_t ucTimeStamp;
-	BLE_MapDataReport_t CurrMapData;
-	BLE_SensorDataReport_t CurrSensorData;
-}BLE_LfDataReport_t ; /*47bytes total size + 3*2 = 6*/
-
+    uint8_t SyncId;
+    uint32_t ucTimeStamp; //5
+    BLE_MapDataReport_t CurrMapData;
+    BLE_SensorDataReport_t CurrSensorData;
+    BLE_PidRegData_t CurrPidRegData;
+}BLE_LfDataReport_t; /*51bytes total size + 3*2 = 6|" Max 54bytes + 1!! difficult to explain why(+1) (left 4bytes)   -- stil */
+					/*However data are aligned to 4bytes... i didn't find time to solve it ;)
+					  I know how to do it (very simple - packed structures but i didn't need it ;)
+					  it coused that CurrPidRegData is on position 16 not 14*/
 
 typedef struct
 {

@@ -17,7 +17,9 @@ public:
     void LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineStyle LineStyle);
     void LfGraph_AppendData(float X_Pos,float Y_Pos);
     void LfGraph_UpdateReplot(void);
+    void LfGraph_ClearData(void);
 
+    QCustomPlot *UIplotP;
 
 
 
@@ -42,7 +44,7 @@ private slots:
 
 
 private:
-    QCustomPlot *UIplotP;
+
 
     QPointer<QCPGraph> Graph1;
     QPointer<QCPGraph> Graph2;

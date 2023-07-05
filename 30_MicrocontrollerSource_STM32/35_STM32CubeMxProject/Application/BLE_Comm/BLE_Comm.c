@@ -220,9 +220,13 @@ static BLE_CallStatus_t BLE_TransmitLfDataReport(void)
 	DataBuffer[2][0] = BLE_BaseDataReport_part3;
 	DataBuffer[2][1] = NewestLfDataReport.SyncId;
 
-	memcpy(&DataBuffer[0][2], &NewestLfDataReport.ucTimeStamp,16); /*Timestamp, WhLftSp,WhRhtSp,YawRate*/
+
+	/*!!!2+18 = 20!!!!*/
+	memcpy(&DataBuffer[0][2], &NewestLfDataReport.ucTimeStamp,16); /*2bytes left only*//*Timestamp, WhLftSp,WhRhtSp,YawRate*/
 	memcpy(&DataBuffer[1][2], &NewestLfDataReport.CurrMapData.PosX,18); /*PosX, PosY, TravelledDistance, 6BytesOfSensorData*/
-	memcpy(&DataBuffer[2][2], &NewestLfDataReport.CurrSensorData.SensorData[6],18); /*6bytes of sensorData,PosError, 2* LinePosConfidence*/
+	memcpy(&DataBuffer[2][2], &NewestLfDataReport.CurrSensorData.SensorData[6],18); /*6bytes of sensorData,PosError, 2* LinePosConfidence
+	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 However data are align to 4bytes... i didn't find time to solve it ;)
+	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 I know how to do it (packed structures but i didn't need it ;) */
 
 	if(BLE_RB_Write(&BleMainRingBuffer, (uint8_t *)DataBuffer, BLE_MAX_SINGLE_MESSAGE_SIZE) != RB_OK)
 	{
@@ -260,10 +264,10 @@ static void Statistics_CreateAndTransmitCommunicationStatistics(void)
 	RingBufferStatisticsHolder[1] = SyncIdStat; /*SyncId*/
 
 	uint32_t ucHelperTime = HAL_GetTick();
-	RingBufferStatisticsHolder[2] = ((uint8_t *)&ucHelperTime)[3];
-	RingBufferStatisticsHolder[3] = ((uint8_t *)&ucHelperTime)[2];
-	RingBufferStatisticsHolder[4] = ((uint8_t *)&ucHelperTime)[1];
-	RingBufferStatisticsHolder[5] = ((uint8_t *)&ucHelperTime)[0];
+	RingBufferStatisticsHolder[2] = ((uint8_t *)&ucHelperTime)[0];
+	RingBufferStatisticsHolder[3] = ((uint8_t *)&ucHelperTime)[1];
+	RingBufferStatisticsHolder[4] = ((uint8_t *)&ucHelperTime)[2];
+	RingBufferStatisticsHolder[5] = ((uint8_t *)&ucHelperTime)[3];
 
 	RingBufferRemaninzingSpace = BLE_RING_BUFFER_SIZE - (BleMainRingBuffer.Head - BleMainRingBuffer.Tail);
 
@@ -336,7 +340,7 @@ void TemporaryFakeProducer(void)
 	NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 100 * WaveHelper));
 	NewestLfDataReport.CurrMapData.WhRhtSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
 
-	NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
+	NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.3 * sin( 2* M_PI * 10 * WaveHelper));
 
 
 	NewestLfDataReport.CurrSensorData.SensorData[0] = 40;
@@ -353,6 +357,8 @@ void TemporaryFakeProducer(void)
 	NewestLfDataReport.CurrSensorData.SensorData[11] = 40;
 
 	NewestLfDataReport.CurrSensorData.PosError = 1 * sin( 2 * M_PI * WaveHelper);
+
+	NewestLfDataReport.CurrPidRegData.PidRegCorrValue = (2 * sin( 2 * M_PI * WaveHelper)) + (0.2 * sin( 2* M_PI * 13 * WaveHelper));;
 
 	BLE_TransmitLfDataReport();
 

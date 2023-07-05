@@ -1,17 +1,14 @@
 #include "BleDataManager.h"
-#include "qelapsedtimer.h"
 #include "qthread.h"
 
 BleDataManager::BleDataManager()
 {
-    this->moveToThread(&BLE_Thread);
+    this->moveToThread(&BleDatMngr_Thread);
+    bleConnection.moveToThread((&BleDatMngr_Thread)) ;
 
     connect(&bleConnection, SIGNAL(newData(QByteArray)), this, SLOT(BleDatMngr_InputHanlder(QByteArray)));
 
-
-
-
-    BLE_Thread.start();
+    BleDatMngr_Thread.start();
 }
 
 
@@ -44,7 +41,7 @@ void BleDataManager::BleDatMngr_CommunicationStatistics_Handler(const QByteArray
     static BleDataManager::BLE_StatisticData_t StatisticData = {0};
     static uint8_t PreviousSyncId = 255U;
 
-    qDebug() << "StatisticHandler SyncId" <<  ((uint8_t)value.at(1)) ;
+//    qDebug() << "StatisticHandler SyncId" <<  ((uint8_t)value.at(1)) ;
 
     StatisticData.SyncId = ((uint8_t)value.at(1)) ;
     StatisticData.ucTimeStamp = ConvToUint32(value,2);
@@ -56,23 +53,49 @@ void BleDataManager::BleDatMngr_CommunicationStatistics_Handler(const QByteArray
 
     if(PreviousSyncId != StatisticData.SyncId)
     {
-        //        QString RgtWhlSpdSimu_s = QString::number(FullMapData.WhLftSp,'f',3);
-        QString MyData = QString("RB_RemSize:%1 |OverFlCount:%2 |TrM_C: %3")
-                             .arg(StatisticData.RingBufferRemainingSize).arg(StatisticData.RingBufferOverFlowCounter)
-                             .arg(StatisticData.TransmisstedMessagesCounter);
-
-//        ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
-//        ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,1,new QTableWidgetItem(QString::number(StatisticData.ucTimeStamp) ));
-//        ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,2,new QTableWidgetItem(QString::number(BleDataManager::BLE_CommunicationStatistics) ));
-//        ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,
-//                                    new QTableWidgetItem((QString)MyData.data() ) );
-
-//        ui->statusbar->showMessage((QString)MyData.data(), 8000);
+        emit BleDatMngrSignal_CommunicationStatisticsUpdate(StatisticData.ucTimeStamp,StatisticData.RingBufferRemainingSize,StatisticData.RingBufferOverFlowCounter,
+                                                            StatisticData.TransmisstedMessagesCounter,StatisticData.RetransmissionCounter);
     }
 
     PreviousSyncId = StatisticData.SyncId;
 }
 
+
+
+void BleDataManager::BleDatMngr_BaseDataInsertToDebugTable(uint32_t FrameCounter)
+{
+
+        QString RgtWhlSpdSimu_s = QString::number(BleDataManager::FullBaseData.CurrMapData.WhLftSp,'f',3);
+        QString LftWhlSpdSimu_s = QString::number(BleDataManager::FullBaseData.CurrMapData.WhRhtSp,'f',3);
+        QString BaseMapData = QString("MapDat: pX: %1 |pY: %2 |L_sp: %3 |R_Sp: %4| Yr: %5")
+                                  .arg(BleDataManager::FullBaseData.CurrMapData.PosX).arg(BleDataManager::FullBaseData.CurrMapData.PosY)
+                                  .arg(LftWhlSpdSimu_s).arg(RgtWhlSpdSimu_s).arg(BleDataManager::FullBaseData.CurrMapData.YawRate) ;
+
+        QString BaseSensorDataP1 = QString("SenDat1: S0: %1 |S1: %2 |S2: %3 |S3: %4 |S4: %5 |S5: %6 |Err: %7")
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[0])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[1])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[2])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[3])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[4])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[5])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.PosError);
+
+        QString BaseSensorDataP2 = QString("SenDat2: S6: %1 |S7: %2 |S8: %3 |S9: %4 |S10: %5 |S11: %6 |Err: %7")
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[6])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[7])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[8])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[9])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[10])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.SensorData[11])
+                                       .arg(BleDataManager::FullBaseData.CurrSensorData.PosError);
+
+//        QColor RowColor = QColor(255,255,255); /*Default row color (not modify color*/
+        emit BleDatMngrSignal_DebugTable_InsertDataRow(FullBaseData.ucTimeStamp,FrameCounter,BleDataManager::FullBaseData.SyncId,BaseMapData);
+        emit BleDatMngrSignal_DebugTable_InsertDataRow(FullBaseData.ucTimeStamp,FrameCounter,BleDataManager::FullBaseData.SyncId,BaseSensorDataP1);
+        emit BleDatMngrSignal_DebugTable_InsertDataRow(FullBaseData.ucTimeStamp,FrameCounter,BleDataManager::FullBaseData.SyncId,BaseSensorDataP2);
+
+        FrameCounter++;
+}
 
 
 void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
@@ -129,6 +152,9 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
             IncomingLfBaseData.CurrSensorData.LastLeftLinePosConfidence =((uint8_t)value.at(12)) ;
             IncomingLfBaseData.CurrSensorData.LastRightLinePosConfidence =((uint8_t)value.at(13)) ;
 
+            IncomingLfBaseData.CurrPidRegData.PidRegCorrValue = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,16));
+
+
             /*Copy full input MapData*/
             FullBaseData = IncomingLfBaseData;
 
@@ -136,46 +162,80 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
             FullFrameCounter++;
 
 
-            /*TODO: Delegate this jobs to dedicated threads... (thread pools or something like it) */
-            QElapsedTimer timer;
 
-//            timer.start();
-////            RefreshErrorIndicatorView();
-//            qDebug() << "RefreshErrorIndicatorView TOOK: " << timer.elapsed() << "milliseconds";
+            if(true == DebugTable_BaseDataLoggingState)
+            {
+            BleDatMngr_BaseDataInsertToDebugTable(FullFrameCounter);
+            }
 
-//            timer.start();
-////            BLE_UpdateDebugTableWithNewLfAppBaseData();
-//            qDebug() << "BLE_UpdateDebugTableWithNewLfAppBaseData TOOK: " << timer.elapsed() << "milliseconds";
+            emit BleDatMngrSignal_RefreshErrorIndicatorView( FullBaseData.CurrSensorData.SensorData[0],
+                                                            FullBaseData.CurrSensorData.SensorData[1],
+                                                            FullBaseData.CurrSensorData.SensorData[2],
+                                                            FullBaseData.CurrSensorData.SensorData[3],
+                                                            FullBaseData.CurrSensorData.SensorData[4],
+                                                            FullBaseData.CurrSensorData.SensorData[5],
+                                                            FullBaseData.CurrSensorData.SensorData[6],
+                                                            FullBaseData.CurrSensorData.SensorData[7],
+                                                            FullBaseData.CurrSensorData.SensorData[8],
+                                                            FullBaseData.CurrSensorData.SensorData[9],
+                                                            FullBaseData.CurrSensorData.SensorData[10],
+                                                            FullBaseData.CurrSensorData.SensorData[11],
+                                                            FullBaseData.CurrSensorData.LastRightLinePosConfidence,
+                                                            FullBaseData.CurrSensorData.LastLeftLinePosConfidence,
+                                                            FullBaseData.CurrSensorData.PosError);
 
-//            timer.start();
-            MapPlot.LfGraph_AppendData(FullBaseData.CurrMapData.PosX,FullBaseData.CurrMapData.PosY);
-            emit BleDatMngrSignal_MapPlotUpdate();
-
-//            qDebug() << "MapGraph_LfGraph_UpdateReplot TOOK: " << timer.elapsed() << "milliseconds";
-
-//            timer.start();
-
-            YawRatePlot.LfGraph_AppendData((float)FullFrameCounter,FullBaseData.CurrMapData.YawRate);
-            emit BleDatMngrSignal_YawRatePlotUpdate();
-//            qDebug() << "YawRateGraph_LfGraph_UpdateReplot TOOK: " << timer.elapsed() << "milliseconds";
+            emit BleDatMngrSignal_PlotMapAppendData(FullBaseData.CurrMapData.PosX,FullBaseData.CurrMapData.PosY);
+            emit BleDatMngrSignal_PlotYawRateAppendData(FullFrameCounter,FullBaseData.CurrMapData.YawRate);
+            emit BleDatMngrSignal_PlotSpdAppendData(FullFrameCounter,FullBaseData.CurrMapData.WhLftSp);
+            emit BleDatMngrSignal_PlotPosErrAppendData(FullFrameCounter,FullBaseData.CurrSensorData.PosError);
+            emit BleDatMngrSignal_PlotPidRegValAppendData(FullFrameCounter,IncomingLfBaseData.CurrPidRegData.PidRegCorrValue);
 
 
-//            timer.start();
-            SpdPlot.LfGraph_AppendData(FullFrameCounter,FullBaseData.CurrMapData.WhLftSp);
-            emit BleDatMngrSignal_SpdPlotUpdate();
-//            qDebug() << "SpdPlot_LfGraph_UpdateReplot TOOK: " << timer.elapsed() << "milliseconds";
+            if( (false == MapPlotPlottingState) && (false == YawRatePlotPlottingState) && (false == SpdPlotPlottingState)
+                && (false == DebugTableScrollingBottomIsActivState) && (false == PosErrPlotPlottingState) && (false == PidRegValPlotPlottingState) )
+            {
+                PlottingInfoMutex.lock();
+                MapPlotPlottingState = true;
+                YawRatePlotPlottingState = true;
+                SpdPlotPlottingState = true;
+                PosErrPlotPlottingState = true;
+                PidRegValPlotPlottingState = true;
+                PlottingInfoMutex.unlock();
+
+
+                if(true == DebugTable_BaseDataLoggingState)
+                {
+                    DebugTableScrollingBottonMutex.lock();
+                    emit BleDatMngrSignal_DebugTable_ScrollToBottom();
+                    DebugTableScrollingBottonMutex.unlock();
+                }
+
+                emit BleDatMngrSignal_PlotMapUpdate(); /*Move plotting to MainWindow process*/
+                emit BleDatMngrSignal_PlotYawRateUpdate(); /*Move plotting to MainWindow process*/
+                emit BleDatMngrSignal_PlotSpdUpdate(); /*Move plotting to MainWindow process*/
+                emit BleDatMngrSignal_PlotPosErrUpdate();
+                emit BleDatMngrSignal_PlotPidRegValUpdate();
+
+
+            }
+            else
+            {
+                //qDebug() << "Plotting not finished skip";
+                /*Refresh plots in next frame*/
+                /*Nothing to do*/
+            }
+
+
         }
         else
         {
             if(PrevSyncId != _inputSyncId)
             {
-                /*Ignore synchronization error detected*/
-//                QString ExpectingFrameNumber_s = QString::number(ExpectingFrameNumber);
-//                QString SyncErroMessage = QString("MapDatSyncErr cID:'%1'|pID:'%2'|mID:'%3' eeData:'%4' ")
-//                                              .arg(_inputSyncId).arg(PrevSyncId).arg(BLE_MessID),arg(ExpectingFrameNumber_s);
-//                ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
-//                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem(SyncErroMessage));
-//                ui->DebugDataTable->item(ui->DebugDataTable->rowCount() -1 , 4) -> setData(Qt::BackgroundRole, QColor (250,0,0));
+
+                QString SyncErrorString = QString("!!!Synchronization Error!!! SyncId: %1 |PrSyncId: %2").arg(_inputSyncId).arg(PrevSyncId) ;
+                QColor RowColor = QColor(255,0,0);
+
+                emit BleDatMngrSignal_DebugTable_InsertDataRow(0,0,0,SyncErrorString,RowColor);
                 ExpectingFrameNumber = 0;
             }
             else
@@ -186,7 +246,6 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
         }
     }
 
-
     PrevSyncId = _inputSyncId;
 }
 
@@ -194,23 +253,16 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
 
 void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
 {
-    QElapsedTimer timer;
-    timer.start();
-
 
     static volatile BLE_MessageID_t BLE_MessageID;
     BLE_MessageID = ((BLE_MessageID_t)value.at(0) );
-
-    qDebug() <<  "NewFrameID:"  << "SyncID:" << ((uint8_t)value.at(1) );
-    qDebug() << "BLE_inputDataHandler CurrThread:" << QThread::currentThread();
-
 
     switch(BLE_MessageID)
     {
         case BLE_MessageID_t::BLE_CommunicationStatistics:
         {
 
-            BleDatMngr_BaseDataHandler(value,BLE_MessageID);
+            BleDatMngr_CommunicationStatistics_Handler(value);
             break;
         }
 
@@ -235,15 +287,4 @@ void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
             break;
         }
     }
-
-
-    static uint32_t ShifterDelay = 0;
-
-
-//    if( (ShifterDelay % 3) == 0)
-//    {
-////        ui->tableWidge_2->scrollToBottom();
-//    }
-    qDebug() << " Wrapper execution time TOOK: " << timer.elapsed() << "milliseconds";
-
 }
