@@ -1,7 +1,6 @@
 #include "main.h"
 #include "BlinkLedMod.h"
-#include "Nvm_EEPROM.h"
-#include "Nvm_EEPROM_MemMap.h"
+#include "EEmuConfig.h"
 
 static void EEPROM_LED_BLINK_READ();
 
@@ -36,6 +35,6 @@ void BlinkLedTask()
 static void EEPROM_LED_BLINK_READ()
 {
 	uint32_t tmpLedBlinkState;
-	EEPROM_READ_INT(EEPROM_LedModeState_Addr, (int *)&tmpLedBlinkState);
+//	EEPROM_READ_INT(EEPROM_LedModeState_Addr, (int *)&tmpLedBlinkState);
 	LedBlinkState = tmpLedBlinkState;
 }

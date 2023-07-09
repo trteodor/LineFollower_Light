@@ -64,10 +64,10 @@
 									<listOptionValue builtIn="false" value="../Application/DistanceSensor"/>
 									<listOptionValue builtIn="false" value="../Application/BLE_Comm"/>
 									<listOptionValue builtIn="false" value="../Drivers/VL53L0/core/inc"/>
+									<listOptionValue builtIn="false" value="../Middlewares/EEPROM_Emul"/>
 									<listOptionValue builtIn="false" value="../Drivers/VL53L0/platform/inc"/>
 									<listOptionValue builtIn="false" value="../Config"/>
 									<listOptionValue builtIn="false" value="../Drivers/VL53L0"/>
-									<listOptionValue builtIn="false" value="../Drivers/EEPROM_M24C16"/>
 									<listOptionValue builtIn="false" value="../Application/AppTools"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1164578962" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
@@ -97,7 +97,8 @@
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Application"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
-						<entry excluding="CMSIS/Core/Template|CMSIS/RTOS2|CMSIS/DSP|CMSIS/NN|CMSIS/Core_A|CMSIS/RTOS" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry excluding="EEPROM_M24C16|CMSIS/Core/Template|CMSIS/RTOS2|CMSIS/DSP|CMSIS/NN|CMSIS/Core_A|CMSIS/RTOS" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Middlewares"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -186,7 +187,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
-						<entry excluding="CMSIS/Core/Template|CMSIS/RTOS2|CMSIS/DSP|CMSIS/NN|CMSIS/Core_A|CMSIS/RTOS" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry excluding="EEPROM_M24C16|CMSIS/Core/Template|CMSIS/RTOS2|CMSIS/DSP|CMSIS/NN|CMSIS/Core_A|CMSIS/RTOS" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

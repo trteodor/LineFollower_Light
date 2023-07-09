@@ -100,7 +100,6 @@ void MainWindow::BLE_InitializeQTConnections(void)
             ,this
             ,SLOT(BLE_changedState(bluetoothleUART::bluetoothleState)));
 
-
     connect(
         &BleInputDataProcessingWrapper,
         SIGNAL(BleDatMngrSignal_PlotMapUpdate() )
@@ -162,10 +161,6 @@ void MainWindow::BLE_InitializeQTConnections(void)
         SIGNAL(BleDatMngrSignal_PlotPidRegValAppendData(uint32_t,float) )
         ,this
         ,SLOT(MainWinPlot_PlotPidRegValAppendData(uint32_t,float) ) );
-
-
-
-
 
     connect(
         &BleInputDataProcessingWrapper,

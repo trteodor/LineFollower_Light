@@ -1,4 +1,5 @@
 
+
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
@@ -9,9 +10,7 @@
 #include <stdlib.h>
 #include "math.h"
 
-
-#include "Nvm_EEPROM.h"
-#include "Nvm_EEPROM_MemMap.h"
+#include "EEmuConfig.h"
 #include "PID_Reg_Module.h"
 #include "LinePosEstimator.h"
 #include "Encoders_Module.h"
@@ -143,10 +142,10 @@ static void CheckDoesNotExceedTheMaximumPWMValue()
 
 static void EEPROM_PID_Data_Read()
 {
-	EEPROM_READ_INT(EEPROM_PID_KdProbeTime_Addr, &PID_Module.PID_DerivativeTime);
-	EEPROM_READ_FLOAT(EEPROM_Addr_PID_Kp, &PID_Module.Kp);
-	EEPROM_READ_FLOAT(EEPROM_Addr_PID_Kd, &PID_Module.Kd);
-	EEPROM_READ_FLOAT(EEPROM_AddrBaseMotorSpeedValue, &PID_Module.BaseMotorSpeed);
-	EEPROM_READ_FLOAT(EEPROM_Addr_PID_Ki, &PID_Module.Ki);
+//	EEPROM_READ_INT(EEPROM_PID_KdProbeTime_Addr, &PID_Module.PID_DerivativeTime);
+//	EEPROM_READ_FLOAT(EEPROM_Addr_PID_Kp, &PID_Module.Kp);
+//	EEPROM_READ_FLOAT(EEPROM_Addr_PID_Kd, &PID_Module.Kd);
+//	EEPROM_READ_FLOAT(EEPROM_AddrBaseMotorSpeedValue, &PID_Module.BaseMotorSpeed);
+//	EEPROM_READ_FLOAT(EEPROM_Addr_PID_Ki, &PID_Module.Ki);
 }
 

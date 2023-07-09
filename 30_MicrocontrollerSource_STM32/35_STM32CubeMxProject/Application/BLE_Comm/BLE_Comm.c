@@ -19,6 +19,9 @@
 #include "stddef.h"
 #include "math.h"
 
+#include "EEmu.h" /*EEPROM emulation header*/
+#include "EEmuConfig.h"
+
 
 #define BLE_MIN_SINGLE_MESSAGE_SIZE  20 /*HARD CODED! please don't change it if you aren't rly aware what you are doing*/
 									/*Please check BLE specifitaion - max message size is 20bytes*/
@@ -73,6 +76,7 @@ static BLE_LfDataReport_t NewestLfDataReport = {0};
 
 static bool FakeProducerStateActiv = false;
 
+static BLE_MessageID_t ReceivedMessageId;
 
 /*
  *********************************************************************************************
@@ -81,6 +85,8 @@ static bool FakeProducerStateActiv = false;
  */
 static BleRingBufferStatus_t BLE_RB_Read(BleRingBuffer_t *Buf, uint8_t *MessageSize, uint8_t **MessagePointer);
 static BleRingBufferStatus_t BLE_RB_Write(BleRingBuffer_t *Buf,uint8_t *BleLogData, uint8_t MessageSize);
+
+static BLE_CallStatus_t BLE_TransmitErrorWeigthData(void);
 
 
 /*TODO: To remove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -125,6 +131,11 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		if(BLE_ReceiveBuffer[0] == BLE_StartFakeProducer)
 		{
 			FakeProducerStateActiv = true;
+		}
+
+		if(BLE_ReceiveBuffer[0] == BLE_NvM_ErrWeigthSensorDataReq)
+		{
+			ReceivedMessageId = BLE_NvM_ErrWeigthSensorDataReq;
 		}
 		// Start listening again
 
@@ -238,6 +249,66 @@ static BLE_CallStatus_t BLE_TransmitLfDataReport(void)
 	return retval;
 }
 
+static BLE_CallStatus_t BLE_TransmitErrorWeigthData(void)
+{
+	uint8_t DataBuffer[3][20] = {0};
+	static uint8_t _SyncID = 0;
+
+	BLE_CallStatus_t retval = BLE_Ok;
+
+	float ErrWDataP1,ErrWDataP2,ErrWDataP3,ErrWDataP4;
+
+	/***********************************************************************/
+	/*Prepare transmit data of part 1*/
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth1_F32, &ErrWDataP1);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth2_F32, &ErrWDataP2);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth3_F32, &ErrWDataP3);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth4_F32, &ErrWDataP4);
+
+	DataBuffer[0][0] = BLE_NvM_ErrWeigthSensorData_part1;
+	DataBuffer[0][1] = _SyncID;
+	memcpy(&DataBuffer[0][2],&ErrWDataP1,4);
+	memcpy(&DataBuffer[0][6],&ErrWDataP2,4);
+	memcpy(&DataBuffer[0][10],&ErrWDataP3,4);
+	memcpy(&DataBuffer[0][14],&ErrWDataP4,4);
+
+	/***********************************************************************/
+	/*Prepare transmit data of part 2*/
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth5_F32, &ErrWDataP1);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth6_F32, &ErrWDataP2);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth7_F32, &ErrWDataP3);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth8_F32, &ErrWDataP4);
+
+	DataBuffer[1][0] = BLE_NvM_ErrWeigthSensorData_part2;
+	DataBuffer[1][1] = _SyncID;
+	memcpy(&DataBuffer[1][2],&ErrWDataP1,4);
+	memcpy(&DataBuffer[1][6],&ErrWDataP2,4);
+	memcpy(&DataBuffer[1][10],&ErrWDataP3,4);
+	memcpy(&DataBuffer[1][14],&ErrWDataP4,4);
+	/***********************************************************************/
+	/*Prepare transmit data of part 3*/
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth9_F32, &ErrWDataP1);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth10_F32, &ErrWDataP2);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth11_F32, &ErrWDataP3);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthMax_F32, &ErrWDataP4);
+
+	DataBuffer[2][0] = BLE_NvM_ErrWeigthSensorData_part3;
+	DataBuffer[2][1] = _SyncID;
+	memcpy(&DataBuffer[2][2],&ErrWDataP1,4);
+	memcpy(&DataBuffer[2][6],&ErrWDataP2,4);
+	memcpy(&DataBuffer[2][10],&ErrWDataP3,4);
+	memcpy(&DataBuffer[2][14],&ErrWDataP4,4);
+	/***********************************************************************/
+
+	if(BLE_RB_Write(&BleMainRingBuffer, (uint8_t *)DataBuffer, BLE_MAX_SINGLE_MESSAGE_SIZE) != RB_OK)
+	{
+		LogDroppedFlag = true;
+		retval = BLE_Error;
+	}
+
+	_SyncID++;
+	return retval;
+}
 
 
 static void Statistics_CreateAndTransmitCommunicationStatistics(void)
@@ -382,6 +453,28 @@ void BLE_Task(void)
 	static uint32_t BLE_StatisticTimer = 0;
 	static uint32_t TempFakeProducerTimer = 0;
 
+	if(ReceivedMessageId != BLE_None)
+	{
+		switch(ReceivedMessageId)
+		{
+			case BLE_NvM_ErrWeigthSensorDataReq:
+
+				BLE_TransmitErrorWeigthData();
+
+			break;
+
+			default:
+			{
+				/*Nothing to do*/
+				break;
+			}
+
+		}
+
+		ReceivedMessageId = BLE_None;
+	}
+
+
 	if(HAL_GetTick() - TempFakeProducerTimer >= 20 && (true == FakeProducerStateActiv) )
 	{
 		TempFakeProducerTimer = HAL_GetTick();
@@ -395,16 +488,16 @@ void BLE_Task(void)
 	TransmitWindowActiv = true;
 	(void)BLE_DataTransmitWindow;
 /*Fajnie wyszlo na 200 wobec 60*/
-//	if(HAL_GetTick() - BLE_DataTransmitWindow > 300)
-//	{
-//		BLE_DataTransmitWindow = HAL_GetTick();
-//		TransmitWindowActiv = true;
-//	}
-//
-//	if(HAL_GetTick() - BLE_DataTransmitWindow > 40)
-//	{
-//		TransmitWindowActiv = false;
-//	}
+	if(HAL_GetTick() - BLE_DataTransmitWindow > 350)
+	{
+		BLE_DataTransmitWindow = HAL_GetTick();
+		TransmitWindowActiv = true;
+	}
+
+	if(HAL_GetTick() - BLE_DataTransmitWindow > 60)
+	{
+		TransmitWindowActiv = false;
+	}
 
 	if( HAL_UART_STATE_READY == huart2.gState && (true == TransmitWindowActiv))
 	{

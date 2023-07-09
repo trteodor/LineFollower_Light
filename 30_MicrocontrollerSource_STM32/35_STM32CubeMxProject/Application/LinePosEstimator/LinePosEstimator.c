@@ -4,8 +4,7 @@
 
 #include "LinePosEstimator.h"
 #include "Encoders_Module.h"
-#include "Nvm_EEPROM_MemMap.h"
-#include "Nvm_EEPROM.h"
+#include "EEmuConfig.h"
 
 #include <stdlib.h>
 
@@ -309,17 +308,17 @@ static float SM_SensorsCalculateError(void)
 /********************************************************************************/
 static void Read_SensorsValue_From_EEPROM(void)
 {
-	EEPROM_READ_FLOAT(EEPROM_ErrW1_Addr, &SensorModule.SensorErrorValue[0]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW2_Addr, &SensorModule.SensorErrorValue[1]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW3_Addr, &SensorModule.SensorErrorValue[2]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW4_Addr, &SensorModule.SensorErrorValue[3]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW5_Addr, &SensorModule.SensorErrorValue[4]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW6_Addr, &SensorModule.SensorErrorValue[5]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW7_Addr, &SensorModule.SensorErrorValue[6]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW8_Addr, &SensorModule.SensorErrorValue[7]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW9_Addr, &SensorModule.SensorErrorValue[8]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW10_Addr, &SensorModule.SensorErrorValue[9]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW11_Addr, &SensorModule.SensorErrorValue[10]);
-	EEPROM_READ_FLOAT(EEPROM_ErrW_Max_Addr, &SensorModule.SensorErrorMaxValue);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW1_Addr, &SensorModule.SensorErrorValue[0]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW2_Addr, &SensorModule.SensorErrorValue[1]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW3_Addr, &SensorModule.SensorErrorValue[2]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW4_Addr, &SensorModule.SensorErrorValue[3]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW5_Addr, &SensorModule.SensorErrorValue[4]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW6_Addr, &SensorModule.SensorErrorValue[5]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW7_Addr, &SensorModule.SensorErrorValue[6]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW8_Addr, &SensorModule.SensorErrorValue[7]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW9_Addr, &SensorModule.SensorErrorValue[8]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW10_Addr, &SensorModule.SensorErrorValue[9]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW11_Addr, &SensorModule.SensorErrorValue[10]);
+//	EEPROM_READ_FLOAT(EEPROM_ErrW_Max_Addr, &SensorModule.SensorErrorMaxValue);
 	SensorModule.LineDetectValue = 3000 ;
 }

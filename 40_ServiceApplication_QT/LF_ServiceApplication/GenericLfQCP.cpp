@@ -22,7 +22,7 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
     //    UIplotP->plotLayout()->addElement(0, 0, title);
     UIplotP->xAxis->setLabel("x Axis");
     UIplotP->yAxis->setLabel("y Axis");
-    UIplotP->legend->setVisible(true);
+    UIplotP->legend->setVisible(false);
     //TODO:
     QFont legendFont = font();
     legendFont.setPointSize(10);

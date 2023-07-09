@@ -103,6 +103,8 @@ void Error_Handler(void);
 #define MPU6050_INT_Pin GPIO_PIN_1
 #define MPU6050_INT_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

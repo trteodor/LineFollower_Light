@@ -1,3 +1,4 @@
+
 #include "main.h"
 #include "tim.h"
 #include "string.h"
@@ -10,8 +11,7 @@
 #include "LF_AppMain.h"
 #include "PID_Reg_Module.h"
 #include "BLE_Comm.h"
-#include "Nvm_EEPROM.h"
-#include "Nvm_EEPROM_MemMap.h"
+#include "EEmuConfig.h"
 #include "BlinkLedMod.h"
 #include "Encoders_Module.h"
 #include "LinePosEstimator.h"
@@ -351,7 +351,7 @@ void Motor_PWM_Init()
 static void EEPROM_ReadTryDetectEndLineMarkState()
 {
 	int tmp;
-	EEPROM_READ_INT(EEPROM_TryDetectEndLineMark_Addr , &tmp);
+//	EEPROM_READ_INT(EEPROM_TryDetectEndLineMark_Addr , &tmp);
 	Robot_Cntrl.TryDetEndLapMarkState=tmp;
 }
 

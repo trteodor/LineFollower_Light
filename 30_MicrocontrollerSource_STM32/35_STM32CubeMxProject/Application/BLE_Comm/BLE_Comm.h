@@ -57,6 +57,21 @@ typedef enum
 	BLE_BaseDataReport_part3,
 	BLE_SuspendFakeProducer,
 	BLE_StartFakeProducer,
+
+
+	BLE_NvM_ErrWeigthSensorDataReq,
+	BLE_NvM_ErrWeigthSensorDataSet,
+	BLE_NvM_ErrWeigthSensorData_part1,
+	BLE_NvM_ErrWeigthSensorData_part2,
+	BLE_NvM_ErrWeigthSensorData_part3,
+
+	BLE_NvM_PidRegDataReq,
+	BLE_NvM_PidRegDataSet,
+	BLE_NvM_PidRegData,
+
+	BLE_NvM_VehCfgReq,
+	BLE_NvM_VehCfgSet,
+	BLE_NvM_VehCfgData,
 }BLE_MessageID_t;
 
 typedef enum
@@ -72,7 +87,7 @@ typedef enum
  * */
 
 
-
+/////////////////////////////////////////////////////////////////////////////////
 typedef struct
 {
 	float WhLftSp;
@@ -107,6 +122,46 @@ typedef struct
 					/*However data are aligned to 4bytes... i didn't find time to solve it ;)
 					  I know how to do it (very simple - packed structures but i didn't need it ;)
 					  it coused that CurrPidRegData is on position 16 not 14*/
+
+/////////////////////////////////////////////////////////////////////////////////
+
+typedef struct
+{
+	float ErrW1;
+	float ErrW2;
+	float ErrW3;
+	float ErrW4;
+	float ErrW5;
+	float ErrW6;
+	float ErrW7;
+	float ErrW8;
+	float ErrW9;
+	float ErrW10;
+	float ErrW11;
+	float ErrWMax; //Line not detected - beyond path
+}BLE_NvM_ErrWeigthSensorData_t; /*Current size 6*4 = 24*/
+
+
+typedef struct
+{
+	float Kp;
+	float Ki;
+	float Kd;
+	float DerivativeTime;
+}BLE_NvM_PidRegData_t; /*Current size 6*4 = 24*/
+
+
+typedef struct
+{
+	float ExpectedAvSpeed;
+	uint8_t BlinkLedState;
+	uint8_t TryDetectEndLineMark;
+}BLE_NvM_VehCfgData_t; /*Current size 6*4 = 24*/
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
 
 typedef struct
 {
@@ -149,6 +204,12 @@ void BLE_ReportSensorData(BLE_SensorDataReport_t *SensorData);
 */
 void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
 
+/* brief BLE_RegisterNvMdataUpdateInfoCallBack
+* Register call back if you want be informed data Non Volatile data has been updated
+* by BLE communication module
+* CallBack function will be called always if NvM data will be updated
+*/
+void BLE_RegisterNvMdataUpdateInfoCallBack(void *UpdateInfoCb(void) );
 
 
 #endif //_BLE_ServiceModule_H
