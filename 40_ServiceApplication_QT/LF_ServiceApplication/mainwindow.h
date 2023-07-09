@@ -38,6 +38,11 @@ private slots:
     void on_BLE_ActivFakeProdButton_clicked();
     void on_GeneralPlotDataClear_pb_clicked();
 
+
+    void MainWin_UpdateNvmErrorWeigthData( float ErrW1,float ErrW2,float ErrW3,float ErrW4,float ErrW5,float ErrW6,
+                                        float ErrW7,float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
+
+
     void MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                            uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
                                            uint8_t RightLinePosConfif,uint8_t LeftLinePosConfif,
@@ -65,6 +70,8 @@ private slots:
 
     void on_EnableBaseDataLogging_clicked(bool checked);
     void on_DebugTable_DisableBaseDataLogging_clicked(bool checked);
+
+    void on_ReadNvM_Button_clicked();
 
 signals:
     void BLE_connectToDevice(int i);

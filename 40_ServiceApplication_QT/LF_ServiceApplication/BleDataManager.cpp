@@ -250,6 +250,87 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
 }
 
 
+void BleDataManager::BleDatMngr_ErrorWeigthDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
+{
+    //    qDebug() << "ok iam here";
+
+    static uint32_t PrevSyncId = 0U;
+
+
+    uint8_t _inputSyncId = ((uint8_t)value.at(1)) ;
+    static volatile uint8_t ExpectingFrameNumber= 0;
+
+
+    static float IncomingErrorWeigthData[12];
+
+
+    if( (0 == ExpectingFrameNumber) && (BLE_MessID == BleDataManager::BLE_NvM_ErrWeigthSensorData_part1)  && (PrevSyncId != _inputSyncId))
+    {
+
+        IncomingErrorWeigthData[0] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
+        IncomingErrorWeigthData[1] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
+        IncomingErrorWeigthData[2] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10));
+        IncomingErrorWeigthData[3] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,14));
+
+        ExpectingFrameNumber = 1;
+    }
+    else if( (1 == ExpectingFrameNumber) && (BLE_MessID == BleDataManager::BLE_NvM_ErrWeigthSensorData_part2)  && (PrevSyncId == _inputSyncId))
+    {
+        IncomingErrorWeigthData[4] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
+        IncomingErrorWeigthData[5] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
+        IncomingErrorWeigthData[6] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10));
+        IncomingErrorWeigthData[7] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,14));
+        ExpectingFrameNumber = 2;
+    }
+    else
+    {
+        if( (2 == ExpectingFrameNumber)  && (BLE_MessID == BleDataManager::BLE_MessageID_t::BLE_NvM_ErrWeigthSensorData_part3) && (PrevSyncId == _inputSyncId) )
+        {
+            IncomingErrorWeigthData[8] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
+            IncomingErrorWeigthData[9] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
+            IncomingErrorWeigthData[10] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10));
+            IncomingErrorWeigthData[11] = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,14));
+
+            ExpectingFrameNumber = 0;
+//            qDebug() << "BleDatMngr_ErrorWeigthDataHandler Received full frame!";
+
+            emit BleDatMngrSignal_UpdateErrorWeigthData(IncomingErrorWeigthData[0],
+                                                        IncomingErrorWeigthData[1],
+                                                        IncomingErrorWeigthData[2],
+                                                        IncomingErrorWeigthData[3],
+                                                        IncomingErrorWeigthData[4],
+                                                        IncomingErrorWeigthData[5],
+                                                        IncomingErrorWeigthData[6],
+                                                        IncomingErrorWeigthData[7],
+                                                        IncomingErrorWeigthData[8],
+                                                        IncomingErrorWeigthData[9],
+                                                        IncomingErrorWeigthData[10],
+                                                        IncomingErrorWeigthData[11]  );
+
+        }
+        else
+        {
+            if(PrevSyncId != _inputSyncId)
+            {
+
+                QString SyncErrorString = QString("!!!Synchronization Error!!! ErrorWeigthDataHandler SyncId: %1 |PrSyncId: %2 ")
+                                                    .arg(_inputSyncId).arg(PrevSyncId) ;
+                QColor RowColor = QColor(255,0,0);
+
+                emit BleDatMngrSignal_DebugTable_InsertDataRow(0,0,0,SyncErrorString,RowColor);
+                ExpectingFrameNumber = 0;
+            }
+            else
+            {
+                ; /*Frame already handled ignore*/
+            }
+
+        }
+    }
+
+    PrevSyncId = _inputSyncId;
+}
+
 
 void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
 {
@@ -281,6 +362,16 @@ void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
             BleDatMngr_BaseDataHandler(value,BLE_MessageID);
             break;
         }
+
+        case BLE_MessageID_t::BLE_NvM_ErrWeigthSensorData_part1:
+        case BLE_MessageID_t::BLE_NvM_ErrWeigthSensorData_part2:
+        case BLE_MessageID_t::BLE_NvM_ErrWeigthSensorData_part3:
+        {
+
+            BleDatMngr_ErrorWeigthDataHandler(value,BLE_MessageID);
+            break;
+        }
+
 
         default:
         {

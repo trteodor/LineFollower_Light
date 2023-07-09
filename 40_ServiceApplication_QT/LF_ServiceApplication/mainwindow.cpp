@@ -81,6 +81,27 @@ void MainWindow::on_GeneralPlotDataClear_pb_clicked()
     PlotPidRegVal.LfGraph_ClearData();
 }
 
+void MainWindow::MainWin_UpdateNvmErrorWeigthData(float ErrW1, float ErrW2, float ErrW3, float ErrW4, float ErrW5,
+                                                    float ErrW6, float ErrW7, float ErrW8, float ErrW9, float ErrW10, float ErrW11, float ErrWM)
+{
+    ui->ErrW1_Text->setText(QString::number(ErrW1,'f',2) );
+    ui->ErrW2_Text->setText(QString::number(ErrW2,'f',2) );
+    ui->ErrW3_Text->setText(QString::number(ErrW3,'f',2) );
+    ui->ErrW4_Text->setText(QString::number(ErrW4,'f',2) );
+    ui->ErrW5_Text->setText(QString::number(ErrW5,'f',2) );
+    ui->ErrW6_Text->setText(QString::number(ErrW6,'f',2) );
+    ui->ErrW7_Text->setText(QString::number(ErrW7,'f',2) );
+    ui->ErrW8_Text->setText(QString::number(ErrW8,'f',2) );
+    ui->ErrW9_Text->setText(QString::number(ErrW9,'f',2) );
+    ui->ErrW10_Text->setText(QString::number(ErrW10,'f',2) );
+    ui->ErrW11_Text->setText(QString::number(ErrW11,'f',2) );
+    ui->ErrWM_Text->setText(QString::number(ErrWM,'f',2) );
+
+
+    MainWin_DebugTable_InsertDataRow(0, 0, 0, "Updated NvM Error Weigths from Line Follower");
+
+}
+
 /*********************************************************************************************************/
 void MainWindow::BLE_InitializeQTConnections(void)
 {
@@ -194,6 +215,13 @@ void MainWindow::BLE_InitializeQTConnections(void)
         SIGNAL(BleDatMngrSignal_CommunicationStatisticsUpdate(uint32_t,uint16_t,uint16_t,uint16_t,uint16_t) )
         ,this
         ,SLOT(MainWin_CommunicationStatisticsUpdate(uint32_t,uint16_t,uint16_t,uint16_t,uint16_t) ) );
+
+
+    connect(
+        &BleInputDataProcessingWrapper,
+        SIGNAL(BleDatMngrSignal_UpdateErrorWeigthData(float,float,float,float,float,float,float,float,float,float,float,float))
+        ,this
+        ,SLOT(MainWin_UpdateNvmErrorWeigthData(float,float,float,float,float,float,float,float,float,float,float,float) ) );
 
 }
 
@@ -797,4 +825,15 @@ void MainWindow::on_DebugTable_DisableBaseDataLogging_clicked(bool checked)
 }
 
 
+
+
+void MainWindow::on_ReadNvM_Button_clicked()
+{
+
+    char command[1];
+    command[0] = (char)BleDataManager::BLE_NvM_ErrWeigthSensorDataReq;
+    QByteArray Helper = QByteArray::fromRawData(command,1);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+}
 

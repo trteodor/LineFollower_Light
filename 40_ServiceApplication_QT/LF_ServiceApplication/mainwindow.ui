@@ -813,7 +813,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QPushButton" name="pushButton_11">
+          <widget class="QPushButton" name="ReadNvM_Button">
            <property name="maximumSize">
             <size>
              <width>70</width>
@@ -1035,42 +1035,42 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <widget class="QLabel" name="label_3">
+              <widget class="QLabel" name="ErrW1_Label">
                <property name="text">
                 <string>Err1:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_14">
+              <widget class="QLabel" name="ErrW2_Label">
                <property name="text">
                 <string>Err2:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_15">
+              <widget class="QLabel" name="ErrW3_Label">
                <property name="text">
                 <string>Err3:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_16">
+              <widget class="QLabel" name="ErrW4_Label">
                <property name="text">
                 <string>Err4:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_17">
+              <widget class="QLabel" name="ErrW5_Label">
                <property name="text">
                 <string>Err5:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="ErrW6_Label">
                <property name="maximumSize">
                 <size>
                  <width>60</width>
@@ -1090,7 +1090,7 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QLineEdit" name="lineEdit">
+              <widget class="QLineEdit" name="ErrW1_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1100,7 +1100,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_5">
+              <widget class="QLineEdit" name="ErrW2_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1110,7 +1110,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_6">
+              <widget class="QLineEdit" name="ErrW3_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1120,7 +1120,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_7">
+              <widget class="QLineEdit" name="ErrW4_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1130,7 +1130,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_8">
+              <widget class="QLineEdit" name="ErrW5_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1140,7 +1140,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_11">
+              <widget class="QLineEdit" name="ErrW6_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1158,7 +1158,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
-              <widget class="QLabel" name="label_4">
+              <widget class="QLabel" name="ErrW7_Label">
                <property name="maximumSize">
                 <size>
                  <width>60</width>
@@ -1171,35 +1171,35 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_18">
+              <widget class="QLabel" name="ErrW8_Label">
                <property name="text">
                 <string>Err8:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_19">
+              <widget class="QLabel" name="ErrW9_Label">
                <property name="text">
                 <string>Err9:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_20">
+              <widget class="QLabel" name="ErrW10_Label">
                <property name="text">
                 <string>Err10:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_21">
+              <widget class="QLabel" name="ErrW11_Label">
                <property name="text">
                 <string>Err11:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_22">
+              <widget class="QLabel" name="ErrWM_Label">
                <property name="text">
                 <string>ErrM:</string>
                </property>
@@ -1213,7 +1213,7 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QLineEdit" name="lineEdit_2">
+              <widget class="QLineEdit" name="ErrW7_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1223,7 +1223,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_3">
+              <widget class="QLineEdit" name="ErrW8_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1233,7 +1233,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_4">
+              <widget class="QLineEdit" name="ErrW9_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1243,7 +1243,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_10">
+              <widget class="QLineEdit" name="ErrW10_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1253,7 +1253,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_9">
+              <widget class="QLineEdit" name="ErrW11_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -1263,7 +1263,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_12">
+              <widget class="QLineEdit" name="ErrWM_Text">
                <property name="maximumSize">
                 <size>
                  <width>40</width>

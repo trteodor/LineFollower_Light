@@ -45,6 +45,21 @@ public:
         BLE_BaseDataReport_part3,
         BLE_SuspendFakeProducer,
         BLE_StartFakeProducer,
+
+
+        BLE_NvM_ErrWeigthSensorDataReq,
+        BLE_NvM_ErrWeigthSensorDataSet,
+        BLE_NvM_ErrWeigthSensorData_part1,
+        BLE_NvM_ErrWeigthSensorData_part2,
+        BLE_NvM_ErrWeigthSensorData_part3,
+
+        BLE_NvM_PidRegDataReq,
+        BLE_NvM_PidRegDataSet,
+        BLE_NvM_PidRegData,
+
+        BLE_NvM_VehCfgReq,
+        BLE_NvM_VehCfgSet,
+        BLE_NvM_VehCfgData,
     }BLE_MessageID_t;
 
 
@@ -103,6 +118,8 @@ public:
 
 signals:
 
+    void BleDatMngrSignal_UpdateErrorWeigthData( float ErrW1,float ErrW2,float ErrW3,float ErrW4,float ErrW5,float ErrW6,float ErrW7,
+                                                float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
     void BleDatMngrSignal_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                                    uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
@@ -136,6 +153,7 @@ private slots:
 
 private:
     void BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
+    void BleDatMngr_ErrorWeigthDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
     void BleDatMngr_CommunicationStatistics_Handler(const QByteArray &value);
     void BleDatMngr_BaseDataInsertToDebugTable(uint32_t FrameCounter);
 
