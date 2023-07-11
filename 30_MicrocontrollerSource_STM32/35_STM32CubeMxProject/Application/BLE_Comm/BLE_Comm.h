@@ -4,7 +4,7 @@
 
  * @brief This file is a part of Line follower application
  * This is Bluetooth low energy module to communicate wireless with Line Follower
- * I used module JDY-08 - if you are interested about the modules please find data sheets in internet.
+ * I used module JDY-08 - if you are interested about information of the modules please find data sheets in internet.
  */
 
 
@@ -17,14 +17,21 @@
 #include "stdint.h"
 #include "stdbool.h"
 
+#include "stdio.h"
+#include "stdint.h"
+
+#include "stdbool.h"
+#include <stdarg.h>
+#include <string.h>
+
 
 /*
  * Defines configuration start
  * */
 
-#define BLE_RING_BUFFER_SIZE     3000
+#define BLE_TRANSMIT_RING_BUFFER_SIZE     3000
 
-
+#define BLE_RECEIVE_RING_BUFFER_SIZE     100
 
 
 
@@ -51,26 +58,25 @@ typedef enum
 {
 	BLE_None = 0,
 	BLE_ConfirmationTag,
+	BLE_DebugMessage,
+	BLE_SimulatorStop,
+	BLE_SimulatorStart,
+
 	BLE_CommunicationStatistics,
-	BLE_BaseDataReport_part1, /*Divide most necessary data into 1 compressed buffor to effienctly communicate*/
+	BLE_BaseDataReport_part1,
 	BLE_BaseDataReport_part2,
 	BLE_BaseDataReport_part3,
-	BLE_SuspendFakeProducer,
-	BLE_StartFakeProducer,
 
 
 	BLE_NvM_ErrWeigthSensorDataReq,
-	BLE_NvM_ErrWeigthSensorDataSet,
 	BLE_NvM_ErrWeigthSensorData_part1,
 	BLE_NvM_ErrWeigthSensorData_part2,
 	BLE_NvM_ErrWeigthSensorData_part3,
 
 	BLE_NvM_PidRegDataReq,
-	BLE_NvM_PidRegDataSet,
 	BLE_NvM_PidRegData,
 
 	BLE_NvM_VehCfgReq,
-	BLE_NvM_VehCfgSet,
 	BLE_NvM_VehCfgData,
 }BLE_MessageID_t;
 
@@ -188,11 +194,6 @@ void BLE_Task(void); /*Runnable of BLE communication module (Call as often as po
 
 /* API  functions: */
 
-/* brief BLE_MessageWrite
- * General interface to transmit message - strongly suggest to don't use
- * */
-BLE_CallStatus_t BLE_MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BLE_MessageBuffer_t *MessageData);
-
 
 /* brief BLE_ReportSensorData
  * LineEstimator: Dedicated interface for  to transmit sensor data
@@ -210,6 +211,15 @@ void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
 * CallBack function will be called always if NvM data will be updated
 */
 void BLE_RegisterNvMdataUpdateInfoCallBack(void *UpdateInfoCb(void) );
+
+/* brief BLE_DbgMsgTransmit
+* A simple function to send debug message through BLE (to QT Application)
+* String length is limited to ~255chars
+* However please bear in mind that single BLE message size == 20
+* Input format is the same as in "printf" function.. 
+* To keep good performence i suggest don't sent many debug messages..
+*/
+void BLE_DbgMsgTransmit(char *DbgString, ...);
 
 
 #endif //_BLE_ServiceModule_H

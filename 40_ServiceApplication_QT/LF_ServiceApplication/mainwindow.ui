@@ -692,7 +692,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="BLE_SuspendFakeProdButton">
+        <widget class="QPushButton" name="BLE_SimulatorSuspendButton">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -705,7 +705,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="BLE_TrueLogStartButton">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -718,7 +718,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="BLE_ActivFakeProdButton">
+        <widget class="QPushButton" name="BLE_SimulatorStartButton">
          <property name="maximumSize">
           <size>
            <width>60</width>
@@ -800,7 +800,7 @@
           <number>0</number>
          </property>
          <item row="1" column="0">
-          <widget class="QPushButton" name="pushButton_10">
+          <widget class="QPushButton" name="UpdateNvM_Button">
            <property name="maximumSize">
             <size>
              <width>70</width>
@@ -831,7 +831,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="ExpectedAvSpdLabel">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -844,7 +844,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_15">
+            <widget class="QLineEdit" name="ExpectedAvSpdText">
              <property name="maximumSize">
               <size>
                <width>40</width>
@@ -854,7 +854,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_11">
+            <widget class="QLabel" name="mPer_s_InfoLabel">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -869,7 +869,7 @@
           </layout>
          </item>
          <item row="3" column="0" colspan="2">
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="PidPositionRegCfgLabel">
            <property name="text">
             <string>PidPositionRegulatorCfg:</string>
            </property>
@@ -878,7 +878,7 @@
          <item row="4" column="0" colspan="2">
           <layout class="QHBoxLayout" name="horizontalLayout_14">
            <item>
-            <widget class="QLabel" name="label_8">
+            <widget class="QLabel" name="PID_KP_Label">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -891,7 +891,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_14">
+            <widget class="QLineEdit" name="PID_KP_text">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -907,7 +907,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="PID_KI_Label">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -920,7 +920,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_13">
+            <widget class="QLineEdit" name="PID_KI_text">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -936,7 +936,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_10">
+            <widget class="QLabel" name="PID_KD_Label">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -949,7 +949,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_16">
+            <widget class="QLineEdit" name="PID_KD_text">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -969,7 +969,7 @@
          <item row="5" column="0" colspan="2">
           <layout class="QHBoxLayout" name="horizontalLayout_16">
            <item>
-            <widget class="QLabel" name="label_12">
+            <widget class="QLabel" name="ProbeTimeLabel">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -982,7 +982,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_18">
+            <widget class="QLineEdit" name="ProbeTimeText">
              <property name="maximumSize">
               <size>
                <width>40</width>
@@ -992,7 +992,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_13">
+            <widget class="QLabel" name="ProbeTime_m_Per_sInfo">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -1007,14 +1007,14 @@
           </layout>
          </item>
          <item row="6" column="0" colspan="2">
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="TryDetEndLineMarkCheckBox">
            <property name="text">
             <string>TryDetectEndLineMark</string>
            </property>
           </widget>
          </item>
          <item row="7" column="0">
-          <widget class="QCheckBox" name="checkBox_2">
+          <widget class="QCheckBox" name="BlinkingLedsStateCheckBox">
            <property name="text">
             <string>BlinkLeds</string>
            </property>
@@ -1455,7 +1455,7 @@
     <set>Qt::AllDockWidgetAreas</set>
    </property>
    <property name="windowTitle">
-    <string>Logger all incoming data</string>
+    <string>Logger</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -1473,9 +1473,9 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QPushButton" name="pushButton_9">
+      <widget class="QPushButton" name="ClearLoggerButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>ClearLogger</string>
        </property>
       </widget>
      </item>

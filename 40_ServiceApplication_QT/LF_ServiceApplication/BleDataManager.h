@@ -39,26 +39,25 @@ public:
     {
         BLE_None = 0,
         BLE_ConfirmationTag,
+        BLE_DebugMessage,
+        BLE_SimulatorStop,
+        BLE_SimulatorStart,
+
         BLE_CommunicationStatistics,
-        BLE_BaseDataReport_part1, /*Divide most necessary data into 1 compressed buffor to effienctly communicate*/
+        BLE_BaseDataReport_part1,
         BLE_BaseDataReport_part2,
         BLE_BaseDataReport_part3,
-        BLE_SuspendFakeProducer,
-        BLE_StartFakeProducer,
 
 
         BLE_NvM_ErrWeigthSensorDataReq,
-        BLE_NvM_ErrWeigthSensorDataSet,
         BLE_NvM_ErrWeigthSensorData_part1,
         BLE_NvM_ErrWeigthSensorData_part2,
         BLE_NvM_ErrWeigthSensorData_part3,
 
         BLE_NvM_PidRegDataReq,
-        BLE_NvM_PidRegDataSet,
         BLE_NvM_PidRegData,
 
         BLE_NvM_VehCfgReq,
-        BLE_NvM_VehCfgSet,
         BLE_NvM_VehCfgData,
     }BLE_MessageID_t;
 
@@ -135,6 +134,7 @@ signals:
                                                             uint16_t TransmisstedMessagesCounter,uint16_t RetransmissionCounter);
 
 
+
     void BleDatMngrSignal_PlotMapUpdate(void);
     void BleDatMngrSignal_PlotYawRateUpdate(void);
     void BleDatMngrSignal_PlotSpdUpdate(void);
@@ -152,6 +152,8 @@ private slots:
 
 
 private:
+
+    void BleDatMngr_DebugMessagerHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
     void BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
     void BleDatMngr_ErrorWeigthDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
     void BleDatMngr_CommunicationStatistics_Handler(const QByteArray &value);

@@ -33,9 +33,11 @@ private slots:
     void BLE_InitializeQTConnections(void);
 
     void on_BLE_DisconnectButton_clicked();
+    void on_BLE_SimulatorStartButton_clicked();
+    void on_BLE_SimulatorSuspendButton_clicked();
+    void on_BLE_TrueLogStartButton_clicked();
 
-    void on_BLE_SuspendFakeProdButton_clicked();
-    void on_BLE_ActivFakeProdButton_clicked();
+
     void on_GeneralPlotDataClear_pb_clicked();
 
 
@@ -52,6 +54,7 @@ private slots:
 
     void MainWin_CommunicationStatisticsUpdate(uint32_t ucTimeStamp,uint16_t RingBufferRemainingSize,uint16_t RingBufferOverFlowCounter,
                                                            uint16_t TransmisstedMessagesCounter,uint16_t RetransmissionCounter);
+
 
 
     void MainWin_DebugTable_ScrollToBottom();
@@ -73,6 +76,14 @@ private slots:
 
     void on_ReadNvM_Button_clicked();
 
+    void on_UpdateNvM_Button_clicked();
+
+    void NvM_ErrWeigthUpdateDelayTimerTimeout();
+
+    void on_ClearLoggerButton_clicked();
+
+
+
 signals:
     void BLE_connectToDevice(int i);
     void BLE_DisconnectDevice();
@@ -81,10 +92,16 @@ signals:
 private:
     Ui::MainWindow *ui;
 
+    QTimer NvM_ErrWeigthUpdateDelayTimer;
+    float  NVM_ErrWeitghtsTabHolder[12];
 
     QList<QString> FoundDevices;
     BleDataManager BleInputDataProcessingWrapper;
 
+
+    QDoubleValidator dblValidator;
+
+    void ReadNvMDataFromLineFollower();
     void RefreshErrorIndicatorView(void);
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
 

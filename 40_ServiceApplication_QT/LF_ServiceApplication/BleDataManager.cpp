@@ -332,6 +332,89 @@ void BleDataManager::BleDatMngr_ErrorWeigthDataHandler(const QByteArray &value,B
 }
 
 
+void BleDataManager::BleDatMngr_DebugMessagerHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
+{
+    (void )BLE_MessID;
+
+
+    /*
+     * Frist Frame:
+     * |FRAMEID|SYNCID|REMAINING_FRAMES| ucTIME | DATA 13bytes
+     * Other frames:
+     * |FRAME_ID|SYNC_ID|REMAINING_FRAMES | DATA 17bytes
+     *
+     * If remaining frames is equal "0" then desktop software
+     * should tract it as a last frame
+     *
+     * REMAINING_FRAMES counter shall be decrement with next frames
+     *
+     */
+
+    static uint32_t PrevSyncId = 0U;
+
+
+    uint8_t _inputSyncId = ((uint8_t)value.at(1)) ;
+
+    static uint8_t RemainingFramesCounter = 0;
+    static uint32_t ucTimeStamp;
+    static QString DebugString;
+
+
+    if( PrevSyncId != _inputSyncId && (RemainingFramesCounter == 0) )
+    {
+        /*Frist message frame and any synchronization error isn't detected*/
+        RemainingFramesCounter = value.at(2);
+        ucTimeStamp = ConvToUint32(value,3);
+        DebugString = QString::fromUtf8(value.toStdString());
+
+        DebugString.remove(0,7);
+        DebugString.remove(QChar::Null);
+        if(RemainingFramesCounter == 0)
+        {
+            /*Last message frame detected!*/
+            emit BleDatMngrSignal_DebugTable_InsertDataRow(ucTimeStamp, BLE_MessID,_inputSyncId, DebugString);
+            emit BleDatMngrSignal_DebugTable_ScrollToBottom();
+        }
+    }
+    else if(PrevSyncId == _inputSyncId && (RemainingFramesCounter -1) == value.at(2) && ( (RemainingFramesCounter -1) == 0 ) )
+    {
+        /*Last message frame detected!*/
+        RemainingFramesCounter = value.at(2);
+        QString DbgMessageStringPart = QString::fromUtf8(value.toStdString());
+        DbgMessageStringPart.remove(0,3);
+        DbgMessageStringPart.remove(QChar::Null);
+        DebugString.append(DbgMessageStringPart);
+
+        emit BleDatMngrSignal_DebugTable_InsertDataRow(ucTimeStamp, BLE_MessID,_inputSyncId, DebugString);
+        emit BleDatMngrSignal_DebugTable_ScrollToBottom();
+
+    }
+    else if(PrevSyncId == _inputSyncId && (RemainingFramesCounter -1) == value.at(2))
+    {
+        /*new message frame detected*/
+        RemainingFramesCounter = value.at(2);
+        QString DbgMessageStringPart = QString::fromUtf8(value.toStdString());
+        DbgMessageStringPart.remove(0,3);
+        DbgMessageStringPart.remove(QChar::Null);
+        DebugString.append(DbgMessageStringPart);
+    }
+    else
+    {
+        RemainingFramesCounter = 0;
+
+        QString SyncErrorString = QString("!!!Synch Error!!! DbgMsgHandler SyncId: %1 |PrSyncId: %2 ")
+                                      .arg(_inputSyncId).arg(PrevSyncId) ;
+        QColor RowColor = QColor(255,0,0);
+
+        emit BleDatMngrSignal_DebugTable_InsertDataRow(0,0,0,SyncErrorString,RowColor);
+        emit BleDatMngrSignal_DebugTable_ScrollToBottom();
+    }
+
+//     qDebug() << "SyncID:" << _inputSyncId << "ucTimeSt:" << ucTimeStamp << "Mes:" << DebugString;
+
+    PrevSyncId = _inputSyncId;
+}
+
 void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
 {
 
@@ -369,6 +452,24 @@ void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
         {
 
             BleDatMngr_ErrorWeigthDataHandler(value,BLE_MessageID);
+            break;
+        }
+
+        case BLE_NvM_VehCfgData:
+        {
+            qDebug() << "RecHndlr: BLE_NvM_VehCfgData";
+            break;
+        }
+
+        case BLE_NvM_PidRegData:
+        {
+            qDebug() << "RecHndlr: BLE_NvM_PidRegData";
+            break;
+        }
+
+        case BLE_MessageID_t::BLE_DebugMessage:
+        {
+            BleDatMngr_DebugMessagerHandler(value,BLE_MessageID);
             break;
         }
 
