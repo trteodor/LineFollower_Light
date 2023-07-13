@@ -13,8 +13,9 @@
 
 typedef enum
 {
-	EE_NvmAddr_SenErrWeigthSecStart,
-	EE_NvmAddr_SenErrWeigth1_F32,
+	Dummy = 0xF, /*Address 0 can't texist*/
+	EE_NvmAddr_SenErrWeigthSecStart, //0x10...
+	EE_NvmAddr_SenErrWeigth1_F32, //0x11...
 	EE_NvmAddr_SenErrWeigth2_F32,
 	EE_NvmAddr_SenErrWeigth3_F32,
 	EE_NvmAddr_SenErrWeigth4_F32,
@@ -34,10 +35,10 @@ typedef enum
 	EE_NvmAddr_ProbeTime_U32,
 
 	EE_NvmAddr_BaseMotorSpdValue_U32,
-
-	EE_NvmAddr_IrSensorState_U32,
 	EE_NvmAddr_BlinkLadeState_U32,
 	EE_NvmAddr_TryDetectEndLine_U32,
+//	EE_NvmAddr_IrSensorState_U32,
+
 
 	EE_VarsCount
 }EE_Vars_t;

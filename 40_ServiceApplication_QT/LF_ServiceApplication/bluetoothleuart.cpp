@@ -311,9 +311,18 @@ void bluetoothleUART::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
 void bluetoothleUART::writeData(QByteArray value){
     if(m_control && m_service)
     {
+        qsizetype SizeOfInput = value.size();
+
+        while(SizeOfInput < 20)
+        {
+            /*Just to be sure i'll send exactly 20bytes*/
+            value.append('B');
+            SizeOfInput = value.size();
+        }
+
         const QLowEnergyCharacteristic  RxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
         //    qDebug()<< s;
-        QByteArray Data = value;
+        QByteArray Data = value.first(20); /*Just to be sure i'll send only 20bytes*/
         //    Data.append("HelloWorld\n\r");
         m_service->writeCharacteristic(RxChar, Data,QLowEnergyService::WriteWithoutResponse);
     }

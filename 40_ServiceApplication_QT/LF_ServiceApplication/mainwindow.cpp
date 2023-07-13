@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     QThread::currentThread()->setObjectName("Main Window Thread");
 
 
+
     ui->setupUi(this);
 
     /*All declared plots/ graph must be initialized!!!*/
@@ -25,13 +26,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&NvM_ErrWeigthUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ErrWeigthUpdateDelayTimerTimeout()));
 
+    connect(&NvM_PidDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_PidDatahUpdateDelayTimerTimeout()));
+    connect(&NvM_VehCfghUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_VehCfgDataUpdateDelayTimerTimeout()));
+
+
     /*Debug Table configure*/
     ui->DebugDataTable->setRowCount(1);
     ui->DebugDataTable->setColumnWidth(0,10);
     ui->DebugDataTable->setColumnWidth(1,10);
     ui->DebugDataTable->setColumnWidth(2,10);
     ui->DebugDataTable->setColumnWidth(3,10);
-    ui->DebugDataTable->setColumnWidth(4,400);
+    ui->DebugDataTable->setColumnWidth(4,600);
     ui->DebugDataTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 
 
@@ -57,6 +62,23 @@ MainWindow::MainWindow(QWidget *parent)
     ui->PID_KD_text->setValidator(&dblValidator);
     ui->ProbeTimeText->setValidator(&dblValidator);
 
+//    QVariant variant= QColor (255,0,0);
+//    QString colcode = variant.toString();
+//    ui->BLE_RobotStop_Button->setAutoFillBackground(true);
+//    ui->BLE_RobotStop_Button->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+//    variant= QColor (0,255,0);
+//    colcode = variant.toString();
+//    ui->BLE_RobotStart_Button->setAutoFillBackground(true);
+//    ui->BLE_RobotStart_Button->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+    QPalette pal = ui->BLE_RobotStart_Button->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::blue));
+    ui->BLE_RobotStart_Button->setAutoFillBackground(true);
+    ui->BLE_RobotStart_Button->setPalette(pal);
+    ui->BLE_RobotStart_Button->update();
+
+
     /*Initialize dark theme*/
     QFile f(":qdarkstyle/dark/darkstyle.qss");
 
@@ -69,6 +91,16 @@ MainWindow::MainWindow(QWidget *parent)
         QTextStream ts(&f);
         qApp->setStyleSheet(ts.readAll());
     }
+
+
+    QSettings settings("LfServiceApp", "BleDeviceName");
+//    settings.setValue("CurrDeviceName", "Franek");
+    QVariant CurrDevName = settings.value("CurrDeviceName");
+    QString NewLineEditText = CurrDevName.toString();
+    qDebug() << NewLineEditText ;
+
+    ui->BLE_AutoConnDevNameL->setText(NewLineEditText);
+
 
 }
 /*********************************************************************************************************/
@@ -85,6 +117,10 @@ MainWindow::~MainWindow()
     */
 
     emit BLE_DisconnectDevice();
+
+    QSettings settings("LfServiceApp", "BleDeviceName");
+    QString NewSearchedBleDeviceName = ui->BLE_AutoConnDevNameL->text();
+    settings.setValue("CurrDeviceName", NewSearchedBleDeviceName);
 
     delete ui;
 
@@ -126,6 +162,27 @@ void MainWindow::MainWin_UpdateNvmErrorWeigthData(float ErrW1, float ErrW2, floa
     NvM_ErrWeigthUpdateDelayTimer.start(100);
 
 
+}
+
+void MainWindow::MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, float ProbeTime)
+{
+    NvM_PID_Kp = Kp;
+    NvM_PID_Ki = Ki;
+    NvM_PID_Kd = Kd;
+    NvM_ProbeTim = ProbeTime;
+
+    NvM_PidDatahUpdateDelayTimer.setSingleShot(true);
+    NvM_PidDatahUpdateDelayTimer.start(100);
+}
+
+void MainWindow::MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd, uint32_t BlinkLedSt, uint32_t TryDetEndLin)
+{
+    NvM_ExpectedAvSpeed = ExpectedAvSpd;
+    NvM_BlinkLedSt = BlinkLedSt;
+    NvM_TryDetEndLinSt = TryDetEndLin;
+
+    NvM_VehCfghUpdateDelayTimer.setSingleShot(true);
+    NvM_VehCfghUpdateDelayTimer.start(100);
 }
 
 /*********************************************************************************************************/
@@ -249,6 +306,18 @@ void MainWindow::BLE_InitializeQTConnections(void)
         ,this
         ,SLOT(MainWin_UpdateNvmErrorWeigthData(float,float,float,float,float,float,float,float,float,float,float,float) ) );
 
+
+    connect(
+        &BleInputDataProcessingWrapper,
+        SIGNAL(BleDatMngrSignal_UpdateVehCfgData(float,uint32_t, uint32_t) )
+        ,this
+        ,SLOT(MainWin_UpdateNvM_VehCfgData(float,uint32_t, uint32_t) ) );
+
+    connect(
+        &BleInputDataProcessingWrapper,
+        SIGNAL(BleDatMngrSignal_UpdatePidData(float,float,float,float) )
+        ,this
+        ,SLOT(MainWin_UpdateNvM_PidData(float,float,float,float) ) );
 }
 
 
@@ -297,7 +366,7 @@ void MainWindow::BLE_changedState(bluetoothleUART::bluetoothleState state){
             {
                 ui->BLE_DetectedDeviceComboBox->setCurrentIndex(deviceCounter_l);
                 ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
-                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem(QString("Expected dev. name Matched: Autoconnection ") ));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem(QString("DevNameMatched:Connecting ") ));
                 emit BLE_connectToDevice(deviceCounter_l);
             }
             else
@@ -353,7 +422,7 @@ void MainWindow::BLE_changedState(bluetoothleUART::bluetoothleState state){
 
         ui->statusbar->showMessage("Aquire data",1000);
 
-        ui->BLE_StatusLabel->setText("State:ConnReadyAcq");
+        ui->BLE_StatusLabel->setText("State:ConnReadyAcqData");
         QVariant variant= QColor (220,255,220);
         QString colcode = variant.toString();
         ui->BLE_StatusLabel->setAutoFillBackground(true);
@@ -799,18 +868,30 @@ void MainWindow::MainWinPlot_PlotSpdReplot(void)
 
 void MainWindow::on_BLE_SimulatorStartButton_clicked()
 {
-    char command[1];
+    char command[20];
     command[0] = (char)BleDataManager::BLE_SimulatorStart;
-    QByteArray Helper = QByteArray::fromRawData(command,1);
+
+    for(int i=1; i<18; i++)
+    {
+            command[i] = 'B';
+    }
+
+    QByteArray Helper = QByteArray::fromRawData(command,18);
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 }
 /*********************************************************************************************************/
 void MainWindow::on_BLE_SimulatorSuspendButton_clicked()
 {
-    char command[1];
-    command[0] = (char)BleDataManager::BLE_SimulatorStop;
-    QByteArray Helper = QByteArray::fromRawData(command,1);
+    char command[20];
+    command[0] = (char)BleDataManager::BLE_SimuAndTrueDataLoggingStop;
+
+    for(int i=1; i<18; i++)
+    {
+            command[i] = 'B';
+    }
+
+    QByteArray Helper = QByteArray::fromRawData(command,18);
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 }
@@ -818,7 +899,17 @@ void MainWindow::on_BLE_SimulatorSuspendButton_clicked()
 /*********************************************************************************************************/
 void MainWindow::on_BLE_TrueLogStartButton_clicked()
 {
+    char command[20];
+    command[0] = (char)BleDataManager::BLE_TrueBaseLoggingStart;
 
+    for(int i=1; i<18; i++)
+    {
+            command[i] = 'B';
+    }
+
+    QByteArray Helper = QByteArray::fromRawData(command,18);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 }
 /*********************************************************************************************************/
 void MainWindow::BLE_connectDevice()
@@ -877,9 +968,6 @@ void MainWindow::ReadNvMDataFromLineFollower()
     ui->PID_KI_text->clear();
     ui->PID_KD_text->clear();
     ui->ProbeTimeText->clear();
-    ui->TryDetEndLineMarkCheckBox->setDisabled(true);
-    ui->BlinkingLedsStateCheckBox->setDisabled(true);
-
 
     char command[20];
     command[0] = (char)BleDataManager::BLE_NvM_ErrWeigthSensorDataReq;
@@ -993,6 +1081,9 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     QString ProbeTimeText = ui->ProbeTimeText->text();
     float ProbeTimeFloat = ProbeTimeText.toFloat();
 
+////    qDebug() << "PID_KDfloat" << PID_KDfloat << "ProbeTimeFloat" << ProbeTimeFloat;
+
+
     command[0] = (char)BleDataManager::BLE_NvM_PidRegData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &PID_KPfloat, sizeof(float));
@@ -1013,6 +1104,9 @@ void MainWindow::on_UpdateNvM_Button_clicked()
 
     uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
     uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+
+////    qDebug() << "BlinkingLedsState" << BlinkingLedsState;
+////    qDebug() << "TryDetEndLineMark" << TryDetEndLineMark;
 
 
     command[0] = (char)BleDataManager::BLE_NvM_VehCfgData;
@@ -1043,6 +1137,25 @@ void MainWindow::NvM_ErrWeigthUpdateDelayTimerTimeout()
         ui->ErrWM_Text->setText(QString::number(NVM_ErrWeitghtsTabHolder[11],'f',2) );
 }
 
+void MainWindow::NvM_PidDatahUpdateDelayTimerTimeout()
+{
+        ui->PID_KP_text->setText(QString::number(NvM_PID_Kp,'f',2) );
+        ui->PID_KI_text->setText(QString::number(NvM_PID_Ki,'f',2) );
+        ui->PID_KD_text->setText(QString::number(NvM_PID_Kd,'f',2) );
+        ui->ProbeTimeText->setText(QString::number(NvM_ProbeTim,'f',2) );
+}
+
+void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()
+{
+    ui->ExpectedAvSpdText->setText(QString::number(NvM_ExpectedAvSpeed,'f',2) );
+
+//    qDebug() << "NvM_BlinkLedSt" << NvM_BlinkLedSt;
+//    qDebug() << "NvM_TryDetEndLinSt" << NvM_TryDetEndLinSt;
+
+    (NvM_BlinkLedSt == 0)     ? ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
+    (NvM_TryDetEndLinSt == 0) ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
+}
+
 
 void MainWindow::on_ClearLoggerButton_clicked()
 {
@@ -1050,4 +1163,116 @@ void MainWindow::on_ClearLoggerButton_clicked()
         ui->DebugDataTable->setRowCount(0);
 }
 
+
+
+void MainWindow::on_BLE_RobotStop_Button_clicked()
+{
+        ui->BLE_TrueLogStartButton->setDisabled(false);
+        ui->BLE_SimulatorSuspendButton->setDisabled(false);
+        ui->BLE_SimulatorStartButton->setDisabled(false);
+
+        ui->BLE_SimulatorSuspendButton->setDisabled(false);
+
+        ui->BLE_TrueLogStartButton->setDisabled(false);
+
+        ui->BLE_RobotStart_Button->setDisabled(false);
+//        ui->ReadNvM_Button->setDisabled(false);
+        ui->UpdateNvM_Button->setDisabled(false);
+        ui->BLE_DisconnectButton->setDisabled(false);
+
+        char command[20] = {0};
+        QByteArray Helper;
+
+        command[0] = (char)BleDataManager::BLE_RobotStop;
+        command[1] = 0; //SyncID
+        for(int i=1; i<18; i++)
+        {
+        command[i] = 'B';
+        }
+        Helper = QByteArray::fromRawData(command,18);
+        Helper.append("\n\r");
+        BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+}
+
+
+void MainWindow::on_BLE_RobotStart_Button_clicked()
+{
+        on_BLE_SimulatorSuspendButton_clicked();
+        on_BLE_TrueLogStartButton_clicked();
+
+
+        ui->BLE_TrueLogStartButton->setDisabled(true);
+        ui->BLE_SimulatorSuspendButton->setDisabled(true);
+        ui->BLE_SimulatorStartButton->setDisabled(true);
+        ui->BLE_SimulatorSuspendButton->setDisabled(true);
+        ui->BLE_TrueLogStartButton->setDisabled(true);
+        ui->BLE_RobotStart_Button->setDisabled(true);
+//        ui->ReadNvM_Button->setDisabled(true);
+        ui->UpdateNvM_Button->setDisabled(true);
+        ui->BLE_DisconnectButton->setDisabled(true);
+
+        char command[20] = {0};
+        QByteArray Helper;
+
+        command[0] = (char)BleDataManager::BLE_RobotStart;
+        command[1] = 0; //SyncID
+        for(int i=1; i<18; i++)
+        {
+        command[i] = 'B';
+        }
+        Helper = QByteArray::fromRawData(command,18);
+        Helper.append("\n\r");
+        BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+}
+
+
+void MainWindow::on_UpdateExpectedAvSpd_clicked()
+{
+        QString ExpectedAvSpdText = ui->ExpectedAvSpdText->text();
+        float ExpectedAvSpdFloat = ExpectedAvSpdText.toFloat();
+
+        uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
+        uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+
+
+        char command[20] = {0};
+        QByteArray Helper;
+
+        command[0] = (char)BleDataManager::BLE_NvM_VehCfgData;
+        command[1] = 0; //SyncID
+        std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
+        std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
+        std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
+        Helper = QByteArray::fromRawData(command,18);
+        Helper.append("\n\r");
+        BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+}
+
+
+
+
+void MainWindow::on_UpdateLfNameButton_clicked()
+{
+        char command[20] = {0};
+        QByteArray Helper;
+        command[0] = (char)BleDataManager::BLE_SetNewRobotName;
+        command[1] = 0; //SyncID
+        QString NewLineFollowerName = ui->NewLfNameText->text();
+        QByteArray Helper2 = NewLineFollowerName.toUtf8();
+        Helper = QByteArray::fromRawData(command,2);
+        Helper = Helper + Helper2;
+        qsizetype SizeNameFrame = Helper.size();
+
+        while(SizeNameFrame < 20)
+        {
+        /*Just to be sure i'll send exactly 20bytes*/
+        Helper.append('\0');
+        SizeNameFrame = Helper.size();
+        }
+
+//        qDebug() << Helper;
+        BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+}
 

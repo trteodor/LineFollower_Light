@@ -151,14 +151,14 @@ int main(void)
 
 //	for(int i =0; i<EE_VarsCount; i++)
 //	{
-//		EE_WriteVariableF32(i, ((float)i) +10.0F );
+//		EE_WriteVariableF32(i, ((float)i) +50.0F );
 //	}
 //
 //	for(int i=0; i<EE_VarsCount; i++)
 //	{
 //		EE_ReadVariableU32(i,  &VarDataTab[i]);
 //	}
-//
+
 
 
 

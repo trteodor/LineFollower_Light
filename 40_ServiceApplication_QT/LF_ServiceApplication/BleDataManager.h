@@ -40,8 +40,13 @@ public:
         BLE_None = 0,
         BLE_ConfirmationTag,
         BLE_DebugMessage,
-        BLE_SimulatorStop,
+
+        BLE_RobotStart,
+        BLE_RobotStop,
+
         BLE_SimulatorStart,
+        BLE_TrueBaseLoggingStart,
+        BLE_SimuAndTrueDataLoggingStop,
 
         BLE_CommunicationStatistics,
         BLE_BaseDataReport_part1,
@@ -59,6 +64,9 @@ public:
 
         BLE_NvM_VehCfgReq,
         BLE_NvM_VehCfgData,
+
+
+        BLE_SetNewRobotName,
     }BLE_MessageID_t;
 
 
@@ -120,6 +128,9 @@ signals:
     void BleDatMngrSignal_UpdateErrorWeigthData( float ErrW1,float ErrW2,float ErrW3,float ErrW4,float ErrW5,float ErrW6,float ErrW7,
                                                 float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
+    void BleDatMngrSignal_UpdatePidData(float Kp,float Ki,float Kd,float ProbeTime);
+    void BleDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
+
     void BleDatMngrSignal_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                                    uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
                                                    uint8_t RightLinePosConfif,uint8_t LeftLinePosConfif,
@@ -147,6 +158,8 @@ signals:
     void BleDatMngrSignal_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
     void BleDatMngrSignal_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
 
+
+
 private slots:
     void BleDatMngr_InputHanlder(const QByteArray &value);
 
@@ -158,6 +171,8 @@ private:
     void BleDatMngr_ErrorWeigthDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
     void BleDatMngr_CommunicationStatistics_Handler(const QByteArray &value);
     void BleDatMngr_BaseDataInsertToDebugTable(uint32_t FrameCounter);
+    void BleDatMngr_PidDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
+    void BleDatMngr_VehCfgDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
 
 };
 

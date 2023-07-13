@@ -104,7 +104,7 @@ static BLE_LfDataReport_t NewestLfDataReport = {0};
 
 static bool SimulatorBaseDataStateActiv = false;
 
-
+static uint32_t LastMessageTime = 0U;
 
 /*
  *********************************************************************************************
@@ -127,25 +127,46 @@ static BLE_CallStatus_t TransmitErrorWeigthData(void);
 static BLE_CallStatus_t MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BLE_MessageBuffer_t *MessageData);
 
 
-
-
-
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-
 	if(huart->Instance == USART2)
 	{
+		LastMessageTime = HAL_GetTick();
+
 		uint8_t *MessageReceiveBufferAddress;
 
 		/*Start listen again as fast as possible*/
 		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
 		// Start listening again
- 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
+// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MAX_SINGLE_MESSAGE_SIZE);
+
+ 		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
 
 		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
 	}
 }
+
+
+
+//void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+//{
+//
+//	if(huart->Instance == USART2)
+//	{
+//		uint8_t *MessageReceiveBufferAddress;
+//
+//		/*Start listen again as fast as possible*/
+//		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
+//		// Start listening again
+//// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
+//
+// 		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
+//
+//		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+//
+//	}
+//}
 
 
 /*!
@@ -344,6 +365,10 @@ static BLE_CallStatus_t TransmitErrorWeigthData(void)
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth3_F32, &ErrWDataP3);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth4_F32, &ErrWDataP4);
 
+//	BLE_DbgMsgTransmit("NVM_Vals: ErrW1 %f ErrW2 %f ErrW3 %f ErrW4 %f",
+//			ErrWDataP1,ErrWDataP2,ErrWDataP3,ErrWDataP4);
+
+
 	DataBuffer[0][0] = BLE_NvM_ErrWeigthSensorData_part1;
 	DataBuffer[0][1] = _SyncID;
 	memcpy(&DataBuffer[0][2],&ErrWDataP1,4);
@@ -351,12 +376,17 @@ static BLE_CallStatus_t TransmitErrorWeigthData(void)
 	memcpy(&DataBuffer[0][10],&ErrWDataP3,4);
 	memcpy(&DataBuffer[0][14],&ErrWDataP4,4);
 
+
 	/***********************************************************************/
 	/*Prepare transmit data of part 2*/
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth5_F32, &ErrWDataP1);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth6_F32, &ErrWDataP2);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth7_F32, &ErrWDataP3);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth8_F32, &ErrWDataP4);
+
+//	BLE_DbgMsgTransmit("NVM_Vals: ErrW5 %f ErrW6 %f ErrW7 %f ErrW8 %f",
+//			ErrWDataP1,ErrWDataP2,ErrWDataP3,ErrWDataP4);
+
 
 	DataBuffer[1][0] = BLE_NvM_ErrWeigthSensorData_part2;
 	DataBuffer[1][1] = _SyncID;
@@ -370,6 +400,10 @@ static BLE_CallStatus_t TransmitErrorWeigthData(void)
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth10_F32, &ErrWDataP2);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth11_F32, &ErrWDataP3);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthMax_F32, &ErrWDataP4);
+
+//	BLE_DbgMsgTransmit("NVM_Vals: ErrW9 %f ErrW10 %f ErrW11 %f ErrWM %f",
+//			ErrWDataP1,ErrWDataP2,ErrWDataP3,ErrWDataP4);
+
 
 	DataBuffer[2][0] = BLE_NvM_ErrWeigthSensorData_part3;
 	DataBuffer[2][1] = _SyncID;
@@ -598,131 +632,179 @@ static void ReceiveDataHandler(void)
 {
 	uint8_t *MessageToRead_p = NULL;
 	uint8_t MessageToReadSize= 0U;
-
-	if(RB_Receive_Read(&BleMainReceiveRingBuffer, &MessageToReadSize,&MessageToRead_p) == RB_OK)
+	if(HAL_GetTick() - LastMessageTime > 50)
 	{
-		uint8_t *ReceivedMessageBuff = MessageToRead_p;
+	/*
+	 * TODO:
+	 * "if(HAL_GetTick() - LastMessageTime > 50)"
+	 * Temporary solution Wait till communication don't exist
+	 * software can't write/erase flash while for example IRQ is trying to read flash(execution code)
+	 * as i understand - to solve the issue I need to study more about the subject..
+	 * However for current usage of application this workaround working perfectly :)
+	 * - function EEWriteVariable.. is disabling iterrupts that's why it's a good idea
+	 */
 
-		BLE_MessageID_t ReceivedMessageId = ReceivedMessageBuff[0];
 
-		switch(ReceivedMessageId)
+		if(RB_Receive_Read(&BleMainReceiveRingBuffer, &MessageToReadSize,&MessageToRead_p) == RB_OK)
 		{
-			case BLE_NvM_ErrWeigthSensorData_part1:
+			uint8_t *ReceivedMessageBuff = MessageToRead_p;
+
+			BLE_MessageID_t ReceivedMessageId = ReceivedMessageBuff[0];
+
+			switch(ReceivedMessageId)
 			{
-				float ErrW1Val  = 0.0F, ErrW2Val  = 0.0F, ErrW3Val  = 0.0F,ErrW4Val  = 0.0F;
-				memcpy(&ErrW1Val,  &ReceivedMessageBuff[2], sizeof(float));
-				memcpy(&ErrW2Val,  &ReceivedMessageBuff[6], sizeof(float));
-				memcpy(&ErrW3Val,  &ReceivedMessageBuff[10], sizeof(float));
-				memcpy(&ErrW4Val,  &ReceivedMessageBuff[14], sizeof(float));
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth1_F32, ErrW1Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth2_F32, ErrW2Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth3_F32, ErrW3Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth4_F32, ErrW4Val);
-				break;
+				case BLE_NvM_ErrWeigthSensorData_part1:
+				{
+					uint8_t HelperBuff[18] = {0};
+
+					for(int i =2; i<18; i++)
+					{
+						HelperBuff[i] = ReceivedMessageBuff[i];
+					}
+
+
+					float ErrW1Val  = 0.0F, ErrW2Val  = 0.0F, ErrW3Val  = 0.0F,ErrW4Val  = 0.0F;
+					memcpy(&ErrW1Val,  &HelperBuff[2], sizeof(float));
+					memcpy(&ErrW2Val,  &HelperBuff[6], sizeof(float));
+					memcpy(&ErrW3Val,  &HelperBuff[10], sizeof(float));
+					memcpy(&ErrW4Val,  &HelperBuff[14], sizeof(float));
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth1_F32, ErrW1Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth2_F32, ErrW2Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth3_F32, ErrW3Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth4_F32, ErrW4Val);
+//					BLE_DbgMsgTransmit("Received: ErrW1 %f ErrW2 %f ErrW3 %f ErrW4 %f"
+//							,ErrW1Val,ErrW2Val,ErrW3Val,ErrW4Val);
+
+
+					break;
+				}
+
+				case BLE_NvM_ErrWeigthSensorData_part2:
+				{
+
+					float ErrW5Val  = 0.0F, ErrW6Val = 0.0F, ErrW7Val = 0.0F, ErrW8Val  = 0.0F;
+					memcpy(&ErrW5Val,  &ReceivedMessageBuff[2], sizeof(float));
+					memcpy(&ErrW6Val,  &ReceivedMessageBuff[6], sizeof(float));
+					memcpy(&ErrW7Val,  &ReceivedMessageBuff[10], sizeof(float));
+					memcpy(&ErrW8Val,  &ReceivedMessageBuff[14], sizeof(float));
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth5_F32, ErrW5Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth6_F32, ErrW6Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth7_F32, ErrW7Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth8_F32, ErrW8Val);
+//					BLE_DbgMsgTransmit("Received: ErrW5 %f ErrW6 %f ErrW7 %f ErrW8 %f"
+//							,ErrW5Val,ErrW6Val,ErrW7Val,ErrW8Val);
+
+					break;
+				}
+
+				case BLE_NvM_ErrWeigthSensorData_part3:
+				{
+
+					float ErrW9Val  = 0.0F,ErrW10Val = 0.0F, ErrW11Val = 0.0F,ErrWMVal  = 0.0F;
+	    			memcpy(&ErrW9Val,  &ReceivedMessageBuff[2], sizeof(float));
+	    			memcpy(&ErrW10Val,  &ReceivedMessageBuff[6], sizeof(float));
+					memcpy(&ErrW11Val,  &ReceivedMessageBuff[10], sizeof(float));
+					memcpy(&ErrWMVal,  &ReceivedMessageBuff[14], sizeof(float));
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth9_F32, ErrW9Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth10_F32, ErrW10Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth11_F32, ErrW11Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigthMax_F32, ErrWMVal);
+
+//					BLE_DbgMsgTransmit("Received: ErrW9 %f ErrW10 %f ErrW11 %f ErrWM %f"
+//							,ErrW9Val,ErrW10Val,ErrW11Val,ErrWMVal);
+
+					break;
+				}
+
+				case BLE_NvM_ErrWeigthSensorDataReq:
+				{
+//					BLE_DbgMsgTransmit("ErrWeigthReq");
+					TransmitErrorWeigthData();
+					break;
+				}
+
+				case BLE_NvM_PidRegDataReq:
+				{
+
+//					BLE_DbgMsgTransmit("PidRegDataReq");
+					TransmitPidData();
+					break;
+				}
+
+				case BLE_NvM_PidRegData:
+				{
+					float PidKp  = 0.0F,PidKi = 0.0F, PidKd = 0.0F,ProbeTime  = 0.0F;
+
+	    			memcpy(&PidKp,  &ReceivedMessageBuff[2], sizeof(float));
+	    			memcpy(&PidKi,  &ReceivedMessageBuff[6], sizeof(float));
+					memcpy(&PidKd,  &ReceivedMessageBuff[10], sizeof(float));
+					memcpy(&ProbeTime,  &ReceivedMessageBuff[14], sizeof(float));
+
+//	BLE_DbgMsgTransmit("Received PidKp: %f,PidKi: %f,PidKd: %f,ProbeTime: %f",
+//			PidKp,PidKi,PidKd,ProbeTime );
+					EE_WriteVariableF32(EE_NvmAddr_PidKp_F32, PidKp);
+					EE_WriteVariableF32(EE_NvmAddr_PidKi_F32, PidKi);
+					EE_WriteVariableF32(EE_NvmAddr_PidKd_F32, PidKd);
+					EE_WriteVariableF32(EE_NvmAddr_ProbeTime_U32, ProbeTime);
+					break;
+				}
+
+				case BLE_NvM_VehCfgReq:
+				{
+	//				BLE_DbgMsgTransmit("VehCfgReq");
+					TransmitVehCfgData();
+					break;
+				}
+
+				case BLE_NvM_VehCfgData:
+				{
+					static float BaseMotSpd  = 0.0F;
+					static uint32_t LedState = 0U, TryDetEndLine = 0U;
+
+	    			memcpy(&BaseMotSpd,  &ReceivedMessageBuff[2], sizeof(float));
+	    			memcpy(&LedState,  &ReceivedMessageBuff[6], sizeof(uint32_t));
+					memcpy(&TryDetEndLine,  &ReceivedMessageBuff[10], sizeof(uint32_t));
+					__disable_irq();
+					EE_WriteVariableF32(EE_NvmAddr_BaseMotorSpdValue_U32, BaseMotSpd);
+
+					if(LedState == 0 || LedState == 1){
+						EE_WriteVariableU32(EE_NvmAddr_BlinkLadeState_U32, LedState);
+					}
+					if(TryDetEndLine ==0 || TryDetEndLine == 1){
+						EE_WriteVariableU32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
+					}
+//					BLE_DbgMsgTransmit("Received BaseMotSpd: %f, LedSt %d, EndLMark %d",
+//							BaseMotSpd,LedState,TryDetEndLine );
+
+					break;
+				}
+
+				case BLE_SimulatorStart:
+				{
+					SimulatorBaseDataStateActiv = true;
+					break;
+				}
+
+				case BLE_SimuAndTrueDataLoggingStop:
+				{
+					SimulatorBaseDataStateActiv = false;
+					break;
+				}
+
+				default:
+				{
+					/*Nothing to do*/
+					break;
+				}
+
 			}
 
-			case BLE_NvM_ErrWeigthSensorData_part2:
-			{
-
-				float ErrW5Val  = 0.0F, ErrW6Val = 0.0F, ErrW7Val = 0.0F, ErrW8Val  = 0.0F;
-				memcpy(&ErrW5Val,  &ReceivedMessageBuff[2], sizeof(float));
-				memcpy(&ErrW6Val,  &ReceivedMessageBuff[6], sizeof(float));
-				memcpy(&ErrW7Val,  &ReceivedMessageBuff[10], sizeof(float));
-				memcpy(&ErrW8Val,  &ReceivedMessageBuff[14], sizeof(float));
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth5_F32, ErrW5Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth6_F32, ErrW6Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth7_F32, ErrW7Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth8_F32, ErrW8Val);
-				break;
-			}
-
-			case BLE_NvM_ErrWeigthSensorData_part3:
-			{
-
-				float ErrW9Val  = 0.0F,ErrW10Val = 0.0F, ErrW11Val = 0.0F,ErrWMVal  = 0.0F;
-    			memcpy(&ErrW9Val,  &ReceivedMessageBuff[2], sizeof(float));
-    			memcpy(&ErrW10Val,  &ReceivedMessageBuff[6], sizeof(float));
-				memcpy(&ErrW11Val,  &ReceivedMessageBuff[10], sizeof(float));
-				memcpy(&ErrWMVal,  &ReceivedMessageBuff[14], sizeof(float));
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth9_F32, ErrW9Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth10_F32, ErrW10Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth11_F32, ErrW11Val);
-				EE_WriteVariableF32(EE_NvmAddr_SenErrWeigthMax_F32, ErrWMVal);
-				break;
-			}
-
-			case BLE_NvM_ErrWeigthSensorDataReq:
-			{
-//				BLE_DbgMsgTransmit("ErrWeigthReq");
-				TransmitErrorWeigthData();
-				break;
-			}
-
-			case BLE_NvM_PidRegDataReq:
-			{
-
-//				BLE_DbgMsgTransmit("PidRegDataReq");
-				TransmitPidData();
-				break;
-			}
-
-			case BLE_NvM_PidRegData:
-			{
-				float PidKp  = 0.0F,PidKi = 0.0F, PidKd = 0.0F,ProbeTime  = 0.0F;
-    			memcpy(&PidKp,  &ReceivedMessageBuff[2], sizeof(float));
-    			memcpy(&PidKi,  &ReceivedMessageBuff[6], sizeof(float));
-				memcpy(&PidKd,  &ReceivedMessageBuff[10], sizeof(float));
-				memcpy(&ProbeTime,  &ReceivedMessageBuff[14], sizeof(float));
-				EE_WriteVariableF32(EE_NvmAddr_PidKp_F32, PidKp);
-				EE_WriteVariableF32(EE_NvmAddr_PidKi_F32, PidKi);
-				EE_WriteVariableF32(EE_NvmAddr_PidKd_F32, PidKd);
-				EE_WriteVariableF32(EE_NvmAddr_ProbeTime_U32, ProbeTime);
-
-				break;
-			}
-
-			case BLE_NvM_VehCfgReq:
-			{
-//				BLE_DbgMsgTransmit("VehCfgReq");
-				TransmitVehCfgData();
-				break;
-			}
-
-			case BLE_NvM_VehCfgData:
-			{
-				float BaseMotSpd  = 0.0F;
-				uint32_t LedState = 0U, TryDetEndLine = 0U;
-    			memcpy(&BaseMotSpd,  &ReceivedMessageBuff[2], sizeof(float));
-    			memcpy(&LedState,  &ReceivedMessageBuff[6], sizeof(uint32_t));
-				memcpy(&TryDetEndLine,  &ReceivedMessageBuff[10], sizeof(uint32_t));
-				EE_WriteVariableF32(EE_NvmAddr_BaseMotorSpdValue_U32, BaseMotSpd);
-				EE_WriteVariableF32(EE_NvmAddr_BlinkLadeState_U32, LedState);
-				EE_WriteVariableF32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
-				break;
-			}
-
-			case BLE_SimulatorStart:
-			{
-				SimulatorBaseDataStateActiv = true;
-				break;
-			}
-
-			case BLE_SimulatorStop:
-			{
-				SimulatorBaseDataStateActiv = false;
-				break;
-			}
-
-			default:
-			{
-				/*Nothing to do*/
-				break;
-			}
-
+			ReceivedMessageId = BLE_None;
 		}
 
-		ReceivedMessageId = BLE_None;
+
 	}
+
 
 }
 
@@ -805,7 +887,8 @@ static void TransmitDataHandler(void)
 */
 void BLE_Init(void)
 {
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], 20);
+//	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], 20);
+	HAL_UART_Receive_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], BLE_MIN_SINGLE_MESSAGE_SIZE);
 	Sim_Create_XY_FakeMap();
 }
 

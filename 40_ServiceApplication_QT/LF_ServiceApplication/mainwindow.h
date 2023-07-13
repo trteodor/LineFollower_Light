@@ -36,7 +36,12 @@ private slots:
     void on_BLE_SimulatorStartButton_clicked();
     void on_BLE_SimulatorSuspendButton_clicked();
     void on_BLE_TrueLogStartButton_clicked();
+    void on_BLE_RobotStop_Button_clicked();
+    void on_BLE_RobotStart_Button_clicked();
 
+
+    void on_UpdateExpectedAvSpd_clicked();
+    void on_UpdateLfNameButton_clicked();
 
     void on_GeneralPlotDataClear_pb_clicked();
 
@@ -44,6 +49,9 @@ private slots:
     void MainWin_UpdateNvmErrorWeigthData( float ErrW1,float ErrW2,float ErrW3,float ErrW4,float ErrW5,float ErrW6,
                                         float ErrW7,float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
+
+    void MainWin_UpdateNvM_PidData(float Kp,float Ki,float Kd,float ProbeTime);
+    void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
 
     void MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                            uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
@@ -78,9 +86,17 @@ private slots:
 
     void on_UpdateNvM_Button_clicked();
 
-    void NvM_ErrWeigthUpdateDelayTimerTimeout();
+
 
     void on_ClearLoggerButton_clicked();
+
+
+    void NvM_ErrWeigthUpdateDelayTimerTimeout();
+    void NvM_PidDatahUpdateDelayTimerTimeout();
+    void NvM_VehCfgDataUpdateDelayTimerTimeout();
+
+
+
 
 
 
@@ -93,7 +109,19 @@ private:
     Ui::MainWindow *ui;
 
     QTimer NvM_ErrWeigthUpdateDelayTimer;
+    QTimer NvM_PidDatahUpdateDelayTimer;
+    QTimer NvM_VehCfghUpdateDelayTimer;
+
     float  NVM_ErrWeitghtsTabHolder[12];
+
+    float  NvM_PID_Kp;
+    float  NvM_PID_Ki;
+    float  NvM_PID_Kd;
+    float  NvM_ProbeTim;
+
+    float  NvM_ExpectedAvSpeed;
+    uint32_t  NvM_BlinkLedSt;
+    uint32_t  NvM_TryDetEndLinSt;
 
     QList<QString> FoundDevices;
     BleDataManager BleInputDataProcessingWrapper;

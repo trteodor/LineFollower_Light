@@ -28,7 +28,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "EEmu.h"
-#include "EEmuConfig.h"
+
 
 #include <string.h> // memcpy
 
@@ -63,6 +63,8 @@ static uint16_t EE_VerifyPageFullyErased(uint32_t Address);
 
 uint16_t EE_Init(void)
 {
+
+
   uint16_t PageStatus0 = 6, PageStatus1 = 6;
   uint16_t VarIdx = 0;
   uint16_t EepromStatus = 0, ReadStatus = 0;
@@ -442,6 +444,7 @@ uint16_t EE_ReadVariableF32(uint16_t VirtAddress, float* Data)
   */
 uint16_t EE_WriteVariableU32(uint16_t VirtAddress, uint32_t Data)
 {
+	__disable_irq();
   uint16_t Status = 0;
   
   /* Write the variable virtual address and value in the EEPROM */
@@ -453,7 +456,7 @@ uint16_t EE_WriteVariableU32(uint16_t VirtAddress, uint32_t Data)
     /* Perform Page transfer */
     Status = EE_PageTransfer(VirtAddress, Data);
   }
-
+  __enable_irq();
   /* Return last operation status */
   return Status;
 }
@@ -470,6 +473,7 @@ uint16_t EE_WriteVariableU32(uint16_t VirtAddress, uint32_t Data)
   */
 uint16_t EE_WriteVariableF32(uint16_t VirtAddress, float Data)
 {
+	__disable_irq();
     uint16_t Status = 0;
   uint32_t FloatDataAsUint32;
   float DataHelper = Data;
@@ -486,6 +490,7 @@ uint16_t EE_WriteVariableF32(uint16_t VirtAddress, float Data)
     Status = EE_PageTransfer(VirtAddress, Data);
   }
 
+  __enable_irq();
   /* Return last operation status */
   return Status;
 }

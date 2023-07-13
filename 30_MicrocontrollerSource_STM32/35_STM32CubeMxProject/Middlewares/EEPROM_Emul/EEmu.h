@@ -30,7 +30,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal.h"
 #include "main.h"
-    
+
+
+#include "EEmuConfig.h"
 /* Exported constants --------------------------------------------------------*/
 
 /*Private constanst*/
@@ -113,7 +115,7 @@
 #define PAGE_FULL             ((uint8_t)0x80)
 
 /* Variables' number */
-#define NB_OF_VAR             ((uint8_t)0xFF)
+#define NB_OF_VAR             ((uint8_t)EE_VarsCount)
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

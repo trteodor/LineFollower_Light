@@ -350,7 +350,7 @@ void BleDataManager::BleDatMngr_DebugMessagerHandler(const QByteArray &value,Ble
      *
      */
 
-    static uint32_t PrevSyncId = 0U;
+    static uint32_t PrevSyncId = 255U;
 
 
     uint8_t _inputSyncId = ((uint8_t)value.at(1)) ;
@@ -415,6 +415,30 @@ void BleDataManager::BleDatMngr_DebugMessagerHandler(const QByteArray &value,Ble
     PrevSyncId = _inputSyncId;
 }
 
+
+
+void BleDataManager::BleDatMngr_PidDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
+{
+
+    float KpVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
+    float KiVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
+    float KdVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10));
+    float ProbeTim = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,14));
+
+    emit BleDatMngrSignal_UpdatePidData(KpVal,KiVal,KdVal,ProbeTim);
+}
+
+void BleDataManager::BleDatMngr_VehCfgDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
+{
+    float ExpAvSpd                = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
+    uint32_t BlinkSt              = ConvToUint32(value,6);
+    uint32_t TryDetEndLineMark    = ConvToUint32(value,10);
+
+    emit BleDatMngrSignal_UpdateVehCfgData(ExpAvSpd,BlinkSt,TryDetEndLineMark);
+}
+
+
+
 void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
 {
 
@@ -457,13 +481,13 @@ void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
 
         case BLE_NvM_VehCfgData:
         {
-            qDebug() << "RecHndlr: BLE_NvM_VehCfgData";
+            BleDatMngr_VehCfgDataHandler(value,BLE_MessageID);
             break;
         }
 
         case BLE_NvM_PidRegData:
         {
-            qDebug() << "RecHndlr: BLE_NvM_PidRegData";
+            BleDatMngr_PidDataHandler(value,BLE_MessageID);
             break;
         }
 

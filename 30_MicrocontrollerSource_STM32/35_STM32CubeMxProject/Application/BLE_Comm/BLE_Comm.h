@@ -56,28 +56,33 @@ typedef struct
  * */
 typedef enum
 {
-	BLE_None = 0,
-	BLE_ConfirmationTag,
-	BLE_DebugMessage,
-	BLE_SimulatorStop,
-	BLE_SimulatorStart,
+    BLE_None = 0,
+    BLE_ConfirmationTag,
+    BLE_DebugMessage,
 
-	BLE_CommunicationStatistics,
-	BLE_BaseDataReport_part1,
-	BLE_BaseDataReport_part2,
-	BLE_BaseDataReport_part3,
+	BLE_RobotStart,
+	BLE_RobotStop,
+
+    BLE_SimulatorStart,
+    BLE_TrueBaseLoggingStart,
+    BLE_SimuAndTrueDataLoggingStop,
+
+    BLE_CommunicationStatistics,
+    BLE_BaseDataReport_part1,
+    BLE_BaseDataReport_part2,
+    BLE_BaseDataReport_part3,
 
 
-	BLE_NvM_ErrWeigthSensorDataReq,
-	BLE_NvM_ErrWeigthSensorData_part1,
-	BLE_NvM_ErrWeigthSensorData_part2,
-	BLE_NvM_ErrWeigthSensorData_part3,
+    BLE_NvM_ErrWeigthSensorDataReq,
+    BLE_NvM_ErrWeigthSensorData_part1,
+    BLE_NvM_ErrWeigthSensorData_part2,
+    BLE_NvM_ErrWeigthSensorData_part3,
 
-	BLE_NvM_PidRegDataReq,
-	BLE_NvM_PidRegData,
+    BLE_NvM_PidRegDataReq,
+    BLE_NvM_PidRegData,
 
-	BLE_NvM_VehCfgReq,
-	BLE_NvM_VehCfgData,
+    BLE_NvM_VehCfgReq,
+    BLE_NvM_VehCfgData,
 }BLE_MessageID_t;
 
 typedef enum
