@@ -63,7 +63,19 @@
         "lv_gpu_swm341_dma2d.h": "c",
         "functional": "c",
         "usart.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "encoders_module.h": "c",
+        "eemuconfig.h": "c",
+        "eemu.h": "c",
+        "lineposestimator.h": "c",
+        "ble_comm.h": "c",
+        "LF_Menager.h": "c",
+        "stdbool.h": "c",
+        "ledmngr.h": "c",
+        "i2c.h": "c",
+        "lf_mainrunnable.h": "c",
+        "encodershandler.h": "c",
+        "tim.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

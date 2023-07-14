@@ -985,7 +985,7 @@ void MainWindow::ReadNvMDataFromLineFollower()
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 
-    command[0] = (char)BleDataManager::BLE_NvM_PidRegDataReq;
+    command[0] = (char)BleDataManager::BLE_NvM_LinePidRegDataReq;
     Helper = QByteArray::fromRawData(command,18);
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
@@ -1090,7 +1090,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
 ////    qDebug() << "PID_KDfloat" << PID_KDfloat << "ProbeTimeFloat" << ProbeTimeFloat;
 
 
-    command[0] = (char)BleDataManager::BLE_NvM_PidRegData;
+    command[0] = (char)BleDataManager::BLE_NvM_LinePidRegData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &PID_KPfloat, sizeof(float));
     std::memcpy(&command[6],  &PID_KIfloat, sizeof(float));

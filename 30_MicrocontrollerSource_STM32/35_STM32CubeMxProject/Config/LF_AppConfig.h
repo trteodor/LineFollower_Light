@@ -5,6 +5,7 @@
 //This file is created to avoid any magic numbers...
 #define OneImpulsDistance 0.000788 //depends on the size of the wheel and the gear on the motor
 #define MaxProbeNumber 4000 //Only My Decision 20ms*4000=80seconds - inaf
+
 #define EncodersProbeTime 200 //20ms (for greater accuracy I use a timer with a resolution of 100us)
 #define EncodersProbeTimeInSeconds 0.02 //same value as above but as float
 

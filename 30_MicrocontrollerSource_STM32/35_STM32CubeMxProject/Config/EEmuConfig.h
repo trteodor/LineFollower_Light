@@ -37,8 +37,8 @@ typedef enum
 	EE_NvmAddr_BaseMotorSpdValue_U32,
 	EE_NvmAddr_BlinkLadeState_U32,
 	EE_NvmAddr_TryDetectEndLine_U32,
+	
 //	EE_NvmAddr_IrSensorState_U32,
-
 
 	EE_NvmAddr_BleDevNamePart1_U32_,
 	EE_NvmAddr_BleDevNamePart2_U32_,

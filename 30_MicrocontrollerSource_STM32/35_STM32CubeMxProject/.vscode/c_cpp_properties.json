@@ -6,7 +6,8 @@
                 "${workspaceFolder}/Application/**",
                 "${workspaceFolder}/Drivers/**",
                 "${workspaceFolder}/Config/**",
-                "${workspaceFolder}/Core/**"
+                "${workspaceFolder}/Core/**",
+                "${workspaceFolder}/Middlewares/**",
             ],
             "defines": [
                 "_DEBUG",

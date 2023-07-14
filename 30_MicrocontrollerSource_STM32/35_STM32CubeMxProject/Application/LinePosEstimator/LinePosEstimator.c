@@ -1,324 +1,355 @@
-#include "main.h"
+
 #include "adc.h"
 #include "dma.h"
 
+#include "BLE_Comm.h"
 #include "LinePosEstimator.h"
-#include "Encoders_Module.h"
-#include "EEmuConfig.h"
+#include "EEmu.h"
 
-#include <stdlib.h>
 
-SensorModule_t SensorModule;
-/*Few field of the structure above are also modified by BLE App Module*/
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
 
-static void Read_SensorsValue_From_EEPROM();
-static float SM_SensorsCalculateError();
+#define LINE_NOT_DETECTED_MAGIC_NUMBER        999
+#define LINE_DETECTED_ADC_VALUE               3000
+#define LINE_SENSOR_DATA_COUNT 				  12
 
-void SM_Init(void)
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
+
+typedef struct
 {
-	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)SensorModule.SensorADCValues,12); //Turn on Sensor Read
-	Read_SensorsValue_From_EEPROM();
-}
+	float PositionErrorValue;
+	uint16_t LineSensorsADCVal[12];
+	float ErrorWeightValueTable[11];
+	float SensorErrorMaxValue;
+	int LineDetectValue;
+}LineEstimatorDesc_t;
 
-void SM_Main(void)
-{
-		static float _PreviousPosErrorValue;
-	float _PosErrorValue;
-	static int SavedLineSide;
-	static uint32_t SavedBigErrorTime; /*Big error is when _PosErrorValue > SensorErrorValue[7] */
+static LineEstimatorDesc_t LineEstimator;
 
 
-	/*Try detect big error position*/
-	for(int i=0; i<3; i++)
-	{
-		if(SensorModule.SensorADCValues[i] > L_DetVal)
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			SavedLineSide = LineOnRightSide;
-		}
-	}
-
-	for(int i=11; i>9; i--)
-	{
-		if(SensorModule.SensorADCValues[i] > L_DetVal)
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			SavedLineSide = LineOnLeftSide ;
-		}
-	}
-
-	if( SavedLineSide != LineSideClear && (SavedBigErrorTime + TimeMSToClearBigErrorFlag) < HAL_GetTick() )
-	{
-		SavedLineSide = LineSideClear;
-	}
-	 /*Get Actual position error */
-	_PosErrorValue = SM_SensorsCalculateError();
-
-	if(_PosErrorValue == LineNotDetectedErrorVal ) /*If line not detected */
-	{
-
-		if(  SavedLineSide == LineOnLeftSide )
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			_PosErrorValue = -SensorModule.SensorErrorMaxValue;
-		}
-		else if( SavedLineSide == LineOnRightSide )
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			_PosErrorValue = SensorModule.SensorErrorMaxValue;
-		}
-		else
-		{
-			_PosErrorValue = _PreviousPosErrorValue ;
-			/*nothing to do*/ /*Continue with previous error */
-		}
-		SensorModule.PositionErrorValue =  _PosErrorValue ;
-
-		return;
-	}
-
-	_PreviousPosErrorValue = _PosErrorValue;
-
-	SensorModule.PositionErrorValue =  _PosErrorValue ;
-	return;
-
-}
-
-void SM_GetAndVerifyCalculatedError()
-{
-	static float _PreviousPosErrorValue;
-	float _PosErrorValue;
-	static int SavedLineSide;
-	static uint32_t SavedBigErrorTime; /*Big error is when _PosErrorValue > SensorErrorValue[7] */
 
 
-	/*Try detect big error position*/
-	for(int i=0; i<3; i++)
-	{
-		if(SensorModule.SensorADCValues[i] > L_DetVal)
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			SavedLineSide = LineOnRightSide;
-		}
-	}
-
-	for(int i=11; i>9; i--)
-	{
-		if(SensorModule.SensorADCValues[i] > L_DetVal)
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			SavedLineSide = LineOnLeftSide ;
-		}
-	}
-
-	if( SavedLineSide != LineSideClear && (SavedBigErrorTime + TimeMSToClearBigErrorFlag) < HAL_GetTick() )
-	{
-		SavedLineSide = LineSideClear;
-	}
-	 /*Get Actual position error */
-	_PosErrorValue = SM_SensorsCalculateError();
-
-	if(_PosErrorValue == LineNotDetectedErrorVal ) /*If line not detected */
-	{
-
-		if(  SavedLineSide == LineOnLeftSide )
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			_PosErrorValue = -SensorModule.SensorErrorMaxValue;
-		}
-		else if( SavedLineSide == LineOnRightSide )
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			_PosErrorValue = SensorModule.SensorErrorMaxValue;
-		}
-		else
-		{
-			_PosErrorValue = _PreviousPosErrorValue ;
-			/*nothing to do*/ /*Continue with previous error */
-		}
-		SensorModule.PositionErrorValue =  _PosErrorValue ;
-
-		return;
-	}
-
-	_PreviousPosErrorValue = _PosErrorValue;
-
-	SensorModule.PositionErrorValue =  _PosErrorValue ;
-	return;
-}
-
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
 
 /*
  * @brief
- * fun  - SM_SensorsCalculateError
+ * Extra macros to increase readability
  *
  * +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
  * | S1        | S2     | S3     | S4     | S5     | S6   | S7   | S8     | S9     | S10    | S11    | S12       |
  * | SideL_Max | SideL4 | SideL3 | SideL2 | SideL1 | Mid1 | Mid2 | SideR1 | SideR2 | SideR3 | SideR4 | SideR_Max |
  * +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
  */
-static float SM_SensorsCalculateError(void)
+/*Extra Macros start*/
+#define Mid1 LineEstimator.LineSensorsADCVal[5]
+#define Mid2 LineEstimator.LineSensorsADCVal[6]
+#define SideL1 LineEstimator.LineSensorsADCVal[4]
+#define SideL2 LineEstimator.LineSensorsADCVal[3]
+#define SideL3 LineEstimator.LineSensorsADCVal[2]
+#define SideL4 LineEstimator.LineSensorsADCVal[1]
+#define SideL_Max LineEstimator.LineSensorsADCVal[0]
+#define SideR1 LineEstimator.LineSensorsADCVal[7]
+#define SideR2 LineEstimator.LineSensorsADCVal[8]
+#define SideR3 LineEstimator.LineSensorsADCVal[9]
+#define SideR4 LineEstimator.LineSensorsADCVal[10]
+#define SideR_Max LineEstimator.LineSensorsADCVal[11]
+/*Extra Macros END*/
+
+#define TimeMSToClearBigErrorFlag 30
+
+/**********************************************************************/
+static void GetErrorWeightsFromNvm();
+static float EstimatePositionError();
+
+static uint16_t MapValueToUint8_Range(uint16_t InputValue)
 {
-	if( Mid1 > L_DetVal /*-ER1*/
-			&& Mid2 > L_DetVal
-				&& SideL1 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[0];
-	}
-	if( Mid1 > L_DetVal /*+ER1*/
-			&& Mid2 > L_DetVal
-				&& SideR1 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[0];
+	uint16_t output;
+
+	float input = (float)InputValue;
+
+	float output_start = 0.0F;
+	float output_end = 255.0F;
+
+	float input_end = 4096.0F;
+	float input_start = 0.0F;
+
+	output = output_start + ( ((output_end - output_start) / (input_end - input_start)) * (input - input_start) );
+	
+	return (uint16_t)output;
+}
+
+
+/**********************************************************************/
+static void GetErrorWeightsFromNvm(void)
+{
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth1_F32,&LineEstimator.ErrorWeightValueTable[0]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth2_F32,&LineEstimator.ErrorWeightValueTable[1]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth3_F32,&LineEstimator.ErrorWeightValueTable[2]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth4_F32,&LineEstimator.ErrorWeightValueTable[3]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth5_F32,&LineEstimator.ErrorWeightValueTable[4]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth6_F32,&LineEstimator.ErrorWeightValueTable[5]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth7_F32,&LineEstimator.ErrorWeightValueTable[6]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth8_F32,&LineEstimator.ErrorWeightValueTable[7]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth9_F32,&LineEstimator.ErrorWeightValueTable[8]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth10_F32,&LineEstimator.ErrorWeightValueTable[9]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth11_F32,&LineEstimator.ErrorWeightValueTable[10]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthMax_F32,&LineEstimator.SensorErrorMaxValue);
+}
+
+/**********************************************************************/
+static void BleUpdateNvmDataCallBack(void)
+{
+	GetErrorWeightsFromNvm();
+}
+/**********************************************************************/
+
+static float EstimatePositionError(void)
+{
+	if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER1*/
+			&& Mid2 > LINE_DETECTED_ADC_VALUE
+				&& SideL1 > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.ErrorWeightValueTable[0];
 	}
 
-	if( Mid1 > L_DetVal /*Error not detected*/
-			&& Mid2 > L_DetVal)
-	{
-		return SensorModule.PositionErrorValue=0;
+	if( Mid1 > LINE_DETECTED_ADC_VALUE /*+ER1*/
+			&& Mid2 > LINE_DETECTED_ADC_VALUE
+				&& SideR1 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[0];
 	}
 
-	if( SideR2 > L_DetVal /*+ER3*/
-			&& SideR1 > L_DetVal
-				&& Mid2 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[2];
-	}
-	if( SideL2 > L_DetVal /*-ER3*/
-			&& SideL1 > L_DetVal
-				&& Mid1 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[2];
+	if( Mid1 > LINE_DETECTED_ADC_VALUE /*Error not detected*/
+			&& Mid2 > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.PositionErrorValue=0;
 	}
 
-	if( SideR1 > L_DetVal /*+ER2*/
-			&& Mid2 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[1];
+	if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER3*/
+			&& SideR1 > LINE_DETECTED_ADC_VALUE
+				&& Mid2 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[2];
+	}
+	if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER3*/
+			&& SideL1 > LINE_DETECTED_ADC_VALUE
+				&& Mid1 > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.ErrorWeightValueTable[2];
 	}
 
-	if( SideL1 > L_DetVal /*-ER2*/
-			&& Mid1 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[1];
+	if( SideR1 > LINE_DETECTED_ADC_VALUE /*+ER2*/
+			&& Mid2 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[1];
 	}
 
-	if( SideR1 > L_DetVal /*-ER5*/
-			&& SideR2 > L_DetVal
-				&& SideR3 > L_DetVal )
-	{
-		return -SensorModule.SensorErrorValue[4];
+	if( SideL1 > LINE_DETECTED_ADC_VALUE /*-ER2*/
+			&& Mid1 > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.ErrorWeightValueTable[1];
 	}
 
-	if( SideL1 > L_DetVal /*+ER5*/
-			&& SideL2 > L_DetVal
-				&& SideL3 > L_DetVal )
-	{
-		return SensorModule.SensorErrorValue[4];
+	if( SideR1 > LINE_DETECTED_ADC_VALUE /*-ER5*/
+			&& SideR2 > LINE_DETECTED_ADC_VALUE
+				&& SideR3 > LINE_DETECTED_ADC_VALUE ){
+		return -LineEstimator.ErrorWeightValueTable[4];
 	}
 
-	if( SideR1 > L_DetVal /*-ER4*/
-			&& SideR2 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[3];
+	if( SideL1 > LINE_DETECTED_ADC_VALUE /*+ER5*/
+			&& SideL2 > LINE_DETECTED_ADC_VALUE
+				&& SideL3 > LINE_DETECTED_ADC_VALUE ){
+		return LineEstimator.ErrorWeightValueTable[4];
 	}
 
-	if( SideL1 > L_DetVal /*+ER4*/
-			&& SideL2 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[3];
+	if( SideR1 > LINE_DETECTED_ADC_VALUE /*-ER4*/
+			&& SideR2 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[3];
 	}
 
-	if( SideR2 > L_DetVal /*-ER7*/
-			&& SideR3 > L_DetVal
-				&& SideR4 > L_DetVal )
-	{
-		return -SensorModule.SensorErrorValue[6];
+	if( SideL1 > LINE_DETECTED_ADC_VALUE /*+ER4*/
+			&& SideL2 > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.ErrorWeightValueTable[3];
 	}
 
-	if( SideL2> L_DetVal /*+ER7*/
-			&& SideL3 > L_DetVal
-				&& SideL4 > L_DetVal )
-	{
-		return SensorModule.SensorErrorValue[6];
+	if( SideR2 > LINE_DETECTED_ADC_VALUE /*-ER7*/
+			&& SideR3 > LINE_DETECTED_ADC_VALUE
+				&& SideR4 > LINE_DETECTED_ADC_VALUE ){
+		return -LineEstimator.ErrorWeightValueTable[6];
 	}
 
-	if( SideR2 > L_DetVal /*-ER6*/
-			&& SideR3 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[5];
-	}
-	if( SideL2 > L_DetVal /*+ER6*/
-			&& SideL3 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[5];
+	if( SideL2> LINE_DETECTED_ADC_VALUE /*+ER7*/
+			&& SideL3 > LINE_DETECTED_ADC_VALUE
+				&& SideL4 > LINE_DETECTED_ADC_VALUE ){
+		return LineEstimator.ErrorWeightValueTable[6];
 	}
 
-	if( SideR3 > L_DetVal /*-ER9*/
-			&& SideR4 > L_DetVal
-				&& SideR_Max > L_DetVal )
+	if( SideR2 > LINE_DETECTED_ADC_VALUE /*-ER6*/
+			&& SideR3 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[5];
+	}
+	if( SideL2 > LINE_DETECTED_ADC_VALUE /*+ER6*/
+			&& SideL3 > LINE_DETECTED_ADC_VALUE)
 	{
-		return -SensorModule.SensorErrorValue[8];
+		return LineEstimator.ErrorWeightValueTable[5];
 	}
 
-	if( SideL3> L_DetVal /*+ER9*/
-			&& SideL4 > L_DetVal
-				&& SideL_Max  > L_DetVal )
-	{
-		return SensorModule.SensorErrorValue[8];
+	if( SideR3 > LINE_DETECTED_ADC_VALUE /*-ER9*/
+			&& SideR4 > LINE_DETECTED_ADC_VALUE
+				&& SideR_Max > LINE_DETECTED_ADC_VALUE ){
+		return -LineEstimator.ErrorWeightValueTable[8];
 	}
 
-	if( SideR3 > L_DetVal /*-ER8*/
-			&& SideR4 > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[7];
+	if( SideL3> LINE_DETECTED_ADC_VALUE /*+ER9*/
+			&& SideL4 > LINE_DETECTED_ADC_VALUE
+				&& SideL_Max  > LINE_DETECTED_ADC_VALUE ){
+		return LineEstimator.ErrorWeightValueTable[8];
 	}
 
-	if( SideL3 > L_DetVal /*+ER8*/
-			&& SideL4 > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[7];
+	if( SideR3 > LINE_DETECTED_ADC_VALUE /*-ER8*/
+			&& SideR4 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[7];
 	}
 
-	if( SideR4 > L_DetVal /*-ER10*/
-			&& SideR_Max > L_DetVal)
-	{
-		return -SensorModule.SensorErrorValue[9];
+	if( SideL3 > LINE_DETECTED_ADC_VALUE /*+ER8*/
+			&& SideL4 > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.ErrorWeightValueTable[7];
 	}
 
-	if( SideL4 > L_DetVal /*+ER10*/
-			&& SideL_Max > L_DetVal)
-	{
-		return SensorModule.SensorErrorValue[9];
+	if( SideR4 > LINE_DETECTED_ADC_VALUE /*-ER10*/
+			&& SideR_Max > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[9];
 	}
 
-	if( SideR_Max > L_DetVal ) /*-ER11*/
-	{
-		return -SensorModule.SensorErrorValue[10];
+	if( SideL4 > LINE_DETECTED_ADC_VALUE /*+ER10*/
+			&& SideL_Max > LINE_DETECTED_ADC_VALUE){
+		return LineEstimator.ErrorWeightValueTable[9];
 	}
 
-	if( SideL_Max > L_DetVal ) /*+ER11*/
-	{
-		return SensorModule.SensorErrorValue[10];
+	if( SideR_Max > LINE_DETECTED_ADC_VALUE ) /*-ER11*/{
+		return -LineEstimator.ErrorWeightValueTable[10];
+	}
+
+	if( SideL_Max > LINE_DETECTED_ADC_VALUE ) /*+ER11*/{
+		return LineEstimator.ErrorWeightValueTable[10];
 	}
 
 	/*Line not detected */
-	return LineNotDetectedErrorVal;
+	return LINE_NOT_DETECTED_MAGIC_NUMBER;
 }
-/********************************************************************************/
-static void Read_SensorsValue_From_EEPROM(void)
+
+typedef enum
 {
-//	EEPROM_READ_FLOAT(EEPROM_ErrW1_Addr, &SensorModule.SensorErrorValue[0]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW2_Addr, &SensorModule.SensorErrorValue[1]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW3_Addr, &SensorModule.SensorErrorValue[2]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW4_Addr, &SensorModule.SensorErrorValue[3]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW5_Addr, &SensorModule.SensorErrorValue[4]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW6_Addr, &SensorModule.SensorErrorValue[5]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW7_Addr, &SensorModule.SensorErrorValue[6]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW8_Addr, &SensorModule.SensorErrorValue[7]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW9_Addr, &SensorModule.SensorErrorValue[8]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW10_Addr, &SensorModule.SensorErrorValue[9]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW11_Addr, &SensorModule.SensorErrorValue[10]);
-//	EEPROM_READ_FLOAT(EEPROM_ErrW_Max_Addr, &SensorModule.SensorErrorMaxValue);
-	SensorModule.LineDetectValue = 3000 ;
+	LineSideClear,
+	LineOnLeftSide,
+	LineOnRightSide,
+}LinePostionEnum_t;
+
+LinePostionEnum_t LinePositionEstimator(void)
+{
+	static float _PreviousPosErrorValue;
+	float _PosErrorValue;
+	static int SavedLineSide;
+	static uint32_t SavedBigErrorTime; /*Big error is when _PosErrorValue > ErrorWeightValueTable[7] */
+
+
+		/*Try detect big error position*/
+	for(int i=0; i<3; i++)
+	{
+		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+		{
+			SavedBigErrorTime = HAL_GetTick();
+			SavedLineSide = LineOnRightSide;
+		}
+	}
+
+	for(int i=11; i>9; i--)
+	{
+		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+		{
+			SavedBigErrorTime = HAL_GetTick();
+			SavedLineSide = LineOnLeftSide ;
+		}
+	}
+
+	if( SavedLineSide != LineSideClear && (SavedBigErrorTime + TimeMSToClearBigErrorFlag) < HAL_GetTick() )
+	{
+		SavedLineSide = LineSideClear;
+	}
+	 /*Get Actual position error */
+	_PosErrorValue = EstimatePositionError();
+
+	if(_PosErrorValue == LINE_NOT_DETECTED_MAGIC_NUMBER) /*If line not detected */
+	{
+
+		if(  SavedLineSide == LineOnLeftSide )
+		{
+			SavedBigErrorTime = HAL_GetTick();
+			_PosErrorValue = -LineEstimator.SensorErrorMaxValue;
+		}
+		else if( SavedLineSide == LineOnRightSide )
+		{
+			SavedBigErrorTime = HAL_GetTick();
+			_PosErrorValue = LineEstimator.SensorErrorMaxValue;
+		}
+		else
+		{
+			_PosErrorValue = _PreviousPosErrorValue ;
+			/*nothing to do*/ /*Continue with previous error */
+		}
+		LineEstimator.PositionErrorValue =  _PosErrorValue ;
+
+	}
+
+	_PreviousPosErrorValue = _PosErrorValue;
+
+	LineEstimator.PositionErrorValue =  _PosErrorValue ;
+
+	return LineSideClear;
 }
+
+void SendLinePosEstDataReportForBle(void)
+{
+	BLE_SensorDataReport_t SensorDataReport ={0};
+
+	for(int i=0; i<LINE_SENSOR_DATA_COUNT; i++)
+	{
+		SensorDataReport.SensorData[i] = MapValueToUint8_Range(LineEstimator.LineSensorsADCVal[(LINE_SENSOR_DATA_COUNT -1) - i]);
+	}
+
+	SensorDataReport.PosError = LineEstimator.PositionErrorValue;
+	SensorDataReport.LastLeftLinePosConfidence = 0;
+	SensorDataReport.LastRightLinePosConfidence = 0;
+	
+	BLE_ReportSensorData(&SensorDataReport);
+}
+
+/****************************************************************************************************/
+/****************************************************************************************************/
+/****************************************************************************************************/
+/****************************************************************************************************/
+void LPE_Init(void)
+{
+	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)LineEstimator.LineSensorsADCVal,12); //Turn on Sensor Read
+	GetErrorWeightsFromNvm();
+	BLE_RegisterNvMdataUpdateInfoCallBack( (void *)BleUpdateNvmDataCallBack);
+}
+
+
+
+void LPE_Task(void)
+{
+	LinePositionEstimator();
+	SendLinePosEstDataReportForBle();
+
+	// BLE_DbgMsgTransmit("MappedValue 3000: %d", MapValueToUint8_Range(3000) );
+
+}
+
+float LPE_GetPosError(void)
+{
+	return LineEstimator.PositionErrorValue;
+}
+
+
+/********************************************************************************/
+

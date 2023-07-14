@@ -486,7 +486,7 @@ void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
             break;
         }
 
-        case BLE_NvM_PidRegData:
+        case BLE_NvM_LinePidRegData:
         {
             BleDatMngr_PidDataHandler(value,BLE_MessageID);
             break;

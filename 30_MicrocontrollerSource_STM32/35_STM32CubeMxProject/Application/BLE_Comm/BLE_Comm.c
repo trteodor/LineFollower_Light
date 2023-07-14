@@ -30,11 +30,11 @@
 #define BLE_MAX_SINGLE_MESSAGE_SIZE  (3 * BLE_MIN_SINGLE_MESSAGE_SIZE)  /*HARD CODED! please don't change it if you aren't rly aware what you are doing*/
 									/*Please check BLE specifitaion - max message size is 20bytes*/
 
-
-
 #define BLE_DATA_FIELD_SIZE 18
 
 #define BLE_STATISTICS_PERIOD 5000
+
+#define BLE_DATA_REPORTING_TIME 20
 
 /**!
  * \brief BleRingBufferStatus_t
@@ -77,13 +77,31 @@ typedef struct
 	uint16_t T[SIMULATOR_PROBES_COUNT];
 }Sim_PositionOnTruck_t;
 
+typedef enum
+{
+	Standstill,
+	Driving,
+}InternalRobotState_t;
 
+typedef enum
+{
+	Suspended,
+	TrueDataLogging,
+	SimulatorDataLogging,
+}LoggingState_t;
 
 /**
  * *******************************************************************************************
- * Static variables declaration and function prototypes
+ * Static variables
  * *******************************************************************************************
  * */
+
+#define BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT 10
+
+static (*NvmUpdateCallBacks[BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT])(void) = {0};
+
+static LoggingState_t LoggingState = Suspended;
+static InternalRobotState_t InternalRobotState = Standstill;
 
 Sim_PositionOnTruck_t  SimFakeXY_MapDat;
 
@@ -102,30 +120,23 @@ static uint8_t BleMainReceiveMessagesTab[BLE_RECEIVE_RING_BUFFER_SIZE][BLE_MAX_S
 
 static BLE_LfDataReport_t NewestLfDataReport = {0};
 
-static bool SimulatorBaseDataStateActiv = false;
-
 static uint32_t LastMessageTime = 0U;
 
 /*
  *********************************************************************************************
- * Static function declaration section
+ * Static function prototypes section
  ********************************************************************************************
  */
 
 static void Sim_Create_XY_FakeMap(void);
-
 static BleRingBufferStatus_t RB_Transmit_Read(BleRingBufferTransmit_t *Buf, uint8_t *MessageSize, uint8_t **MessagePointer);
 static BleRingBufferStatus_t RB_Transmit_Write(BleRingBufferTransmit_t *Buf,uint8_t *DataToWrite, uint8_t MessageSize);
-
-
 static BleRingBufferStatus_t RB_Receive_GetNextMessageAddress(BleRingBufferReceive_t *Buf, uint8_t **WriteAddress);
 static BleRingBufferStatus_t RB_Receive_Read(BleRingBufferReceive_t *Buf, uint8_t *MessageSize, uint8_t **MessagePointer);
-
-
 static BLE_CallStatus_t TransmitErrorWeigthData(void);
-
 static BLE_CallStatus_t MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BLE_MessageBuffer_t *MessageData);
 
+/************************************************************************************************/
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
@@ -416,7 +427,7 @@ static BLE_CallStatus_t TransmitPidData(void)
 	EE_ReadVariableF32(EE_NvmAddr_PidKd_F32, &PidKd);
 	EE_ReadVariableF32(EE_NvmAddr_ProbeTime_U32, &ProbeT);
 
-	DataBuffer[0] = BLE_NvM_PidRegData;
+	DataBuffer[0] = BLE_NvM_LinePidRegData;
 	DataBuffer[1] = _SyncID;
 	memcpy(&DataBuffer[2],&PidKp,4);
 	memcpy(&DataBuffer[6],&PidKi,4);
@@ -549,65 +560,79 @@ static void Sim_Create_XY_FakeMap(void)
 
 void Sim_FakeBaseDataReportTask(void)
 {
-	static uint32_t SimulatorFakeBaseDataTimer = 0;
 	static uint16_t ProbeIterator = 0u;
 	static uint8_t SyncIdIter = 1;
 	static float WaveHelper = 0.0F;
 
-	if(HAL_GetTick() - SimulatorFakeBaseDataTimer >= 20 && (true == SimulatorBaseDataStateActiv) )
+	for(int i =0; i<1; i++)
 	{
-		SimulatorFakeBaseDataTimer = HAL_GetTick();
-		for(int i =0; i<1; i++)
+		if(ProbeIterator == SIMULATOR_PROBES_COUNT)
 		{
-			if(ProbeIterator == SIMULATOR_PROBES_COUNT)
-			{
-				Sim_Create_XY_FakeMap();
-				ProbeIterator = 1U;
-			}
-
-			NewestLfDataReport.ucTimeStamp = HAL_GetTick();
-
-			NewestLfDataReport.CurrMapData.PosX = SimFakeXY_MapDat.X[ProbeIterator];
-			NewestLfDataReport.CurrMapData.PosY = SimFakeXY_MapDat.Y[ProbeIterator];
-
-			NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 100 * WaveHelper));
-			NewestLfDataReport.CurrMapData.WhRhtSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
-
-			NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.3 * sin( 2* M_PI * 10 * WaveHelper));
-
-
-			NewestLfDataReport.CurrSensorData.SensorData[0] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[1] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[2] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[3] = 63;
-			NewestLfDataReport.CurrSensorData.SensorData[4] = 64;
-			NewestLfDataReport.CurrSensorData.SensorData[5] = (uint8_t)(65 + SyncIdIter);
-			NewestLfDataReport.CurrSensorData.SensorData[6] = (uint8_t)(66 + SyncIdIter);
-			NewestLfDataReport.CurrSensorData.SensorData[7] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[8] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[9] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[10] = 40;
-			NewestLfDataReport.CurrSensorData.SensorData[11] = 40;
-
-			NewestLfDataReport.CurrSensorData.PosError = 1 * sin( 2 * M_PI * WaveHelper);
-
-			NewestLfDataReport.CurrPidRegData.PidRegCorrValue = (2 * sin( 2 * M_PI * WaveHelper)) + (0.2 * sin( 2* M_PI * 13 * WaveHelper));;
-
-			TransmitLfBaseDataReport();
-
-			WaveHelper = WaveHelper + 0.01;
-			ProbeIterator++;
-			SyncIdIter++;
+			Sim_Create_XY_FakeMap();
+			ProbeIterator = 1U;
 		}
+		NewestLfDataReport.ucTimeStamp = HAL_GetTick();
+		NewestLfDataReport.CurrMapData.PosX = SimFakeXY_MapDat.X[ProbeIterator];
+		NewestLfDataReport.CurrMapData.PosY = SimFakeXY_MapDat.Y[ProbeIterator];
+		NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 100 * WaveHelper));
+		NewestLfDataReport.CurrMapData.WhRhtSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
+		NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.3 * sin( 2* M_PI * 10 * WaveHelper));
+		NewestLfDataReport.CurrSensorData.SensorData[0] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[1] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[2] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[3] = 63;
+		NewestLfDataReport.CurrSensorData.SensorData[4] = 64;
+		NewestLfDataReport.CurrSensorData.SensorData[5] = (uint8_t)(65 + SyncIdIter);
+		NewestLfDataReport.CurrSensorData.SensorData[6] = (uint8_t)(66 + SyncIdIter);
+		NewestLfDataReport.CurrSensorData.SensorData[7] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[8] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[9] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[10] = 40;
+		NewestLfDataReport.CurrSensorData.SensorData[11] = 40;
+		NewestLfDataReport.CurrSensorData.PosError = 1 * sin( 2 * M_PI * WaveHelper);
+		NewestLfDataReport.CurrPidRegData.PidRegCorrValue = (2 * sin( 2 * M_PI * WaveHelper)) + (0.2 * sin( 2* M_PI * 13 * WaveHelper));;
+
+		WaveHelper = WaveHelper + 0.01;
+		ProbeIterator++;
+		SyncIdIter++;
+	
 	}
 
 }
 
 
+void BaseDataReporterTask(void)
+{
+	static uint32_t PreviousReportTransmitTime = 0;
 
+	if( (HAL_GetTick() - PreviousReportTransmitTime >= BLE_DATA_REPORTING_TIME)
+			&& (TrueDataLogging == LoggingState))
+	{
+		PreviousReportTransmitTime = HAL_GetTick();
+		TransmitLfBaseDataReport(); 
+		/*Base data report struct is updated asynchronicly 
+		* by another modules
+		* Check desprition of functions BLE_Report..
+		*/
+	}
+	else if(  (HAL_GetTick() - PreviousReportTransmitTime >= BLE_DATA_REPORTING_TIME )
+						&& (SimulatorDataLogging == LoggingState) )
+	{
+		PreviousReportTransmitTime = HAL_GetTick();
+		Sim_FakeBaseDataReportTask();
+		TransmitLfBaseDataReport();
+	}
+	else//Suspended == LoggingState
+	{
+		/*Nothing to do*/
+	}
+}
 
 static void ReceiveDataHandler(void)
 {
+	static uint32_t LastReadRingBufferTime = 0U;
+	static bool NvmDataUpdatedFlag = false;
+
 	uint8_t *MessageToRead_p = NULL;
 	uint8_t MessageToReadSize= 0U;
 	if(HAL_GetTick() - LastMessageTime > 50)
@@ -622,12 +647,13 @@ static void ReceiveDataHandler(void)
 	 * - function EEWriteVariable.. is disabling iterrupts that's why it's a good idea
 	 */
 
-
 		if(RB_Receive_Read(&BleMainReceiveRingBuffer, &MessageToReadSize,&MessageToRead_p) == RB_OK)
 		{
-			uint8_t *ReceivedMessageBuff = MessageToRead_p;
 
+			uint8_t *ReceivedMessageBuff = MessageToRead_p;
 			BLE_MessageID_t ReceivedMessageId = ReceivedMessageBuff[0];
+
+			LastReadRingBufferTime = HAL_GetTick();
 
 			switch(ReceivedMessageId)
 			{
@@ -650,6 +676,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth2_F32, ErrW2Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth3_F32, ErrW3Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth4_F32, ErrW4Val);
+					NvmDataUpdatedFlag= true;
 //					BLE_DbgMsgTransmit("Received: ErrW1 %f ErrW2 %f ErrW3 %f ErrW4 %f"
 //							,ErrW1Val,ErrW2Val,ErrW3Val,ErrW4Val);
 
@@ -669,6 +696,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth6_F32, ErrW6Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth7_F32, ErrW7Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth8_F32, ErrW8Val);
+					NvmDataUpdatedFlag= true;
 //					BLE_DbgMsgTransmit("Received: ErrW5 %f ErrW6 %f ErrW7 %f ErrW8 %f"
 //							,ErrW5Val,ErrW6Val,ErrW7Val,ErrW8Val);
 
@@ -687,7 +715,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth10_F32, ErrW10Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth11_F32, ErrW11Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigthMax_F32, ErrWMVal);
-
+					NvmDataUpdatedFlag= true;
 //					BLE_DbgMsgTransmit("Received: ErrW9 %f ErrW10 %f ErrW11 %f ErrWM %f"
 //							,ErrW9Val,ErrW10Val,ErrW11Val,ErrWMVal);
 
@@ -701,7 +729,7 @@ static void ReceiveDataHandler(void)
 					break;
 				}
 
-				case BLE_NvM_PidRegDataReq:
+				case BLE_NvM_LinePidRegDataReq:
 				{
 
 //					BLE_DbgMsgTransmit("PidRegDataReq");
@@ -709,7 +737,7 @@ static void ReceiveDataHandler(void)
 					break;
 				}
 
-				case BLE_NvM_PidRegData:
+				case BLE_NvM_LinePidRegData:
 				{
 					float PidKp  = 0.0F,PidKi = 0.0F, PidKd = 0.0F,ProbeTime  = 0.0F;
 
@@ -724,6 +752,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_PidKi_F32, PidKi);
 					EE_WriteVariableF32(EE_NvmAddr_PidKd_F32, PidKd);
 					EE_WriteVariableF32(EE_NvmAddr_ProbeTime_U32, ProbeTime);
+					NvmDataUpdatedFlag= true;
 					break;
 				}
 
@@ -751,21 +780,39 @@ static void ReceiveDataHandler(void)
 					if(TryDetEndLine ==0 || TryDetEndLine == 1){
 						EE_WriteVariableU32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
 					}
+					NvmDataUpdatedFlag= true;
 //					BLE_DbgMsgTransmit("Received BaseMotSpd: %f, LedSt %d, EndLMark %d",
 //							BaseMotSpd,LedState,TryDetEndLine );
 
 					break;
 				}
 
+				case BLE_RobotStart:
+				{
+					InternalRobotState = Driving;
+					LoggingState = TrueDataLogging;
+				}
+				case BLE_RobotStop:
+				{
+					InternalRobotState = Standstill;
+					LoggingState = Suspended;
+				}
+
 				case BLE_SimulatorStart:
 				{
-					SimulatorBaseDataStateActiv = true;
+					LoggingState = SimulatorDataLogging;
+					break;
+				}
+
+				case BLE_TrueBaseLoggingStart:
+				{
+					LoggingState = TrueDataLogging;
 					break;
 				}
 
 				case BLE_SimuAndTrueDataLoggingStop:
 				{
-					SimulatorBaseDataStateActiv = false;
+					LoggingState = Suspended;
 					break;
 				}
 
@@ -802,6 +849,18 @@ static void ReceiveDataHandler(void)
 			ReceivedMessageId = BLE_None;
 		}
 
+		if( (NvmDataUpdatedFlag == true) && (HAL_GetTick() - LastReadRingBufferTime > 50) )
+		{
+			NvmDataUpdatedFlag = false;
+
+			for(int i=0; i<BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT; i++)
+			{
+				if(NvmUpdateCallBacks[i] != 0)
+				{
+					NvmUpdateCallBacks[i]();
+				}
+			}
+		}
 
 	}
 
@@ -841,7 +900,7 @@ static void TransmitDataHandler(void)
 	TransmitWindowActiv = true;
 	(void)BLE_DataTransmitWindow;
 /*Fajnie wyszlo na 200 wobec 60*/
-	if(HAL_GetTick() - BLE_DataTransmitWindow > 350)
+	if(HAL_GetTick() - BLE_DataTransmitWindow > 200)
 	{
 		BLE_DataTransmitWindow = HAL_GetTick();
 		TransmitWindowActiv = true;
@@ -879,12 +938,13 @@ static void TransmitDataHandler(void)
 }
 
 
-
 /*
 *********************************************************************************************
 *Interface functions implementation
 *********************************************************************************************
 */
+#define API_FUNCTIONS_BLE_COMM
+
 void BLE_Init(void)
 {
 	HAL_Delay(200); /* While startup after power on
@@ -915,8 +975,8 @@ void BLE_Init(void)
 	}
 
 	HAL_UART_Transmit_DMA(&huart2, (uint8_t *)DevNameFullCommandBuffor, DevNameSize);
-//	HAL_Delay(50); /*Short delay to ignore answer :) */
 	HAL_UART_Receive(&huart2, (uint8_t *)FakeRecBuf, 20,100);
+	//	HAL_Delay(50); /*Short delay to ignore answer :) */
 
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], BLE_MIN_SINGLE_MESSAGE_SIZE);
 	Sim_Create_XY_FakeMap();
@@ -924,7 +984,7 @@ void BLE_Init(void)
 
 void BLE_Task(void)
 {
-	Sim_FakeBaseDataReportTask();
+	BaseDataReporterTask();
 	ReceiveDataHandler();
 	TransmitDataHandler();
 }
@@ -941,7 +1001,13 @@ void BLE_ReportSensorData(BLE_SensorDataReport_t *SensorData)
 
 void BLE_RegisterNvMdataUpdateInfoCallBack(void *UpdateInfoCb(void) )
 {
-	//TODO: to implement
+	for(int i=0; i<BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT; i++)
+	{
+		if(NvmUpdateCallBacks[i] == 0)
+		{
+			NvmUpdateCallBacks[i] = UpdateInfoCb;
+		}
+	}
 }
 
 

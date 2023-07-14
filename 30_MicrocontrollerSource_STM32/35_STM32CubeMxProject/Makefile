@@ -29,7 +29,7 @@ OPT = -Og
 # paths
 #######################################
 # Build path
-BUILD_DIR = build
+BUILD_DIR = .build
 
 ######################################
 #Application sources
@@ -44,7 +44,7 @@ APP_SRC := $(foreach dir,$(DIRECTORIES_APP),$(wildcard $(dir)*.c))
 APP_INC = $(foreach dir, $(DIRECTORIES_APP), $(addprefix -I, $(dir)))
 
 
-$(info APP_INC: $(APP_INC) )
+# $(info APP_INC: $(APP_INC) )
 
 $(info ---------------)
 ######################################
@@ -94,7 +94,7 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_gpio.c \
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_dma.c \
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c \
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c \
-Drivers/EEPROM_M24C16/EEPROM.c
+Middlewares/EEPROM_Emul/EEmu.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -158,10 +158,10 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Device/ST/STM32H7xx/Include \
 -IDrivers/CMSIS/Include \
 -IConfig \
--IDrivers/VL53L0 \
--IDrivers/VL53L0/platform/inc \
--IDrivers/VL53L0/core/inc \
--IDrivers/EEPROM_M24C16 \
+-IIMiddlewares/VL53L0 \
+-IIMiddlewares/VL53L0/platform/inc \
+-IIMiddlewares/VL53L0/core/inc \
+-IMiddlewares/EEPROM_Emul \
 $(APP_INC)
 
 
@@ -205,12 +205,15 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	@echo CC $<
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
+	@$(AS) -c $(CFLAGS) $< -o $@
+	@echo AS $<
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
+	@echo Linking...
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
 

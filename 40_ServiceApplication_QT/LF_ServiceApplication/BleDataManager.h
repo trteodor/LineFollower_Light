@@ -59,8 +59,8 @@ public:
         BLE_NvM_ErrWeigthSensorData_part2,
         BLE_NvM_ErrWeigthSensorData_part3,
 
-        BLE_NvM_PidRegDataReq,
-        BLE_NvM_PidRegData,
+        BLE_NvM_LinePidRegDataReq,
+        BLE_NvM_LinePidRegData,
 
         BLE_NvM_VehCfgReq,
         BLE_NvM_VehCfgData,

@@ -62,7 +62,6 @@ typedef enum
 
     BLE_RobotStart,
     BLE_RobotStop,
-
     BLE_SimulatorStart,
     BLE_TrueBaseLoggingStart,
     BLE_SimuAndTrueDataLoggingStop,
@@ -78,8 +77,8 @@ typedef enum
     BLE_NvM_ErrWeigthSensorData_part2,
     BLE_NvM_ErrWeigthSensorData_part3,
 
-    BLE_NvM_PidRegDataReq,
-    BLE_NvM_PidRegData,
+    BLE_NvM_LinePidRegDataReq,
+    BLE_NvM_LinePidRegData,
 
     BLE_NvM_VehCfgReq,
     BLE_NvM_VehCfgData,
@@ -162,7 +161,7 @@ typedef struct
 	float Ki;
 	float Kd;
 	float DerivativeTime;
-}BLE_NvM_PidRegData_t; /*Current size 6*4 = 24*/
+}BLE_NvM_LinePidRegData_t; /*Current size 6*4 = 24*/
 
 
 typedef struct
@@ -193,7 +192,7 @@ typedef struct
  * Exported functions prototypes:
  * */
 
-void BLE_init(void); /*Initialize the Communication module*/
+void BLE_Init(void); /*Initialize the Communication module*/
 void BLE_Task(void); /*Runnable of BLE communication module (Call as often as possible*/
 					/*.. don't blocked contest, very short*/
 /**/
@@ -209,12 +208,12 @@ void BLE_Task(void); /*Runnable of BLE communication module (Call as often as po
 void BLE_ReportSensorData(BLE_SensorDataReport_t *SensorData);
 
 /* brief BLE_ReportMapData
-*LF_AppMain: Dedicated interface to create XY map in desktop application
+*LF_Menager: Dedicated interface to create XY map in desktop application
 */
 void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
 
 /* brief BLE_RegisterNvMdataUpdateInfoCallBack
-* Register call back if you want be informed data Non Volatile data has been updated
+* Register call back if you want be informed that Non Volatile data has been updated
 * by BLE communication module
 * CallBack function will be called always if NvM data will be updated
 */

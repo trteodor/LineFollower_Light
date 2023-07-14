@@ -121,10 +121,10 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 uint16_t EE_Init(void);
-uint16_t EE_ReadVariableU32(uint16_t VirtAddress, uint32_t* Data);
-uint16_t EE_ReadVariableF32(uint16_t VirtAddress, float* Data);
-uint16_t EE_WriteVariableU32(uint16_t VirtAddress, uint32_t Data);
-uint16_t EE_WriteVariableF32(uint16_t VirtAddress, float Data);
+uint16_t EE_ReadVariableU32(EE_Vars_t VirtAddress, uint32_t* Data);
+uint16_t EE_ReadVariableF32(EE_Vars_t VirtAddress, float* Data);
+uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data);
+uint16_t EE_WriteVariableF32(EE_Vars_t VirtAddress, float Data);
 
 #endif /* __EEPROM_H */
 

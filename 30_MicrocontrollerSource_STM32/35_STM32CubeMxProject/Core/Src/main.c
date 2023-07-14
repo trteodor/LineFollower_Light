@@ -28,11 +28,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "LF_AppMain.h"
-
-#include "EEmu.h"
-#include "EEmuConfig.h"
-
+#include "LF_MainRunnable.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,15 +48,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-//FRESULT FatFsResult;
-//FATFS SdFatFs;
-//FIL SdCardFile;
-//
-//uint8_t bytes;
-//char data[128];
-
-uint32_t VarDataTab[EE_VarsCount] = {0};
-uint32_t VarValue,VarDataTmp = 0;
 
 /* USER CODE END PV */
 
@@ -126,53 +113,15 @@ int main(void)
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
-  //LF_App_MainConfig(); //Application/Src/LF_AppMain
-
-
-  	EE_Init();
-	BLE_Init();
-
-
-//	static uint8_t ReceiveBuffer[50];
-//	static uint8_t TransmitBuffer[50];
-//	static uint8_t RecDataNumber= 0U;
-
-//  uint8_t size = sprintf(TransmitBuffer,"AT+NEIN0");
-//  HAL_UARTEx_ReceiveToIdle(&huart2, ReceiveBuffer, 50, &RecDataNumber, 500);
-//  HAL_UART_Transmit(&huart2, TransmitBuffer, size, 200);
-//  HAL_Delay(50);
-//
-//  size = sprintf(TransmitBuffer,"AT+ADVEN2");
-//  HAL_UARTEx_ReceiveToIdle(&huart2, ReceiveBuffer, 50, &RecDataNumber, 500);
-//  HAL_UART_Transmit(&huart2, TransmitBuffer, size, 200);
-//  HAL_Delay(50);
-
-
-
-
-//	for(int i =0; i<EE_VarsCount; i++)
-//	{
-//		EE_WriteVariableF32(i, ((float)i) +50.0F );
-//	}
-//
-//	for(int i=0; i<EE_VarsCount; i++)
-//	{
-//		EE_ReadVariableU32(i,  &VarDataTab[i]);
-//	}
-
-
-
-
+  LF_AppInit();
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-
-
-      BLE_Task();
+    LF_AppTask();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

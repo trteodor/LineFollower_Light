@@ -343,6 +343,9 @@ void TIM5_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-
+uint32_t HAL_Get100usTick(void)
+{
+  return us100Timer;
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

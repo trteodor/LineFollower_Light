@@ -9,8 +9,8 @@ Release/*
 !Release/LF_v5_Source_STM32H7.elf
 !Release/LF_v5_Source_STM32H7.map
 
-build/*
-!build/LF_UltraLight.elf
-!build/LF_UltraLight.hex
-!build/LF_UltraLight.map
-!build/LF_UltraLight.bin
+.build/*
+!.build/LF_UltraLight.elf
+!.build/LF_UltraLight.hex
+!.build/LF_UltraLight.map
+!.build/LF_UltraLight.bin

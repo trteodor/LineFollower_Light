@@ -369,7 +369,7 @@ uint16_t EE_VerifyPageFullyErased(uint32_t Address)
   *           - 1: if the variable was not found
   *           - NO_VALID_PAGE: if no valid page was found.
   */
-uint16_t EE_ReadVariableU32(uint16_t VirtAddress, uint32_t* Data)
+uint16_t EE_ReadVariableU32(EE_Vars_t VirtAddress, uint32_t* Data)
 {
   uint16_t ValidPage = PAGE0;
   uint16_t AddressValue = 0x5555, ReadStatus = 1;
@@ -419,7 +419,7 @@ uint16_t EE_ReadVariableU32(uint16_t VirtAddress, uint32_t* Data)
 }
 
 
-uint16_t EE_ReadVariableF32(uint16_t VirtAddress, float* Data)
+uint16_t EE_ReadVariableF32(EE_Vars_t VirtAddress, float* Data)
 {
   
   uint16_t ReadStatus;
@@ -442,7 +442,7 @@ uint16_t EE_ReadVariableF32(uint16_t VirtAddress, float* Data)
   *           - NO_VALID_PAGE: if no valid page was found
   *           - Flash error code: on write Flash error
   */
-uint16_t EE_WriteVariableU32(uint16_t VirtAddress, uint32_t Data)
+uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data)
 {
 	__disable_irq();
   uint16_t Status = 0;
@@ -471,7 +471,7 @@ uint16_t EE_WriteVariableU32(uint16_t VirtAddress, uint32_t Data)
   *           - NO_VALID_PAGE: if no valid page was found
   *           - Flash error code: on write Flash error
   */
-uint16_t EE_WriteVariableF32(uint16_t VirtAddress, float Data)
+uint16_t EE_WriteVariableF32(EE_Vars_t VirtAddress, float Data)
 {
 	__disable_irq();
     uint16_t Status = 0;
