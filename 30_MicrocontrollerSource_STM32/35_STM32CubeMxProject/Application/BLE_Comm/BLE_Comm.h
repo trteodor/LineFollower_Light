@@ -60,8 +60,8 @@ typedef enum
     BLE_ConfirmationTag,
     BLE_DebugMessage,
 
-	BLE_RobotStart,
-	BLE_RobotStop,
+    BLE_RobotStart,
+    BLE_RobotStop,
 
     BLE_SimulatorStart,
     BLE_TrueBaseLoggingStart,
@@ -83,6 +83,9 @@ typedef enum
 
     BLE_NvM_VehCfgReq,
     BLE_NvM_VehCfgData,
+
+    BLE_SetNewRobotName,
+
 }BLE_MessageID_t;
 
 typedef enum

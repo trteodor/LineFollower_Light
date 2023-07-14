@@ -195,6 +195,7 @@ void MainWindow::BLE_InitializeQTConnections(void)
 
     /* Connect Button */
     connect(ui->BLE_ConnectButton,SIGNAL(clicked()), this, SLOT(BLE_connectDevice()));
+
     connect(this, SIGNAL(BLE_DisconnectDevice() ),&BleInputDataProcessingWrapper.bleConnection,SLOT(DisconnectDevice() ));
     //    /* Bleutooth States */
 
@@ -914,7 +915,12 @@ void MainWindow::on_BLE_TrueLogStartButton_clicked()
 /*********************************************************************************************************/
 void MainWindow::BLE_connectDevice()
 {
-    //    ui->BLE_AutoConnCheckBox->isChecked();
+
+
+
+    QString NewAutoConnDevName = ui->BLE_DetectedDeviceComboBox->itemText(ui->BLE_DetectedDeviceComboBox->currentIndex());
+    ui->BLE_AutoConnDevNameL->setText(NewAutoConnDevName);
+
     emit BLE_connectToDevice(ui->BLE_DetectedDeviceComboBox->currentIndex());
 }
 /*********************************************************************************************************/

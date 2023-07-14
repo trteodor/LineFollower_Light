@@ -96,10 +96,6 @@ private slots:
     void NvM_VehCfgDataUpdateDelayTimerTimeout();
 
 
-
-
-
-
 signals:
     void BLE_connectToDevice(int i);
     void BLE_DisconnectDevice();

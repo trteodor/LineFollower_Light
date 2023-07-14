@@ -419,7 +419,7 @@ void BleDataManager::BleDatMngr_DebugMessagerHandler(const QByteArray &value,Ble
 
 void BleDataManager::BleDatMngr_PidDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
 {
-
+    (void)BLE_MessID;
     float KpVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
     float KiVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
     float KdVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10));
@@ -430,6 +430,7 @@ void BleDataManager::BleDatMngr_PidDataHandler(const QByteArray &value,BleDataMa
 
 void BleDataManager::BleDatMngr_VehCfgDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
 {
+    (void)BLE_MessID;
     float ExpAvSpd                = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
     uint32_t BlinkSt              = ConvToUint32(value,6);
     uint32_t TryDetEndLineMark    = ConvToUint32(value,10);

@@ -128,6 +128,7 @@ int main(void)
 
   //LF_App_MainConfig(); //Application/Src/LF_AppMain
 
+
   	EE_Init();
 	BLE_Init();
 

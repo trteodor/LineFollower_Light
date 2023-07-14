@@ -40,6 +40,12 @@ typedef enum
 //	EE_NvmAddr_IrSensorState_U32,
 
 
+	EE_NvmAddr_BleDevNamePart1_U32_,
+	EE_NvmAddr_BleDevNamePart2_U32_,
+	EE_NvmAddr_BleDevNamePart3_U32_,
+	EE_NvmAddr_BleDevNamePart4_U32_,
+
+
 	EE_VarsCount
 }EE_Vars_t;
 

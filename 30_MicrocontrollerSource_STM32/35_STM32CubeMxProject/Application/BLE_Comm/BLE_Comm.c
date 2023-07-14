@@ -127,46 +127,24 @@ static BLE_CallStatus_t TransmitErrorWeigthData(void);
 static BLE_CallStatus_t MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BLE_MessageBuffer_t *MessageData);
 
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
+
 	if(huart->Instance == USART2)
 	{
-		LastMessageTime = HAL_GetTick();
-
 		uint8_t *MessageReceiveBufferAddress;
+
+		LastMessageTime = HAL_GetTick();
 
 		/*Start listen again as fast as possible*/
 		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
 		// Start listening again
-// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MAX_SINGLE_MESSAGE_SIZE);
-
- 		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
+ 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
 
 		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
 	}
 }
-
-
-
-//void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-//{
-//
-//	if(huart->Instance == USART2)
-//	{
-//		uint8_t *MessageReceiveBufferAddress;
-//
-//		/*Start listen again as fast as possible*/
-//		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
-//		// Start listening again
-//// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
-//
-// 		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
-//
-//		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-//
-//	}
-//}
 
 
 /*!
@@ -791,6 +769,28 @@ static void ReceiveDataHandler(void)
 					break;
 				}
 
+				case BLE_SetNewRobotName:
+				{
+					uint32_t AuxilaryNameVar1 = 0;
+					uint32_t AuxilaryNameVar2 = 0;
+					uint32_t AuxilaryNameVar3 = 0;
+					uint32_t AuxilaryNameVar4 = 0;
+
+	    			memcpy( &AuxilaryNameVar1,  &ReceivedMessageBuff[2], sizeof(uint32_t) );
+	    			memcpy( &AuxilaryNameVar2,  &ReceivedMessageBuff[6], sizeof(uint32_t) );
+	    			memcpy( &AuxilaryNameVar3,  &ReceivedMessageBuff[10], sizeof(uint32_t) );
+	    			memcpy( &AuxilaryNameVar4,  &ReceivedMessageBuff[14], sizeof(uint32_t) );
+
+					EE_WriteVariableU32(EE_NvmAddr_BleDevNamePart1_U32_, AuxilaryNameVar1);
+					EE_WriteVariableU32(EE_NvmAddr_BleDevNamePart2_U32_, AuxilaryNameVar2);
+					EE_WriteVariableU32(EE_NvmAddr_BleDevNamePart3_U32_, AuxilaryNameVar3);
+					EE_WriteVariableU32(EE_NvmAddr_BleDevNamePart4_U32_, AuxilaryNameVar4);
+
+					BLE_DbgMsgTransmit("Received NewDeviceName: %s", &ReceivedMessageBuff[2]);
+
+					break;
+				}
+
 				default:
 				{
 					/*Nothing to do*/
@@ -887,8 +887,38 @@ static void TransmitDataHandler(void)
 */
 void BLE_Init(void)
 {
-//	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], 20);
-	HAL_UART_Receive_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], BLE_MIN_SINGLE_MESSAGE_SIZE);
+	HAL_Delay(200); /* While startup after power on
+	 * and after experimental test it was observed that short delay is required to stabilize BLE module
+	 * It is required for AT Commands like AT+NAME...
+	 * */
+
+	char DevName[16];
+	char FakeRecBuf[20];
+	char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
+	uint8_t DevNameSize =7;
+
+	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart1_U32_, (uint32_t *)&DevName[0]);
+	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart2_U32_, (uint32_t *)&DevName[4]);
+	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart3_U32_, (uint32_t *)&DevName[8]);
+	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart4_U32_, (uint32_t *)&DevName[12]);
+
+	for(int i=0; i<16; i++)
+	{
+		if(DevName[i] == '\0'){
+			break;
+		}
+		DevNameSize++;
+	}
+
+	for(int i=7; i<(DevNameSize+7); i++){
+		DevNameFullCommandBuffor[i] = DevName[i-7];
+	}
+
+	HAL_UART_Transmit_DMA(&huart2, (uint8_t *)DevNameFullCommandBuffor, DevNameSize);
+//	HAL_Delay(50); /*Short delay to ignore answer :) */
+	HAL_UART_Receive(&huart2, (uint8_t *)FakeRecBuf, 20,100);
+
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], BLE_MIN_SINGLE_MESSAGE_SIZE);
 	Sim_Create_XY_FakeMap();
 }
 
