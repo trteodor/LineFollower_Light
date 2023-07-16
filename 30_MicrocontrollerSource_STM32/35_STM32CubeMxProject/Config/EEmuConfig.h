@@ -32,9 +32,10 @@ typedef enum
 	EE_NvmAddr_PidKp_F32,
 	EE_NvmAddr_PidKi_F32,
 	EE_NvmAddr_PidKd_F32,
+	
 	EE_NvmAddr_ProbeTime_U32,
 
-	EE_NvmAddr_BaseMotorSpdValue_U32,
+	EE_NvmAddr_ExpectedMotorSpdValue_F32,
 	EE_NvmAddr_BlinkLadeState_U32,
 	EE_NvmAddr_TryDetectEndLine_U32,
 	
@@ -44,6 +45,8 @@ typedef enum
 	EE_NvmAddr_BleDevNamePart2_U32_,
 	EE_NvmAddr_BleDevNamePart3_U32_,
 	EE_NvmAddr_BleDevNamePart4_U32_,
+
+	EE_NvmAddr_DevNameUpdatedFlag_U32,
 
 
 	EE_VarsCount

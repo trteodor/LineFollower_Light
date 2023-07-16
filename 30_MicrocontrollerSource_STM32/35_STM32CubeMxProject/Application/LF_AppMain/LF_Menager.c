@@ -27,83 +27,31 @@
 
 /*************************************************************************/
 
-typedef struct PositionOnTrack_t
-{
-	float X[MaxProbeNumber];
-	float Y[MaxProbeNumber];
-	float T[MaxProbeNumber];
-}PositionOnTrack_t;
-
-typedef enum RobotState_t
-{
-	LF_Ok,
-	LF_Idle,
-	LF_go_Stop,
-	LF_go_Start,
-	LF_Started,
-}RobotState_t;
-
-typedef enum EndLapMarkStates_t
-{
-	ResetState,
-	Start_MarkDet,
-	End_MarkDet,
-
-}EndLapMarkStates_t;
-
-typedef enum TrackMapActions_t
-{
-	MapSt_Idle,
-	MapSt_GoToCreate,
-	MapSt_Created,
-}TrackMapActions_t;
-
-typedef enum TryDetectEndLapMarkState_t
-{
-	NotActive,
-	Active,
-}TryDetectEndLapMarkState_t;
-
-
 typedef struct Robot_Cntrl_t
 {
-	EndLapMarkStates_t EndLapMarkStates;
-	TryDetectEndLapMarkState_t TryDetEndLapMarkState;
-	RobotState_t RobotState;
-	TrackMapActions_t TrackMapActions;
-	bool EndLapMarkDetection;
-	bool IsMapAvailable;
+	int input_LeftWhPwmVal;
+	int input_RightWhPwmVal;
+
 	bool IsFlagStartedForDrivingTime;
-
-	float RobotStartTime;
-	float RobotStopTime;
-	float RobotRunTime;
-
-	uint32_t SavedCountEncProbeNumerWhenRStopped;
-
+	uint32_t RobotStartTime;
+	uint32_t RobotRunTime;
 }Robot_Cntrl_t;
 
 /*************************************************************************/
 
 Robot_Cntrl_t Robot_Cntrl;
-// extern PID_RegModule_t PID_Module;
-PositionOnTrack_t PositionOnTrack;
 
-static void Decode_PID();
-static void LF_Robot_Stop();
-static void Motor_PWM_Init();
-static void ForwardDriving(int LeftMotorSpeed, int RightMotorSpeed);
-static void RightMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed);
-static void LeftMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed);
-static void App_RobotControllerInit();
-static RobotState_t TryDetectLapEndMark();
-static RobotState_t App_RobotControllerTask();
-static void App_SpeedProfiler();
-static void CalculateDrivingTimeFun();
+static void MotorsPwmInit();
+static void MotorsForceStop();
+static void MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed);
+static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed);
+static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed);
+
+static void SpeedProfiler();
 
 
 /**************************************************************************************************/
-void Motor_PWM_Init()
+void MotorsPwmInit()
 {
     HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
@@ -118,7 +66,7 @@ void Motor_PWM_Init()
     __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,0);
 }
 /**************************************************************************************************/
-static void ForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
+static void MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
 {
   __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue  - RightMotorSpeed);//-->> Forward
   __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);
@@ -127,7 +75,7 @@ static void ForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
   __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
 }
 /**************************************************************************************************/
-static void RightMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
+static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
 
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue );
@@ -137,7 +85,7 @@ static void RightMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
 }
 /**************************************************************************************************/
-static void LeftMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
+static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue - RightMotorSpeed); //-->> Forward
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue );
@@ -147,126 +95,7 @@ static void LeftMotorDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 
 }
 /**************************************************************************************************/
-static void App_RobotControllerInit()
-{
-	// EEPROM_ReadTryDetectEndLineMarkState();
-	Motor_PWM_Init();
-}
-/**************************************************************************************************/
-
-static RobotState_t App_RobotControllerTask()
-{
-
-	if( Robot_Cntrl.TryDetEndLapMarkState==Active && Robot_Cntrl.EndLapMarkDetection==true )
-	{
-
-			if(Robot_Cntrl.EndLapMarkStates==ResetState)
-			{
-				Robot_Cntrl.EndLapMarkStates=Start_MarkDet;
-				Robot_Cntrl.EndLapMarkDetection=false;
-			}
-			if(Robot_Cntrl.EndLapMarkStates==Start_MarkDet)
-			{
-				Robot_Cntrl.EndLapMarkStates=End_MarkDet;
-				Robot_Cntrl.EndLapMarkDetection=false;
-
-				LF_Robot_Stop();
-
-				if(Robot_Cntrl.IsFlagStartedForDrivingTime==true)
-				{
-					Robot_Cntrl.IsFlagStartedForDrivingTime=false;
-					CalculateDrivingTimeFun();
-				}
-
-				Robot_Cntrl.RobotState = LF_Idle;
-			}
-	}
-
-	if(Robot_Cntrl.RobotState == LF_go_Stop) //Bluetooth or Ir Rec Can set the state
-	{
-		LF_Robot_Stop();
-		if(Robot_Cntrl.IsFlagStartedForDrivingTime==true)
-		{
-			Robot_Cntrl.IsFlagStartedForDrivingTime=false;
-			CalculateDrivingTimeFun();
-		}
-		Robot_Cntrl.RobotState = LF_Idle;
-	}
-
-	if(Robot_Cntrl.RobotState == LF_go_Start) //Bluetooth or Ir Rec Can set the state
-	{
-		//All falgs/values to reset state...
-		Robot_Cntrl.EndLapMarkStates=ResetState;
-		Robot_Cntrl.IsMapAvailable=false;
-		Robot_Cntrl.IsFlagStartedForDrivingTime=true;
-		Enc_ResetModule(); //reset Encoder module to zero (all struct fields to zero)
-		Robot_Cntrl.RobotStartTime=HAL_GetTick(); //save start time..
-		Robot_Cntrl.RobotState = LF_Started;
-	}
-
-	if(Robot_Cntrl.RobotState == LF_Started)
-	{
-		Decode_PID();
-		TryDetectLapEndMark();
-
-		return LF_Started;
-	}
-return LF_Idle;
-}
-/**************************************************************************************************/
-static void App_SpeedProfiler()
-{
-	static uint8_t speedprofilenumer=0;
-
-	if (speedprofilenumer==1)
-	{
-//		if(Enc_Module.TakenDistance > 0)
-//			{
-//			//actions
-////			PID_Module.BaseMotorSpeed=1.0;
-//			}
-		//actions
-	}
-}
-/******************************************************************************************************/
-/******************************************************************************************************/
-
-/* @brief
- * Equations for determining the position of the robot based on the collected information.
- * ref: https://github.com/trteodor/FAST_Line_Follower_STM32H7/blob/master/docs/LF_Desc_PL.pdf
- * equal number 3.12
- */
-void Create_XY_PositionMap()
-{
-	// for(int i=0;  i<Enc_Module.ProbeNumber; i++)
-	// {
-	// 	PositionOnTrack.T[i]=PositionOnTrack.T[i-1] + (1/0.147)
-	// 			*(Enc_Module.LeftWheelDistanceInProbe[i] - Enc_Module.RightWheelDistanceInProbe[i]);
-
-
-	// 	PositionOnTrack.X[i]=PositionOnTrack.X[i-1]+(  0.5*cos(PositionOnTrack.T[i-1]) *
-	// 			( Enc_Module.LeftWheelDistanceInProbe[i]+Enc_Module.RightWheelDistanceInProbe[i]) );
-
-	// 	PositionOnTrack.Y[i]=PositionOnTrack.Y[i-1]+(  0.5*sin(PositionOnTrack.T[i-1]) *
-	// 			( Enc_Module.LeftWheelDistanceInProbe[i]+Enc_Module.RightWheelDistanceInProbe[i]) );
-	// }
-}
-
-/******************************************************************************************************/
-static void CalculateDrivingTimeFun()
-{
-	//Calculate driving time
-		Robot_Cntrl.RobotStopTime=HAL_GetTick();
-		Robot_Cntrl.RobotRunTime=(Robot_Cntrl.RobotStopTime-Robot_Cntrl.RobotStartTime)/1000; //1000 to seconds
-		Enc_CalculateTraveledDistance();
-		Enc_CalculateFinalAverageSpeed();
-		// Robot_Cntrl.SavedCountEncProbeNumerWhenRStopped=Enc_Module.ProbeNumber;
-		Robot_Cntrl.IsMapAvailable=true;
-
-		// BLE_App.Ble_AppSt=SendDrivingTimeAndAvSpeed; //just flag for BleTask
-}
-
-static void LF_Robot_Stop()
+static void MotorsForceStop(void)
 {
 	//Motors Off
     __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);
@@ -274,108 +103,85 @@ static void LF_Robot_Stop()
 
     __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);
     __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
-
 }
 
-/******************************************************************************************************/
-static RobotState_t TryDetectLapEndMark()
+static void DecodeLinePid(void)
 {
-
-	// int CountSensorLineDetected=0;
-
-	// static float PreviousDistance_LeftWheel;
-	// static float PreviousDistance_RightWheel;
-
-	// static uint16_t DistanceTakenInLineDetectStateByLeftWheel;
-	// static uint16_t DistanceTakenInLineDetectStateByRightWheel;
-
-		//Sensor from 2 to 6 if is line detected...
-	// for(int i=2; i<6; i++)
-	// {
-	// 	if ( SensorModule.SensorADCValues[i] > LineIsDetectedDefValue )
-	// 	{
-	// 		CountSensorLineDetected++;
-	// 	}
-	// 	if(CountSensorLineDetected >=4)
-	// 	{
-	// 		SensorModule.PositionErrorValue=0;
-	// 	}
-
-	// }
-
-	// if(CountSensorLineDetected < 4)
-	// {
-	// 	DistanceTakenInLineDetectStateByRightWheel=0;
-	// 	DistanceTakenInLineDetectStateByLeftWheel=0;
-
-	// 	return LF_Ok; //@@@@@@@@@@//break, end mark not detected!!
-	// }
-
-
-	// if( CountSensorLineDetected >=4 && (Enc_Module.Distance_LeftWheel-PreviousDistance_LeftWheel) !=0 )
-	// {
-	// 	PreviousDistance_LeftWheel=Enc_Module.Distance_LeftWheel;
-	// 	DistanceTakenInLineDetectStateByLeftWheel++;
-	// }
-	// if( CountSensorLineDetected >=4 && (Enc_Module.Distance_RightWheel - PreviousDistance_RightWheel) !=0 )
-	// {
-	// 	PreviousDistance_RightWheel=Enc_Module.Distance_RightWheel;
-	// 	DistanceTakenInLineDetectStateByRightWheel++;
-	// }
-
-
-	// if(DistanceTakenInLineDetectStateByRightWheel>=CountStatesWhenLineBy4SenDetToEndLapMark
-	// 		&& DistanceTakenInLineDetectStateByLeftWheel>=CountStatesWhenLineBy4SenDetToEndLapMark)
-	// {
-	// 	//End Line Mark Detected
-
-	// 	DistanceTakenInLineDetectStateByRightWheel=0;
-	// 	DistanceTakenInLineDetectStateByLeftWheel=0;
-
-
-	// 	Robot_Cntrl.EndLapMarkDetection=true;
-	// 	HAL_GPIO_TogglePin(LDD1_GPIO_Port, LDD1_Pin); //now only for tests, does it work correctly?
-
-	// }
-	return LF_Ok;
+	if(Robot_Cntrl.input_LeftWhPwmVal<0 && (Robot_Cntrl.input_RightWhPwmVal<0) ){
+		/*Not handled now*/
+	}
+	else if(Robot_Cntrl.input_LeftWhPwmVal <= 0){
+		int _CalculatedLeftMotorSpeed=Robot_Cntrl.input_LeftWhPwmVal*(-1);
+		MotorLeftDrivingReverse(_CalculatedLeftMotorSpeed, Robot_Cntrl.input_RightWhPwmVal);
+	}
+	else if(Robot_Cntrl.input_RightWhPwmVal < 0){
+	    int _CalculatedRightMotorSpeed=Robot_Cntrl.input_RightWhPwmVal*(-1);
+		MotorRightDrivingReverse(Robot_Cntrl.input_LeftWhPwmVal, _CalculatedRightMotorSpeed);
+	}
+	else{ /*Robot_Cntrl.input_LeftWhPwmVal<0 && (Robot_Cntrl.input_RightWhPwmVal<0*/
+		MotorsForwardDriving(Robot_Cntrl.input_LeftWhPwmVal, Robot_Cntrl.input_RightWhPwmVal);
+	}
 }
 
-/******************************************************************************************************/
-static void Decode_PID()
+void LFAppMngrUpdateInputData(void)
 {
-	// if(PID_Module.CalculatedLeftMotorSpeed<0)
-	// 	{
-
-	// 		int _CalculatedLeftMotorSpeed=PID_Module.CalculatedLeftMotorSpeed*(-1);
-
-	// 		LeftMotorDrivingReverse(_CalculatedLeftMotorSpeed, PID_Module.CalculatedRightMotorSpeed);
-	// 		return;
-	// 	}
-	// if(PID_Module.CalculatedRightMotorSpeed < 0)
-	// 	{
-	// 	int _CalculatedRightMotorSpeed=PID_Module.CalculatedRightMotorSpeed*(-1);
-
-	// 		RightMotorDrivingReverse(PID_Module.CalculatedLeftMotorSpeed, _CalculatedRightMotorSpeed);
-
-	// 		return;
-	// 	}
-
-	// ForwardDriving(PID_Module.CalculatedLeftMotorSpeed, PID_Module.CalculatedRightMotorSpeed);
-	return;
+	App_LinePidGetComputedPwmVals(&Robot_Cntrl.input_LeftWhPwmVal, &Robot_Cntrl.input_RightWhPwmVal);
 }
 
+/**************************************************************************************************/
+static void SpeedProfiler(void)
+{
+	static uint8_t speedprofilenumer=0;
 
-
-
+	if (speedprofilenumer==1)
+	{
+		//		if(Enc_Module.TakenDistance > 0)
+		//			{
+		//			//actions
+		//			PID_Module.BaseMotorSpeed=1.0;
+		//			}
+		//actions
+	}
+}
 /************************************************************************************/
 #define API_FUNCTIONS
 /************************************************************************************/
 void LF_MngrInit(void) /*Line Following Menager init */
 {
-
+	// EEPROM_ReadTryDetectEndLineMarkState();
+	MotorsPwmInit();
 }
+
 void LF_MngrTask(void) /*Line Following Menager task */
 {
+	LFAppMngrUpdateInputData();
+	static uint32_t DrivingStartTime = 0U;
+	static bool prevExpectedrDrivingState = false;
+	bool ExpectedrDrivingState = BLE_isExpectedStateDriving();
 
+	if(prevExpectedrDrivingState != ExpectedrDrivingState)
+	{
+		if(true == prevExpectedrDrivingState)
+		{/*Changed from driving to standstill*/
+			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
+			BLE_DbgMsgTransmit("LineFollowing Seconds: %d", (DrivingTime/1000 ));
+		}
+		else
+		{/*Changed from standstill to driving */
+			ENC_Init();/*re-init Encoder data*/ 
+			DrivingStartTime = HAL_GetTick();
+		}
+	}
+
+	if(true == ExpectedrDrivingState)
+	{
+		SpeedProfiler();
+		DecodeLinePid();
+	}
+	else{
+		MotorsForceStop();
+	}
+
+	prevExpectedrDrivingState = ExpectedrDrivingState;
 }
 

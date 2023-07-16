@@ -23,8 +23,7 @@ void LF_AppInit(void)
 	LPE_Init();  /*Line Position estimator init*/
 
 	/*Line Following App functions*/
-	App_LineFollowPidInit();  /*Line Keep Pid regulator init*/
-
+	App_LinePidInit();  /*Line Keep Pid regulator init*/
 	LF_MngrInit();
 }
 
@@ -39,9 +38,11 @@ void LF_AppTask(void) //only one Task without any RTOS, all works fine -- for no
 	LPE_Task();
 	ENC_Task();
 
-	App_LineFollowPidTask(); /*Line Keep Pid regulator task*/
+	App_LinePidTask(); /*Line Keep Pid regulator task*/
 
 	/*Highest layer Line Follower Application Task: */
+	/*TODO: Temporary turned off!!!*/
 	LF_MngrTask(); /*Line Following Menager task */
+	/*Controll if driving or no..*/
 
 }

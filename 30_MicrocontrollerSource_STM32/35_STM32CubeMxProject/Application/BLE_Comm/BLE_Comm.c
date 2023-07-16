@@ -40,7 +40,7 @@
  * \brief BleRingBufferStatus_t
  * \details ---
  * */
-typedef enum
+typedef enum BleRingBufferStatus_t
 {
 	RB_OK       = 0,
 	RB_ERROR	= 1
@@ -77,13 +77,13 @@ typedef struct
 	uint16_t T[SIMULATOR_PROBES_COUNT];
 }Sim_PositionOnTruck_t;
 
-typedef enum
+typedef enum InternalRobotState_t
 {
 	Standstill,
 	Driving,
 }InternalRobotState_t;
 
-typedef enum
+typedef enum LoggingState_t
 {
 	Suspended,
 	TrueDataLogging,
@@ -455,7 +455,7 @@ static BLE_CallStatus_t TransmitVehCfgData(void)
 	uint32_t BlinkLedSt,TryDetEndLineMFlag;
 
 	/***********************************************************************/
-	EE_ReadVariableF32(EE_NvmAddr_BaseMotorSpdValue_U32, &BaseMSpd);
+	EE_ReadVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, &BaseMSpd);
 	EE_ReadVariableU32(EE_NvmAddr_BlinkLadeState_U32, &BlinkLedSt);
 	EE_ReadVariableU32(EE_NvmAddr_TryDetectEndLine_U32, &TryDetEndLineMFlag);
 
@@ -590,7 +590,7 @@ void Sim_FakeBaseDataReportTask(void)
 		NewestLfDataReport.CurrSensorData.SensorData[10] = 40;
 		NewestLfDataReport.CurrSensorData.SensorData[11] = 40;
 		NewestLfDataReport.CurrSensorData.PosError = 1 * sin( 2 * M_PI * WaveHelper);
-		NewestLfDataReport.CurrPidRegData.PidRegCorrValue = (2 * sin( 2 * M_PI * WaveHelper)) + (0.2 * sin( 2* M_PI * 13 * WaveHelper));;
+		NewestLfDataReport.LinePidRegData.LinePidRegVal = (2 * sin( 2 * M_PI * WaveHelper)) + (0.2 * sin( 2* M_PI * 13 * WaveHelper));;
 
 		WaveHelper = WaveHelper + 0.01;
 		ProbeIterator++;
@@ -772,7 +772,7 @@ static void ReceiveDataHandler(void)
 	    			memcpy(&LedState,  &ReceivedMessageBuff[6], sizeof(uint32_t));
 					memcpy(&TryDetEndLine,  &ReceivedMessageBuff[10], sizeof(uint32_t));
 					__disable_irq();
-					EE_WriteVariableF32(EE_NvmAddr_BaseMotorSpdValue_U32, BaseMotSpd);
+					EE_WriteVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, BaseMotSpd);
 
 					if(LedState == 0 || LedState == 1){
 						EE_WriteVariableU32(EE_NvmAddr_BlinkLadeState_U32, LedState);
@@ -791,11 +791,13 @@ static void ReceiveDataHandler(void)
 				{
 					InternalRobotState = Driving;
 					LoggingState = TrueDataLogging;
+					break;
 				}
 				case BLE_RobotStop:
 				{
 					InternalRobotState = Standstill;
 					LoggingState = Suspended;
+					break;
 				}
 
 				case BLE_SimulatorStart:
@@ -843,6 +845,7 @@ static void ReceiveDataHandler(void)
 
 				default:
 				{
+					BLE_DbgMsgTransmit("BLE RecHandlrErr-why defult?? |FrId:%d",ReceivedMessageId);
 					/*Nothing to do*/
 					break;
 				}
@@ -1017,10 +1020,21 @@ void BLE_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) )
 		if(NvmUpdateCallBacks[i] == 0)
 		{
 			NvmUpdateCallBacks[i] = UpdateInfoCb;
+			break;
 		}
 	}
 }
 
+bool BLE_isExpectedStateDriving(void)
+{
+	bool retVal = false;
+
+	if(InternalRobotState ==  Driving)
+	{
+		retVal = true;
+	}
+	return retVal;
+}
 
 
 void BLE_DbgMsgTransmit(char *DbgString, ...)

@@ -13,12 +13,13 @@ typedef enum
 
 static LedBlinkState_t LedBlinkState;
 
-static UpdateLedState(void)
+static void UpdateLedState(void)
 {
 	uint32_t _tmpLedBlinkState;
 	EE_ReadVariableU32(EE_NvmAddr_BlinkLadeState_U32,&_tmpLedBlinkState);
 	LedBlinkState = (LedBlinkState_t)_tmpLedBlinkState;
 }
+
 
 
 void LED_Init()
