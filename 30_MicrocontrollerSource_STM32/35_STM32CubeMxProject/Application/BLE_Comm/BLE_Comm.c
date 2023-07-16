@@ -323,10 +323,15 @@ static BLE_CallStatus_t TransmitLfBaseDataReport(void)
 
 	/*!!!2+18 = 20!!!!*/
 	memcpy(&DataBuffer[0][2], &NewestLfDataReport.ucTimeStamp,16); /*2bytes left only*//*Timestamp, WhLftSp,WhRhtSp,YawRate*/
-	memcpy(&DataBuffer[1][2], &NewestLfDataReport.CurrMapData.PosX,18); /*PosX, PosY, TravelledDistance, 6BytesOfSensorData*/
-	memcpy(&DataBuffer[2][2], &NewestLfDataReport.CurrSensorData.SensorData[6],18); /*6bytes of sensorData,PosError, 2* LinePosConfidence
-	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 However data are align to 4bytes... i didn't find time to solve it ;)
-	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 I know how to do it (packed structures but i didn't need it ;) */
+	memcpy(&DataBuffer[0][18], &NewestLfDataReport.CurrSensorData.LastLeftLinePosConfidence,2); /*Filled full*/
+
+
+	memcpy(&DataBuffer[1][2], &NewestLfDataReport.CurrMapData.PosX,18); /*PosX, PosY, PosO, TrvD, 2BytesOfSensorData- Full*/
+
+
+	memcpy(&DataBuffer[2][2], &NewestLfDataReport.CurrSensorData.SensorData[2],14); /*10bytes of sensorData,PosError */
+	memcpy(&DataBuffer[2][16], &NewestLfDataReport.LinePidRegData.LinePidRegVal,4); /*4bytes LinePidRegVal - Full*/
+
 
 	if(RB_Transmit_Write(&BleMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLE_MAX_SINGLE_MESSAGE_SIZE) != RB_OK)
 	{
@@ -574,6 +579,7 @@ void Sim_FakeBaseDataReportTask(void)
 		NewestLfDataReport.ucTimeStamp = HAL_GetTick();
 		NewestLfDataReport.CurrMapData.PosX = SimFakeXY_MapDat.X[ProbeIterator];
 		NewestLfDataReport.CurrMapData.PosY = SimFakeXY_MapDat.Y[ProbeIterator];
+		NewestLfDataReport.CurrMapData.PosO = 43+SyncIdIter;
 		NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 100 * WaveHelper));
 		NewestLfDataReport.CurrMapData.WhRhtSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
 		NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.3 * sin( 2* M_PI * 10 * WaveHelper));
@@ -679,7 +685,6 @@ static void ReceiveDataHandler(void)
 					NvmDataUpdatedFlag= true;
 //					BLE_DbgMsgTransmit("Received: ErrW1 %f ErrW2 %f ErrW3 %f ErrW4 %f"
 //							,ErrW1Val,ErrW2Val,ErrW3Val,ErrW4Val);
-
 
 					break;
 				}
@@ -845,8 +850,10 @@ static void ReceiveDataHandler(void)
 
 				default:
 				{
-					BLE_DbgMsgTransmit("BLE RecHandlrErr-why defult?? |FrId:%d",ReceivedMessageId);
-					/*Nothing to do*/
+					if(ReceivedMessageId != 0)
+					{
+						BLE_DbgMsgTransmit("BLE RecHandlrErr-why defult?? |FrId:%d",ReceivedMessageId);
+					}
 					break;
 				}
 

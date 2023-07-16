@@ -150,6 +150,7 @@ static void UpdateEncBleDataReport(void)
 	BLE_MapDataReport.WhRhtSp = EncHandlerDescr.RightWheelSpeed;
 	BLE_MapDataReport.PosX = RobotPosition.X;
 	BLE_MapDataReport.PosY = RobotPosition.Y;
+	BLE_MapDataReport.PosO = RobotPosition.O;
 	BLE_MapDataReport.TravelledDistance = EncHandlerDescr.TakenDistance;
 	// BLE_MapDataReport.YawRate =
 

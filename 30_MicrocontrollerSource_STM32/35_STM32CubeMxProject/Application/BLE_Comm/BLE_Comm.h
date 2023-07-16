@@ -109,8 +109,11 @@ typedef struct
 	float YawRate;
 	float PosX;
 	float PosY;
+    float PosO;
 	float TravelledDistance;
-}BLE_MapDataReport_t; /*Current size 6*4 = 24*/
+}BLE_MapDataReport_t; /*Current size 6*4 = 28*/
+
+
 
 typedef struct
 {
@@ -132,10 +135,9 @@ typedef struct
     BLE_MapDataReport_t CurrMapData;
     BLE_SensorDataReport_t CurrSensorData;
     BLE_PidRegData_t LinePidRegData;
-}BLE_LfDataReport_t; /*51bytes total size + 3*2 = 6|" Max 54bytes + 1!! difficult to explain why(+1) (left 4bytes)   -- stil */
-					/*However data are aligned to 4bytes... i didn't find time to solve it ;)
-					  I know how to do it (very simple - packed structures but i didn't need it ;)
-					  it coused that LinePidRegData is on position 16 not 14*/
+}BLE_LfDataReport_t; /*55bytes total size
+						(3*(Frame+SyncID): 54DataBytes (Left 0 free)*/
+
 
 /////////////////////////////////////////////////////////////////////////////////
 

@@ -62,15 +62,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->PID_KD_text->setValidator(&dblValidator);
     ui->ProbeTimeText->setValidator(&dblValidator);
 
-//    QVariant variant= QColor (255,0,0);
-//    QString colcode = variant.toString();
-//    ui->BLE_RobotStop_Button->setAutoFillBackground(true);
-//    ui->BLE_RobotStop_Button->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-//    variant= QColor (0,255,0);
-//    colcode = variant.toString();
-//    ui->BLE_RobotStart_Button->setAutoFillBackground(true);
-//    ui->BLE_RobotStart_Button->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 
     QPalette pal = ui->BLE_RobotStart_Button->palette();
     pal.setColor(QPalette::Button, QColor(Qt::blue));
