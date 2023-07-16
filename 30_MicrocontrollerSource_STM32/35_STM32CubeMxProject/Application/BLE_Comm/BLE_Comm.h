@@ -217,7 +217,7 @@ void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
 * by BLE communication module
 * CallBack function will be called always if NvM data will be updated
 */
-void BLE_RegisterNvMdataUpdateInfoCallBack(void *UpdateInfoCb(void) );
+void BLE_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
 
 /* brief BLE_DbgMsgTransmit
 * A simple function to send debug message through BLE (to QT Application)

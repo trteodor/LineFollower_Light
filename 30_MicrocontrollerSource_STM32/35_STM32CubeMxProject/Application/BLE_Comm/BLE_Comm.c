@@ -98,7 +98,7 @@ typedef enum
 
 #define BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT 10
 
-static (*NvmUpdateCallBacks[BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT])(void) = {0};
+static void (*NvmUpdateCallBacks[BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT])(void) = {0};
 
 static LoggingState_t LoggingState = Suspended;
 static InternalRobotState_t InternalRobotState = Standstill;
@@ -835,6 +835,9 @@ static void ReceiveDataHandler(void)
 
 					BLE_DbgMsgTransmit("Received NewDeviceName: %s", &ReceivedMessageBuff[2]);
 
+					EE_WriteVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32, true);
+
+
 					break;
 				}
 
@@ -947,36 +950,44 @@ static void TransmitDataHandler(void)
 
 void BLE_Init(void)
 {
-	HAL_Delay(200); /* While startup after power on
-	 * and after experimental test it was observed that short delay is required to stabilize BLE module
-	 * It is required for AT Commands like AT+NAME...
-	 * */
+	uint32_t DevNameUpdateFlag = 0;
+	EE_ReadVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32,&DevNameUpdateFlag);
 
-	char DevName[16];
-	char FakeRecBuf[20];
-	char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
-	uint8_t DevNameSize =7;
-
-	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart1_U32_, (uint32_t *)&DevName[0]);
-	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart2_U32_, (uint32_t *)&DevName[4]);
-	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart3_U32_, (uint32_t *)&DevName[8]);
-	EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart4_U32_, (uint32_t *)&DevName[12]);
-
-	for(int i=0; i<16; i++)
+	if(true == DevNameUpdateFlag)
 	{
-		if(DevName[i] == '\0'){
-			break;
+		HAL_Delay(200); /* While startup after power on
+		 * and after experimental test it was observed that short delay is required to stabilize BLE module
+		 * It is required for AT Commands like AT+NAME...
+		 * */
+
+		char DevName[16];
+		char FakeRecBuf[20];
+		char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
+		uint8_t DevNameSize =7;
+
+		EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart1_U32_, (uint32_t *)&DevName[0]);
+		EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart2_U32_, (uint32_t *)&DevName[4]);
+		EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart3_U32_, (uint32_t *)&DevName[8]);
+		EE_ReadVariableU32(EE_NvmAddr_BleDevNamePart4_U32_, (uint32_t *)&DevName[12]);
+
+		for(int i=0; i<16; i++)
+		{
+			if(DevName[i] == '\0'){
+				break;
+			}
+			DevNameSize++;
 		}
-		DevNameSize++;
-	}
 
-	for(int i=7; i<(DevNameSize+7); i++){
-		DevNameFullCommandBuffor[i] = DevName[i-7];
-	}
+		for(int i=7; i<(DevNameSize+7); i++){
+			DevNameFullCommandBuffor[i] = DevName[i-7];
+		}
 
-	HAL_UART_Transmit_DMA(&huart2, (uint8_t *)DevNameFullCommandBuffor, DevNameSize);
-	HAL_UART_Receive(&huart2, (uint8_t *)FakeRecBuf, 20,100);
-	//	HAL_Delay(50); /*Short delay to ignore answer :) */
+		HAL_UART_Transmit_DMA(&huart2, (uint8_t *)DevNameFullCommandBuffor, DevNameSize);
+		HAL_UART_Receive(&huart2, (uint8_t *)FakeRecBuf, 20,100);
+		//	HAL_Delay(50); /*Short delay to ignore answer :) */
+
+		EE_ReadVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32,false);
+	}
 
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BleMainReceiveMessagesTab[0][0], BLE_MIN_SINGLE_MESSAGE_SIZE);
 	Sim_Create_XY_FakeMap();
@@ -999,7 +1010,7 @@ void BLE_ReportSensorData(BLE_SensorDataReport_t *SensorData)
 	NewestLfDataReport.CurrSensorData = *SensorData;
 }
 
-void BLE_RegisterNvMdataUpdateInfoCallBack(void *UpdateInfoCb(void) )
+void BLE_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) )
 {
 	for(int i=0; i<BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT; i++)
 	{
