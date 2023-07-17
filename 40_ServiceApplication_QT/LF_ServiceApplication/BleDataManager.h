@@ -11,6 +11,7 @@ class BleDataManager : public QObject
     Q_OBJECT
 public:
     BleDataManager();
+    ~BleDataManager();
 
     QThread BleDatMngr_Thread;
 

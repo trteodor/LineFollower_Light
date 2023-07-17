@@ -11,6 +11,10 @@ BleDataManager::BleDataManager()
     BleDatMngr_Thread.start();
 }
 
+BleDataManager::~BleDataManager()
+{
+    BleDatMngr_Thread.terminate();
+}
 
 /*****************************************/
 /*Tools functions start for Main Window and BLE*/

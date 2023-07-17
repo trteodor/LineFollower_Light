@@ -52,9 +52,7 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
 
     Graph1 = UIplotP->addGraph();
 
-    Graph1->setScatterStyle(QCPScatterStyle::ssDot);
     Graph1->setLineStyle(LineStyle);
-
     if(LineStyle == QCPGraph::LineStyle::lsNone)
     {
         Graph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::white), 5));
@@ -63,8 +61,30 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
     {
         Graph1->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::black, 1.5), QBrush(Qt::white), 3));
     }
+    Graph1->setPen(QPen(QColor(180, 180, 180), 2));
 
-    Graph1->setPen(QPen(QColor(120, 120, 120), 2));
+
+    /***********************************/
+    /*Draw vertical line*/
+        Graph2 = UIplotP->addGraph();
+        QPen redDotPen;
+        redDotPen.setStyle(Qt::DotLine);
+        redDotPen.setColor(QColor(255, 255, 255, 180));
+        redDotPen.setWidthF(1.5);
+        Graph2->setPen(redDotPen);
+
+        Graph2->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
+
+//        //Graph2->set
+//        QVector<double>  Test_X;
+//        QVector<double>  Test_Y;
+//        Test_X.append( ((float)3));
+//        Test_Y.append( ((float)0));
+//        Test_X.append( ((float)3));
+//        Test_Y.append( ((float)7));
+//        Graph2->setData(Test_X,Test_Y);
+    /***********************************/
+
 
     UIplotP->xAxis->setBasePen(QPen(Qt::white, 1));
     UIplotP->yAxis->setBasePen(QPen(Qt::white, 1));
@@ -85,6 +105,8 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
     UIplotP->xAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
     UIplotP->yAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
 
+
+
     QLinearGradient plotGradient;
     plotGradient.setStart(0, 0);
     plotGradient.setFinalStop(0, 350);
@@ -99,16 +121,10 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
     UIplotP->axisRect()->setBackground(axisRectGradient);
 
 
-
     UIplotP->graph()->setName(QString("New graph %1").arg(UIplotP->graphCount()-1));
-    //    UIplotP->graph()->setLineStyle((QCPGraph::LineStyle)(std::rand()%5+1));
-    //    if (std::rand()%100 > 50)
-    //        UIplotP->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(std::rand()%14+1)));
-    QPen graphPen;
-    graphPen.setColor(QColor(std::rand()%245+10, std::rand()%245+10, std::rand()%245+10));
-    graphPen.setWidthF(std::rand()/(double)RAND_MAX*2+1);
-    UIplotP->graph()->setPen(graphPen);
+
     UIplotP->replot();
+    UIplotP->update();
 
 }
 
@@ -361,5 +377,21 @@ void GenericLfQCP::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dat
     // since we know we only have QCPGraphs in the plot, we can immediately access interface1D()
     // usually it's better to first check whether interface1D() returns non-zero, and only then use it.
     double dataValue = plottable->interface1D()->dataMainValue(dataIndex);
+    double dataValue2 = plottable->interface1D()->dataMainKey(dataIndex);
     QString message = QString("Clicked on graph '%1' at data point #%2 with value %3.").arg(plottable->name()).arg(dataIndex).arg(dataValue);
+
+    QString message2 = QString("DatVal2: %1").arg(dataValue2) ;
+
+    qDebug() << message2;
+
+    //Graph2->set
+    QVector<double>  Test_X;
+    QVector<double>  Test_Y;
+    Test_X.append( ((float)dataValue2));
+    Test_Y.append( ((float)-5000.0F));
+    Test_X.append( ((float)dataValue2));
+    Test_Y.append( ((float)5000.0F ));
+    Graph2->setData(Test_X,Test_Y);
+
+    qDebug() << message;
 }
