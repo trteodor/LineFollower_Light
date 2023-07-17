@@ -424,13 +424,14 @@ static BLE_CallStatus_t TransmitPidData(void)
 
 	BLE_CallStatus_t retval = BLE_Ok;
 
-	float PidKp,PidKi,PidKd,ProbeT;
+	float PidKp,PidKi,PidKd;
+	uint32_t ProbeT;
 
 	/***********************************************************************/
 	EE_ReadVariableF32(EE_NvmAddr_PidKp_F32, &PidKp);
 	EE_ReadVariableF32(EE_NvmAddr_PidKi_F32, &PidKi);
 	EE_ReadVariableF32(EE_NvmAddr_PidKd_F32, &PidKd);
-	EE_ReadVariableF32(EE_NvmAddr_ProbeTime_U32, &ProbeT);
+	EE_ReadVariableU32(EE_NvmAddr_ProbeTime_U32, &ProbeT);
 
 	DataBuffer[0] = BLE_NvM_LinePidRegData;
 	DataBuffer[1] = _SyncID;
@@ -744,7 +745,8 @@ static void ReceiveDataHandler(void)
 
 				case BLE_NvM_LinePidRegData:
 				{
-					float PidKp  = 0.0F,PidKi = 0.0F, PidKd = 0.0F,ProbeTime  = 0.0F;
+					float PidKp  = 0.0F,PidKi = 0.0F, PidKd = 0.0F;
+					uint32_t ProbeTime  = 0.0F;
 
 	    			memcpy(&PidKp,  &ReceivedMessageBuff[2], sizeof(float));
 	    			memcpy(&PidKi,  &ReceivedMessageBuff[6], sizeof(float));
@@ -756,7 +758,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_PidKp_F32, PidKp);
 					EE_WriteVariableF32(EE_NvmAddr_PidKi_F32, PidKi);
 					EE_WriteVariableF32(EE_NvmAddr_PidKd_F32, PidKd);
-					EE_WriteVariableF32(EE_NvmAddr_ProbeTime_U32, ProbeTime);
+					EE_WriteVariableU32(EE_NvmAddr_ProbeTime_U32, ProbeTime);
 					NvmDataUpdatedFlag= true;
 					break;
 				}
@@ -913,16 +915,16 @@ static void TransmitDataHandler(void)
 	TransmitWindowActiv = true;
 	(void)BLE_DataTransmitWindow;
 /*Fajnie wyszlo na 200 wobec 60*/
-	if(HAL_GetTick() - BLE_DataTransmitWindow > 200)
-	{
-		BLE_DataTransmitWindow = HAL_GetTick();
-		TransmitWindowActiv = true;
-	}
-
-	if(HAL_GetTick() - BLE_DataTransmitWindow > 60)
-	{
-		TransmitWindowActiv = false;
-	}
+//	if(HAL_GetTick() - BLE_DataTransmitWindow > 200)
+//	{
+//		BLE_DataTransmitWindow = HAL_GetTick();
+//		TransmitWindowActiv = true;
+//	}
+//
+//	if(HAL_GetTick() - BLE_DataTransmitWindow > 60)
+//	{
+//		TransmitWindowActiv = false;
+//	}
 
 	if( HAL_UART_STATE_READY == huart2.gState && (true == TransmitWindowActiv))
 	{

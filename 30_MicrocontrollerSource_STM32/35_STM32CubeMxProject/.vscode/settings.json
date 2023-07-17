@@ -75,7 +75,8 @@
         "i2c.h": "c",
         "lf_mainrunnable.h": "c",
         "encodershandler.h": "c",
-        "tim.h": "c"
+        "tim.h": "c",
+        "lf_appconfig.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

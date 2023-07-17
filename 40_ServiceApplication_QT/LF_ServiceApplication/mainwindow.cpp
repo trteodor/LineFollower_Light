@@ -155,7 +155,7 @@ void MainWindow::MainWin_UpdateNvmErrorWeigthData(float ErrW1, float ErrW2, floa
 
 }
 
-void MainWindow::MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, float ProbeTime)
+void MainWindow::MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_t ProbeTime)
 {
     NvM_PID_Kp = Kp;
     NvM_PID_Ki = Ki;
@@ -213,6 +213,7 @@ void MainWindow::BLE_InitializeQTConnections(void)
         SIGNAL(BleDatMngrSignal_PlotSpdUpdate() )
         ,this
         ,SLOT(MainWinPlot_PlotSpdReplot() ));
+
 
     connect(
         &BleInputDataProcessingWrapper,
@@ -307,9 +308,9 @@ void MainWindow::BLE_InitializeQTConnections(void)
 
     connect(
         &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdatePidData(float,float,float,float) )
+        SIGNAL(BleDatMngrSignal_UpdatePidData(float,float,float,uint32_t) )
         ,this
-        ,SLOT(MainWin_UpdateNvM_PidData(float,float,float,float) ) );
+        ,SLOT(MainWin_UpdateNvM_PidData(float,float,float,uint32_t) ) );
 }
 
 
@@ -469,7 +470,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
 
 
 
-    if(S0 > 60)
+    if(S0 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -490,7 +491,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S1_label->setFont(f);
     }
 
-    if(S1 > 60)
+    if(S1 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -511,7 +512,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S2_label->setFont(f);
     }
 
-    if(S2 > 60)
+    if(S2 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -532,7 +533,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S3_label->setFont(f);
     }
 
-    if(S3 > 60)
+    if(S3 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -553,7 +554,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S4_label->setFont(f);
     }
 
-    if(S4 > 60)
+    if(S4 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -575,7 +576,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
     }
 
 
-    if(S5 > 60)
+    if(S5 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -597,7 +598,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
     }
 
 
-    if(S6 > 60)
+    if(S6 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -618,7 +619,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S7_label->setFont(f);
     }
 
-    if(S7 > 60)
+    if(S7 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -640,7 +641,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
     }
 
 
-    if(S8 > 60)
+    if(S8 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -662,7 +663,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
     }
 
 
-    if(S9 > 60)
+    if(S9 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -683,7 +684,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S10_label->setFont(f);
     }
 
-    if(S10 > 60)
+    if(S10 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -704,7 +705,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
         ui->S11_label->setFont(f);
     }
 
-    if(S11 > 60)
+    if(S11 > 170)
     {
         QVariant variant= QColor (255,120,120);
         QString colcode = variant.toString();
@@ -1076,7 +1077,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     QString PID_KDtext = ui->PID_KD_text->text();
     float PID_KDfloat = PID_KDtext.toFloat();
     QString ProbeTimeText = ui->ProbeTimeText->text();
-    float ProbeTimeFloat = ProbeTimeText.toFloat();
+    uint32_t ProbeTimeInt = ProbeTimeText.toInt();
 
 ////    qDebug() << "PID_KDfloat" << PID_KDfloat << "ProbeTimeFloat" << ProbeTimeFloat;
 
@@ -1086,7 +1087,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     std::memcpy(&command[2],  &PID_KPfloat, sizeof(float));
     std::memcpy(&command[6],  &PID_KIfloat, sizeof(float));
     std::memcpy(&command[10], &PID_KDfloat, sizeof(float));
-    std::memcpy(&command[14], &ProbeTimeFloat, sizeof(float));
+    std::memcpy(&command[14], &ProbeTimeInt, sizeof(float));
     Helper = QByteArray::fromRawData(command,18);
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
@@ -1139,7 +1140,7 @@ void MainWindow::NvM_PidDatahUpdateDelayTimerTimeout()
         ui->PID_KP_text->setText(QString::number(NvM_PID_Kp,'f',2) );
         ui->PID_KI_text->setText(QString::number(NvM_PID_Ki,'f',2) );
         ui->PID_KD_text->setText(QString::number(NvM_PID_Kd,'f',2) );
-        ui->ProbeTimeText->setText(QString::number(NvM_ProbeTim,'f',2) );
+        ui->ProbeTimeText->setText(QString::number(NvM_ProbeTim,10) );
 }
 
 void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()

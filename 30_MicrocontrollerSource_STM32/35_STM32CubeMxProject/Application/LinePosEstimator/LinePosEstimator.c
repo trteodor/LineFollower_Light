@@ -109,129 +109,125 @@ static void BleUpdateNvmDataCallBack(void)
 }
 /**********************************************************************/
 
+ /*
+ * +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
+ * | S1        | S2     | S3     | S4     | S5     | S6   | S7   | S8     | S9     | S10    | S11    | S12       |
+ * | SideL_Max | SideL4 | SideL3 | SideL2 | SideL1 | Mid1 | Mid2 | SideR1 | SideR2 | SideR3 | SideR4 | SideR_Max |
+ * +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
+ */
 static float EstimatePositionError(void)
 {
-	if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER1*/
-			&& Mid2 > LINE_DETECTED_ADC_VALUE
+
+	/************************************************/
+	if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER2*/
 				&& SideL1 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[0];
+		return LineEstimator.ErrorWeightValueTable[1];
 	}
 
-	if( Mid1 > LINE_DETECTED_ADC_VALUE /*+ER1*/
-			&& Mid2 > LINE_DETECTED_ADC_VALUE
+	if(  Mid2 > LINE_DETECTED_ADC_VALUE/*+ER2*/
 				&& SideR1 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[0];
+		return -LineEstimator.ErrorWeightValueTable[1];
 	}
+	/************************************************/
 
+	/************************************************/
 	if( Mid1 > LINE_DETECTED_ADC_VALUE /*Error not detected*/
 			&& Mid2 > LINE_DETECTED_ADC_VALUE){
 		return LineEstimator.PositionErrorValue=0;
 	}
+	/************************************************/
 
-	if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER3*/
-			&& SideR1 > LINE_DETECTED_ADC_VALUE
-				&& Mid2 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[2];
+	if( Mid2 > LINE_DETECTED_ADC_VALUE /*+ER1*/){
+		return -LineEstimator.ErrorWeightValueTable[0];
 	}
-	if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER3*/
-			&& SideL1 > LINE_DETECTED_ADC_VALUE
-				&& Mid1 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[2];
+	if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER1*/){
+		return LineEstimator.ErrorWeightValueTable[0];
 	}
 
-	if( SideR1 > LINE_DETECTED_ADC_VALUE /*+ER2*/
-			&& Mid2 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[1];
-	}
 
-	if( SideL1 > LINE_DETECTED_ADC_VALUE /*-ER2*/
-			&& Mid1 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[1];
-	}
-
-	if( SideR1 > LINE_DETECTED_ADC_VALUE /*-ER5*/
-			&& SideR2 > LINE_DETECTED_ADC_VALUE
-				&& SideR3 > LINE_DETECTED_ADC_VALUE ){
-		return -LineEstimator.ErrorWeightValueTable[4];
-	}
-
-	if( SideL1 > LINE_DETECTED_ADC_VALUE /*+ER5*/
-			&& SideL2 > LINE_DETECTED_ADC_VALUE
-				&& SideL3 > LINE_DETECTED_ADC_VALUE ){
-		return LineEstimator.ErrorWeightValueTable[4];
-	}
-
-	if( SideR1 > LINE_DETECTED_ADC_VALUE /*-ER4*/
-			&& SideR2 > LINE_DETECTED_ADC_VALUE){
+	if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER4*/
+			&& SideR1 > LINE_DETECTED_ADC_VALUE){
 		return -LineEstimator.ErrorWeightValueTable[3];
 	}
-
-	if( SideL1 > LINE_DETECTED_ADC_VALUE /*+ER4*/
-			&& SideL2 > LINE_DETECTED_ADC_VALUE){
+	if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER4*/
+			&& SideL1 > LINE_DETECTED_ADC_VALUE){
 		return LineEstimator.ErrorWeightValueTable[3];
 	}
 
-	if( SideR2 > LINE_DETECTED_ADC_VALUE /*-ER7*/
-			&& SideR3 > LINE_DETECTED_ADC_VALUE
-				&& SideR4 > LINE_DETECTED_ADC_VALUE ){
-		return -LineEstimator.ErrorWeightValueTable[6];
+	/************************************************/
+	if( SideR1 > LINE_DETECTED_ADC_VALUE /*+ER3*/){
+		return -LineEstimator.ErrorWeightValueTable[2];
 	}
-
-	if( SideL2> LINE_DETECTED_ADC_VALUE /*+ER7*/
-			&& SideL3 > LINE_DETECTED_ADC_VALUE
-				&& SideL4 > LINE_DETECTED_ADC_VALUE ){
-		return LineEstimator.ErrorWeightValueTable[6];
+	if( SideL1 > LINE_DETECTED_ADC_VALUE /*-ER3*/){
+		return LineEstimator.ErrorWeightValueTable[2];
 	}
+	/************************************************/
 
-	if( SideR2 > LINE_DETECTED_ADC_VALUE /*-ER6*/
-			&& SideR3 > LINE_DETECTED_ADC_VALUE){
+
+	if( SideR3 > LINE_DETECTED_ADC_VALUE /*+ER6*/
+			&& SideR2 > LINE_DETECTED_ADC_VALUE){
 		return -LineEstimator.ErrorWeightValueTable[5];
 	}
-	if( SideL2 > LINE_DETECTED_ADC_VALUE /*+ER6*/
-			&& SideL3 > LINE_DETECTED_ADC_VALUE)
-	{
+	if( SideL3 > LINE_DETECTED_ADC_VALUE /*-ER6*/
+			&& SideL2 > LINE_DETECTED_ADC_VALUE){
 		return LineEstimator.ErrorWeightValueTable[5];
 	}
 
-	if( SideR3 > LINE_DETECTED_ADC_VALUE /*-ER9*/
-			&& SideR4 > LINE_DETECTED_ADC_VALUE
-				&& SideR_Max > LINE_DETECTED_ADC_VALUE ){
-		return -LineEstimator.ErrorWeightValueTable[8];
+	if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER5*/){
+		return -LineEstimator.ErrorWeightValueTable[4];
+	}
+	if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER5*/){
+		return LineEstimator.ErrorWeightValueTable[4];
 	}
 
-	if( SideL3> LINE_DETECTED_ADC_VALUE /*+ER9*/
-			&& SideL4 > LINE_DETECTED_ADC_VALUE
-				&& SideL_Max  > LINE_DETECTED_ADC_VALUE ){
-		return LineEstimator.ErrorWeightValueTable[8];
-	}
 
-	if( SideR3 > LINE_DETECTED_ADC_VALUE /*-ER8*/
-			&& SideR4 > LINE_DETECTED_ADC_VALUE){
+	if( SideR4 > LINE_DETECTED_ADC_VALUE /*+ER8*/
+			&& SideR3 > LINE_DETECTED_ADC_VALUE){
 		return -LineEstimator.ErrorWeightValueTable[7];
 	}
-
-	if( SideL3 > LINE_DETECTED_ADC_VALUE /*+ER8*/
-			&& SideL4 > LINE_DETECTED_ADC_VALUE){
+	if( SideL4 > LINE_DETECTED_ADC_VALUE /*-ER8*/
+			&& SideL3 > LINE_DETECTED_ADC_VALUE){
 		return LineEstimator.ErrorWeightValueTable[7];
 	}
 
-	if( SideR4 > LINE_DETECTED_ADC_VALUE /*-ER10*/
-			&& SideR_Max > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[9];
+
+	if( SideR3 > LINE_DETECTED_ADC_VALUE /*+ER7*/){
+		return -LineEstimator.ErrorWeightValueTable[6];
+	}
+	if( SideL3 > LINE_DETECTED_ADC_VALUE /*-ER7*/){
+		return LineEstimator.ErrorWeightValueTable[6];
 	}
 
-	if( SideL4 > LINE_DETECTED_ADC_VALUE /*+ER10*/
-			&& SideL_Max > LINE_DETECTED_ADC_VALUE){
+
+	if( SideR_Max > LINE_DETECTED_ADC_VALUE /*+ER10*/
+			&& SideR4 > LINE_DETECTED_ADC_VALUE){
+		return -LineEstimator.ErrorWeightValueTable[9];
+	}
+	if( SideL_Max > LINE_DETECTED_ADC_VALUE /*-ER10*/
+			&& SideL4 > LINE_DETECTED_ADC_VALUE){
 		return LineEstimator.ErrorWeightValueTable[9];
 	}
 
-	if( SideR_Max > LINE_DETECTED_ADC_VALUE ) /*-ER11*/{
-		return -LineEstimator.ErrorWeightValueTable[10];
+	if( SideR4 > LINE_DETECTED_ADC_VALUE /*+ER9*/){
+		return -LineEstimator.ErrorWeightValueTable[8];
+	}
+	if( SideL4 > LINE_DETECTED_ADC_VALUE /*-ER9*/){
+		return LineEstimator.ErrorWeightValueTable[8];
 	}
 
-	if( SideL_Max > LINE_DETECTED_ADC_VALUE ) /*+ER11*/{
+	if( SideR_Max > LINE_DETECTED_ADC_VALUE /*+ER11*/){
+		return -LineEstimator.ErrorWeightValueTable[10];
+	}
+	if( SideL_Max > LINE_DETECTED_ADC_VALUE /*-ER11*/){
 		return LineEstimator.ErrorWeightValueTable[10];
 	}
+
+	/*
+	* +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
+	* | S1        | S2     | S3     | S4     | S5     | S6   | S7   | S8     | S9     | S10    | S11    | S12       |
+	* | SideL_Max | SideL4 | SideL3 | SideL2 | SideL1 | Mid1 | Mid2 | SideR1 | SideR2 | SideR3 | SideR4 | SideR_Max |
+	* +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
+	*/
 
 	/*Line not detected */
 	return LINE_NOT_DETECTED_MAGIC_NUMBER;

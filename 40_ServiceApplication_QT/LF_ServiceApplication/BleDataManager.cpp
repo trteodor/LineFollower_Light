@@ -431,7 +431,7 @@ void BleDataManager::BleDatMngr_PidDataHandler(const QByteArray &value,BleDataMa
     float KpVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
     float KiVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
     float KdVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,10));
-    float ProbeTim = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,14));
+    uint32_t ProbeTim = ConvToUint32(value,14);
 
     emit BleDatMngrSignal_UpdatePidData(KpVal,KiVal,KdVal,ProbeTim);
 }

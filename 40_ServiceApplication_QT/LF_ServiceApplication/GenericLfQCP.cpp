@@ -157,8 +157,8 @@ void GenericLfQCP::LfGraph_UpdateReplot(void)
     Graph1->setData(DataVector_X,DataVector_Y);
 
     UIplotP->xAxis->setRange
-        ( *std::min_element(DataVector_X.begin(),DataVector_X.end() ) -1,
-         *std::max_element(DataVector_X.begin(),DataVector_X.end() ) +1);
+        ( *std::min_element(DataVector_X.end() - 300,DataVector_X.end() ) -1,
+         *std::max_element(DataVector_X.end() - 300,DataVector_X.end() ) +1);
 
     UIplotP->yAxis->setRange
         (  *std::min_element(DataVector_Y.begin() ,DataVector_Y.end() ) -1,

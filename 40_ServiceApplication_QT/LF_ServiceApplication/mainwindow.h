@@ -50,7 +50,7 @@ private slots:
                                         float ErrW7,float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
 
-    void MainWin_UpdateNvM_PidData(float Kp,float Ki,float Kd,float ProbeTime);
+    void MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_t ProbeTime);
     void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
 
     void MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
@@ -113,7 +113,7 @@ private:
     float  NvM_PID_Kp;
     float  NvM_PID_Ki;
     float  NvM_PID_Kd;
-    float  NvM_ProbeTim;
+    uint32_t  NvM_ProbeTim;
 
     float  NvM_ExpectedAvSpeed;
     uint32_t  NvM_BlinkLedSt;

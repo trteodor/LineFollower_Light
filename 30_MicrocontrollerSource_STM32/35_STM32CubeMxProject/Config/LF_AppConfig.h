@@ -9,15 +9,14 @@
 #define EncodersProbeTime 200 //20ms (for greater accuracy I use a timer with a resolution of 100us)
 #define EncodersProbeTimeInSeconds 0.02 //same value as above but as float
 
+#define WheelBase 0.147
+
 //(For PID_Module)
 //Experimentally Designated
 //Converting PWM value to speed value
 //		 RealMotorSpeed = ax +b
 #define A_FactorMotor 220
 #define B_FactorMotor 50
-
-//BLE_Comm
-#define TimeBeetweenNextDataPart 10
 
 //For LedModule
 #define LED_TOGGLE_TIME 500

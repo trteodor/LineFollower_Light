@@ -74,7 +74,7 @@ PositionStruct_t RobotPosition = {0};
 static void EsimtateRobotOrientationAndPosition(void)
 {
 	RobotPosition.O=RobotPosition.prO +
-			( (1/0.147) *(EncHandlerDescr.Distance_LeftWheel - EncHandlerDescr.Distance_RightWheel) );
+			( (1/WheelBase) *(EncHandlerDescr.Distance_LeftWheel - EncHandlerDescr.Distance_RightWheel) );
 
 	RobotPosition.X=RobotPosition.prX+(  0.5*cos(RobotPosition.prO) *
 			( EncHandlerDescr.Distance_LeftWheel + EncHandlerDescr.Distance_RightWheel ) );
@@ -145,7 +145,6 @@ static void UpdateEncBleDataReport(void)
 
 	BLE_MapDataReport_t BLE_MapDataReport = {0};
 
-	/*TODO: Debug mode!!!*/
 	BLE_MapDataReport.WhLftSp = EncHandlerDescr.LeftWheelSpeed;
 	BLE_MapDataReport.WhRhtSp = EncHandlerDescr.RightWheelSpeed;
 	BLE_MapDataReport.PosX = RobotPosition.X;
