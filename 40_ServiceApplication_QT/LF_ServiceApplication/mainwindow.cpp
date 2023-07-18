@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QtQuick/QQuickView>
+#include <QtQuick/QQuickItem>
+#include <QUrl>
+
 /**************************************************************/
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&NvM_PidDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_PidDatahUpdateDelayTimerTimeout()));
     connect(&NvM_VehCfghUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_VehCfgDataUpdateDelayTimerTimeout()));
 
+
+    addJoyStick(ui->RobotMoverXYGridLayout);
 
     /*Debug Table configure*/
     ui->DebugDataTable->setRowCount(1);
@@ -88,7 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    settings.setValue("CurrDeviceName", "Franek");
     QVariant CurrDevName = settings.value("CurrDeviceName");
     QString NewLineEditText = CurrDevName.toString();
-    qDebug() << NewLineEditText ;
+//    qDebug() << NewLineEditText ;
 
     ui->BLE_AutoConnDevNameL->setText(NewLineEditText);
 
@@ -116,6 +122,55 @@ MainWindow::~MainWindow()
     delete ui;
 
     qDebug("Reached end");
+}
+
+
+
+void MainWindow::addJoyStick(QLayout *layout_, JoyType type)
+{
+    QQuickView *view = new QQuickView();
+    /* NB: We load the QML from a .qrc file becuase the Qt build step
+     * that packages the final .app on Mac forgets to add the QML
+     * if you reference it directly
+     */
+    view->setSource(QUrl("qrc:/res/virtual_joystick.qml"));
+
+    /* Enable transparent background on the QQuickView
+     * Note that this currently does not work on Windows
+     */
+#ifndef _WIN32
+    view->setClearBeforeRendering(true);
+    view->setColor(QColor(Qt::transparent));
+#endif
+
+    // Attach to the 'mouse moved' signal
+    auto *root = view->rootObject();
+    if (type == HorizontalOnly)
+        root->setProperty("horizontalOnly", true);
+    else if (type == VerticalOnly)
+        root->setProperty("verticalOnly", true);
+    connect(
+        root,
+        SIGNAL(joystick_moved(double, double)),
+        this,
+        SLOT(joystick_moved(double, double))
+        );
+
+    // Create a container widget for the QQuickView
+    QWidget *container = QWidget::createWindowContainer(view, this);
+    container->setMinimumSize(160, 160);
+    container->setMaximumSize(160, 160);
+    container->setFocusPolicy(Qt::TabFocus);
+    layout_->addWidget(container);
+}
+
+/**
+ * @brief MainWindow::mouse_moved Called when the virtual joystick is moved
+ * @param x Mouse x position
+ * @param y Mouse y position
+ */
+void MainWindow::joystick_moved(double x, double y) {
+    qDebug() << x << ", " << y;
 }
 
 
@@ -171,6 +226,8 @@ void MainWindow::MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd, uint32_t Blin
     NvM_ExpectedAvSpeed = ExpectedAvSpd;
     NvM_BlinkLedSt = BlinkLedSt;
     NvM_TryDetEndLinSt = TryDetEndLin;
+
+
 
     NvM_VehCfghUpdateDelayTimer.setSingleShot(true);
     NvM_VehCfghUpdateDelayTimer.start(100);
@@ -302,9 +359,9 @@ void MainWindow::BLE_InitializeQTConnections(void)
 
     connect(
         &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdateVehCfgData(float,uint32_t, uint32_t) )
+        SIGNAL(BleDatMngrSignal_UpdateVehCfgData(float,uint32_t,uint32_t) )
         ,this
-        ,SLOT(MainWin_UpdateNvM_VehCfgData(float,uint32_t, uint32_t) ) );
+        ,SLOT(MainWin_UpdateNvM_VehCfgData(float, uint32_t, uint32_t) ) );
 
     connect(
         &BleInputDataProcessingWrapper,
@@ -441,290 +498,301 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
                                             float PosError)
 {
 
-    ui->S1_label->setText(QString::number(S0));
-    ui->S2_label->setText(QString::number(S1));
-    ui->S3_label->setText(QString::number(S2));
-    ui->S4_label->setText(QString::number(S3));
-    ui->S5_label->setText(QString::number(S4));
-    ui->S6_label->setText(QString::number(S5));
-    ui->S7_label->setText(QString::number(S6));
-    ui->S8_label->setText(QString::number(S7));
-    ui->S9_label->setText(QString::number(S8));
-    ui->S10_label->setText(QString::number(S9));
-    ui->S11_label->setText(QString::number(S10));
-    ui->S12_label->setText(QString::number(S11));
 
-    ui->ConfL_Right->setText(QString::number(RightLinePosConfif) );
-    ui->ConfL_Left->setText(QString::number(LeftLinePosConfif) );
-    ui->PositionErrorLabel->setText(QString::number(PosError) );
+        QElapsedTimer timerIndView;
+        timerIndView.start();
 
-
-
-    QVariant variant= QColor (255,0,0);
-    QString colcode = variant.toString();
-    ui->PositionErrorLabel->setAutoFillBackground(true);
-    ui->PositionErrorLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-    QFont f( "Arial", 18, QFont::Bold);
-    ui->PositionErrorLabel->setFont(f);
-
-
-
-    if(S0 > 170)
+    if(ui->IndicatorVieEnableChBox->isChecked() )
     {
-        QVariant variant= QColor (255,120,120);
+
+        ui->S1_label->setText(QString::number(S0));
+        ui->S2_label->setText(QString::number(S1));
+        ui->S3_label->setText(QString::number(S2));
+        ui->S4_label->setText(QString::number(S3));
+        ui->S5_label->setText(QString::number(S4));
+        ui->S6_label->setText(QString::number(S5));
+        ui->S7_label->setText(QString::number(S6));
+        ui->S8_label->setText(QString::number(S7));
+        ui->S9_label->setText(QString::number(S8));
+        ui->S10_label->setText(QString::number(S9));
+        ui->S11_label->setText(QString::number(S10));
+        ui->S12_label->setText(QString::number(S11));
+
+        ui->ConfL_Right->setText(QString::number(RightLinePosConfif) );
+        ui->ConfL_Left->setText(QString::number(LeftLinePosConfif) );
+        ui->PositionErrorLabel->setText(QString::number(PosError) );
+
+
+
+        QVariant variant= QColor (255,0,0);
         QString colcode = variant.toString();
-        ui->S1_label->setAutoFillBackground(true);
-        ui->S1_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+        ui->PositionErrorLabel->setAutoFillBackground(true);
+        ui->PositionErrorLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S1_label->setFont(f);
+        QFont f( "Arial", 18, QFont::Bold);
+        ui->PositionErrorLabel->setFont(f);
+
+
+
+        if(S0 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S1_label->setAutoFillBackground(true);
+            ui->S1_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S1_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S1_label->setAutoFillBackground(true);
+            ui->S1_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S1_label->setFont(f);
+        }
+
+        if(S1 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S2_label->setAutoFillBackground(true);
+            ui->S2_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S2_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S2_label->setAutoFillBackground(true);
+            ui->S2_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S2_label->setFont(f);
+        }
+
+        if(S2 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S3_label->setAutoFillBackground(true);
+            ui->S3_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S3_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S3_label->setAutoFillBackground(true);
+            ui->S3_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S3_label->setFont(f);
+        }
+
+        if(S3 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S4_label->setAutoFillBackground(true);
+            ui->S4_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S4_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S4_label->setAutoFillBackground(true);
+            ui->S4_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S4_label->setFont(f);
+        }
+
+        if(S4 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S5_label->setAutoFillBackground(true);
+            ui->S5_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S5_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S5_label->setAutoFillBackground(true);
+            ui->S5_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S5_label->setFont(f);
+        }
+
+
+        if(S5 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S6_label->setAutoFillBackground(true);
+            ui->S6_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S6_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S6_label->setAutoFillBackground(true);
+            ui->S6_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S6_label->setFont(f);
+        }
+
+
+        if(S6 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S7_label->setAutoFillBackground(true);
+            ui->S7_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S7_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S7_label->setAutoFillBackground(true);
+            ui->S7_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S7_label->setFont(f);
+        }
+
+        if(S7 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S8_label->setAutoFillBackground(true);
+            ui->S8_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S8_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S8_label->setAutoFillBackground(true);
+            ui->S8_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S8_label->setFont(f);
+        }
+
+
+        if(S8 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S9_label->setAutoFillBackground(true);
+            ui->S9_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S9_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S9_label->setAutoFillBackground(true);
+            ui->S9_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S9_label->setFont(f);
+        }
+
+
+        if(S9 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S10_label->setAutoFillBackground(true);
+            ui->S10_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S10_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S10_label->setAutoFillBackground(true);
+            ui->S10_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S10_label->setFont(f);
+        }
+
+        if(S10 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S11_label->setAutoFillBackground(true);
+            ui->S11_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S11_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S11_label->setAutoFillBackground(true);
+            ui->S11_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S11_label->setFont(f);
+        }
+
+        if(S11 > 170)
+        {
+            QVariant variant= QColor (255,120,120);
+            QString colcode = variant.toString();
+            ui->S12_label->setAutoFillBackground(true);
+            ui->S12_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S12_label->setFont(f);
+        }
+        else
+        {
+            QVariant variant= QColor (255,255,255);
+            QString colcode = variant.toString();
+            ui->S12_label->setAutoFillBackground(true);
+            ui->S12_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+            QFont f( "Arial", 13, QFont::Bold);
+            ui->S12_label->setFont(f);
+        }
+
     }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S1_label->setAutoFillBackground(true);
-        ui->S1_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S1_label->setFont(f);
-    }
-
-    if(S1 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S2_label->setAutoFillBackground(true);
-        ui->S2_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S2_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S2_label->setAutoFillBackground(true);
-        ui->S2_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S2_label->setFont(f);
-    }
-
-    if(S2 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S3_label->setAutoFillBackground(true);
-        ui->S3_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S3_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S3_label->setAutoFillBackground(true);
-        ui->S3_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S3_label->setFont(f);
-    }
-
-    if(S3 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S4_label->setAutoFillBackground(true);
-        ui->S4_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S4_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S4_label->setAutoFillBackground(true);
-        ui->S4_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S4_label->setFont(f);
-    }
-
-    if(S4 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S5_label->setAutoFillBackground(true);
-        ui->S5_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S5_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S5_label->setAutoFillBackground(true);
-        ui->S5_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S5_label->setFont(f);
-    }
-
-
-    if(S5 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S6_label->setAutoFillBackground(true);
-        ui->S6_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S6_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S6_label->setAutoFillBackground(true);
-        ui->S6_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S6_label->setFont(f);
-    }
-
-
-    if(S6 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S7_label->setAutoFillBackground(true);
-        ui->S7_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S7_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S7_label->setAutoFillBackground(true);
-        ui->S7_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S7_label->setFont(f);
-    }
-
-    if(S7 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S8_label->setAutoFillBackground(true);
-        ui->S8_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S8_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S8_label->setAutoFillBackground(true);
-        ui->S8_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S8_label->setFont(f);
-    }
-
-
-    if(S8 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S9_label->setAutoFillBackground(true);
-        ui->S9_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S9_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S9_label->setAutoFillBackground(true);
-        ui->S9_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S9_label->setFont(f);
-    }
-
-
-    if(S9 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S10_label->setAutoFillBackground(true);
-        ui->S10_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S10_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S10_label->setAutoFillBackground(true);
-        ui->S10_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S10_label->setFont(f);
-    }
-
-    if(S10 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S11_label->setAutoFillBackground(true);
-        ui->S11_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S11_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S11_label->setAutoFillBackground(true);
-        ui->S11_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S11_label->setFont(f);
-    }
-
-    if(S11 > 170)
-    {
-        QVariant variant= QColor (255,120,120);
-        QString colcode = variant.toString();
-        ui->S12_label->setAutoFillBackground(true);
-        ui->S12_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S12_label->setFont(f);
-    }
-    else
-    {
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->S12_label->setAutoFillBackground(true);
-        ui->S12_label->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-        QFont f( "Arial", 13, QFont::Bold);
-        ui->S12_label->setFont(f);
-    }
+        qDebug() << "MainWinRfrIndView TOOK: " << timerIndView.elapsed() << "milliseconds";
 
 }
 /*********************************************************************************************************/
@@ -782,7 +850,11 @@ void MainWindow::MainWin_DebugTable_ScrollToBottom()
 
 void MainWindow::MainWinPlot_PlotPosErrReplot(void)
 {
-    PlotPosErr.LfGraph_UpdateReplot();
+    int Index = ui->tabWidget_4->currentIndex();
+    if(Index== 2)
+    {
+        PlotPosErr.LfGraph_UpdateReplot();
+    }
 
     BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
     BleInputDataProcessingWrapper.PosErrPlotPlottingState = FALSE;
@@ -791,7 +863,11 @@ void MainWindow::MainWinPlot_PlotPosErrReplot(void)
 
 void MainWindow::MainWinPlot_PlotPidRegValReplot()
 {
-    PlotPidRegVal.LfGraph_UpdateReplot();
+    int Index = ui->tabWidget_4->currentIndex();
+    if(Index== 3)
+    {
+        PlotPidRegVal.LfGraph_UpdateReplot();
+    }
 
     BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
     BleInputDataProcessingWrapper.PidRegValPlotPlottingState = FALSE;
@@ -830,7 +906,11 @@ void MainWindow::MainWinPlot_PlotMapReplot(void)
 
 //    QElapsedTimer timer;
 //    timer.start();
-    PlotMap.LfGraph_UpdateReplot();
+    int Index = ui->MainTabWidget->currentIndex();
+    if(Index== 1)
+    {
+        PlotMap.LfGraph_UpdateReplot();
+    }
 //    qDebug() << "MainWinPlot_PlotMapReplot TOOK: " << timer.elapsed() << "milliseconds";
     BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
     BleInputDataProcessingWrapper.MapPlotPlottingState = FALSE;
@@ -840,8 +920,11 @@ void MainWindow::MainWinPlot_PlotMapReplot(void)
 void MainWindow::MainWinPlot_PlotYawRateReplot(void)
 {
 //    qInfo() << this << "MainWinPlot_PlotYawRateReplot Thread:  " << QThread::currentThread();
-    PlotYawRate.LfGraph_UpdateReplot();
-
+    int Index = ui->PlotWidgetTab1->currentIndex();
+    if(Index== 1)
+    {
+        PlotYawRate.LfGraph_UpdateReplot();
+    }
     BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
     BleInputDataProcessingWrapper.YawRatePlotPlottingState = FALSE;
     BleInputDataProcessingWrapper.PlottingInfoMutex.unlock();
@@ -850,7 +933,12 @@ void MainWindow::MainWinPlot_PlotYawRateReplot(void)
 void MainWindow::MainWinPlot_PlotSpdReplot(void)
 {
 //    qInfo() << this << "MainWinPlot_PlotSpdReplot Thread:  " << QThread::currentThread();
-    PlotSpd.LfGraph_UpdateReplot();
+    int Index = ui->tabWidget_4->currentIndex();
+    if(Index== 1)
+    {
+        PlotSpd.LfGraph_UpdateReplot();
+    }
+
 
     BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
     BleInputDataProcessingWrapper.SpdPlotPlottingState = FALSE;
@@ -1150,8 +1238,8 @@ void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()
 //    qDebug() << "NvM_BlinkLedSt" << NvM_BlinkLedSt;
 //    qDebug() << "NvM_TryDetEndLinSt" << NvM_TryDetEndLinSt;
 
-    (NvM_BlinkLedSt == 0)     ? ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
-    (NvM_TryDetEndLinSt == 0) ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
+    (NvM_TryDetEndLinSt == 0)     ? ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
+    (NvM_BlinkLedSt == 0) ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
 }
 
 
@@ -1272,5 +1360,15 @@ void MainWindow::on_UpdateLfNameButton_clicked()
 
 //        qDebug() << Helper;
         BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+}
+
+
+void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
+{
+    PlotPosErr.LfGraph_UpdateReplot();
+    PlotPidRegVal.LfGraph_UpdateReplot();
+    PlotYawRate.LfGraph_UpdateReplot();
+    PlotSpd.LfGraph_UpdateReplot();
+    PlotMap.LfGraph_UpdateReplot();
 }
 

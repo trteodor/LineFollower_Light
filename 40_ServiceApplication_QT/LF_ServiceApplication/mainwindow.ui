@@ -53,147 +53,7 @@
    <property name="acceptDrops">
     <bool>false</bool>
    </property>
-   <layout class="QGridLayout" name="gridLayout_3">
-    <item row="2" column="0">
-     <widget class="QSplitter" name="PlotVerticalSplitter">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="childrenCollapsible">
-       <bool>false</bool>
-      </property>
-      <widget class="QTabWidget" name="MainTabWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="MapViewTabViewOrg">
-        <attribute name="title">
-         <string>MapView</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="0" column="0">
-          <widget class="QCustomPlot" name="MapViewWidget" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="sizeIncrement">
-            <size>
-             <width>1</width>
-             <height>1</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_6">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-       </widget>
-      </widget>
-      <widget class="QSplitter" name="lPlotHorizontaSpliter">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="childrenCollapsible">
-        <bool>false</bool>
-       </property>
-       <widget class="QTabWidget" name="PlotWidgetTab1">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>70</height>
-         </size>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QCustomPlot" name="PlotYawRateW">
-         <attribute name="title">
-          <string>YawRate</string>
-         </attribute>
-        </widget>
-        <widget class="QWidget" name="tab_8">
-         <attribute name="title">
-          <string>Tab 2</string>
-         </attribute>
-        </widget>
-       </widget>
-       <widget class="QTabWidget" name="tabWidget_4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>70</height>
-         </size>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QCustomPlot" name="PlotSpdW">
-         <attribute name="title">
-          <string>Speed</string>
-         </attribute>
-        </widget>
-        <widget class="QCustomPlot" name="PlotPosErrW">
-         <attribute name="title">
-          <string>PosError</string>
-         </attribute>
-        </widget>
-        <widget class="QCustomPlot" name="PlotPidRegValW">
-         <attribute name="title">
-          <string>PidRegVal</string>
-         </attribute>
-        </widget>
-       </widget>
-      </widget>
-     </widget>
-    </item>
+   <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_10">
       <item>
@@ -221,6 +81,13 @@
           </property>
           <property name="text">
            <string>ConfL:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="IndicatorVieEnableChBox">
+          <property name="text">
+           <string>EnableIndRefr</string>
           </property>
          </widget>
         </item>
@@ -450,6 +317,161 @@
       </item>
      </layout>
     </item>
+    <item row="2" column="0">
+     <widget class="QSplitter" name="PlotVerticalSplitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QTabWidget" name="MainTabWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab_7">
+        <attribute name="title">
+         <string>nA</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="MapViewTabViewOrg">
+        <attribute name="title">
+         <string>MapView</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QCustomPlot" name="MapViewWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>1</width>
+             <height>1</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_6">
+        <attribute name="title">
+         <string>Tab 2</string>
+        </attribute>
+       </widget>
+      </widget>
+      <widget class="QSplitter" name="lPlotHorizontaSpliter">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="childrenCollapsible">
+        <bool>false</bool>
+       </property>
+       <widget class="QTabWidget" name="PlotWidgetTab1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab_5">
+         <attribute name="title">
+          <string>nA</string>
+         </attribute>
+        </widget>
+        <widget class="QCustomPlot" name="PlotYawRateW">
+         <attribute name="title">
+          <string>YawRate</string>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="tab_8">
+         <attribute name="title">
+          <string>Tab 2</string>
+         </attribute>
+        </widget>
+       </widget>
+       <widget class="QTabWidget" name="tabWidget_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>nA</string>
+         </attribute>
+        </widget>
+        <widget class="QCustomPlot" name="PlotSpdW">
+         <attribute name="title">
+          <string>Speed</string>
+         </attribute>
+        </widget>
+        <widget class="QCustomPlot" name="PlotPosErrW">
+         <attribute name="title">
+          <string>PosError</string>
+         </attribute>
+        </widget>
+        <widget class="QCustomPlot" name="PlotPidRegValW">
+         <attribute name="title">
+          <string>PidRegVal</string>
+         </attribute>
+        </widget>
+       </widget>
+      </widget>
+     </widget>
+    </item>
     <item row="3" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
@@ -460,9 +482,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="GeneraReplotAllPlots_pb">
         <property name="text">
-         <string>PushButton</string>
+         <string>ReplotAll</string>
         </property>
        </widget>
       </item>
@@ -1537,14 +1559,14 @@ color: rgb(255, 255, 255);</string>
    </property>
    <property name="minimumSize">
     <size>
-     <width>100</width>
-     <height>107</height>
+     <width>200</width>
+     <height>240</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>524287</width>
-     <height>524287</height>
+     <height>250</height>
     </size>
    </property>
    <property name="sizeIncrement">
@@ -1569,75 +1591,60 @@ color: rgb(255, 255, 255);</string>
     <set>Qt::AllDockWidgetAreas</set>
    </property>
    <property name="windowTitle">
-    <string>Logger important data</string>
+    <string>ManualMoveDockWindow</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_789">
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QTableWidget" name="tableWidget_76443">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QAbstractScrollArea::AdjustToContents</enum>
-       </property>
-       <property name="autoScroll">
-        <bool>false</bool>
-       </property>
-       <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>50</number>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Dat1</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Val1</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Dat2</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Val2</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Dat3</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Val3</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QGroupBox" name="RobotMoverGBox">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>180</width>
+       <height>180</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>180</width>
+       <height>180</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>ManualMove</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="RobotMoverXYGridLayout">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>6</number>
+      </property>
+     </layout>
+    </widget>
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockWidget_888">
@@ -1821,9 +1828,8 @@ color: rgb(255, 255, 255);</string>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tableWidget_76443</tabstop>
   <tabstop>DebugDataTable</tabstop>
-  <tabstop>pushButton_4</tabstop>
+  <tabstop>GeneraReplotAllPlots_pb</tabstop>
   <tabstop>pushButton_2</tabstop>
   <tabstop>GeneralPlotDataClear_pb</tabstop>
   <tabstop>MainTabWidget</tabstop>

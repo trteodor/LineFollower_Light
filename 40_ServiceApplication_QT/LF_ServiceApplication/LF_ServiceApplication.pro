@@ -1,4 +1,4 @@
-QT       += core gui bluetooth concurrent
+QT       += core gui bluetooth concurrent quick widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -35,6 +35,17 @@ CONFIG += embed_translations
 
 RESOURCES += qdarkstyle/dark/darkstyle.qrc
 RESOURCES += qdarkstyle/light/lightstyle.qrc
+
+RESOURCES += VirtualJoystickQML/resources.qrc
+
+OTHER_FILES += \
+    VirtualJoystickQML/finger.png \
+    VirtualJoystickQML/background.png \
+    VirtualJoystickQML/virtual_joystick.qml
+
+
+
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

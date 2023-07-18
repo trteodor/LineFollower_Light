@@ -41,11 +41,18 @@ void LED_MngrTask()
 		  BlinkSavedTime= HAL_GetTick();
 			HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+
+			/*Strongly suggest don't use for now -- resistor needed to limit diode and Port current..*/
+//			HAL_GPIO_TogglePin(SenD1_GPIO_Port, SenD1_Pin);
+//			HAL_GPIO_TogglePin(SenD2_GPIO_Port, SenD2_Pin);
+
 	  }
 	}
 	else
 	{ /*Lazy solution :) */
 		HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin(SenD1_GPIO_Port, SenD1_Pin, GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin(SenD2_GPIO_Port, SenD2_Pin, GPIO_PIN_RESET);
 	}
 }

@@ -778,7 +778,7 @@ static void ReceiveDataHandler(void)
 	    			memcpy(&BaseMotSpd,  &ReceivedMessageBuff[2], sizeof(float));
 	    			memcpy(&LedState,  &ReceivedMessageBuff[6], sizeof(uint32_t));
 					memcpy(&TryDetEndLine,  &ReceivedMessageBuff[10], sizeof(uint32_t));
-					__disable_irq();
+
 					EE_WriteVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, BaseMotSpd);
 
 					if(LedState == 0 || LedState == 1){
@@ -788,8 +788,8 @@ static void ReceiveDataHandler(void)
 						EE_WriteVariableU32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
 					}
 					NvmDataUpdatedFlag= true;
-//					BLE_DbgMsgTransmit("Received BaseMotSpd: %f, LedSt %d, EndLMark %d",
-//							BaseMotSpd,LedState,TryDetEndLine );
+					BLE_DbgMsgTransmit("Received BaseMotSpd: %f, LedSt %d, EndLMark %d",
+							BaseMotSpd,LedState,TryDetEndLine );
 
 					break;
 				}
@@ -798,30 +798,35 @@ static void ReceiveDataHandler(void)
 				{
 					InternalRobotState = Driving;
 					LoggingState = TrueDataLogging;
+					BLE_DbgMsgTransmit("LineFollower start!");
 					break;
 				}
 				case BLE_RobotStop:
 				{
 					InternalRobotState = Standstill;
 					LoggingState = Suspended;
+					BLE_DbgMsgTransmit("LineFollower stop");
 					break;
 				}
 
 				case BLE_SimulatorStart:
 				{
 					LoggingState = SimulatorDataLogging;
+					BLE_DbgMsgTransmit("Simulator data start");
 					break;
 				}
 
 				case BLE_TrueBaseLoggingStart:
 				{
 					LoggingState = TrueDataLogging;
+					BLE_DbgMsgTransmit("True data logger start");
 					break;
 				}
 
 				case BLE_SimuAndTrueDataLoggingStop:
 				{
 					LoggingState = Suspended;
+					BLE_DbgMsgTransmit("Logger stop");
 					break;
 				}
 

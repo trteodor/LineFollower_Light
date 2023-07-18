@@ -22,10 +22,20 @@ public:
 
 
 
+    enum JoyType {
+        XY,
+        HorizontalOnly,
+        VerticalOnly
+    };
+
+    void addJoyStick(QLayout *layout_, JoyType type = XY);
 
 
 
 private slots:
+
+    void joystick_moved(double x, double y);
+
     void BLE_changedState(bluetoothleUART::bluetoothleState state);
     void BLE_connectDevice();
 
@@ -95,6 +105,8 @@ private slots:
     void NvM_PidDatahUpdateDelayTimerTimeout();
     void NvM_VehCfgDataUpdateDelayTimerTimeout();
 
+
+    void on_GeneraReplotAllPlots_pb_clicked();
 
 signals:
     void BLE_connectToDevice(int i);

@@ -115,8 +115,6 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
     uint8_t _inputSyncId = ((uint8_t)value.at(1)) ;
     static volatile uint8_t ExpectingFrameNumber= 0;
 
-    static uint8_t OrientationReceiverHelper[4];
-
     static BleDataManager::BLE_LfDataReport_t IncomingLfBaseData;
 
 
@@ -442,6 +440,8 @@ void BleDataManager::BleDatMngr_VehCfgDataHandler(const QByteArray &value,BleDat
     float ExpAvSpd                = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
     uint32_t BlinkSt              = ConvToUint32(value,6);
     uint32_t TryDetEndLineMark    = ConvToUint32(value,10);
+
+//    qDebug() << "BlinkSt:" << BlinkSt << "TryDetEndLineMark:" << TryDetEndLineMark;
 
     emit BleDatMngrSignal_UpdateVehCfgData(ExpAvSpd,BlinkSt,TryDetEndLineMark);
 }

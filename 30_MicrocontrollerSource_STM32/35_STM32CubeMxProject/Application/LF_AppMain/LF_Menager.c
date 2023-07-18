@@ -164,7 +164,7 @@ void LF_MngrTask(void) /*Line Following Menager task */
 		if(true == prevExpectedrDrivingState)
 		{/*Changed from driving to standstill*/
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
-			BLE_DbgMsgTransmit("LineFollowing Seconds: %d", (DrivingTime/1000 ));
+			BLE_DbgMsgTransmit("LineFollowing mSec: %d", (DrivingTime ));
 		}
 		else
 		{/*Changed from standstill to driving */

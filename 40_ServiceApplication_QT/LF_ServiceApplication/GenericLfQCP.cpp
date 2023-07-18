@@ -155,17 +155,26 @@ void GenericLfQCP::LfGraph_AppendData(float X_Pos,float Y_Pos)
 void GenericLfQCP::LfGraph_UpdateReplot(void)
 {
     Graph1->setData(DataVector_X,DataVector_Y);
+    uint32_t VectorXSize = DataVector_X.size();
 
-    UIplotP->xAxis->setRange
-        ( *std::min_element(DataVector_X.end() - 300,DataVector_X.end() ) -1,
-         *std::max_element(DataVector_X.end() - 300,DataVector_X.end() ) +1);
+    if(VectorXSize > 300)
+    {
+      UIplotP->xAxis->setRange
+          ( *std::min_element(DataVector_X.end() - 300,DataVector_X.end() ) -1,
+           *std::max_element(DataVector_X.end() - 300,DataVector_X.end() ) +1);
+    }
+    else{
+      UIplotP->xAxis->setRange
+          ( *std::min_element(DataVector_X.begin(),DataVector_X.end() ) -1,
+           *std::max_element(DataVector_X.begin(),DataVector_X.end() ) +1);
+    }
 
     UIplotP->yAxis->setRange
         (  *std::min_element(DataVector_Y.begin() ,DataVector_Y.end() ) -1,
          *std::max_element(DataVector_Y.begin() ,DataVector_Y.end() ) +2 );
 
     UIplotP->replot();
-    UIplotP->update();
+//    UIplotP->update();
 }
 
 void GenericLfQCP::LfGraph_ClearData(void)
