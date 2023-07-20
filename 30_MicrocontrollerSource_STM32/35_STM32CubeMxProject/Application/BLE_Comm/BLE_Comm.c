@@ -482,6 +482,72 @@ static BLE_CallStatus_t TransmitVehCfgData(void)
 	return retval;
 }
 
+static BLE_CallStatus_t TransmitMotorFactorsData(void)
+{
+	uint8_t DataBuffer[20] = {0};
+	static uint8_t _SyncID = 0;
+
+	BLE_CallStatus_t retval = BLE_Ok;
+
+
+	uint32_t FacA_Lft  = 0U,FacA_Rgt = 0U, FacB_Lft = 0U,FacB_Rht = 0U;
+
+	/***********************************************************************/
+	EE_ReadVariableU32(EE_NvmAddr_MotAtoPwmFacLeft_U32, &FacA_Lft);
+	EE_ReadVariableU32(EE_NvmAddr_MotAtoPwmFacRight_U32, &FacA_Rgt);
+	EE_ReadVariableU32(EE_NvmAddr_MotBtoPwmFacLeft_U32, &FacB_Lft);
+	EE_ReadVariableU32(EE_NvmAddr_MotBtoPwmFacRight_U32, &FacB_Rht);
+
+
+	DataBuffer[0] = BLE_NvM_MotorsFactorsData;
+	DataBuffer[1] = _SyncID;
+	memcpy(&DataBuffer[2],&FacA_Lft,4);
+	memcpy(&DataBuffer[6],&FacA_Rgt,4);
+	memcpy(&DataBuffer[10],&FacB_Lft,4);
+	memcpy(&DataBuffer[14],&FacB_Rht,4);
+
+	if(RB_Transmit_Write(&BleMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLE_MIN_SINGLE_MESSAGE_SIZE) != RB_OK)
+	{
+		LogDroppedFlag = true;
+		retval = BLE_Error;
+	}
+
+	_SyncID++;
+	return retval;
+}
+
+static BLE_CallStatus_t TransmitEncoderData(void)
+{
+	uint8_t DataBuffer[20] = {0};
+	static uint8_t _SyncID = 0;
+
+	BLE_CallStatus_t retval = BLE_Ok;
+
+
+	uint32_t OneImpDist  = 0U,WheelBase = 0U;
+
+	/***********************************************************************/
+	EE_ReadVariableU32(EE_NvmAddr_EncodersOneImpDistance_F32, &OneImpDist);
+	EE_ReadVariableU32(EE_NvmAddr_EncodersWheelBaseInfo_F32, &WheelBase);
+
+
+
+	DataBuffer[0] = BLE_NvM_EncoderModCfgData;
+	DataBuffer[1] = _SyncID;
+	memcpy(&DataBuffer[2],&OneImpDist,4);
+	memcpy(&DataBuffer[6],&WheelBase,4);
+
+	if(RB_Transmit_Write(&BleMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLE_MIN_SINGLE_MESSAGE_SIZE) != RB_OK)
+	{
+		LogDroppedFlag = true;
+		retval = BLE_Error;
+	}
+
+	_SyncID++;
+	return retval;
+}
+
+
 static void Statistics_CreateAndTransmitCommunicationStatistics(void)
 {
 	static uint8_t SyncIdStat = 0U;
@@ -582,7 +648,7 @@ void Sim_FakeBaseDataReportTask(void)
 		NewestLfDataReport.CurrMapData.PosY = SimFakeXY_MapDat.Y[ProbeIterator];
 		NewestLfDataReport.CurrMapData.PosO = 43+SyncIdIter;
 		NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 100 * WaveHelper));
-		NewestLfDataReport.CurrMapData.WhRhtSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
+		NewestLfDataReport.CurrMapData.WhRhtSp = (2 * cos( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 50 * WaveHelper));
 		NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.3 * sin( 2* M_PI * 10 * WaveHelper));
 		NewestLfDataReport.CurrSensorData.SensorData[0] = 40;
 		NewestLfDataReport.CurrSensorData.SensorData[1] = 40;
@@ -827,6 +893,57 @@ static void ReceiveDataHandler(void)
 				{
 					LoggingState = Suspended;
 					BLE_DbgMsgTransmit("Logger stop");
+					break;
+				}
+
+				case BLE_NvM_MotorsFactorsReq:
+				{
+					TransmitMotorFactorsData();
+					break;
+				}
+
+				case BLE_NvM_MotorsFactorsData:
+				{
+
+					uint32_t FacA_Lft  = 0U,FacA_Rgt = 0U, FacB_Lft = 0U,FacB_Rht = 0U;
+
+	    			memcpy(&FacA_Lft,  &ReceivedMessageBuff[2], sizeof(uint32_t));
+	    			memcpy(&FacA_Rgt,  &ReceivedMessageBuff[6], sizeof(uint32_t));
+					memcpy(&FacB_Lft,  &ReceivedMessageBuff[10], sizeof(uint32_t));
+					memcpy(&FacB_Rht,  &ReceivedMessageBuff[14], sizeof(uint32_t));
+
+					// BLE_DbgMsgTransmit("Received FacA_Lft: %d,FacA_Rgt: %d,FacB_Lft: %d,FacB_Rht: %d",
+					// 		FacA_Lft,FacA_Rgt,FacB_Lft,FacB_Rht );
+
+					EE_WriteVariableU32(EE_NvmAddr_MotAtoPwmFacLeft_U32, FacA_Lft);
+					EE_WriteVariableU32(EE_NvmAddr_MotAtoPwmFacRight_U32, FacA_Rgt);
+					EE_WriteVariableU32(EE_NvmAddr_MotBtoPwmFacLeft_U32, FacB_Lft);
+					EE_WriteVariableU32(EE_NvmAddr_MotBtoPwmFacRight_U32, FacB_Rht);
+					NvmDataUpdatedFlag= true;
+					break;
+
+				}
+
+				case BLE_NvM_EncoderModCfgReq:
+				{
+					TransmitEncoderData();
+					break;
+				}
+				case BLE_NvM_EncoderModCfgData :
+				{
+
+					static float OneImpDist  = 0U;
+					static float WheelBase = 0U;
+
+	    			memcpy(&OneImpDist,  &ReceivedMessageBuff[2], sizeof(float));
+	    			memcpy(&WheelBase,  &ReceivedMessageBuff[6], sizeof(float));
+
+
+					BLE_DbgMsgTransmit("Received OneImpDist: %f,WheelBase: %f  ||",OneImpDist,WheelBase);
+
+					EE_WriteVariableF32(EE_NvmAddr_EncodersOneImpDistance_F32, OneImpDist);
+					EE_WriteVariableF32(EE_NvmAddr_EncodersWheelBaseInfo_F32, WheelBase);
+					NvmDataUpdatedFlag= true;
 					break;
 				}
 

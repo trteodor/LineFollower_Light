@@ -32,6 +32,11 @@ typedef struct LinePidReg_t
 
 	float BaseMotorSpeed;
 
+	uint32_t NVM_MotAFacPwmToSpdLeft;
+	uint32_t NVM_MotAFacPwmToSpdRight;
+	uint32_t NVM_MotBFacPwmToSpdLeft;
+	uint32_t NVM_MotBFacPwmToSpdRight;
+
 	int ComputedLeftWhPwmVal;
 	int ComputedRightWhPwmVal;
 
@@ -44,6 +49,12 @@ LinePidReg_t LinePid;
 
 static void LinePidNvmDataRead(void)
 {
+	EE_ReadVariableU32(EE_NvmAddr_MotAtoPwmFacLeft_U32, &LinePid.NVM_MotAFacPwmToSpdLeft);
+	EE_ReadVariableU32(EE_NvmAddr_MotAtoPwmFacRight_U32,&LinePid.NVM_MotAFacPwmToSpdRight);
+	EE_ReadVariableU32(EE_NvmAddr_MotBtoPwmFacLeft_U32, &LinePid.NVM_MotBFacPwmToSpdLeft);
+	EE_ReadVariableU32(EE_NvmAddr_MotBtoPwmFacRight_U32, &LinePid.NVM_MotBFacPwmToSpdRight);
+
+	
 	EE_ReadVariableF32(EE_NvmAddr_PidKp_F32,&LinePid.Kp);
 	EE_ReadVariableF32(EE_NvmAddr_PidKi_F32,&LinePid.Ki);
 	EE_ReadVariableF32(EE_NvmAddr_PidKd_F32,&LinePid.Kd);
@@ -78,14 +89,13 @@ static void ComputeExpectedPwmValues(void)
 	float ExpectedSpeed_LeftMotor;
 	float ExpectedSpeed_RightMotor;
 
-	ExpectedSpeed_LeftMotor=ExpectedSpeed - LinePid.PID_value;
-	ExpectedSpeed_RightMotor=ExpectedSpeed + LinePid.PID_value;
+	ExpectedSpeed_LeftMotor=ExpectedSpeed + LinePid.PID_value;
+	ExpectedSpeed_RightMotor=ExpectedSpeed - LinePid.PID_value;
 
 	//Convert speed value to PWM value 
 	//RealMotorSpeed = ax +b ex
-	LinePid.ComputedLeftWhPwmVal= (A_FactorMotor*ExpectedSpeed_RightMotor )+B_FactorMotor +  (A_FactorMotor* LinePid.PID_value);
-
-	LinePid.ComputedRightWhPwmVal=  (A_FactorMotor*ExpectedSpeed_LeftMotor)+B_FactorMotor - (A_FactorMotor* LinePid.PID_value);
+	LinePid.ComputedLeftWhPwmVal= (LinePid.NVM_MotAFacPwmToSpdLeft*ExpectedSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft +  (LinePid.NVM_MotAFacPwmToSpdLeft* LinePid.PID_value);
+	LinePid.ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*ExpectedSpeed_RightMotor)+LinePid.NVM_MotBFacPwmToSpdRight - (LinePid.NVM_MotAFacPwmToSpdRight* LinePid.PID_value);
 
 	if(LinePid.ComputedLeftWhPwmVal>MaxPWMValue){
 		LinePid.ComputedLeftWhPwmVal=MaxPWMValue;
@@ -138,31 +148,29 @@ void App_LinePidComputeExpectedPwmValuesForExpSpd(float ExpectedSpeed,int *LeftW
 
 	float ExpectedSpeed_LeftMotor;
 	float ExpectedSpeed_RightMotor;
-	float ComputedLeftWhPwmVal;
-	float ComputedRightWhPwmVal;
 
-	ExpectedSpeed_LeftMotor=ExpectedSpeed - LinePid.PID_value;
-	ExpectedSpeed_RightMotor=ExpectedSpeed + LinePid.PID_value;
+	ExpectedSpeed_LeftMotor=ExpectedSpeed + LinePid.PID_value;
+	ExpectedSpeed_RightMotor=ExpectedSpeed - LinePid.PID_value;
 
 	//Convert speed value to PWM value 
 	//RealMotorSpeed = ax +b ex
-	ComputedLeftWhPwmVal= (A_FactorMotor*ExpectedSpeed_RightMotor )+B_FactorMotor + (A_FactorMotor* LinePid.PID_value);
-	ComputedRightWhPwmVal=  (A_FactorMotor*ExpectedSpeed_LeftMotor  )+B_FactorMotor - (A_FactorMotor* LinePid.PID_value);
+	LinePid.ComputedLeftWhPwmVal= (LinePid.NVM_MotAFacPwmToSpdLeft*ExpectedSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft +  (LinePid.NVM_MotAFacPwmToSpdLeft* LinePid.PID_value);
+	LinePid.ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*ExpectedSpeed_RightMotor)+LinePid.NVM_MotBFacPwmToSpdRight - (LinePid.NVM_MotAFacPwmToSpdRight* LinePid.PID_value);
 
-	if(ComputedLeftWhPwmVal>MaxPWMValue){
-		ComputedLeftWhPwmVal=MaxPWMValue;
+	if(LinePid.ComputedLeftWhPwmVal>MaxPWMValue){
+		LinePid.ComputedRightWhPwmVal=MaxPWMValue;
 	}
-	else if(ComputedLeftWhPwmVal < -MaxPWMValue){
-		ComputedLeftWhPwmVal = -MaxPWMValue;
+	else if(LinePid.ComputedLeftWhPwmVal < -MaxPWMValue){
+		LinePid.ComputedLeftWhPwmVal = -MaxPWMValue;
 	}
 	
-	if(ComputedRightWhPwmVal > MaxPWMValue){
-		ComputedRightWhPwmVal = MaxPWMValue;
+	if(LinePid.ComputedRightWhPwmVal > MaxPWMValue){
+		LinePid.ComputedRightWhPwmVal = MaxPWMValue;
 	}
-	else if(ComputedRightWhPwmVal < -MaxPWMValue){
-		ComputedRightWhPwmVal = -MaxPWMValue;
+	else if(LinePid.ComputedRightWhPwmVal < -MaxPWMValue){
+		LinePid.ComputedRightWhPwmVal = -MaxPWMValue;
 	}
 
-	*LeftWhExpectedPwm = ComputedLeftWhPwmVal;
-	*RightWhExpectedPwm = ComputedRightWhPwmVal;
+	*LeftWhExpectedPwm = LinePid.ComputedLeftWhPwmVal;
+	*RightWhExpectedPwm = LinePid.ComputedRightWhPwmVal;
 }

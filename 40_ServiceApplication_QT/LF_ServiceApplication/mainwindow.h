@@ -63,6 +63,9 @@ private slots:
     void MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_t ProbeTime);
     void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
 
+    void MainWin_UpdateEncoderCfgData(float OneImpDist, float WheelBase);
+    void MainWin_UpdateMotorsFactors(uint32_t FacA_Lft, uint32_t FacA_Rgt,uint32_t FacB_Lft,uint32_t FacB_Rht);
+
     void MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                            uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
                                            uint8_t RightLinePosConfif,uint8_t LeftLinePosConfif,
@@ -85,7 +88,7 @@ private slots:
 
     void MainWinPlot_PlotMapAppendData(float PosX, float PosY);
     void MainWinPlot_PlotYawRateAppendData(uint32_t FrameId, float YrValue);
-    void MainWinPlot_PlotSpdAppendData(uint32_t FrameId, float SpdValue);
+    void MainWinPlot_PlotSpdAppendData(uint32_t FrameId, float SpdValueLeftWh,float SpdValueRightWh);
     void MainWinPlot_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
     void MainWinPlot_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
 
@@ -104,7 +107,8 @@ private slots:
     void NvM_ErrWeigthUpdateDelayTimerTimeout();
     void NvM_PidDatahUpdateDelayTimerTimeout();
     void NvM_VehCfgDataUpdateDelayTimerTimeout();
-
+    void NvM_MotorsFactorsDataUpdateDelayTimerTimeout();
+    void NvM_EncodersConfigDataUpdateDelayTimerTimeout();
 
     void on_GeneraReplotAllPlots_pb_clicked();
 
@@ -120,6 +124,9 @@ private:
     QTimer NvM_PidDatahUpdateDelayTimer;
     QTimer NvM_VehCfghUpdateDelayTimer;
 
+    QTimer NvM_EncoderCfgUpdateDelayTimer;
+    QTimer NvM_MotorsFactorsUpdateDelayTimer;
+
     float  NVM_ErrWeitghtsTabHolder[12];
 
     float  NvM_PID_Kp;
@@ -130,6 +137,16 @@ private:
     float  NvM_ExpectedAvSpeed;
     uint32_t  NvM_BlinkLedSt;
     uint32_t  NvM_TryDetEndLinSt;
+
+
+
+    float  NVM_OneImpulsDistance;
+    float  NVM_WheelBase;
+
+    uint32_t  NvM_FacA_Lft;
+    uint32_t  NvM_FacA_Rgt;
+    uint32_t  NvM_FacB_Lft;
+    uint32_t  NvM_FacB_Rht;
 
     QList<QString> FoundDevices;
     BleDataManager BleInputDataProcessingWrapper;
@@ -142,10 +159,20 @@ private:
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
 
     GenericLfQCP PlotMap;
+
+
     GenericLfQCP PlotYawRate;
+
+
     GenericLfQCP PlotSpd;
+
+
     GenericLfQCP PlotPosErr;
+
+
     GenericLfQCP PlotPidRegVal;
+
+
 
 };
 #endif // MAINWINDOW_H

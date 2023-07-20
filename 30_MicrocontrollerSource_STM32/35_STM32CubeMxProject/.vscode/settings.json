@@ -76,7 +76,8 @@
         "lf_mainrunnable.h": "c",
         "encodershandler.h": "c",
         "tim.h": "c",
-        "lf_appconfig.h": "c"
+        "lf_appconfig.h": "c",
+        "math.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

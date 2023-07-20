@@ -63,17 +63,34 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
     }
     Graph1->setPen(QPen(QColor(180, 180, 180), 2));
 
-
-    /***********************************/
-    /*Draw vertical line*/
-        Graph2 = UIplotP->addGraph();
         QPen redDotPen;
         redDotPen.setStyle(Qt::DotLine);
         redDotPen.setColor(QColor(255, 255, 255, 180));
         redDotPen.setWidthF(1.5);
+/***********************************/
+        Graph2 = UIplotP->addGraph();
+        redDotPen.setColor(QColor(166, 3, 3, 180));
         Graph2->setPen(redDotPen);
+        Graph2->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::red, 1.5), QBrush(Qt::red), 3));
 
-        Graph2->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
+/***********************************/
+        Graph3 = UIplotP->addGraph();
+        redDotPen.setColor(QColor(5, 5, 120, 180));
+        Graph3->setPen(redDotPen);
+        Graph3->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::blue, 1.5), QBrush(Qt::blue), 3));
+/***********************************/
+        Graph4 = UIplotP->addGraph();
+        Graph4->setPen(redDotPen);
+        Graph4->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::green, 1.5), QBrush(Qt::green), 3));
+/***********************************/
+        Graph5 = UIplotP->addGraph();
+        Graph5->setPen(redDotPen);
+        Graph5->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
+/***********************************/
+        Graph6 = UIplotP->addGraph();
+        Graph6->setPen(redDotPen);
+        Graph6->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
+/***********************************/
 
 //        //Graph2->set
 //        QVector<double>  Test_X;
@@ -121,7 +138,7 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
     UIplotP->axisRect()->setBackground(axisRectGradient);
 
 
-    UIplotP->graph()->setName(QString("New graph %1").arg(UIplotP->graphCount()-1));
+//    UIplotP->graph()->setName(QString("New graph %1").arg(UIplotP->graphCount()-1));
 
     UIplotP->replot();
     UIplotP->update();
@@ -138,40 +155,65 @@ GenericLfQCP::~GenericLfQCP()
 
     if(Graph2){
               delete Graph2;  }
-
+    if(Graph3){
+              delete Graph2;  }
+    if(Graph4){
+              delete Graph2;  }
+    if(Graph5){
+              delete Graph2;  }
+    if(Graph6){
+              delete Graph2;  }
 }
 
 
 
-void GenericLfQCP::LfGraph_AppendData(float X_Pos,float Y_Pos)
+void GenericLfQCP::LfGraph_AppendData(float X_Pos1,float Y_Pos1,
+                                        float X_Pos2,float Y_Pos2,
+                                        float X_Pos3,float Y_Pos3,
+                                        float X_Pos4,float Y_Pos4,
+                                        float X_Pos5,float Y_Pos5,
+                                        float X_Pos6,float Y_Pos6)
 {
-    float XposVal = X_Pos;
-    float YposVal = Y_Pos;
-    DataVector_X.append( ((float)XposVal));
-    DataVector_Y.append( ((float)YposVal));
-
+    DataVector_X1.append( ((float)X_Pos1));
+    DataVector_Y1.append( ((float)Y_Pos1));
+    DataVector_X2.append( ((float)X_Pos2));
+    DataVector_Y2.append( ((float)Y_Pos2));
+    DataVector_X3.append( ((float)X_Pos3));
+    DataVector_Y3.append( ((float)Y_Pos3));
+    DataVector_X4.append( ((float)X_Pos4));
+    DataVector_Y4.append( ((float)Y_Pos4));
+    DataVector_X5.append( ((float)X_Pos5));
+    DataVector_Y5.append( ((float)Y_Pos5));
+    DataVector_X6.append( ((float)X_Pos6));
+    DataVector_Y6.append( ((float)Y_Pos6));
 }
 
 void GenericLfQCP::LfGraph_UpdateReplot(void)
 {
-    Graph1->setData(DataVector_X,DataVector_Y);
-    uint32_t VectorXSize = DataVector_X.size();
+    Graph1->setData(DataVector_X1,DataVector_Y1);
+    Graph2->setData(DataVector_X2,DataVector_Y2);
+    Graph3->setData(DataVector_X3,DataVector_Y3);
+    Graph4->setData(DataVector_X4,DataVector_Y4);
+    Graph5->setData(DataVector_X5,DataVector_Y5);
+    Graph6->setData(DataVector_X6,DataVector_Y6);
+
+    uint32_t VectorXSize = DataVector_X1.size();
 
     if(VectorXSize > 300)
     {
       UIplotP->xAxis->setRange
-          ( *std::min_element(DataVector_X.end() - 300,DataVector_X.end() ) -1,
-           *std::max_element(DataVector_X.end() - 300,DataVector_X.end() ) +1);
+          ( *std::min_element(DataVector_X1.end() - 300,DataVector_X1.end() ) -1,
+           *std::max_element(DataVector_X1.end() - 300,DataVector_X1.end() ) +1);
     }
     else{
       UIplotP->xAxis->setRange
-          ( *std::min_element(DataVector_X.begin(),DataVector_X.end() ) -1,
-           *std::max_element(DataVector_X.begin(),DataVector_X.end() ) +1);
+          ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
+           *std::max_element(DataVector_X1.begin(),DataVector_X1.end() ) +1);
     }
 
     UIplotP->yAxis->setRange
-        (  *std::min_element(DataVector_Y.begin() ,DataVector_Y.end() ) -1,
-         *std::max_element(DataVector_Y.begin() ,DataVector_Y.end() ) +2 );
+        (  *std::min_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) -1,
+         *std::max_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) +2 );
 
     UIplotP->replot();
 //    UIplotP->update();
@@ -179,18 +221,18 @@ void GenericLfQCP::LfGraph_UpdateReplot(void)
 
 void GenericLfQCP::LfGraph_ClearData(void)
 {
-    DataVector_X.clear();
-    DataVector_Y.clear();
+    DataVector_X1.clear();
+    DataVector_Y1.clear();
 
-    Graph1->setData(DataVector_X,DataVector_Y);
+    Graph1->setData(DataVector_X1,DataVector_Y1);
 
     UIplotP->xAxis->setRange
-        ( *std::min_element(DataVector_X.begin(),DataVector_X.end() ) -1,
-         *std::max_element(DataVector_X.begin(),DataVector_X.end() ) +1);
+        ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
+         *std::max_element(DataVector_X1.begin(),DataVector_X1.end() ) +1);
 
     UIplotP->yAxis->setRange
-        (  *std::min_element(DataVector_Y.begin() ,DataVector_Y.end() ) -1,
-         *std::max_element(DataVector_Y.begin() ,DataVector_Y.end() ) +2 );
+        (  *std::min_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) -1,
+         *std::max_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) +2 );
 
     UIplotP->replot();
     UIplotP->update();
@@ -391,7 +433,7 @@ void GenericLfQCP::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dat
 
     QString message2 = QString("DatVal2: %1").arg(dataValue2) ;
 
-    qDebug() << message2;
+//    qDebug() << message2;
 
     //Graph2->set
     QVector<double>  Test_X;
@@ -402,5 +444,5 @@ void GenericLfQCP::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dat
     Test_Y.append( ((float)5000.0F ));
     Graph2->setData(Test_X,Test_Y);
 
-    qDebug() << message;
+    qDebug() << message << message2;
 }

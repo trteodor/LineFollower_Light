@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
+    this->setWindowTitle("LineFollower QT ServApp");
+
+
     /*All declared plots/ graph must be initialized!!!*/
     PlotMap.LfGraphInitialize(ui->MapViewWidget,QCPGraph::lsNone);
     PlotYawRate.LfGraphInitialize(ui->PlotYawRateW,QCPGraph::lsLine);
@@ -29,9 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     connect(&NvM_ErrWeigthUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ErrWeigthUpdateDelayTimerTimeout()));
-
     connect(&NvM_PidDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_PidDatahUpdateDelayTimerTimeout()));
     connect(&NvM_VehCfghUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_VehCfgDataUpdateDelayTimerTimeout()));
+    connect(&NvM_MotorsFactorsUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_MotorsFactorsDataUpdateDelayTimerTimeout()));
+    connect(&NvM_EncoderCfgUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_EncodersConfigDataUpdateDelayTimerTimeout()));
 
 
     addJoyStick(ui->RobotMoverXYGridLayout);
@@ -67,6 +71,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->PID_KI_text->setValidator(&dblValidator);
     ui->PID_KD_text->setValidator(&dblValidator);
     ui->ProbeTimeText->setValidator(&dblValidator);
+
+    ui->TextWheelBase->setValidator(&dblValidator);
+    ui->TextOneImpDist->setValidator(&dblValidator);
+
+    ui->TextPwmToSpAFacL->setValidator(&dblValidator);
+    ui->TextPwmToSpAFacR->setValidator(&dblValidator);
+    ui->TextPwmToSpBFacL->setValidator(&dblValidator);
+    ui->TextPwmToSpBFacR->setValidator(&dblValidator);
 
 
     QPalette pal = ui->BLE_RobotStart_Button->palette();
@@ -233,6 +245,29 @@ void MainWindow::MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd, uint32_t Blin
     NvM_VehCfghUpdateDelayTimer.start(100);
 }
 
+void MainWindow::MainWin_UpdateEncoderCfgData(float OneImpDist, float WheelBase)
+{
+    NVM_OneImpulsDistance = OneImpDist;
+    NVM_WheelBase = WheelBase;
+
+    NvM_EncoderCfgUpdateDelayTimer.setSingleShot(true);
+    NvM_EncoderCfgUpdateDelayTimer.start(100);
+}
+
+
+void MainWindow::MainWin_UpdateMotorsFactors(uint32_t FacA_Lft, uint32_t FacA_Rgt,uint32_t FacB_Lft,uint32_t FacB_Rht)
+{
+    NvM_FacA_Lft = FacA_Lft;
+    NvM_FacA_Rgt = FacA_Rgt;
+    NvM_FacB_Lft = FacB_Lft;
+    NvM_FacB_Rht = FacB_Rht;
+
+
+    NvM_MotorsFactorsUpdateDelayTimer.setSingleShot(true);
+    NvM_MotorsFactorsUpdateDelayTimer.start(100);
+}
+
+
 /*********************************************************************************************************/
 void MainWindow::BLE_InitializeQTConnections(void)
 {
@@ -300,9 +335,9 @@ void MainWindow::BLE_InitializeQTConnections(void)
 
     connect(
         &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotSpdAppendData(uint32_t,float) )
+        SIGNAL(BleDatMngrSignal_PlotSpdAppendData(uint32_t,float,float) )
         ,this
-        ,SLOT(MainWinPlot_PlotSpdAppendData(uint32_t,float) ) );
+        ,SLOT(MainWinPlot_PlotSpdAppendData(uint32_t,float,float) ) );
 
     connect(
         &BleInputDataProcessingWrapper,
@@ -368,6 +403,23 @@ void MainWindow::BLE_InitializeQTConnections(void)
         SIGNAL(BleDatMngrSignal_UpdatePidData(float,float,float,uint32_t) )
         ,this
         ,SLOT(MainWin_UpdateNvM_PidData(float,float,float,uint32_t) ) );
+
+
+    connect(
+        &BleInputDataProcessingWrapper,
+        SIGNAL(BleDatMngrSignal_UpdateMotorsFactors(uint32_t,uint32_t,uint32_t,uint32_t) )
+        ,this
+        ,SLOT(MainWin_UpdateMotorsFactors(uint32_t, uint32_t, uint32_t,uint32_t) ) );
+
+    connect(
+        &BleInputDataProcessingWrapper,
+        SIGNAL(BleDatMngrSignal_UpdateEncoderCfgData(float,float) )
+        ,this
+        ,SLOT(MainWin_UpdateEncoderCfgData(float,float) ) );
+
+
+
+
 }
 
 
@@ -792,7 +844,7 @@ void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_
 
     }
 
-        qDebug() << "MainWinRfrIndView TOOK: " << timerIndView.elapsed() << "milliseconds";
+//        qDebug() << "MainWinRfrIndView TOOK: " << timerIndView.elapsed() << "milliseconds";
 
 }
 /*********************************************************************************************************/
@@ -896,9 +948,9 @@ void MainWindow::MainWinPlot_PlotYawRateAppendData(uint32_t FrameId, float YrVal
     PlotYawRate.LfGraph_AppendData((float)FrameId,YrValue);
 }
 /*********************************************************************************************************/
-void MainWindow::MainWinPlot_PlotSpdAppendData(uint32_t FrameId, float SpdValue)
+void MainWindow::MainWinPlot_PlotSpdAppendData(uint32_t FrameId, float SpdValueLeftWh,float SpdValueRightWh)
 {
-    PlotSpd.LfGraph_AppendData((float)FrameId,SpdValue);
+    PlotSpd.LfGraph_AppendData((float)FrameId,SpdValueLeftWh,(float)FrameId,SpdValueRightWh);
 }
 /*********************************************************************************************************/
 void MainWindow::MainWinPlot_PlotMapReplot(void)
@@ -1055,6 +1107,14 @@ void MainWindow::ReadNvMDataFromLineFollower()
     ui->PID_KD_text->clear();
     ui->ProbeTimeText->clear();
 
+    ui->TextPwmToSpAFacL->clear();
+    ui->TextPwmToSpAFacR->clear();
+    ui->TextPwmToSpBFacL->clear();
+    ui->TextPwmToSpBFacR->clear();
+
+    ui->TextWheelBase->clear();
+    ui->TextOneImpDist->clear();
+
     char command[20];
     command[0] = (char)BleDataManager::BLE_NvM_ErrWeigthSensorDataReq;
     for(int i=1; i<18; i++)
@@ -1071,6 +1131,16 @@ void MainWindow::ReadNvMDataFromLineFollower()
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 
     command[0] = (char)BleDataManager::BLE_NvM_VehCfgReq;
+    Helper = QByteArray::fromRawData(command,18);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+    command[0] = (char)BleDataManager::BLE_NvM_MotorsFactorsReq;
+    Helper = QByteArray::fromRawData(command,18);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+    command[0] = (char)BleDataManager::BLE_NvM_EncoderModCfgReq;
     Helper = QByteArray::fromRawData(command,18);
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
@@ -1204,6 +1274,58 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 
+
+    /*********************************************************************************************************/
+    /*********************************************************************************************************/
+    /*********************************************************************************************************/
+
+    QString FacA_LftText = ui->TextPwmToSpAFacL->text();
+    uint32_t FacA_LftU32 = FacA_LftText.toInt();
+    QString FacA_RhtText = ui->TextPwmToSpAFacR->text();
+    uint32_t FacA_RhtU32 = FacA_RhtText.toInt();
+    QString FacB_LftText = ui->TextPwmToSpBFacL->text();
+    uint32_t FacB_LftU32 = FacB_LftText.toInt();
+    QString FacB_RhtText = ui->TextPwmToSpBFacR->text();
+    uint32_t FacB_RhtU32 = FacB_RhtText.toInt();
+
+
+    command[0] = (char)BleDataManager::BLE_NvM_MotorsFactorsData;
+    command[1] = SyncID;
+    std::memcpy(&command[2],  &FacA_LftU32, sizeof(uint32_t));
+    std::memcpy(&command[6],  &FacA_RhtU32, sizeof(uint32_t));
+    std::memcpy(&command[10], &FacB_LftU32, sizeof(uint32_t));
+    std::memcpy(&command[14], &FacB_RhtU32, sizeof(uint32_t));
+    Helper = QByteArray::fromRawData(command,18);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+    /*********************************************************************************************************/
+    /*********************************************************************************************************/
+    /*********************************************************************************************************/
+
+    QString OneImpDistText = ui->TextOneImpDist->text();
+    float OneImpDistF32 = OneImpDistText.toFloat();
+    QString WheelBaseText = ui->TextWheelBase->text();
+    float WheelBaseF32 = WheelBaseText.toFloat();
+
+
+    command[0] = (char)BleDataManager::BLE_NvM_EncoderModCfgData;
+    command[1] = SyncID;
+    std::memcpy(&command[2],  &OneImpDistF32, sizeof(float));
+    std::memcpy(&command[6],  &WheelBaseF32, sizeof(float));
+
+//    qDebug() << "OneImpDistF32" << OneImpDistF32 << "WheelBaseF32" << WheelBaseF32;
+
+    Helper = QByteArray::fromRawData(command,18);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+
+    /*********************************************************************************************************/
+    /*********************************************************************************************************/
+    /*********************************************************************************************************/
+
+
     SyncID++;
 }
 
@@ -1242,6 +1364,19 @@ void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()
     (NvM_BlinkLedSt == 0) ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
 }
 
+void MainWindow::NvM_MotorsFactorsDataUpdateDelayTimerTimeout()
+{
+    ui->TextPwmToSpAFacL->setText(QString::number(NvM_FacA_Lft,10) );
+    ui->TextPwmToSpAFacR->setText(QString::number(NvM_FacA_Rgt,10) );
+    ui->TextPwmToSpBFacL->setText(QString::number(NvM_FacB_Lft,10) );
+    ui->TextPwmToSpBFacR->setText(QString::number(NvM_FacB_Rht,10) );
+}
+
+void MainWindow::NvM_EncodersConfigDataUpdateDelayTimerTimeout()
+{
+    ui->TextWheelBase->setText(QString::number(NVM_WheelBase,'f',5) );
+    ui->TextOneImpDist->setText(QString::number(NVM_OneImpulsDistance,'f',8) );
+}
 
 void MainWindow::on_ClearLoggerButton_clicked()
 {
@@ -1309,7 +1444,6 @@ void MainWindow::on_BLE_RobotStart_Button_clicked()
         Helper = QByteArray::fromRawData(command,18);
         Helper.append("\n\r");
         BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
-
 }
 
 

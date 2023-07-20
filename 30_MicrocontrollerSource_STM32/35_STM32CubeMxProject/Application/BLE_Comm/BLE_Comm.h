@@ -42,6 +42,14 @@
 /*
  * Type defs
  * */
+typedef enum
+{
+	BLE_Ok,
+	BLE_Error
+}BLE_CallStatus_t;
+
+
+
 
 typedef struct
 {
@@ -84,15 +92,15 @@ typedef enum
     BLE_NvM_VehCfgReq,
     BLE_NvM_VehCfgData,
 
+	BLE_NvM_MotorsFactorsReq,
+    BLE_NvM_MotorsFactorsData,
+
+	BLE_NvM_EncoderModCfgReq,
+    BLE_NvM_EncoderModCfgData,
+
     BLE_SetNewRobotName,
 
 }BLE_MessageID_t;
-
-typedef enum
-{
-	BLE_Ok,
-	BLE_Error
-}BLE_CallStatus_t;
 
 
 

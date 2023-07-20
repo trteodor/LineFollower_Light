@@ -39,6 +39,14 @@ typedef enum
 	EE_NvmAddr_BlinkLadeState_U32,
 	EE_NvmAddr_TryDetectEndLine_U32,
 	
+	EE_NvmAddr_MotAtoPwmFacLeft_U32,
+	EE_NvmAddr_MotAtoPwmFacRight_U32,
+	EE_NvmAddr_MotBtoPwmFacLeft_U32,
+	EE_NvmAddr_MotBtoPwmFacRight_U32,
+
+	EE_NvmAddr_EncodersOneImpDistance_F32,
+	EE_NvmAddr_EncodersWheelBaseInfo_F32,
+
 //	EE_NvmAddr_IrSensorState_U32,
 
 	EE_NvmAddr_BleDevNamePart1_U32_,

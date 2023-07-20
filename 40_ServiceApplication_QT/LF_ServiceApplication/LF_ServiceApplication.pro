@@ -38,6 +38,8 @@ RESOURCES += qdarkstyle/light/lightstyle.qrc
 
 RESOURCES += VirtualJoystickQML/resources.qrc
 
+RC_ICONS = LfAppIco.ico
+
 OTHER_FILES += \
     VirtualJoystickQML/finger.png \
     VirtualJoystickQML/background.png \

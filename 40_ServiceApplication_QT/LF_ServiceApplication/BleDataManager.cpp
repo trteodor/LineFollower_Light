@@ -192,7 +192,7 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
 
             emit BleDatMngrSignal_PlotMapAppendData(FullBaseData.CurrMapData.PosX,FullBaseData.CurrMapData.PosY);
             emit BleDatMngrSignal_PlotYawRateAppendData(FullFrameCounter,FullBaseData.CurrMapData.YawRate);
-            emit BleDatMngrSignal_PlotSpdAppendData(FullFrameCounter,FullBaseData.CurrMapData.WhLftSp);
+            emit BleDatMngrSignal_PlotSpdAppendData(FullFrameCounter,FullBaseData.CurrMapData.WhLftSp,FullBaseData.CurrMapData.WhRhtSp);
             emit BleDatMngrSignal_PlotPosErrAppendData(FullFrameCounter,FullBaseData.CurrSensorData.PosError);
             emit BleDatMngrSignal_PlotPidRegValAppendData(FullFrameCounter,IncomingLfBaseData.LinePidRegData.PidRegCorrValue);
 
@@ -446,7 +446,27 @@ void BleDataManager::BleDatMngr_VehCfgDataHandler(const QByteArray &value,BleDat
     emit BleDatMngrSignal_UpdateVehCfgData(ExpAvSpd,BlinkSt,TryDetEndLineMark);
 }
 
+void BleDataManager::BleDatMngr_MotorsFactorsDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
+{
+//    uint32_t FacA_Lft  = 0U,FacA_Rgt = 0U, FacB_Lft = 0U,FacB_Rht = 0U;
 
+    (void)BLE_MessID;
+    uint32_t FacA_Lft    = ConvToUint32(value,2);
+    uint32_t FacA_Rgt    = ConvToUint32(value,6);
+    uint32_t FacB_Lft    = ConvToUint32(value,10);
+    uint32_t FacB_Rht    = ConvToUint32(value,14);
+
+    emit BleDatMngrSignal_UpdateMotorsFactors(FacA_Lft,FacA_Rgt,FacB_Lft,FacB_Rht);
+}
+
+void BleDataManager::BleDatMngr_EncodersCfgDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID)
+{
+    (void)BLE_MessID;
+    float OneImpDist    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,2));
+    float WheelBase    = ieee_uint32_AsBitsTo_float32(ConvToUint32(value,6));
+
+    emit BleDatMngrSignal_UpdateEncoderCfgData(OneImpDist,WheelBase);
+}
 
 void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
 {
@@ -499,6 +519,20 @@ void BleDataManager::BleDatMngr_InputHanlder(const QByteArray &value)
             BleDatMngr_PidDataHandler(value,BLE_MessageID);
             break;
         }
+
+        case BLE_NvM_MotorsFactorsData:
+        {
+            BleDatMngr_MotorsFactorsDataHandler(value,BLE_MessageID);
+            break;
+        }
+
+
+        case BLE_NvM_EncoderModCfgData:
+        {
+            BleDatMngr_EncodersCfgDataHandler(value,BLE_MessageID);
+            break;
+        }
+
 
         case BLE_MessageID_t::BLE_DebugMessage:
         {

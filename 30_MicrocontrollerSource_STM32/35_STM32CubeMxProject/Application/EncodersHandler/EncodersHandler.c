@@ -48,6 +48,9 @@ typedef struct EncHandlerDescr_t
 	uint16_t PreviousLeftEncoderCntImpulsCount;
 	uint16_t PreviousRightEncoderCntImpulsCount;
 
+	float NVM_WheelBase;
+	float NVM_OneImpulsDistance;
+
 
 	float LeftWheelSpeed;
 	float RightWheelSpeed;
@@ -69,12 +72,11 @@ PositionStruct_t RobotPosition = {0};
  * Equations for determining the position and orientation of the robot based on the collected information.
  * ref: https://github.com/trteodor/FAST_Line_Follower_STM32H7/blob/master/docs/LF_Desc_PL.pdf
  * equasition, page 21: 3.12
- * #define WheelBase 0.147
  */
 static void EsimtateRobotOrientationAndPosition(void)
 {
 	RobotPosition.O=RobotPosition.prO +
-			( (1/WheelBase) *(EncHandlerDescr.Distance_LeftWheel - EncHandlerDescr.Distance_RightWheel) );
+			( (1/EncHandlerDescr.NVM_WheelBase) *(EncHandlerDescr.Distance_LeftWheel - EncHandlerDescr.Distance_RightWheel) );
 
 	RobotPosition.X=RobotPosition.prX+(  0.5*cos(RobotPosition.prO) *
 			( EncHandlerDescr.Distance_LeftWheel + EncHandlerDescr.Distance_RightWheel ) );
@@ -102,9 +104,9 @@ static void CalculateBasicBasedOnEncodersData(void)
 	DifferenceValueLeft = TmpLeftEncImpCnt-EncHandlerDescr.PreviousLeftEncoderCntImpulsCount;
 	DifferenceValueRight = TmpRightEncImpCnt-EncHandlerDescr.PreviousRightEncoderCntImpulsCount;
 
-	EncHandlerDescr.Distance_LeftWheel=((DifferenceValueLeft)*OneImpulsDistance);
+	EncHandlerDescr.Distance_LeftWheel=((DifferenceValueLeft)*EncHandlerDescr.NVM_OneImpulsDistance);
 
-	EncHandlerDescr.Distance_RightWheel = ((DifferenceValueRight)*OneImpulsDistance);
+	EncHandlerDescr.Distance_RightWheel = ((DifferenceValueRight)*EncHandlerDescr.NVM_OneImpulsDistance);
 
 	EncHandlerDescr.LeftWheelSpeed = EncHandlerDescr.Distance_LeftWheel/EncodersProbeTimeInSeconds;
 	EncHandlerDescr.RightWheelSpeed = EncHandlerDescr.Distance_RightWheel/EncodersProbeTimeInSeconds;
@@ -130,9 +132,12 @@ static void CalculateBasicBasedOnEncodersData(void)
 
 
 
+
+
 static void ReadNvMParameters(void)
 {
-	/*Currently none NvmData to read/ update*/
+	EE_ReadVariableF32(EE_NvmAddr_EncodersOneImpDistance_F32, &EncHandlerDescr.NVM_OneImpulsDistance);
+	EE_ReadVariableF32(EE_NvmAddr_EncodersWheelBaseInfo_F32, &EncHandlerDescr.NVM_WheelBase);
 }
 
 static void BleEncUpdateNvmDataCallBack(void)
