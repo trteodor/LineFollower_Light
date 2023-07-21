@@ -17,6 +17,9 @@
 #include "LinePosEstimator.h"
 
 #include "stdbool.h"
+#include "math.h"
+
+#define LF_M_PI_VAL		((float)3.14159265F)
 
 
 #define MaxPID_DerivativeTime 200
@@ -31,10 +34,15 @@ typedef struct Robot_Cntrl_t
 {
 	int input_LeftWhPwmVal;
 	int input_RightWhPwmVal;
+	float input_TravelledDistance;
+	float input_RobotOrientation;
 
 	bool IsFlagStartedForDrivingTime;
 	uint32_t RobotStartTime;
 	uint32_t RobotRunTime;
+
+	
+
 }Robot_Cntrl_t;
 
 /*************************************************************************/
@@ -126,6 +134,9 @@ static void DecodeLinePid(void)
 void LFAppMngrUpdateInputData(void)
 {
 	App_LinePidGetComputedPwmVals(&Robot_Cntrl.input_LeftWhPwmVal, &Robot_Cntrl.input_RightWhPwmVal);
+
+	Robot_Cntrl.input_RobotOrientation = ENC_GetCurrentOrientation();
+	Robot_Cntrl.input_TravelledDistance = ENC_GetTravelledDistance();
 }
 
 /**************************************************************************************************/
@@ -143,12 +154,96 @@ static void SpeedProfiler(void)
 		//actions
 	}
 }
+
+typedef enum{
+	rotDirUndefinded,
+	rotDirectionLeft,
+	rotDirectionRight,
+}RotDirection_t;
+
+
+RotDirection_t RotDirection;
+
+
+static float  VecLHelperX,VecLHelperY;
+
+void ManualDrivingCallBackHandler(float VecXVal, float VecYVal)
+{
+VecLHelperX= VecXVal;
+VecLHelperY = VecYVal;
+ static uint32_t OrientationLoggerTempTimer = 0;
+ // input_RobotOrientation
+	 if(HAL_GetTick() - OrientationLoggerTempTimer > 150)
+	 {
+			 	 OrientationLoggerTempTimer = HAL_GetTick();
+
+				float ExpectedOrientation = ( (float)atan2(VecLHelperY,VecLHelperX) );
+
+				if(ExpectedOrientation < (0.0F) )
+				{
+					ExpectedOrientation =  (LF_M_PI_VAL) + (LF_M_PI_VAL - fabs(ExpectedOrientation));
+					/*To get full circle*/
+				}
+
+				float CurrOrientationLimited = (Robot_Cntrl.input_RobotOrientation);
+
+				uint32_t OpCounter = 0;
+				while( fabs(CurrOrientationLimited) >= ( 2 *LF_M_PI_VAL) )
+				{
+					if( (CurrOrientationLimited) > (2 *LF_M_PI_VAL) )
+					{
+						CurrOrientationLimited =  CurrOrientationLimited- (2 *LF_M_PI_VAL) ;
+					}
+					else{
+						CurrOrientationLimited  = CurrOrientationLimited + (2 *LF_M_PI_VAL) ;
+					}
+
+					OpCounter++;
+				}
+
+				CurrOrientationLimited = fabs(CurrOrientationLimited);
+
+
+				float NeededRotationRight;
+				float NeededRotationLeft;
+				float Diff;
+				float NeededRot = 0;
+
+				Diff= ExpectedOrientation - CurrOrientationLimited;
+
+				if(Diff > 0)
+				{
+					NeededRotationLeft = fabs(Diff - 2* LF_M_PI_VAL);
+				}else{
+					NeededRotationLeft = fabs(Diff);
+				}
+
+				if(Diff < 0)
+				{
+					NeededRotationRight = Diff + ( 2* LF_M_PI_VAL);
+				}else{
+					NeededRotationRight = fabs(Diff);
+				}
+
+				if(NeededRotationLeft > NeededRotationRight)
+				{
+					NeededRot = -1.0F * NeededRotationRight;
+				}
+				else{
+					NeededRot = NeededRotationLeft;
+				}
+
+				BLE_DbgMsgTransmit("NeededRot %f,ExpectedO: %f CurrO: %f " ,NeededRot,ExpectedOrientation,CurrOrientationLimited);
+	 }
+}
+
 /************************************************************************************/
 #define API_FUNCTIONS
 /************************************************************************************/
 void LF_MngrInit(void) /*Line Following Menager init */
 {
 	// EEPROM_ReadTryDetectEndLineMarkState();
+	BLE_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackHandler);
 	MotorsPwmInit();
 }
 
@@ -164,7 +259,8 @@ void LF_MngrTask(void) /*Line Following Menager task */
 		if(true == prevExpectedrDrivingState)
 		{/*Changed from driving to standstill*/
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
-			BLE_DbgMsgTransmit("LineFollowing mSec: %d", (DrivingTime ));
+			BLE_DbgMsgTransmit("LineFollowing mSec: %d TakenDist: %f", 
+										DrivingTime, Robot_Cntrl.input_TravelledDistance);
 		}
 		else
 		{/*Changed from standstill to driving */
@@ -179,7 +275,7 @@ void LF_MngrTask(void) /*Line Following Menager task */
 		DecodeLinePid();
 	}
 	else{
-		MotorsForceStop();
+		// MotorsForceStop();
 	}
 
 	prevExpectedrDrivingState = ExpectedrDrivingState;

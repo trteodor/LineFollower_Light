@@ -100,6 +100,8 @@ typedef enum LoggingState_t
 
 static void (*NvmUpdateCallBacks[BLE_NVM_UPDATE_MAX_CALL_BACKS_COUNT])(void) = {0};
 
+static void (*ManualCtrlRequestCallBackPointer)(float vecV_X, float vecV_Y);
+
 static LoggingState_t LoggingState = Suspended;
 static InternalRobotState_t InternalRobotState = Standstill;
 
@@ -947,6 +949,19 @@ static void ReceiveDataHandler(void)
 					break;
 				}
 
+				case	BLE_NvM_ManualCntrlCommand:/* Virutal analog controller frame */
+				{
+					float VecValX, VecValY;
+					memcpy(&VecValX,  &ReceivedMessageBuff[2], sizeof(float));
+					memcpy(&VecValY,  &ReceivedMessageBuff[6], sizeof(float));
+					if(ManualCtrlRequestCallBackPointer != 0)
+					{
+						ManualCtrlRequestCallBackPointer(VecValX,VecValY);
+					}
+
+					break;
+				}
+
 				case BLE_SetNewRobotName:
 				{
 					uint32_t AuxilaryNameVar1 = 0;
@@ -1154,6 +1169,11 @@ void BLE_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) )
 			break;
 		}
 	}
+}
+
+void BLE_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, float vecV_Y) )
+{
+	ManualCtrlRequestCallBackPointer = ManualCtrlReqCb;
 }
 
 bool BLE_isExpectedStateDriving(void)

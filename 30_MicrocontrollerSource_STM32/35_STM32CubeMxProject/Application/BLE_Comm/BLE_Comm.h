@@ -98,6 +98,8 @@ typedef enum
 	BLE_NvM_EncoderModCfgReq,
     BLE_NvM_EncoderModCfgData,
 
+	BLE_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
+
     BLE_SetNewRobotName,
 
 }BLE_MessageID_t;
@@ -235,6 +237,15 @@ void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
 * CallBack function will be called always if NvM data will be updated
 */
 void BLE_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
+
+/* brief BLE_RegisterNvMdataUpdateInfoCallBack
+* Register call back if, interface dedicated for handler in LF_Menager to cntrl manually 
+* the linne follower robot for example during standstill state using a virutal analog cntroller
+* in QT desktop application
+* CallBack function will be called always when the value of vector in the virtual controller will be changed
+*/
+void BLE_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, float vecV_Y) );
+
 
 /* brief BLE_DbgMsgTransmit
 * A simple function to send debug message through BLE (to QT Application)

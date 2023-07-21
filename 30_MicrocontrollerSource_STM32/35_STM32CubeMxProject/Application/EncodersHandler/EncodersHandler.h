@@ -19,4 +19,6 @@ void ENC_Task(void);
 
 float ENC_GetTravelledDistance(void);
 
+float ENC_GetCurrentOrientation(void);
+
 #endif //_Encoders_Module_H

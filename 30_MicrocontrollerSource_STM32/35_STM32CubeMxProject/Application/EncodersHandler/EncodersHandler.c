@@ -275,13 +275,18 @@ float ENC_GetLeftWhSpeed(void)
 	return EncHandlerDescr.LeftWheelSpeed;
 }
 
+float ENC_GetCurrentOrientation(void)
+{
+	return RobotPosition.O;
+}
+
 // float ENC_GetRightWhSpeed(void)
 // {
 // 	return EncHandlerDescr.RightWheelSpeed;
 // }
 
-// float ENC_GetTravelledDistance(void)
-// {
-// 	return EncHandlerDescr.TakenDistance;
-// }
+float ENC_GetTravelledDistance(void)
+{
+	return EncHandlerDescr.TakenDistance;
+}
 
