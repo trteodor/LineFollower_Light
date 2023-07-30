@@ -88,6 +88,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->BLE_RobotStart_Button->update();
 
 
+    DrawOrientationIndicator(3.14 / 2);
+
     /*Initialize dark theme*/
     QFile f(":qdarkstyle/dark/darkstyle.qss");
 
@@ -112,6 +114,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 }
+
+
 /*********************************************************************************************************/
 MainWindow::~MainWindow()
 {
@@ -136,7 +140,21 @@ MainWindow::~MainWindow()
     qDebug("Reached end");
 }
 
+/*
+ * Drawing orientation indicator based on input given in radian
+*/
+void MainWindow::DrawOrientationIndicator(float Orientation)
+{
+//    QElapsedTimer timerIndView;
+//    timerIndView.start();
+    QPixmap pix(":/RobOri/RobOrientation/robotOriResource/RobotOriIndicator.png");
+    QPainter paint(&pix);
+    QTransform trans;
+    trans.rotate( -(Orientation*57.2957795) );
+    ui->OrientationVectlabel->setPixmap(pix.transformed(trans) );
 
+//    qDebug() << "DrawOrientationIndicator TOOK: " << timerIndView.elapsed() << "milliseconds";
+}
 
 void MainWindow::addJoyStick(QLayout *layout_, JoyType type)
 {
@@ -182,7 +200,23 @@ void MainWindow::addJoyStick(QLayout *layout_, JoyType type)
  * @param y Mouse y position
  */
 void MainWindow::joystick_moved(double x, double y) {
-    qDebug() << x << ", " << y;
+    char command[20];
+
+
+    float VecValX= (float)x;
+    float VecValY= (float)y;
+
+
+    command[0] = (char)BleDataManager::BLE_NvM_ManualCntrlCommand;
+
+    std::memcpy(&command[2],  &VecValX, sizeof(float));
+    std::memcpy(&command[6],  &VecValY, sizeof(float));
+
+    QByteArray Helper = QByteArray::fromRawData(command,18);
+    Helper.append("\n\r");
+    BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+    qDebug() << "VecValX:" << VecValX << "VecValY: " << VecValY;
 }
 
 

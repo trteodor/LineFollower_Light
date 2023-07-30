@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/RobotOri">
+        <file alias="RobotOri">robotOriResource/RobotOriIndicator.png</file>
+    </qresource>
+</RCC>

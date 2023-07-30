@@ -39,9 +39,9 @@ Simulation:
 
 ![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_Final_SimuAssebly.PNG)
 
-Mobile App:
+QT Service App:
 
-![mobApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/Mobile_AppView.jpg)
+![QtApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/QTServAppScreenShot.png)
 
 General Concept:
 

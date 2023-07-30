@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/RobOri/RobOrientation">
+        <file>robotOriResource/RobotOriIndicator.png</file>
+    </qresource>
+</RCC>

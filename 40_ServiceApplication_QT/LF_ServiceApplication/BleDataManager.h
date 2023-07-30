@@ -72,10 +72,11 @@ public:
         BLE_NvM_EncoderModCfgReq,
         BLE_NvM_EncoderModCfgData,
 
+        BLE_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
+
         BLE_SetNewRobotName,
 
     }BLE_MessageID_t;
-
 
     /*
  * Modules should report the newest data then BLE module will transmit it

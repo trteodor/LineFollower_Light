@@ -157,19 +157,13 @@ private:
     void ReadNvMDataFromLineFollower();
     void RefreshErrorIndicatorView(void);
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
+    void DrawOrientationIndicator(float Orientation);
+
 
     GenericLfQCP PlotMap;
-
-
     GenericLfQCP PlotYawRate;
-
-
     GenericLfQCP PlotSpd;
-
-
     GenericLfQCP PlotPosErr;
-
-
     GenericLfQCP PlotPidRegVal;
 
 

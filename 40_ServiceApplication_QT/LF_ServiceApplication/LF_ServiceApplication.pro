@@ -34,6 +34,7 @@ CONFIG += lrelease
 CONFIG += embed_translations
 
 RESOURCES += qdarkstyle/dark/darkstyle.qrc
+RESOURCES += RobotOriRes.qrc
 RESOURCES += qdarkstyle/light/lightstyle.qrc
 
 RESOURCES += VirtualJoystickQML/resources.qrc
