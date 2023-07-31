@@ -1,0 +1,206 @@
+Change Component Footprint: Designator=C1 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C2 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C3 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C4 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C5 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C6 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C7 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C8 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C11 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C12 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C15 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C16 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C18 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C19 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C20 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C21 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C22 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C23 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C24 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C25 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C26 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C27 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C30 Old Footprint=0805C New Footprint=0805C
+Change Component Footprint: Designator=C32 Old Footprint=0805C New Footprint=0805C
+Added Component: Designator=C9(3216-SMDA)
+Add component (AddParameter): Name = "Indeks"; Value = "12471"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "10u-16V"; VariantName = "[No Variations]"
+Added Component: Designator=C10(3216-SMDA)
+Add component (AddParameter): Name = "Indeks"; Value = "12471"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "10u-16V"; VariantName = "[No Variations]"
+Added Component: Designator=C13(3528-SMDB)
+Add component (AddParameter): Name = "Indeks"; Value = "4032"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "47u-10V"; VariantName = "[No Variations]"
+Added Component: Designator=C14(3528-SMDB)
+Add component (AddParameter): Name = "Indeks"; Value = "4032"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "47u-10V"; VariantName = "[No Variations]"
+Added Component: Designator=C28(1206C)
+Add component (AddParameter): Name = "ECCN_US/EU"; Value = "n/a"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_1"; Value = "YAGEO"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_2"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_Part_1"; Value = "CC1206KKX7R7BB225"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_Part_2"; Value = "C1206C225K4RAC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Order"; Value = "CC1206KKX7R7BB225"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision"; Value = "July-2002: Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "2.2uF"; VariantName = "[No Variations]"
+Added Component: Designator=C29(1206C)
+Add component (AddParameter): Name = "ECCN_US/EU"; Value = "n/a"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_1"; Value = "YAGEO"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_2"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_Part_1"; Value = "CC1206KKX7R7BB225"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manuf_Part_2"; Value = "C1206C225K4RAC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Order"; Value = "CC1206KKX7R7BB225"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision"; Value = "July-2002: Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "2.2uF"; VariantName = "[No Variations]"
+Add Component: Footprint Not Found CMJ2101FP
+Add Component: Footprint Not Found CMJ2101FP
+Added Component: Designator=D1(D1206)
+Add component (AddParameter): Name = "Index"; Value = "-"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "n.m."; VariantName = "[No Variations]"
+Added Component: Designator=D2(D1206)
+Add component (AddParameter): Name = "Index"; Value = "-"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "n.m."; VariantName = "[No Variations]"
+Added Component: Designator=D3(D1206)
+Add component (AddParameter): Name = "Index"; Value = "-"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "n.m."; VariantName = "[No Variations]"
+Add Component: Footprint Not Found SOT23-6
+Added Component: Designator=R1(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "0R12-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R2(0805R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "330R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R3(0805R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "330R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R4(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "0R12-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R5(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "0R12-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R6(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "0R12-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R7(0805R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "2k-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R8(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "470R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R9(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "470R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R10(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "0R"; VariantName = "[No Variations]"
+Added Component: Designator=R11(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "470R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R12(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "470R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R13(0805R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "3k-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R14(0805R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "3k-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R20(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "470R-1%"; VariantName = "[No Variations]"
+Added Component: Designator=R21(1206R)
+Add component (AddParameter): Name = "Indeks"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Nazwa"; Value = "10k-1%"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=PB+ Pin=C9-1
+Added Pin To Net: NetName=GND Pin=C9-2
+Added Pin To Net: NetName=PB+ Pin=C10-1
+Added Pin To Net: NetName=GND Pin=C10-2
+Added Pin To Net: NetName=PB+ Pin=C13-1
+Added Pin To Net: NetName=GND Pin=C13-2
+Added Pin To Net: NetName=VCC Pin=C14-1
+Added Pin To Net: NetName=GND Pin=C14-2
+Added Pin To Net: NetName=GND Pin=C28-1
+Added Pin To Net: NetName=VCAP Pin=C28-2
+Added Pin To Net: NetName=GND Pin=C29-1
+Added Pin To Net: NetName=VCAP Pin=C29-2
+Add Pin To Net: Unknown Pin: Pin CMJ1-1
+Add Pin To Net: Unknown Pin: Pin CMJ1-2
+Add Pin To Net: Unknown Pin: Pin CMJ1-3
+Add Pin To Net: Unknown Pin: Pin CMJ1-4
+Add Pin To Net: Unknown Pin: Pin CMJ2-1
+Add Pin To Net: Unknown Pin: Pin CMJ2-2
+Add Pin To Net: Unknown Pin: Pin CMJ2-3
+Add Pin To Net: Unknown Pin: Pin CMJ2-4
+Added Pin To Net: NetName=NetD1_1 Pin=D1-1
+Added Pin To Net: NetName=VCC Pin=D1-2
+Added Pin To Net: NetName=NetD2_1 Pin=D2-1
+Added Pin To Net: NetName=DIODE_1 Pin=D2-2
+Added Pin To Net: NetName=NetD3_1 Pin=D3-1
+Added Pin To Net: NetName=DIODE_2 Pin=D3-2
+Add Pin To Net: Unknown Pin: Pin IC-1
+Add Pin To Net: Unknown Pin: Pin IC-2
+Add Pin To Net: Unknown Pin: Pin IC-3
+Add Pin To Net: Unknown Pin: Pin IC-4
+Add Pin To Net: Unknown Pin: Pin IC-5
+Add Pin To Net: Unknown Pin: Pin IC-6
+Added Pin To Net: NetName=NetR1_1 Pin=R1-1
+Added Pin To Net: NetName=GND Pin=R1-2
+Added Pin To Net: NetName=PB+ Pin=R2-1
+Added Pin To Net: NetName=NetC11_2 Pin=R2-2
+Added Pin To Net: NetName=VC Pin=R3-1
+Added Pin To Net: NetName=NetC16_1 Pin=R3-2
+Added Pin To Net: NetName=NetR4_1 Pin=R4-1
+Added Pin To Net: NetName=GND Pin=R4-2
+Added Pin To Net: NetName=NetR5_1 Pin=R5-1
+Added Pin To Net: NetName=GND Pin=R5-2
+Added Pin To Net: NetName=NetR6_1 Pin=R6-1
+Added Pin To Net: NetName=GND Pin=R6-2
+Added Pin To Net: NetName=GND Pin=R7-1
+Added Pin To Net: NetName=NetIC_3 Pin=R7-2
+Added Pin To Net: NetName=NetD2_1 Pin=R8-1
+Added Pin To Net: NetName=GND Pin=R8-2
+Added Pin To Net: NetName=NetD3_1 Pin=R9-1
+Added Pin To Net: NetName=GND Pin=R9-2
+Added Pin To Net: NetName=VSS Pin=R10-1
+Added Pin To Net: NetName=GND Pin=R10-2
+Added Pin To Net: NetName=NetR11_1 Pin=R11-1
+Added Pin To Net: NetName=SenD1 Pin=R11-2
+Added Pin To Net: NetName=NetD1_1 Pin=R12-1
+Added Pin To Net: NetName=GND Pin=R12-2
+Added Pin To Net: NetName=VCC Pin=R13-1
+Added Pin To Net: NetName=I2C1_SDA Pin=R13-2
+Added Pin To Net: NetName=VCC Pin=R14-1
+Added Pin To Net: NetName=I2C1_SCL Pin=R14-2
+Added Pin To Net: NetName=NetR20_1 Pin=R20-1
+Added Pin To Net: NetName=SenD2 Pin=R20-2
+Added Pin To Net: NetName=VCC Pin=R21-1
+Added Pin To Net: NetName=RESET Pin=R21-2
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component C9 10u-16V
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component C10 10u-16V
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component C13 47u-10V
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component C14 47u-10V
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component C28 2.2uF
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component C29 2.2uF
+Add Class Member: Failed to add class member : Component CMJ1 CMJ2101
+Add Class Member: Failed to add class member : Component CMJ2 CMJ2101
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component D1 n.m.
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component D2 n.m.
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component D3 n.m.
+Add Class Member: Failed to add class member : Component IC TC2120
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R1 0.1
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R2 330R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R3 330R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R4 0.1
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R5 0.1
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R6 0.1
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R7 2k-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R8 470R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R9 470R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R10 n.m
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R11 470R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R12 470R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R13 3k-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R14 3k-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R20 470R-1%
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component R21 10k-1%

@@ -1,5 +1,0 @@
-Resistors for diodes in sensor board
-Remove EEPROM - not used (emulated in MCU)
-Add T2120 ByPass through button(force wake up)
-Place for the lift lock of sensor bard
-Remove SdCard - not used, completely unnecessary

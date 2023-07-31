@@ -157,7 +157,7 @@ signals:
                                                             uint16_t TransmisstedMessagesCounter,uint16_t RetransmissionCounter);
 
 
-
+    void BleDatMngrSignal_UpdateOrientation(float Orientation);
 
     void BleDatMngrSignal_PlotMapUpdate(void);
     void BleDatMngrSignal_PlotYawRateUpdate(void);

@@ -167,7 +167,7 @@ void BleDataManager::BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataM
             ExpectingFrameNumber = 0;
             FullFrameCounter++;
 
-
+            emit BleDatMngrSignal_UpdateOrientation(FullBaseData.CurrMapData.PosO);
 
             if(true == DebugTable_BaseDataLoggingState)
             {

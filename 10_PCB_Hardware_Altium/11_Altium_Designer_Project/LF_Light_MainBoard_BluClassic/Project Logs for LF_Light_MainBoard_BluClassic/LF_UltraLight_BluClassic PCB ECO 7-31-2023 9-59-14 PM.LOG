@@ -1,0 +1,20 @@
+Add Component: Footprint Not Found CMJ2101FP
+Add Component: Footprint Not Found CMJ2101FP
+Add Component: Footprint Not Found SOT23-6
+Add Pin To Net: Unknown Pin: Pin CMJ1-1
+Add Pin To Net: Unknown Pin: Pin CMJ1-2
+Add Pin To Net: Unknown Pin: Pin CMJ1-3
+Add Pin To Net: Unknown Pin: Pin CMJ1-4
+Add Pin To Net: Unknown Pin: Pin CMJ2-1
+Add Pin To Net: Unknown Pin: Pin CMJ2-2
+Add Pin To Net: Unknown Pin: Pin CMJ2-3
+Add Pin To Net: Unknown Pin: Pin CMJ2-4
+Add Pin To Net: Unknown Pin: Pin IC-1
+Add Pin To Net: Unknown Pin: Pin IC-2
+Add Pin To Net: Unknown Pin: Pin IC-3
+Add Pin To Net: Unknown Pin: Pin IC-4
+Add Pin To Net: Unknown Pin: Pin IC-5
+Add Pin To Net: Unknown Pin: Pin IC-6
+Add Class Member: Failed to add class member : Component CMJ1 CMJ2101
+Add Class Member: Failed to add class member : Component CMJ2 CMJ2101
+Add Class Member: Failed to add class member : Component IC TC2120

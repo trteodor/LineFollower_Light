@@ -36,6 +36,8 @@ private slots:
 
     void joystick_moved(double x, double y);
 
+    void MainWin_DrawOrientationIndicator(float Orientation);
+
     void BLE_changedState(bluetoothleUART::bluetoothleState state);
     void BLE_connectDevice();
 
@@ -157,7 +159,7 @@ private:
     void ReadNvMDataFromLineFollower();
     void RefreshErrorIndicatorView(void);
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
-    void DrawOrientationIndicator(float Orientation);
+
 
 
     GenericLfQCP PlotMap;

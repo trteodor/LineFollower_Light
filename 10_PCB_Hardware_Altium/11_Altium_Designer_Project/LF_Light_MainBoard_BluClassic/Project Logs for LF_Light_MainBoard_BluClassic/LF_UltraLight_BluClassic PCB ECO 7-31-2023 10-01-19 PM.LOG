@@ -1,0 +1,29 @@
+Add Component: Footprint Not Found CMJ2101FP
+Add Component: Footprint Not Found CMJ2101FP
+Added Component: Designator=IC(SOT23-6)
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "https://abc-rc.pl/pl/products/modul-bms-pcm-pcb-ladowania-i-ochrony-ogniw-li-ion-2s-8-4v-5a-18650-7891.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "Taken directly from this component"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Fortune Semiconductor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "DW01A"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Package Analog Devices"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/DW01A/Fortune%20Semiconductor/view-part/4388554/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Add Pin To Net: Unknown Pin: Pin CMJ1-1
+Add Pin To Net: Unknown Pin: Pin CMJ1-2
+Add Pin To Net: Unknown Pin: Pin CMJ1-3
+Add Pin To Net: Unknown Pin: Pin CMJ1-4
+Add Pin To Net: Unknown Pin: Pin CMJ2-1
+Add Pin To Net: Unknown Pin: Pin CMJ2-2
+Add Pin To Net: Unknown Pin: Pin CMJ2-3
+Add Pin To Net: Unknown Pin: Pin CMJ2-4
+Added Pin To Net: NetName=OD Pin=IC-1
+Added Pin To Net: NetName=OC Pin=IC-2
+Added Pin To Net: NetName=NetIC_3 Pin=IC-3
+Added Pin To Net: NetName=NetC16_1 Pin=IC-4
+Added Pin To Net: NetName=NetC11_2 Pin=IC-5
+Added Pin To Net: NetName=VSS Pin=IC-6
+Add Class Member: Failed to add class member : Component CMJ1 CMJ2101
+Add Class Member: Failed to add class member : Component CMJ2 CMJ2101
+Added Member To Class: ClassName=LF_Light_BluClassic Member=Component IC TC2120

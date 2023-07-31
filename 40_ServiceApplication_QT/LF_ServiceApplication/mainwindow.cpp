@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->BLE_RobotStart_Button->update();
 
 
-    DrawOrientationIndicator(3.14 / 2);
+    MainWin_DrawOrientationIndicator( 3.14F / 2.0F);
 
     /*Initialize dark theme*/
     QFile f(":qdarkstyle/dark/darkstyle.qss");
@@ -140,21 +140,6 @@ MainWindow::~MainWindow()
     qDebug("Reached end");
 }
 
-/*
- * Drawing orientation indicator based on input given in radian
-*/
-void MainWindow::DrawOrientationIndicator(float Orientation)
-{
-//    QElapsedTimer timerIndView;
-//    timerIndView.start();
-    QPixmap pix(":/RobOri/RobOrientation/robotOriResource/RobotOriIndicator.png");
-    QPainter paint(&pix);
-    QTransform trans;
-    trans.rotate( -(Orientation*57.2957795) );
-    ui->OrientationVectlabel->setPixmap(pix.transformed(trans) );
-
-//    qDebug() << "DrawOrientationIndicator TOOK: " << timerIndView.elapsed() << "milliseconds";
-}
 
 void MainWindow::addJoyStick(QLayout *layout_, JoyType type)
 {
@@ -215,6 +200,14 @@ void MainWindow::joystick_moved(double x, double y) {
     QByteArray Helper = QByteArray::fromRawData(command,18);
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
+
+//Debug/ test
+//    float ExpectedOrientation = ( (float)atan2(VecValY,VecValX) );
+//    if(ExpectedOrientation < (0.0F) ){
+//        ExpectedOrientation =  (3.14) + (3.14 - fabs(ExpectedOrientation));
+//        /*To get full circle*/
+//    }
+//    MainWin_DrawOrientationIndicator(ExpectedOrientation);
 
     qDebug() << "VecValX:" << VecValX << "VecValY: " << VecValY;
 }
@@ -450,6 +443,12 @@ void MainWindow::BLE_InitializeQTConnections(void)
         SIGNAL(BleDatMngrSignal_UpdateEncoderCfgData(float,float) )
         ,this
         ,SLOT(MainWin_UpdateEncoderCfgData(float,float) ) );
+
+    connect(
+        &BleInputDataProcessingWrapper,
+        SIGNAL(BleDatMngrSignal_UpdateOrientation(float) )
+        ,this
+        ,SLOT(MainWin_DrawOrientationIndicator(float) ) );
 
 
 
@@ -1032,6 +1031,22 @@ void MainWindow::MainWinPlot_PlotSpdReplot(void)
 }
 /*********************************************************************************************************/
 
+/*
+ * Drawing orientation indicator based on input given in radian
+*/
+void MainWindow::MainWin_DrawOrientationIndicator(float Orientation)
+{
+    qDebug() << "MainWin_DrawOrientationIndicator Ori:" << Orientation;
+    //    QElapsedTimer timerIndView;
+    //    timerIndView.start();
+    QPixmap pix(":/RobOri/RobOrientation/robotOriResource/RobotOriIndicator.png");
+    QPainter paint(&pix);
+    QTransform trans;
+    trans.rotate( -(Orientation*57.2957795) );
+    ui->OrientationVectlabel->setPixmap(pix.transformed(trans) );
+
+    //    qDebug() << "MainWin_DrawOrientationIndicator TOOK: " << timerIndView.elapsed() << "milliseconds";
+}
 
 void MainWindow::on_BLE_SimulatorStartButton_clicked()
 {
