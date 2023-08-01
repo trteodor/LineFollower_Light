@@ -94,10 +94,14 @@ void Error_Handler(void);
 #define TIM12_CH1_MotPWM2_2_GPIO_Port GPIOB
 #define TIM12_CH2_MotPWM2_1_Pin GPIO_PIN_15
 #define TIM12_CH2_MotPWM2_1_GPIO_Port GPIOB
+#define IR_PIN_Pin GPIO_PIN_8
+#define IR_PIN_GPIO_Port GPIOA
 #define LDD1_Pin GPIO_PIN_15
 #define LDD1_GPIO_Port GPIOA
-#define PWRC_BLE_Pin GPIO_PIN_4
-#define PWRC_BLE_GPIO_Port GPIOD
+#define BLU_ABN_MEM_Pin GPIO_PIN_3
+#define BLU_ABN_MEM_GPIO_Port GPIOD
+#define BLU_RESET_Pin GPIO_PIN_4
+#define BLU_RESET_GPIO_Port GPIOD
 #define EEPROM_WC_Pin GPIO_PIN_0
 #define EEPROM_WC_GPIO_Port GPIOE
 #define MPU6050_INT_Pin GPIO_PIN_1

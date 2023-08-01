@@ -29,6 +29,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "LF_MainRunnable.h"
+
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -77,7 +79,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-   HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
    /* Unlock the Flash Program Erase controller */
@@ -113,15 +115,59 @@ int main(void)
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
-  LF_AppInit();
+//  LF_AppInit();
+  static uint8_t RecDatBuff[40];
+  static uint8_t TrDatBuff[40];
+
+  static uint32_t startTim, endTim;
   
+  uint8_t Size;
+
+  static volatile uint8_t transmitDebugChangedFlag = 0;
+
+	Size = sprintf(TrDatBuff,"AT");
+	//  Size = sprintf(TrDatBuff,"AT+VERSION\r\n");
+	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+	startTim = HAL_GetTick();
+	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+	endTim = HAL_GetTick();
+	HAL_Delay(1100);
+
+	memset(RecDatBuff,0,40);
+	Size = sprintf(TrDatBuff,"AT+VERSION");
+	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+	startTim = HAL_GetTick();
+	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+	endTim = HAL_GetTick();
+	HAL_Delay(1100);
+
+	memset(RecDatBuff,0,40);
+	Size = sprintf(TrDatBuff,"AT+NAMECL_ANDRZEJ");
+	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+	startTim = HAL_GetTick();
+	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+	endTim = HAL_GetTick();
+	HAL_Delay(1100);
+
+
+	memset(RecDatBuff,0,40);
+	Size = sprintf(TrDatBuff,"AT+BAUDB"); /*SetBaud 961000*/
+	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+	startTim = HAL_GetTick();
+	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+	endTim = HAL_GetTick();
+	HAL_Delay(1100);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LF_AppTask();
+	  Size = sprintf(TrDatBuff,"HelloWorldWhatAmazingCrazyLongMessage!!\n\r");
+	  HAL_UART_Transmit(&huart2, TrDatBuff,Size,100);
+	  HAL_Delay(1);
+//    LF_AppTask();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
