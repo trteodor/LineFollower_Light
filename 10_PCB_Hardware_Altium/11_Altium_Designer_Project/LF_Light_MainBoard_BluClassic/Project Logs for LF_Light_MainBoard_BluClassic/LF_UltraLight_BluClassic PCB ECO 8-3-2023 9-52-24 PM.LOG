@@ -1,3 +1,0 @@
-Removed Pin From Net: NetName=VCC Pin=C23-1
-Removed Pin From Net: NetName=GND Pin=C23-2
-Removed Member From Class: ClassName=Microcontroller Member=C23
