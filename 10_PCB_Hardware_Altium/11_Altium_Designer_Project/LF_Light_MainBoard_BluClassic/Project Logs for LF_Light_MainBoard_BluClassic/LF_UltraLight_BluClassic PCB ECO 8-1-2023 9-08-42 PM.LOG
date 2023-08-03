@@ -1,6 +1,0 @@
-Change Component Comment : Designator=P1 Old Comment=Odbiornik IR TSOP2236 New Comment=Receiver TSOP2236
-Added Pin To Net: NetName=VCC Pin=P1-2
-Added Pin To Net: NetName=GND Pin=P1-3
-Added Pin To Net: NetName=IR_PIN Pin=P1-1
-Added Pin To Net: NetName=IR_PIN Pin=U5-67
-Added Net: Name=IR_PIN

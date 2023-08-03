@@ -140,24 +140,24 @@ static BLE_CallStatus_t MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BL
 
 /************************************************************************************************/
 
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-{
-
-	if(huart->Instance == USART2)
-	{
-		uint8_t *MessageReceiveBufferAddress;
-
-		LastMessageTime = HAL_GetTick();
-
-		/*Start listen again as fast as possible*/
-		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
-		// Start listening again
- 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
-
-		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-
-	}
-}
+//void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+//{
+//
+//	if(huart->Instance == USART2)
+//	{
+//		uint8_t *MessageReceiveBufferAddress;
+//
+//		LastMessageTime = HAL_GetTick();
+//
+//		/*Start listen again as fast as possible*/
+//		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
+//		// Start listening again
+// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
+//
+//		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+//
+//	}
+//}
 
 
 /*!

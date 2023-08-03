@@ -1,3 +1,0 @@
-Removed Pin From Net: NetName=BLU_AbandonMemory Pin=BluC-26
-Added Pin To Net: NetName=BLU_ABN_MEM Pin=BluC-26
-Added Net: Name=BLU_ABN_MEM

@@ -1,7 +1,2 @@
-Place for the lift lock of sensor bard (protection jump of sensor board while turn)
-
-Verify encoder connections!!!
 Verify battery connector!!!
-Verify layout of tc2120!!!
-Add Reset button and ByPass button of TC2120 to force wakeUp
-Add Bluetooth Classic instead of BLE
+Bluetooth Layout

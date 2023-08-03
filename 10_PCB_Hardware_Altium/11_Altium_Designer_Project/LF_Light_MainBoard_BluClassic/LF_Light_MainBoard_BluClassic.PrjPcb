@@ -49,6 +49,23 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
+DocumentPath=1_PowerInput.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=HGMFFAOB
+
+[Document2]
 DocumentPath=LF_UltraLight_BluClassic.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -65,7 +82,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=LJXRPJCI
 
-[Document2]
+[Document3]
 DocumentPath=LF_Light_BluClassic.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -82,7 +99,41 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NWCUDYAK
 
-[Document3]
+[Document4]
+DocumentPath=2_Microcontroller.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=4
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=WORAJYWC
+
+[Document5]
+DocumentPath=3_MotorDrivers.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=2
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=JBXQPAOQ
+
+[Document6]
 DocumentPath=..\Component_Libraries\TC2120\Project Outputs for TC2120\TC2120.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -99,7 +150,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document4]
+[Document7]
 DocumentPath=..\Component_Libraries\8205A\8205A.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -116,7 +167,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document5]
+[Document8]
 DocumentPath=..\Component_Libraries\DRV8833PWP\Project Outputs for DRV8833PWPFULLBYTEOR\DRV8833PWPFULLBYTEOR.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -133,7 +184,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document6]
+[Document9]
 DocumentPath=..\Component_Libraries\DW01A\DW01A.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -150,7 +201,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document7]
+[Document10]
 DocumentPath=..\Component_Libraries\JDY_08\JDY_08.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -167,7 +218,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document8]
+[Document11]
 DocumentPath=..\Component_Libraries\KTIR0711S_Lib\Project Outputs for KTIR0711SLib\KTIR0711SLib.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -184,7 +235,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document9]
+[Document12]
 DocumentPath=..\Component_Libraries\MPU_6050\MPU-6050.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -201,7 +252,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document10]
+[Document13]
 DocumentPath=..\Component_Libraries\PololuMotorWithEncoder\Silnik_Pololu.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -217,6 +268,27 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
+
+[Document14]
+DocumentPath=4_ConnectorsAndPeripherials.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=3
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=OTJDAMAO
+
+[GeneratedDocument1]
+DocumentPath=Project Outputs for LF_Light_MainBoard_BluClassic\Design Rule Check - LF_UltraLight_BluClassic.html
+DItemRevisionGUID=
 
 [Configuration1]
 Name=Sources

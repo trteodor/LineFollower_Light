@@ -62,7 +62,17 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint8_t RecDmaDataBuff[300];
 
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+
+	if(huart->Instance == USART2)
+	{
+ 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, RecDmaDataBuff, 300);
+		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -116,47 +126,52 @@ int main(void)
   LL_TIM_EnableCounter(TIM2);
 
 //  LF_AppInit();
-  static uint8_t RecDatBuff[40];
-  static uint8_t TrDatBuff[40];
+  static uint8_t RecDatBuff[300];
+  static uint8_t TrDatBuff[300];
 
   static uint32_t startTim, endTim;
   
   uint8_t Size;
 
-  static volatile uint8_t transmitDebugChangedFlag = 0;
+//  static volatile uint8_t transmitDebugChangedFlag = 0;
+//
+//	Size = sprintf(TrDatBuff,"AT");
+//	//  Size = sprintf(TrDatBuff,"AT+VERSION\r\n");
+//	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+//	startTim = HAL_GetTick();
+//	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+//	endTim = HAL_GetTick();
+//	HAL_Delay(1100);
+//
+//	memset(RecDatBuff,0,40);
+//	Size = sprintf(TrDatBuff,"AT+VERSION");
+//	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+//	startTim = HAL_GetTick();
+//	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+//	endTim = HAL_GetTick();
+//	HAL_Delay(1100);
+//
+//	memset(RecDatBuff,0,40);
+//	Size = sprintf(TrDatBuff,"AT+NAMECL_ANDRZEJ");
+//	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+//	startTim = HAL_GetTick();
+//	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+//	endTim = HAL_GetTick();
+//	HAL_Delay(1100);
+//
+//
+//	memset(RecDatBuff,0,40);
+//	Size = sprintf(TrDatBuff,"AT+BAUDB"); /*SetBaud 921600*/
+//	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
+//	startTim = HAL_GetTick();
+//	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
+//	endTim = HAL_GetTick();
+//	HAL_Delay(1100);
+	/*Uart baud must be updated then*/
 
-	Size = sprintf(TrDatBuff,"AT");
-	//  Size = sprintf(TrDatBuff,"AT+VERSION\r\n");
-	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
-	startTim = HAL_GetTick();
-	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
-	endTim = HAL_GetTick();
-	HAL_Delay(1100);
+  uint32_t Iter = 0;
 
-	memset(RecDatBuff,0,40);
-	Size = sprintf(TrDatBuff,"AT+VERSION");
-	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
-	startTim = HAL_GetTick();
-	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
-	endTim = HAL_GetTick();
-	HAL_Delay(1100);
-
-	memset(RecDatBuff,0,40);
-	Size = sprintf(TrDatBuff,"AT+NAMECL_ANDRZEJ");
-	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
-	startTim = HAL_GetTick();
-	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
-	endTim = HAL_GetTick();
-	HAL_Delay(1100);
-
-
-	memset(RecDatBuff,0,40);
-	Size = sprintf(TrDatBuff,"AT+BAUDB"); /*SetBaud 961000*/
-	HAL_UART_Transmit(&huart2, TrDatBuff,Size,1000);
-	startTim = HAL_GetTick();
-	HAL_UART_Receive(&huart2, RecDatBuff, 40, 1000);
-	endTim = HAL_GetTick();
-	HAL_Delay(1100);
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart2, RecDmaDataBuff, 300);
 
   /* USER CODE END 2 */
 
@@ -164,9 +179,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  Size = sprintf(TrDatBuff,"HelloWorldWhatAmazingCrazyLongMessage!!\n\r");
-	  HAL_UART_Transmit(&huart2, TrDatBuff,Size,100);
-	  HAL_Delay(1);
+
+//	  Size = sprintf(TrDatBuff,"%d  AAXZm0MgzIm8I5naGP0a0OQ6oTYWAgUCZhEaKFoEH0AaCJ0X0Rw71xoqs5jSx2cRGPjgP63XpErbMsrXDmE5E3ngYbn9NMO4Tfspo5O6WntUGSu5WDtfKGfVsKRs2zS4tflAXRM0PpZR8IjQA88hBPLvN2cKMtGHWZC9d4Xa2YKeKlKF5EFHqjI7Hpv3rVg0MYPlExxLAwRbHeNEBfn0ODLkbqE6aiRi5o1UvjcyNNZwXBxqAeA\n\r",Iter);
+//	  HAL_UART_Transmit(&huart2, TrDatBuff,Size,100);
+//	  endTim = HAL_Get100usTick();
+//	  Iter++;
+//	  HAL_Delay(20);
 //    LF_AppTask();
     /* USER CODE END WHILE */
 

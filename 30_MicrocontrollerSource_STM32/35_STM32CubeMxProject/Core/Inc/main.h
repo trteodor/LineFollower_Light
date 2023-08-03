@@ -96,6 +96,8 @@ void Error_Handler(void);
 #define TIM12_CH2_MotPWM2_1_GPIO_Port GPIOB
 #define IR_PIN_Pin GPIO_PIN_8
 #define IR_PIN_GPIO_Port GPIOA
+#define USER_BUTTON_Pin GPIO_PIN_12
+#define USER_BUTTON_GPIO_Port GPIOA
 #define LDD1_Pin GPIO_PIN_15
 #define LDD1_GPIO_Port GPIOA
 #define BLU_ABN_MEM_Pin GPIO_PIN_3
