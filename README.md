@@ -22,7 +22,7 @@ TODO:
 * Generally much things..
 * Development of QT service application..
 
-The repository contains all the files used to create this project (PCB, Assemblies, Microcontroller Source Code)
+The repository contains all the files used to create this project (PCB, Mechanic models, Embedded source Code, QT serv. App code)
 
 # Few Photos
 
