@@ -31,13 +31,12 @@ Assembly without VL53
 
 ![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/RobotFotoMain.png)
 
-Small Family:
-
-![SmallFamily](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/Sweet_Family.jpg)
 
 Simulation:
 
-![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_Final_SimuAssebly.PNG)
+![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyFrontSide.PNG)
+
+![draftView2](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyBackSide.PNG)
 
 QT Service App:
 

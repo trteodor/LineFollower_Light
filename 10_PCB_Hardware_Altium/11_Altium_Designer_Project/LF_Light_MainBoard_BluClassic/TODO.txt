@@ -1,2 +1,2 @@
 Verify battery connector!!!
-Bluetooth Layout
+Verify Bluetooth Layout

@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : E:\STM32_VSCodeWorkSpace\LineFollower_Light\10_PCB_Hardware_Altium\11_Altium_Designer_Project\LF_Light_MainBoard_BluClassic\LF_Light_BluClassic.PcbDoc
-Date     : 8/4/2023
-Time     : 12:04:24 AM
+Date     : 8/8/2023
+Time     : 10:51:01 PM
 
 Processing Rule : Clearance Constraint (Gap=0.711mm) (HasFootprint('SFT01')),(All)
 Rule Violations :0
@@ -108,4 +108,4 @@ Rule Violations :0
 
 Violations Detected : 0
 Waived Violations : 0
-Time Elapsed        : 00:00:02
+Time Elapsed        : 00:00:01
