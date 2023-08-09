@@ -1,5 +1,5 @@
 /**
- * @file BLE_Comm.c
+ * @file BluetoothClassicComm.c
  * @author teodor
 
  * @brief This file is a part of Line follower application
@@ -8,7 +8,7 @@
  */
 
 
-#include "BLE_Comm.h"
+#include "BluetoothClassicComm.h"
 
 #include "stdbool.h"
 #include "string.h"
@@ -570,7 +570,7 @@ static void Statistics_CreateAndTransmitCommunicationStatistics(void)
 		MainRingBufferOverFlowCounter++;
 	}
 
-	RingBufferStatisticsHolder[0] = BLE_CommunicationStatistics;
+	RingBufferStatisticsHolder[0] = BluetoothClassicCommunicationStatistics;
 	RingBufferStatisticsHolder[1] = SyncIdStat; /*SyncId*/
 
 	uint32_t ucHelperTime = HAL_GetTick();
@@ -969,7 +969,7 @@ static void ReceiveDataHandler(void)
 					uint32_t AuxilaryNameVar3 = 0;
 					uint32_t AuxilaryNameVar4 = 0;
 
-	    			memcpy( &AuxilaryNameVar1,  &ReceivedMessageBuff[2], sizeof(uint32_t) );
+	    			memcpy( &AuxilaryNameVar1,  &ReceivedMessageBuff[2], sizeof(uint32_t) );``
 	    			memcpy( &AuxilaryNameVar2,  &ReceivedMessageBuff[6], sizeof(uint32_t) );
 	    			memcpy( &AuxilaryNameVar3,  &ReceivedMessageBuff[10], sizeof(uint32_t) );
 	    			memcpy( &AuxilaryNameVar4,  &ReceivedMessageBuff[14], sizeof(uint32_t) );
@@ -1095,7 +1095,7 @@ static void TransmitDataHandler(void)
 *Interface functions implementation
 *********************************************************************************************
 */
-#define API_FUNCTIONS_BLE_COMM
+#define API_FUNCTIONS_BluetoothClassicComm
 
 void BLE_Init(void)
 {

@@ -68,7 +68,7 @@
         "eemuconfig.h": "c",
         "eemu.h": "c",
         "lineposestimator.h": "c",
-        "ble_comm.h": "c",
+        "BluetoothClassicComm.h": "c",
         "LF_Menager.h": "c",
         "stdbool.h": "c",
         "ledmngr.h": "c",

@@ -1,6 +1,6 @@
 #include "stdint.h"
 
-#include "BLE_Comm.h"
+#include "BluetoothClassicComm.h"
 #include "LF_AppConfig.h"
 #include "LF_LinePid.h"
 #include "LinePosEstimator.h"

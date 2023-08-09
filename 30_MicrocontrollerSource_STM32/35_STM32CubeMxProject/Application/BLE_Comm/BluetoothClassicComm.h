@@ -1,5 +1,5 @@
 /**
- * @file BLE_Comm.h
+ * @file BluetoothClassicComm.h
  * @author teodor
 
  * @brief This file is a part of Line follower application
@@ -75,7 +75,7 @@ typedef enum
     BLE_TrueBaseLoggingStart,
     BLE_SimuAndTrueDataLoggingStop,
 
-    BLE_CommunicationStatistics,
+    BluetoothClassicCommunicationStatistics,
     BLE_BaseDataReport_part1,
     BLE_BaseDataReport_part2,
     BLE_BaseDataReport_part3,

@@ -10,7 +10,7 @@
 
 #include "LF_Menager.h"
 #include "LF_LinePid.h"
-#include "BLE_Comm.h"
+#include "BluetoothClassicComm.h"
 #include "EEmu.h"
 #include "LedMngr.h"
 #include "EncodersHandler.h"

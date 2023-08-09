@@ -8,7 +8,7 @@
 
 #include "EncodersHandler.h"
 #include "LF_AppConfig.h"
-#include "BLE_Comm.h"
+#include "BluetoothClassicComm.h"
 #include "EEmu.h"
 
 #include "math.h"

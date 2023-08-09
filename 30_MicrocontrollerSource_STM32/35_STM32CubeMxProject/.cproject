@@ -61,7 +61,7 @@
 									<listOptionValue builtIn="false" value="../Application/LinePosEstimator"/>
 									<listOptionValue builtIn="false" value="../Application/LedManager"/>
 									<listOptionValue builtIn="false" value="../Application/DistanceSensor"/>
-									<listOptionValue builtIn="false" value="../Application/BLE_Comm"/>
+									<listOptionValue builtIn="false" value="../Application/BluetoothClassicComm"/>
 									<listOptionValue builtIn="false" value="../Middlewares/EEPROM_Emul"/>
 									<listOptionValue builtIn="false" value="../Config"/>
 									<listOptionValue builtIn="false" value="../Application/AppTools"/>

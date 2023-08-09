@@ -2,7 +2,7 @@
 #include "adc.h"
 #include "dma.h"
 
-#include "BLE_Comm.h"
+#include "BluetoothClassicComm.h"
 #include "LinePosEstimator.h"
 #include "EEmu.h"
 

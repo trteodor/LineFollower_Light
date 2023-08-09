@@ -1,7 +1,7 @@
 #include "main.h"
 #include "LedMngr.h"
 #include "EEmu.h"
-#include "BLE_Comm.h"
+#include "BluetoothClassicComm.h"
 
 
 
