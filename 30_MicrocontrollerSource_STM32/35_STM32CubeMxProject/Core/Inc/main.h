@@ -90,12 +90,12 @@ void Error_Handler(void);
 #define I2C2_SCL_VL53_GPIO_Port GPIOB
 #define I2C2_SDA_VL53_Pin GPIO_PIN_11
 #define I2C2_SDA_VL53_GPIO_Port GPIOB
+#define IR_INPUT_DATA_Pin GPIO_PIN_12
+#define IR_INPUT_DATA_GPIO_Port GPIOB
 #define TIM12_CH1_MotPWM2_2_Pin GPIO_PIN_14
 #define TIM12_CH1_MotPWM2_2_GPIO_Port GPIOB
 #define TIM12_CH2_MotPWM2_1_Pin GPIO_PIN_15
 #define TIM12_CH2_MotPWM2_1_GPIO_Port GPIOB
-#define IR_PIN_Pin GPIO_PIN_8
-#define IR_PIN_GPIO_Port GPIOA
 #define USER_BUTTON_Pin GPIO_PIN_12
 #define USER_BUTTON_GPIO_Port GPIOA
 #define LDD1_Pin GPIO_PIN_15

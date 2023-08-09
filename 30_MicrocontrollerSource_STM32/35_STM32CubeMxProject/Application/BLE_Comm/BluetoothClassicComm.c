@@ -140,24 +140,24 @@ static BLE_CallStatus_t MessageWrite(BLE_MessageID_t MessageID,uint8_t SyncId,BL
 
 /************************************************************************************************/
 
-//void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-//{
-//
-//	if(huart->Instance == USART2)
-//	{
-//		uint8_t *MessageReceiveBufferAddress;
-//
-//		LastMessageTime = HAL_GetTick();
-//
-//		/*Start listen again as fast as possible*/
-//		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
-//		// Start listening again
-// 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
-//
-//		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-//
-//	}
-//}
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+
+	if(huart->Instance == USART2)
+	{
+		uint8_t *MessageReceiveBufferAddress;
+
+		LastMessageTime = HAL_GetTick();
+
+		/*Start listen again as fast as possible*/
+		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
+		// Start listening again
+ 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLE_MIN_SINGLE_MESSAGE_SIZE);
+
+		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+
+	}
+}
 
 
 /*!
@@ -969,7 +969,7 @@ static void ReceiveDataHandler(void)
 					uint32_t AuxilaryNameVar3 = 0;
 					uint32_t AuxilaryNameVar4 = 0;
 
-	    			memcpy( &AuxilaryNameVar1,  &ReceivedMessageBuff[2], sizeof(uint32_t) );``
+	    			memcpy( &AuxilaryNameVar1,  &ReceivedMessageBuff[2], sizeof(uint32_t) );
 	    			memcpy( &AuxilaryNameVar2,  &ReceivedMessageBuff[6], sizeof(uint32_t) );
 	    			memcpy( &AuxilaryNameVar3,  &ReceivedMessageBuff[10], sizeof(uint32_t) );
 	    			memcpy( &AuxilaryNameVar4,  &ReceivedMessageBuff[14], sizeof(uint32_t) );
@@ -1099,15 +1099,23 @@ static void TransmitDataHandler(void)
 
 void BLE_Init(void)
 {
+	HAL_UART2_CostumUserInit(9600); /*Configure default HC-06 uart speed for few operations*/
+	HAL_Delay(200); /* While startup after power on
+		* and after experimental test it was observed that short delay is required to stabilize bluetooth module
+		* It is required for AT Commands like AT+NAME...
+		* */
+
+	HAL_UART_Transmit(&huart2, (uint8_t *)"AT+BAUDB",8,1000);
+	HAL_Delay(50);
+	HAL_UART2_CostumUserInit(961000); /*We are almost sure that bluetooth
+										* BaudRate is now configured as expected*/
+	HAL_Delay(50);
+
 	uint32_t DevNameUpdateFlag = 0;
 	EE_ReadVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32,&DevNameUpdateFlag);
 
 	if(true == DevNameUpdateFlag)
 	{
-		HAL_Delay(200); /* While startup after power on
-		 * and after experimental test it was observed that short delay is required to stabilize BLE module
-		 * It is required for AT Commands like AT+NAME...
-		 * */
 
 		char DevName[16];
 		char FakeRecBuf[20];
