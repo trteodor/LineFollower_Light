@@ -9,18 +9,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    BleDataManager.cpp \
     GenericLfQCP.cpp \
-    bluetoothleuart.cpp \
+    bluetoothDataManager.cpp \
+    bluetoothclassic.cpp \
     main.cpp \
     mainwindow.cpp \
     deviceinfo.cpp \
     qcustomplot.cpp
 
 HEADERS += \
-    BleDataManager.h \
     GenericLfQCP.h \
-    bluetoothleuart.h \
+    bluetoothDataManager.h \
+    bluetoothclassic.h \
     mainwindow.h \
     deviceinfo.h \
     qcustomplot.h

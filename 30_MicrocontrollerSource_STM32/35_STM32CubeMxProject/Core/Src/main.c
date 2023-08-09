@@ -117,6 +117,9 @@ int main(void)
 
 //  LF_AppInit();
 
+	HAL_UART2_CostumUserInit(961000); /*We are almost sure that bluetooth
+										* BaudRate is now configured as expected*/
+
   static char TrDatBuff[120];
 
   /* USER CODE END 2 */
@@ -125,8 +128,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  uint8_t Size = sprintf(TrDatBuff,"HelloWorldWhatAmazingCrazyLongMessage!!\n\r");
-	  HAL_UART_Transmit(&huart2, (uint8_t *)TrDatBuff,Size,100);
+	  uint8_t Size = sprintf(TrDatBuff,"HelloWorldWhatAAmazingCrazyLongMessage!! ucT: %lu \n", HAL_GetTick() );
+	  HAL_UART_Transmit(&huart2, (uint8_t *)TrDatBuff,Size,1000);
 	  HAL_Delay(500);
 //    LF_AppTask();
     /* USER CODE END WHILE */

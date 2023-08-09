@@ -1,8 +1,8 @@
-#ifndef BLEDATAMANAGER_H
-#define BLEDATAMANAGER_H
+#ifndef BLUETOOTHDATAMANAGER_H
+#define BLUETOOTHDATAMANAGER_H
 
 #include <QMainWindow>
-#include "bluetoothleuart.h"
+#include "bluetoothclassic.h"
 #include "qmutex.h"
 #include "qthread.h"
 
@@ -15,8 +15,7 @@ public:
 
     QThread BleDatMngr_Thread;
 
-    bluetoothleUART bleConnection; /*Must be moved to BleDatMngr_Thread*/
-
+    bluetoothClassic bleutoothClassicConnection; /*Must be moved to BleDatMngr_Thread*/
 
     volatile bool DebugTable_BaseDataLoggingState = false;
 
@@ -191,4 +190,4 @@ private:
 
 };
 
-#endif // BLEDATAMANAGER_H
+#endif // BLUETOOTHDATAMANAGER_H

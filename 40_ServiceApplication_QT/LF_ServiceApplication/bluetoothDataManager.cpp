@@ -1,9 +1,9 @@
-#include "BleDataManager.h"
+#include "bluetoothDataManager.h"
 #include "qthread.h"
 
 BleDataManager::BleDataManager()
 {
-    this->moveToThread(&BleDatMngr_Thread);
+    this->moveToThread(&bleutoothClassicConnection);
     bleConnection.moveToThread((&BleDatMngr_Thread)) ;
 
     connect(&bleConnection, SIGNAL(newData(QByteArray)), this, SLOT(BleDatMngr_InputHanlder(QByteArray)));

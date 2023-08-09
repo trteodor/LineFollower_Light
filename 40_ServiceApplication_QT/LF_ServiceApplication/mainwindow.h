@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QtConcurrent>
-#include "BleDataManager.h"
+#include "bluetoothDataManager.h"
 #include "GenericLfQCP.h"
 
 //#include <QInputDialog>
@@ -37,10 +37,6 @@ private slots:
     void joystick_moved(double x, double y);
 
     void MainWin_DrawOrientationIndicator(float Orientation);
-
-    void BLE_changedState(bluetoothleUART::bluetoothleState state);
-    void BLE_connectDevice();
-
 
     void BLE_InitializeQTConnections(void);
 
@@ -114,10 +110,22 @@ private slots:
 
     void on_GeneraReplotAllPlots_pb_clicked();
 
+
+    void MainWin_bluetoothSlotDeviceDiscovered(QString name);
+    void MainWin_bluetoothSlotDiscoveryFinished(void);
+
+    void MainWin_bluetoothSlotConnectingStart();
+    void MainWin_bluetoothSlotConnectionEstablished(void);
+    void MainWin_bluetoothSlotConnectionInterrupted(void);
+
+    void on_BLE_ScanButton_clicked();
+
+    void on_BLE_ConnectButton_clicked();
+
 signals:
-    void BLE_connectToDevice(int i);
-    void BLE_DisconnectDevice();
-    void BLE_BlockData(bool Flag);
+    void MainWin_bluetoothSignalStartDiscoveryDevices(void);
+    void MainWin_bluetoothDisconnect(void);
+    void MainWin_bluetootSignalConnectToDeviceByName(QString DevName);
 
 private:
     Ui::MainWindow *ui;

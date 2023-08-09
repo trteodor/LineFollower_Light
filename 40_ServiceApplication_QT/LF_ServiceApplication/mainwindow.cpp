@@ -300,12 +300,6 @@ void MainWindow::BLE_InitializeQTConnections(void)
 {
     /*BLE Signals*/
 
-    /* Search Button */
-    connect(ui->BLE_ScanButton, SIGNAL(clicked()),&BleInputDataProcessingWrapper.bleConnection, SLOT(startScan() ));
-
-    /* Connect Button */
-    connect(ui->BLE_ConnectButton,SIGNAL(clicked()), this, SLOT(BLE_connectDevice()));
-
     connect(this, SIGNAL(BLE_DisconnectDevice() ),&BleInputDataProcessingWrapper.bleConnection,SLOT(DisconnectDevice() ));
     //    /* Bleutooth States */
 
@@ -450,132 +444,108 @@ void MainWindow::BLE_InitializeQTConnections(void)
         ,this
         ,SLOT(MainWin_DrawOrientationIndicator(float) ) );
 
-
-
-
 }
 
 
 
 /*********************************************************************************************************/
-void MainWindow::BLE_changedState(bluetoothleUART::bluetoothleState state){
-
-    static uint8_t deviceCounter_l = 0;
-
-    qDebug() << state;
-
-    switch(state){
-
-    case bluetoothleUART::Scanning:
-    {
-        ui->BLE_StatusLabel->setText("State:Scanning");
-        ui->BLE_DetectedDeviceComboBox->clear();
-
-        ui->BLE_ConnectButton->setEnabled(false);
-        ui->BLE_ScanButton->setEnabled(false);
+void MainWindow::MainWin_bluetoothSlotDeviceDiscovered(QString name)
+{
+        ui->BLE_ConnectButton->setEnabled(true);
         ui->BLE_DetectedDeviceComboBox->setEnabled(true);
 
-        ui->statusbar->showMessage("Searching for low energy devices...",1000);
-        break;
-    }
-
-    case bluetoothleUART::NewDeviceDiscovered:
-    {
         ui->BLE_StatusLabel->setText("State:NewDevDet");
-        BleInputDataProcessingWrapper.bleConnection.getDeviceList(FoundDevices);
 
-        if(!FoundDevices.empty()){
+        ui->BLE_DetectedDeviceComboBox->addItem(name);
 
-            ui->BLE_DetectedDeviceComboBox->addItem(FoundDevices.at(deviceCounter_l));
-            /* Initialise Slot startConnect(int) -> button press ui->BLE_ConnectButton */
-            connect(this, SIGNAL(BLE_connectToDevice(int)),&BleInputDataProcessingWrapper.bleConnection,SLOT(startConnect(int)));
+        QString AutoConnDevName = ui->BLE_AutoConnDevNameL->text();
 
-            ui->BLE_ConnectButton->setEnabled(true);
-            ui->BLE_ScanButton->setEnabled(true);
-            ui->BLE_DetectedDeviceComboBox->setEnabled(true);
+        if( name == AutoConnDevName && ui->BLE_AutoConnCheckBox->isChecked() )
+        {
+            ui->BLE_DetectedDeviceComboBox->setCurrentIndex(
+                         ui->BLE_DetectedDeviceComboBox->count());
 
-            QString AutoConnDevName = ui->BLE_AutoConnDevNameL->text();
+            ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
+            ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,
+                                        new QTableWidgetItem(QString("DevNameMatched:Connecting ") ));
 
-            if( ui->BLE_DetectedDeviceComboBox->itemText(deviceCounter_l) ==  AutoConnDevName
-                && ui->BLE_AutoConnCheckBox->isChecked() )
-            {
-                ui->BLE_DetectedDeviceComboBox->setCurrentIndex(deviceCounter_l);
-                ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
-                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem(QString("DevNameMatched:Connecting ") ));
-                emit BLE_connectToDevice(deviceCounter_l);
-            }
-            else
-            {
-                ui->statusbar->showMessage("Please select BLE device",1000);
-            }
-            deviceCounter_l++;
+            emit MainWin_bluetootSignalConnectToDeviceByName(AutoConnDevName);
         }
-
-        break;
-    }
-
-    case bluetoothleUART::ScanFinished:
-    {
-        ui->BLE_StatusLabel->setText("State:ScanFinished");
-    }
-    case bluetoothleUART::Connecting:
-    {
-                ui->BLE_StatusLabel->setText("State:Connecting");
-        ui->BLE_ConnectButton->setEnabled(false);
-        ui->BLE_ScanButton->setEnabled(false);
-//        ui->BLE_DetectedDeviceComboBox->setEnabled(false);
-
-        ui->statusbar->showMessage("Connecting to device...",1000);
-        break;
-    }
-    case bluetoothleUART::Connected:
-    {
-        ui->BLE_StatusLabel->setText("State:ConnNotReady");
-        break;
-    }
-    case bluetoothleUART::Disconnected:
-    {
-        ui->BLE_StatusLabel->setText("State:Disconnected");
-        ui->BLE_ConnectButton->setEnabled(true);
-        ui->BLE_ScanButton->setEnabled(true);
-        QVariant variant= QColor (255,255,255);
-        QString colcode = variant.toString();
-        ui->BLE_StatusLabel->setAutoFillBackground(true);
-        ui->BLE_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-
-        deviceCounter_l = 0;
-        break;
-    }
-    case bluetoothleUART::ServiceFound:
-    {
-        break;
-    }
-    case bluetoothleUART::AcquireData:
-    {
-
-
-        ui->statusbar->showMessage("Aquire data",1000);
-
-        ui->BLE_StatusLabel->setText("State:ConnReadyAcqData");
-        QVariant variant= QColor (220,255,220);
-        QString colcode = variant.toString();
-        ui->BLE_StatusLabel->setAutoFillBackground(true);
-        ui->BLE_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
-
-
-        ReadNvMDataFromLineFollower();
-
-        break;
-    }
-    default:
-        break;
-
-
-    }
-
-
+        else
+        {
+            ui->statusbar->showMessage("Please select BLE device",1000);
+        }
 }
+
+void MainWindow::MainWin_bluetoothSlotDiscoveryFinished(void)
+{
+    ui->BLE_ConnectButton->setEnabled(true);
+    ui->BLE_ScanButton->setEnabled(true);
+    ui->BLE_DetectedDeviceComboBox->setEnabled(true);
+
+    ui->BLE_StatusLabel->setText("Bluetooth devices discovery process finished");
+}
+
+void MainWindow::MainWin_bluetoothSlotConnectingStart()
+{
+    ui->BLE_StatusLabel->setText("State:Connecting");
+    ui->statusbar->showMessage("Connecting to device...",1000);
+}
+void MainWindow::MainWin_bluetoothSlotConnectionEstablished(void)
+{
+    ui->statusbar->showMessage("Aquire data",1000);
+
+    ui->BLE_StatusLabel->setText("State:ConnReadyAcqData");
+    QVariant variant= QColor (220,255,220);
+    QString colcode = variant.toString();
+    ui->BLE_StatusLabel->setAutoFillBackground(true);
+    ui->BLE_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+
+    ReadNvMDataFromLineFollower();
+}
+void MainWindow::MainWin_bluetoothSlotConnectionInterrupted(void)
+{
+    ui->statusbar->showMessage("Connection interrupted, why?",1000);
+}
+
+void MainWindow::on_BLE_ScanButton_clicked()
+{
+    ui->BLE_StatusLabel->setText("State:Scanning");
+    ui->BLE_DetectedDeviceComboBox->clear();
+    ui->BLE_ConnectButton->setEnabled(false);
+    ui->BLE_ScanButton->setEnabled(false);
+    ui->BLE_DetectedDeviceComboBox->setEnabled(true);
+    ui->statusbar->showMessage("Searching for bluetooth devices...",1000);
+    emit MainWin_bluetoothSignalStartDiscoveryDevices();
+}
+
+
+void MainWindow::on_BLE_ConnectButton_clicked()
+{
+    QString NewAutoConnDevName = ui->BLE_DetectedDeviceComboBox->itemText(ui->BLE_DetectedDeviceComboBox->currentIndex());
+    ui->BLE_AutoConnDevNameL->setText(NewAutoConnDevName);
+    emit MainWin_bluetootSignalConnectToDeviceByName(NewAutoConnDevName);
+}
+/*********************************************************************************************************/
+void MainWindow::on_BLE_DisconnectButton_clicked()
+{
+
+    on_BLE_SimulatorSuspendButton_clicked();
+    QThread::msleep(30);
+    on_BLE_SimulatorSuspendButton_clicked();
+    QThread::msleep(30);
+    on_BLE_SimulatorSuspendButton_clicked();
+    emit MainWin_bluetoothDisconnect();
+
+    ui->BLE_StatusLabel->setText("State:Disconnected");
+    ui->BLE_ConnectButton->setEnabled(true);
+    ui->BLE_ScanButton->setEnabled(true);
+    QVariant variant= QColor (255,255,255);
+    QString colcode = variant.toString();
+    ui->BLE_StatusLabel->setAutoFillBackground(true);
+    ui->BLE_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+}
+
 /*********************************************************************************************************/
 void MainWindow::MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                             uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
@@ -1093,27 +1063,7 @@ void MainWindow::on_BLE_TrueLogStartButton_clicked()
     Helper.append("\n\r");
     BleInputDataProcessingWrapper.bleConnection.writeData(Helper);
 }
-/*********************************************************************************************************/
-void MainWindow::BLE_connectDevice()
-{
 
-
-
-    QString NewAutoConnDevName = ui->BLE_DetectedDeviceComboBox->itemText(ui->BLE_DetectedDeviceComboBox->currentIndex());
-    ui->BLE_AutoConnDevNameL->setText(NewAutoConnDevName);
-
-    emit BLE_connectToDevice(ui->BLE_DetectedDeviceComboBox->currentIndex());
-}
-/*********************************************************************************************************/
-void MainWindow::on_BLE_DisconnectButton_clicked()
-{
-    on_BLE_SimulatorSuspendButton_clicked();
-    QThread::msleep(30);
-    on_BLE_SimulatorSuspendButton_clicked();
-    QThread::msleep(30);
-    on_BLE_SimulatorSuspendButton_clicked();
-    emit BLE_DisconnectDevice();
-}
 /*********************************************************************************************************/
 
 
@@ -1554,4 +1504,8 @@ void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
     PlotSpd.LfGraph_UpdateReplot();
     PlotMap.LfGraph_UpdateReplot();
 }
+
+
+
+
 
