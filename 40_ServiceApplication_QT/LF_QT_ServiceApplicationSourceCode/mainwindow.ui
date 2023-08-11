@@ -377,7 +377,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_7">
         <attribute name="title">
@@ -744,7 +744,7 @@
         <number>15</number>
        </property>
        <item>
-        <widget class="QPushButton" name="BLE_RobotStart_Button">
+        <widget class="QPushButton" name="BLU_RobotStart_Button">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -774,7 +774,7 @@ color: rgb(255, 255, 255);</string>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="BLE_RobotStop_Button">
+        <widget class="QPushButton" name="BLU_RobotStop_Button">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -843,7 +843,7 @@ color: rgb(255, 255, 255);</string>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="BLE_SimulatorStartButton">
+        <widget class="QPushButton" name="BLU_SimulatorStartButton">
          <property name="maximumSize">
           <size>
            <width>60</width>

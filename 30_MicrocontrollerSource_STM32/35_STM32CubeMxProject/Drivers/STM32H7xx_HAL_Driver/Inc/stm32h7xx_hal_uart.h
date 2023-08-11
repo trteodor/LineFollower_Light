@@ -548,7 +548,7 @@ typedef  void (*pUART_RxEventCallbackTypeDef)
 #define UART_ADVFEATURE_RXINVERT_INIT           0x00000002U          /*!< RX pin active level inversion            */
 #define UART_ADVFEATURE_DATAINVERT_INIT         0x00000004U          /*!< Binary data inversion                    */
 #define UART_ADVFEATURE_SWAP_INIT               0x00000008U          /*!< TX/RX pins swap                          */
-#define UART_ADVFEATURE_RXOVERRUNDISABLE_INIT   0x00000010U          /*!< RX overrun disable                       */
+#define UART_ADVFEATURE_RXOVERRUNDISABLU_Init   0x00000010U          /*!< RX overrun disable                       */
 #define UART_ADVFEATURE_DMADISABLEONERROR_INIT  0x00000020U          /*!< DMA disable on Reception Error           */
 #define UART_ADVFEATURE_AUTOBAUDRATE_INIT       0x00000040U          /*!< Auto Baud rate detection initialization  */
 #define UART_ADVFEATURE_MSBFIRST_INIT           0x00000080U          /*!< Most significant bit sent/received first */
@@ -1447,7 +1447,7 @@ typedef  void (*pUART_RxEventCallbackTypeDef)
                                                             UART_ADVFEATURE_RXINVERT_INIT          | \
                                                             UART_ADVFEATURE_DATAINVERT_INIT        | \
                                                             UART_ADVFEATURE_SWAP_INIT              | \
-                                                            UART_ADVFEATURE_RXOVERRUNDISABLE_INIT  | \
+                                                            UART_ADVFEATURE_RXOVERRUNDISABLU_Init  | \
                                                             UART_ADVFEATURE_DMADISABLEONERROR_INIT | \
                                                             UART_ADVFEATURE_AUTOBAUDRATE_INIT      | \
                                                             UART_ADVFEATURE_MSBFIRST_INIT))

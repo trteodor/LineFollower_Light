@@ -115,12 +115,14 @@ int main(void)
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
-//  LF_AppInit();
+ LF_AppInit();
 
-	HAL_UART2_CostumUserInit(961000); /*We are almost sure that bluetooth
-										* BaudRate is now configured as expected*/
+//	HAL_UART2_CostumUserInit(961000); /*We are almost sure that bluetooth
+//										* BaudRate is now configured as expected*/
 
   static char TrDatBuff[120];
+
+static uint32_t TimeDataTrTest = 0;
 
   /* USER CODE END 2 */
 
@@ -128,10 +130,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  uint8_t Size = sprintf(TrDatBuff,"HelloWorldWhatAAmazingCrazyLongMessage!! ucT: %lu \n", HAL_GetTick() );
-	  HAL_UART_Transmit(&huart2, (uint8_t *)TrDatBuff,Size,1000);
-	  HAL_Delay(500);
-//    LF_AppTask();
+
+    LF_AppTask();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -8,11 +8,11 @@
 
 #include "EncodersHandler.h"
 #include "LF_AppConfig.h"
-#include "BluetoothClassicComm.h"
 #include "EEmu.h"
 
 #include "math.h"
 #include "tim.h"
+#include "../BluetoothComm/BluetoothClassicComm.h"
 
 /*************************************************************************************/
 /*************************************************************************************/
@@ -148,7 +148,7 @@ static void BleEncUpdateNvmDataCallBack(void)
 static void UpdateEncBleDataReport(void)
 {
 
-	BLE_MapDataReport_t BLE_MapDataReport = {0};
+	BLU_MapDataReport_t BLE_MapDataReport = {0};
 
 	BLE_MapDataReport.WhLftSp = EncHandlerDescr.LeftWheelSpeed;
 	BLE_MapDataReport.WhRhtSp = EncHandlerDescr.RightWheelSpeed;
@@ -158,7 +158,7 @@ static void UpdateEncBleDataReport(void)
 	BLE_MapDataReport.TravelledDistance = EncHandlerDescr.TakenDistance;
 	// BLE_MapDataReport.YawRate =
 
-	BLE_ReportMapData(&BLE_MapDataReport);
+	BLU_ReportMapData(&BLE_MapDataReport);
 }
 
 /******************************************************************************************************/
@@ -247,7 +247,7 @@ void ENC_Init(void)
 	HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
 	HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
 	ReadNvMParameters();
-	BLE_RegisterNvMdataUpdateInfoCallBack(BleEncUpdateNvmDataCallBack);
+	BLU_RegisterNvMdataUpdateInfoCallBack(BleEncUpdateNvmDataCallBack);
 
 }
 

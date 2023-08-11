@@ -13,6 +13,7 @@ bluetoothClassic::bluetoothClassic()
     connect(bluetoothClassicSocket, SIGNAL(connected()),this, SLOT(bluetoothConnectionEstablished()));
     connect(bluetoothClassicSocket, SIGNAL(disconnected()),this, SLOT(bluetoothConnectionInterrupted()));
     connect(bluetoothClassicSocket, SIGNAL(readyRead()),this, SLOT(bluetoothSocketReadyToRead()));
+    qDebug() << "bluetoothClassic:Constructor called";
 }
 bluetoothClassic::~bluetoothClassic()
 {
@@ -24,18 +25,21 @@ bluetoothClassic::~bluetoothClassic()
 
 void bluetoothClassic::bluetoothStartDiscoveryDevices(void)
 {
+//    qDebug() << "bluetoothClassic:bluetoothStartDiscoveryDevices:  called";
     bluetoothDiscoveryAgent->start();
 }
 
-void bluetoothClassic::bluetootConnectToDeviceByName(QString *DevName)
+void bluetoothClassic::bluetootConnectToDeviceByName(QString DevName)
 {
+    qDebug() << "bluetoothClassic:bluetootConnectToDeviceByName Name:" << DevName ;
+
     int indexOfDevice = -1;
 
-    for (int i = 0; i < this->FoundDevicesListNames.size(); ++i) {
-        if (this->FoundDevicesListNames.at(i) == *DevName)
+    for (int i = 0; i < FoundDevicesListNames.size(); ++i) {
+        if (this->FoundDevicesListNames.at(i) == DevName)
         {
             indexOfDevice = i;
-            qDebug() << "bluetootConnectToDeviceByName DevFound";
+//            qDebug() << "bluetootConnectToDeviceByName DevFound";
             break;
         }
     }
@@ -52,19 +56,22 @@ void bluetoothClassic::bluetootConnectToDeviceByName(QString *DevName)
 
 void bluetoothClassic::bluetoothDisconnect(void)
 {
+//    qDebug() << "bluetoothClassic:bluetoothDisconnect:  called";
+
     bluetoothClassicSocket->disconnectFromService();
 }
 
 
 void bluetoothClassic::bluetoothSearchingFinished(void)
 {
+//    qDebug() << "bluetoothClassic:bluetoothSearchingFinished:  called";
+
     emit bluetoothSignalDiscoveryFinished();
 }
 
 void bluetoothClassic::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
-    QList<QString> FoundDevicesListNames;
-    QList<QString> FoundDevicesListAddresses;
+//    qDebug() << "bluetoothClassic:bluetoothDeviceDiscovered:  called";
 
     this->FoundDevicesListNames.append( device.name());
     this->FoundDevicesListAddresses.append(device.address().toString() );
@@ -72,17 +79,26 @@ void bluetoothClassic::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &dev
 }
 
 void bluetoothClassic::bluetoothConnectionEstablished() {
-    qDebug() << "bluetoothConnectionEstablished";
+//    qDebug() << "bluetoothClassic:bluetoothConnectionEstablished:  called";
     emit bluetoothSignalConnectionEstablished();
 }
 
 void bluetoothClassic::bluetoothConnectionInterrupted() {
-    qDebug() << "bluetoothConnectionInterrupted";
+//    qDebug() << "bluetoothClassic:bluetoothConnectionInterrupted:  called";
     emit bluetoothSignalConnectionInterrupted();
 }
 
 void  bluetoothClassic::bluetoothSendDataToDevice(QByteArray Data)
 {
+
+    uint32_t DataTransmitSize = Data.size();
+    if(DataTransmitSize != BLU_SINGLE_TR_MESSAGE_SIZE)
+    {
+        qDebug() << "bluetoothSendDataToDevice unexpected Size:" << DataTransmitSize << "data:" << Data;
+        //      qDebug() << "bluetoothSendDataToDevice Size:" << DataTransmitSize;
+    }
+
+
   if(this->bluetoothClassicSocket->isOpen() && this->bluetoothClassicSocket->isWritable()) {
     this->bluetoothClassicSocket->write(Data);
   } else {
@@ -92,21 +108,21 @@ void  bluetoothClassic::bluetoothSendDataToDevice(QByteArray Data)
 
 void bluetoothClassic::bluetoothSocketReadyToRead(void)
 {
-//    while(bluetoothClassicSocket->bytesAvailable() ) {
-//        char Data[255];
-//        uint32_t Size = bluetoothClassicSocket->read(Data,255);
-//        qDebug() <<"BlutoothMessage:  " << Data;
-//    }
-    while(this->bluetoothClassicSocket->canReadLine()) {
-        char Data[255] = {0};
-        uint32_t Size = bluetoothClassicSocket->read(Data,255);
+  while(bluetoothClassicSocket->bytesAvailable() >99 ) {
+        static char Data[5000] = {0};
+        uint32_t Size = bluetoothClassicSocket->read(&Data[0],100);
+        emit bluetoothSignalNewDataReceived(Data,100);
 
-        emit bluetoothSignalNewDataReceived(Data,Size);
+//        qDebug() << "SyncID:" << (uint8_t)Data[1] << "Size:" << Size <<"FullFramesCount:" << FullFramesCount;
 
-        qDebug() <<"BlutoothMessage:  " << Data;
-        //    QString line = this->bluetoothClassicSocket->readLine();
-        //    qDebug() << line;
-        
+//        static uint32_t CleanerAfterWakeUpFlag = 100;
+//        if(CleanerAfterWakeUpFlag != 0 && bluetoothClassicSocket->bytesAvailable() > 0)
+//        {
+//            CleanerAfterWakeUpFlag = CleanerAfterWakeUpFlag - 1;
+//            Size = bluetoothClassicSocket->read(&Data[0],5000);
+//            qDebug() << "Err?: SyncID" << (uint8_t)Data[1] << "Size:" << Size <<"FullFramesCount:" << FullFramesCount;
+//        }
+
     }
 }
 

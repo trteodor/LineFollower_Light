@@ -29,9 +29,8 @@
  * Defines configuration start
  * */
 
-#define BLE_TRANSMIT_RING_BUFFER_SIZE     3000
-
-#define BLE_RECEIVE_RING_BUFFER_SIZE     100
+#define BLU_TRANSMIT_RING_BUFFER_SIZE     100
+#define BLU_RECEIVE_RING_BUFFER_SIZE     100
 
 
 
@@ -44,65 +43,49 @@
  * */
 typedef enum
 {
-	BLE_Ok,
-	BLE_Error
-}BLE_CallStatus_t;
-
-
-
-
-typedef struct
-{
-	uint8_t BLE_Data[18];
-	/*as i know Max size of one BLE message is 20bytes
-	 * - |FrameID|SyncID|18bytesData|
-	 * */
-}BLE_MessageBuffer_t;
+	BLU_Ok,
+	BLU_Error
+}BLU_CallStatus_t;
 
 /*
  * Type definition of Common Header or message ID for Embedded software and desktop application
  * */
 typedef enum
 {
-    BLE_None = 0,
-    BLE_ConfirmationTag,
-    BLE_DebugMessage,
+    BLU_None = 0,
+    BLU_ConfirmationTag,
+    BLU_DebugMessage,
 
-    BLE_RobotStart,
-    BLE_RobotStop,
+    BLU_RobotStart,
+    BLU_RobotStop,
 	
-    BLE_SimulatorStart,
-    BLE_TrueBaseLoggingStart,
-    BLE_SimuAndTrueDataLoggingStop,
+    BLU_SimulatorStart,
+    BLU_TrueBaseLoggingStart,
+    BLU_SimuAndTrueDataLoggingStop,
 
-    BluetoothClassicCommunicationStatistics,
-    BLE_BaseDataReport_part1,
-    BLE_BaseDataReport_part2,
-    BLE_BaseDataReport_part3,
+    BLU_CommunicationStats,
+    BLU_BaseDataReport,
 
+    BLU_NvM_ErrWeigthSensorDataReq,
+    BLU_NvM_ErrWeigthSensorData,
 
-    BLE_NvM_ErrWeigthSensorDataReq,
-    BLE_NvM_ErrWeigthSensorData_part1,
-    BLE_NvM_ErrWeigthSensorData_part2,
-    BLE_NvM_ErrWeigthSensorData_part3,
+    BLU_NvM_LinePidRegDataReq,
+    BLU_NvM_LinePidRegData,
 
-    BLE_NvM_LinePidRegDataReq,
-    BLE_NvM_LinePidRegData,
+    BLU_NvM_VehCfgReq,
+    BLU_NvM_VehCfgData,
 
-    BLE_NvM_VehCfgReq,
-    BLE_NvM_VehCfgData,
+	BLU_NvM_MotorsFactorsReq,
+    BLU_NvM_MotorsFactorsData,
 
-	BLE_NvM_MotorsFactorsReq,
-    BLE_NvM_MotorsFactorsData,
+	BLU_NvM_EncoderModCfgReq,
+    BLU_NvM_EncoderModCfgData,
 
-	BLE_NvM_EncoderModCfgReq,
-    BLE_NvM_EncoderModCfgData,
+	BLU_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
 
-	BLE_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
+    BLU_SetNewRobotName,
 
-    BLE_SetNewRobotName,
-
-}BLE_MessageID_t;
+}BLU_MessageID_t;
 
 
 
@@ -121,9 +104,7 @@ typedef struct
 	float PosY;
     float PosO;
 	float TravelledDistance;
-}BLE_MapDataReport_t; /*Current size 6*4 = 28*/
-
-
+}__attribute__((__packed__)) BLU_MapDataReport_t; /*Current size 6*4 = 28*/
 
 typedef struct
 {
@@ -131,26 +112,23 @@ typedef struct
 	float PosError;
 	uint8_t LastLeftLinePosConfidence;
 	uint8_t LastRightLinePosConfidence;
-}BLE_SensorDataReport_t;  /*Current size= 12+4+1+1 = 18*/
+}__attribute__((__packed__)) BLU_SensorDataReport_t;  /*Current size= 12+4+1+1 = 18*/
 
 typedef struct
 {
     float LinePidRegVal;
-}BLE_PidRegData_t; /*Current size= 4*/
+}__attribute__((__packed__)) BLE_PidRegData_t; /*Current size= 4*/
 
 typedef struct
 {
     uint8_t SyncId;
     uint32_t ucTimeStamp; //5
-    BLE_MapDataReport_t CurrMapData;
-    BLE_SensorDataReport_t CurrSensorData;
-    BLE_PidRegData_t LinePidRegData;
-}BLE_LfDataReport_t; /*55bytes total size
-						(3*(Frame+SyncID): 54DataBytes (Left 0 free)*/
-
+    BLU_MapDataReport_t CurrMapData; /*33*/
+    BLU_SensorDataReport_t CurrSensorData; /*51*/
+    BLE_PidRegData_t LinePidRegData; /*55*/
+}__attribute__((__packed__)) BLU_LfDataReport_t;/*55bytes total size*/
 
 /////////////////////////////////////////////////////////////////////////////////
-
 typedef struct
 {
 	float ErrW1;
@@ -165,7 +143,7 @@ typedef struct
 	float ErrW10;
 	float ErrW11;
 	float ErrWMax; //Line not detected - beyond path
-}BLE_NvM_ErrWeigthSensorData_t; /*Current size 6*4 = 24*/
+}BLU_NvM_ErrWeigthSensorData_t; /*Current size 6*4 = 24*/
 
 
 typedef struct
@@ -174,20 +152,15 @@ typedef struct
 	float Ki;
 	float Kd;
 	float DerivativeTime;
-}BLE_NvM_LinePidRegData_t; /*Current size 6*4 = 24*/
-
+}BLU_NvM_LinePidRegData_t; /*Current size 6*4 = 24*/
 
 typedef struct
 {
 	float ExpectedAvSpeed;
 	uint8_t BlinkLedState;
 	uint8_t TryDetectEndLineMark;
-}BLE_NvM_VehCfgData_t; /*Current size 6*4 = 24*/
+}BLU_NvM_VehCfgData_t; /*Current size 6*4 = 24*/
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////////
 
 typedef struct
 {
@@ -205,8 +178,8 @@ typedef struct
  * Exported functions prototypes:
  * */
 
-void BLE_Init(void); /*Initialize the Communication module*/
-void BLE_Task(void); /*Runnable of BLE communication module (Call as often as possible*/
+void BLU_Init(void); /*Initialize the Communication module*/
+void BLU_Task(void); /*Runnable of BLE communication module (Call as often as possible*/
 					/*.. don't blocked contest, very short*/
 /**/
 
@@ -214,47 +187,46 @@ void BLE_Task(void); /*Runnable of BLE communication module (Call as often as po
 
 /* API  functions: */
 
-/** @brief BLE_isExpectedStateDriving
+/** @brief BLU_isExpectedStateDriving
 * @details 
 * @return Expected driving by user (follow line or stop)
 */
-bool BLE_isExpectedStateDriving(void);
+bool BLU_isExpectedStateDriving(void);
 
 
-/* brief BLE_ReportSensorData
+/* brief BLU_ReportSensorData
  * LineEstimator: Dedicated interface for  to transmit sensor data
  */
-void BLE_ReportSensorData(BLE_SensorDataReport_t *SensorData);
+void BLU_ReportSensorData(BLU_SensorDataReport_t *SensorData);
 
-/* brief BLE_ReportMapData
+/* brief BLU_ReportMapData
 *LF_Menager: Dedicated interface to create XY map in desktop application
 */
-void BLE_ReportMapData(BLE_MapDataReport_t *MapData);
+void BLU_ReportMapData(BLU_MapDataReport_t *MapData);
 
-/* brief BLE_RegisterNvMdataUpdateInfoCallBack
+/* brief BLU_RegisterNvMdataUpdateInfoCallBack
 * Register call back if you want be informed that Non Volatile data has been updated
 * by BLE communication module
 * CallBack function will be called always if NvM data will be updated
 */
-void BLE_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
+void BLU_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
 
-/* brief BLE_RegisterNvMdataUpdateInfoCallBack
+/* brief BLU_RegisterNvMdataUpdateInfoCallBack
 * Register call back if, interface dedicated for handler in LF_Menager to cntrl manually 
 * the linne follower robot for example during standstill state using a virutal analog cntroller
 * in QT desktop application
 * CallBack function will be called always when the value of vector in the virtual controller will be changed
 */
-void BLE_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, float vecV_Y) );
+void BLU_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, float vecV_Y) );
 
 
-/* brief BLE_DbgMsgTransmit
+/* brief BLU_DbgMsgTransmit
 * A simple function to send debug message through BLE (to QT Application)
-* String length is limited to ~255chars
-* However please bear in mind that single BLE message size == 20
+* String length is limited to ~100chars
 * Input format is the same as in "printf" function.. 
 * To keep good performence i suggest don't sent many debug messages..
 */
-void BLE_DbgMsgTransmit(char *DbgString, ...);
+void BLU_DbgMsgTransmit(char *DbgString, ...);
 
 
 #endif //_BLE_ServiceModule_H

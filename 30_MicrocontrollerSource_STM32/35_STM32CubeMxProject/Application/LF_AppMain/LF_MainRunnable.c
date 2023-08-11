@@ -1,5 +1,4 @@
 
-#include "BluetoothClassicComm.h"
 #include "EEmu.h"
 #include "LedMngr.h"
 #include "EncodersHandler.h"
@@ -7,6 +6,7 @@
 
 #include "LF_Menager.h"
 #include "LF_LinePid.h"
+#include "BluetoothClassicComm.h"
 
 
 /** @brief LF_AppTask
@@ -17,7 +17,7 @@ void LF_AppInit(void)
 	/*Hardware peripherials are already initialized in "main.c"*/
 
 	EE_Init();	 /*EEPROM Emulation module init*/
-	BLE_Init();  /*Bluetooth low energy module init*/
+	BLU_Init();  /*Bluetooth low energy module init*/
 	LED_Init();  /*Led module init*/
 	ENC_Init();  /*Encoder module init*/
 	LPE_Init();  /*Line Position estimator init*/
@@ -34,7 +34,7 @@ void LF_AppInit(void)
 void LF_AppTask(void) //only one Task without any RTOS, all works fine -- for now the solution is inaf :)
 {
 	LED_MngrTask();
-	BLE_Task();
+	BLU_Task();
 	LPE_Task();
 	ENC_Task();
 

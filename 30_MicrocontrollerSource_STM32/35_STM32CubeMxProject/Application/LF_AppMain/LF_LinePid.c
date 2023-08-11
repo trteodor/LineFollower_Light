@@ -1,10 +1,10 @@
 #include "stdint.h"
 
-#include "BluetoothClassicComm.h"
 #include "LF_AppConfig.h"
 #include "LF_LinePid.h"
 #include "LinePosEstimator.h"
 #include "EEmu.h"
+#include "BluetoothClassicComm.h"
 
 #define MaxDerivativeTime 200
 #define MaxPWMValue 1000 //Depends on the PWM value of the timer counter (Max Timer Count Value dk how to explain :( )
@@ -127,7 +127,7 @@ void UpdateInputData(void)
 void App_LinePidInit(void)
 {
 	LinePidNvmDataRead();
-	BLE_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
+	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
 }
 
 void App_LinePidTask(void)

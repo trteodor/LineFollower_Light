@@ -2,9 +2,9 @@
 #include "adc.h"
 #include "dma.h"
 
-#include "BluetoothClassicComm.h"
 #include "LinePosEstimator.h"
 #include "EEmu.h"
+#include "BluetoothClassicComm.h"
 
 
 /**********************************************************************/
@@ -305,7 +305,7 @@ LinePostionEnum_t LinePositionEstimator(void)
 
 void SendLinePosEstDataReportForBle(void)
 {
-	BLE_SensorDataReport_t SensorDataReport ={0};
+	BLU_SensorDataReport_t SensorDataReport ={0};
 
 	for(int i=0; i<LINE_SENSOR_DATA_COUNT; i++)
 	{
@@ -316,7 +316,7 @@ void SendLinePosEstDataReportForBle(void)
 	SensorDataReport.LastLeftLinePosConfidence = 0;
 	SensorDataReport.LastRightLinePosConfidence = 0;
 	
-	BLE_ReportSensorData(&SensorDataReport);
+	BLU_ReportSensorData(&SensorDataReport);
 }
 
 /****************************************************************************************************/
@@ -327,7 +327,7 @@ void LPE_Init(void)
 {
 	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)LineEstimator.LineSensorsADCVal,12); //Turn on Sensor Read
 	GetErrorWeightsFromNvm();
-	BLE_RegisterNvMdataUpdateInfoCallBack( (void *)BleUpdateNvmDataCallBack);
+	BLU_RegisterNvMdataUpdateInfoCallBack( (void *)BleUpdateNvmDataCallBack);
 }
 
 
@@ -337,7 +337,7 @@ void LPE_Task(void)
 	LinePositionEstimator();
 	SendLinePosEstDataReportForBle();
 
-	// BLE_DbgMsgTransmit("MappedValue 3000: %d", MapValueToUint8_Range(3000) );
+	// BLU_DbgMsgTransmit("MappedValue 3000: %d", MapValueToUint8_Range(3000) );
 
 }
 

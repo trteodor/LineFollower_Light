@@ -10,7 +10,6 @@
 
 #include "LF_Menager.h"
 #include "LF_LinePid.h"
-#include "BluetoothClassicComm.h"
 #include "EEmu.h"
 #include "LedMngr.h"
 #include "EncodersHandler.h"
@@ -18,6 +17,7 @@
 
 #include "stdbool.h"
 #include "math.h"
+#include "BluetoothClassicComm.h"
 
 #define LF_M_PI_VAL		((float)3.14159265F)
 
@@ -233,7 +233,7 @@ VecLHelperY = VecYVal;
 					NeededRot = NeededRotationLeft;
 				}
 
-				BLE_DbgMsgTransmit("NeededRot %f,ExpectedO: %f CurrO: %f " ,NeededRot,ExpectedOrientation,CurrOrientationLimited);
+				BLU_DbgMsgTransmit("NeededRot %f,ExpectedO: %f CurrO: %f " ,NeededRot,ExpectedOrientation,CurrOrientationLimited);
 	 }
 }
 
@@ -243,7 +243,7 @@ VecLHelperY = VecYVal;
 void LF_MngrInit(void) /*Line Following Menager init */
 {
 	// EEPROM_ReadTryDetectEndLineMarkState();
-	BLE_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackHandler);
+	BLU_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackHandler);
 	MotorsPwmInit();
 }
 
@@ -252,14 +252,14 @@ void LF_MngrTask(void) /*Line Following Menager task */
 	LFAppMngrUpdateInputData();
 	static uint32_t DrivingStartTime = 0U;
 	static bool prevExpectedrDrivingState = false;
-	bool ExpectedrDrivingState = BLE_isExpectedStateDriving();
+	bool ExpectedrDrivingState = BLU_isExpectedStateDriving();
 
 	if(prevExpectedrDrivingState != ExpectedrDrivingState)
 	{
 		if(true == prevExpectedrDrivingState)
 		{/*Changed from driving to standstill*/
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
-			BLE_DbgMsgTransmit("LineFollowing mSec: %d TakenDist: %f", 
+			BLU_DbgMsgTransmit("LineFollowing mSec: %d TakenDist: %f", 
 										DrivingTime, Robot_Cntrl.input_TravelledDistance);
 		}
 		else

@@ -41,11 +41,11 @@ private slots:
     void BLE_InitializeQTConnections(void);
 
     void on_BLE_DisconnectButton_clicked();
-    void on_BLE_SimulatorStartButton_clicked();
+    void on_BLU_SimulatorStartButton_clicked();
     void on_BLE_SimulatorSuspendButton_clicked();
     void on_BLE_TrueLogStartButton_clicked();
-    void on_BLE_RobotStop_Button_clicked();
-    void on_BLE_RobotStart_Button_clicked();
+    void on_BLU_RobotStop_Button_clicked();
+    void on_BLU_RobotStart_Button_clicked();
 
 
     void on_UpdateExpectedAvSpd_clicked();

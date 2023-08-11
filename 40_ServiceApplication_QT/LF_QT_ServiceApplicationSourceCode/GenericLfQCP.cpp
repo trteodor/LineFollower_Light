@@ -3,7 +3,7 @@
 
 GenericLfQCP::GenericLfQCP(void)
 {
-    qDebug() << "Construct Called Class:GenericLfQCP";
+//    qDebug() << "Construct Called Class:GenericLfQCP";
 }
 
 
@@ -148,7 +148,7 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
 
 GenericLfQCP::~GenericLfQCP()
 {
-    qDebug() << "Plot X Deconstructed";
+//    qDebug() << "Plot X Deconstructed";
 
     if(Graph1){
             delete Graph1;      }

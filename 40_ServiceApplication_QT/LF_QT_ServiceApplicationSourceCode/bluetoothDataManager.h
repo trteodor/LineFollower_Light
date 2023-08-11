@@ -6,6 +6,9 @@
 #include "qmutex.h"
 #include "qthread.h"
 
+
+
+
 class BleDataManager : public QObject
 {
     Q_OBJECT
@@ -35,49 +38,47 @@ public:
     volatile bool DebugTableScrollingBottomIsActivState = false;
 
 
-    typedef enum
-    {
-        BLE_None = 0,
-        BLE_ConfirmationTag,
-        BLE_DebugMessage,
-
-        BLE_RobotStart,
-        BLE_RobotStop,
-
-        BLE_SimulatorStart,
-        BLE_TrueBaseLoggingStart,
-        BLE_SimuAndTrueDataLoggingStop,
-
-        BLE_CommunicationStatistics,
-        BLE_BaseDataReport_part1,
-        BLE_BaseDataReport_part2,
-        BLE_BaseDataReport_part3,
-
-
-        BLE_NvM_ErrWeigthSensorDataReq,
-        BLE_NvM_ErrWeigthSensorData_part1,
-        BLE_NvM_ErrWeigthSensorData_part2,
-        BLE_NvM_ErrWeigthSensorData_part3,
-
-        BLE_NvM_LinePidRegDataReq,
-        BLE_NvM_LinePidRegData,
-
-        BLE_NvM_VehCfgReq,
-        BLE_NvM_VehCfgData,
-
-        BLE_NvM_MotorsFactorsReq,
-        BLE_NvM_MotorsFactorsData,
-
-        BLE_NvM_EncoderModCfgReq,
-        BLE_NvM_EncoderModCfgData,
-
-        BLE_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
-
-        BLE_SetNewRobotName,
-
-    }BLE_MessageID_t;
-
     /*
+ * Type definition of Common Header or message ID for Embedded software and desktop application
+ * */
+typedef enum
+{
+    BLU_None = 0,
+    BLU_ConfirmationTag,
+    BLU_DebugMessage,
+
+    BLU_RobotStart,
+    BLU_RobotStop,
+
+    BLU_SimulatorStart,
+    BLU_TrueBaseLoggingStart,
+    BLU_SimuAndTrueDataLoggingStop,
+
+    BLU_CommunicationStats,
+    BLU_BaseDataReport,
+
+    BLU_NvM_ErrWeigthSensorDataReq,
+    BLU_NvM_ErrWeigthSensorData,
+
+    BLU_NvM_LinePidRegDataReq,
+    BLU_NvM_LinePidRegData,
+
+    BLU_NvM_VehCfgReq,
+    BLU_NvM_VehCfgData,
+
+    BLU_NvM_MotorsFactorsReq,
+    BLU_NvM_MotorsFactorsData,
+
+    BLU_NvM_EncoderModCfgReq,
+    BLU_NvM_EncoderModCfgData,
+
+    BLU_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
+
+    BLU_SetNewRobotName,
+
+}BLU_MessageID_t;
+
+ /*
  * Modules should report the newest data then BLE module will transmit it
  * */
 
@@ -173,20 +174,20 @@ signals:
 
 
 private slots:
-    void BleDatMngr_InputHanlder(const QByteArray &value);
+    void BleDatMngr_InputHanlder( char* data, uint32_t Size);
 
 
 private:
 
-    void BleDatMngr_DebugMessagerHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
-    void BleDatMngr_BaseDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
-    void BleDatMngr_ErrorWeigthDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
-    void BleDatMngr_CommunicationStatistics_Handler(const QByteArray &value);
+    void BleDatMngr_DebugMessagerHandler(char *data,uint32_t size, BleDataManager::BLU_MessageID_t BLE_MessID);
+    void BleDatMngr_BaseDataHandler(char *data,uint32_t Size);
+    void BleDatMngr_ErrorWeigthDataHandler(char *data,uint32_t Size);
+    void BleDatMngr_CommunicationStatistics_Handler(char *data,uint32_t Size);
     void BleDatMngr_BaseDataInsertToDebugTable(uint32_t FrameCounter);
-    void BleDatMngr_PidDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
-    void BleDatMngr_VehCfgDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
-    void BleDatMngr_MotorsFactorsDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
-    void BleDatMngr_EncodersCfgDataHandler(const QByteArray &value,BleDataManager::BLE_MessageID_t BLE_MessID);
+    void BleDatMngr_PidDataHandler(char* data, uint32_t Size);
+    void BleDatMngr_VehCfgDataHandler(char* data, uint32_t Size);
+    void BleDatMngr_MotorsFactorsDataHandler(char* data, uint32_t Size);
+    void BleDatMngr_EncodersCfgDataHandler(char* data, uint32_t Size);
 
 };
 

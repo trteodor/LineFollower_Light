@@ -49,10 +49,10 @@ typedef enum
 
 //	EE_NvmAddr_IrSensorState_U32,
 
-	EE_NvmAddr_BleDevNamePart1_U32_,
-	EE_NvmAddr_BleDevNamePart2_U32_,
-	EE_NvmAddr_BleDevNamePart3_U32_,
-	EE_NvmAddr_BleDevNamePart4_U32_,
+	EE_NvmAddr_BluDevNamePart1_U32_,
+	EE_NvmAddr_BluDevNamePart2_U32_,
+	EE_NvmAddr_BluDevNamePart3_U32_,
+	EE_NvmAddr_BluDevNamePart4_U32_,
 
 	EE_NvmAddr_DevNameUpdatedFlag_U32,
 

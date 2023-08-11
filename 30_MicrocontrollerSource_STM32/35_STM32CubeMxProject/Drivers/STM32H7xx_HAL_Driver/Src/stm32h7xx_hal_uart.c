@@ -3307,7 +3307,7 @@ void UART_AdvFeatureConfig(UART_HandleTypeDef *huart)
   }
 
   /* if required, configure RX overrun detection disabling */
-  if (HAL_IS_BIT_SET(huart->AdvancedInit.AdvFeatureInit, UART_ADVFEATURE_RXOVERRUNDISABLE_INIT))
+  if (HAL_IS_BIT_SET(huart->AdvancedInit.AdvFeatureInit, UART_ADVFEATURE_RXOVERRUNDISABLU_Init))
   {
     assert_param(IS_UART_OVERRUN(huart->AdvancedInit.OverrunDisable));
     MODIFY_REG(huart->Instance->CR3, USART_CR3_OVRDIS, huart->AdvancedInit.OverrunDisable);
