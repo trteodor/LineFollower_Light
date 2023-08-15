@@ -603,7 +603,7 @@ void Sim_FakeBaseDataReportTask(void)
 		NewestLfDataReport.ucTimeStamp = HAL_GetTick();
 		NewestLfDataReport.CurrMapData.PosX = SimFakeXY_MapDat.X[ProbeIterator];
 		NewestLfDataReport.CurrMapData.PosY = SimFakeXY_MapDat.Y[ProbeIterator];
-		NewestLfDataReport.CurrMapData.PosO =    (M_PI * sin(2 * M_PI * WaveHelper));
+		NewestLfDataReport.CurrMapData.PosO = M_PI * sin(2 * M_PI * WaveHelper);
 		NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 3 * WaveHelper));
 		NewestLfDataReport.CurrMapData.WhRhtSp = (2 * cos( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 7 * WaveHelper));
 		NewestLfDataReport.CurrMapData.YawRate = (2 * sin( 2 * M_PI * WaveHelper)) + (0.3 * sin( 2* M_PI * 10 * WaveHelper));

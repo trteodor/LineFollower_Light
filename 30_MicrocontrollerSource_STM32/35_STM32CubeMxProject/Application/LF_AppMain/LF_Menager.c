@@ -155,29 +155,19 @@ static void SpeedProfiler(void)
 	}
 }
 
-typedef enum{
-	rotDirUndefinded,
-	rotDirectionLeft,
-	rotDirectionRight,
-}RotDirection_t;
 
-
-RotDirection_t RotDirection;
-
-
-static float  VecLHelperX,VecLHelperY;
-
-void ManualDrivingCallBackHandler(float VecXVal, float VecYVal)
+/*!
+ ************************************************************************************************
+ * \brief estimateNeededRotation
+ * \details --
+ * \param RingBuffer_t *Buf - pointer to Ring Buffer structure
+ * \param in VecXVal
+ * \param in VecXVal
+ * \return Returned positive value is meaning that vehicle should rotate to right to achive expected orientation
+ * */
+float estimateNeededRotation(float VecXVal, float VecYVal)
 {
-VecLHelperX= VecXVal;
-VecLHelperY = VecYVal;
- static uint32_t OrientationLoggerTempTimer = 0;
- // input_RobotOrientation
-	 if(HAL_GetTick() - OrientationLoggerTempTimer > 150)
-	 {
-			 	 OrientationLoggerTempTimer = HAL_GetTick();
-
-				float ExpectedOrientation = ( (float)atan2(VecLHelperY,VecLHelperX) );
+				float ExpectedOrientation = ( (float)atan2(VecYVal,VecXVal) );
 
 				if(ExpectedOrientation < (0.0F) )
 				{
@@ -187,7 +177,6 @@ VecLHelperY = VecYVal;
 
 				float CurrOrientationLimited = (Robot_Cntrl.input_RobotOrientation);
 
-				uint32_t OpCounter = 0;
 				while( fabs(CurrOrientationLimited) >= ( 2 *LF_M_PI_VAL) )
 				{
 					if( (CurrOrientationLimited) > (2 *LF_M_PI_VAL) )
@@ -197,12 +186,11 @@ VecLHelperY = VecYVal;
 					else{
 						CurrOrientationLimited  = CurrOrientationLimited + (2 *LF_M_PI_VAL) ;
 					}
-
-					OpCounter++;
 				}
-
-				CurrOrientationLimited = fabs(CurrOrientationLimited);
-
+				if(CurrOrientationLimited < 0.0F)
+				{
+					CurrOrientationLimited = CurrOrientationLimited + (2 *LF_M_PI_VAL);
+				}
 
 				float NeededRotationRight;
 				float NeededRotationLeft;
@@ -233,7 +221,39 @@ VecLHelperY = VecYVal;
 					NeededRot = NeededRotationLeft;
 				}
 
-				BLU_DbgMsgTransmit("NeededRot %f,ExpectedO: %f CurrO: %f " ,NeededRot,ExpectedOrientation,CurrOrientationLimited);
+	return NeededRot;
+}
+
+void ManualDrivingCallBackHandler(float VecXVal, float VecYVal)
+{
+	static uint32_t SavedTimeManDriv_PID;
+	static float PreviousPositionErrorValueManDrivPid;
+	static float ManDrivPid_P,ManDrivPid_I,ManDrivPid_D;
+	static float PidManDrivResult;
+	static const uint32_t ProbeTimeManDrivPid = 20;
+	static const uint32_t ManDrivPid_Kp = 0.2;
+	static const uint32_t ManDrivPid_Kd = 0.2;
+	
+
+	float neededRot = estimateNeededRotation(VecXVal, VecYVal);
+
+
+	ManDrivPid_P = neededRot; /*Tract needed rotation as error*/
+
+	if( (HAL_GetTick() - SavedTimeManDriv_PID) > ProbeTimeManDrivPid ){
+		ManDrivPid_D= ManDrivPid_P - PreviousPositionErrorValueManDrivPid;
+		PreviousPositionErrorValueManDrivPid=ManDrivPid_P;
+		SavedTimeManDriv_PID=HAL_GetTick();
+	}
+	PidManDrivResult = (ManDrivPid_Kp * ManDrivPid_P)+(ManDrivPid_Kd * ManDrivPid_D);
+
+	// MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
+
+ 	static uint32_t OrientationLoggerTempTimer = 0;
+	if(HAL_GetTick() - OrientationLoggerTempTimer > 150)
+	{	
+		OrientationLoggerTempTimer = HAL_GetTick();
+		BLU_DbgMsgTransmit("NeededRot %f" ,neededRot);
 	 }
 }
 
@@ -261,6 +281,7 @@ void LF_MngrTask(void) /*Line Following Menager task */
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
 			BLU_DbgMsgTransmit("LineFollowing mSec: %d TakenDist: %f", 
 										DrivingTime, Robot_Cntrl.input_TravelledDistance);
+
 		}
 		else
 		{/*Changed from standstill to driving */

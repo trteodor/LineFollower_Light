@@ -145,7 +145,6 @@ void App_LinePidGetComputedPwmVals(int *LeftWhExpectedPwm, int *RightWhExpectedP
 
 void App_LinePidComputeExpectedPwmValuesForExpSpd(float ExpectedSpeed,int *LeftWhExpectedPwm, int *RightWhExpectedPwm)
 {
-
 	float ExpectedSpeed_LeftMotor;
 	float ExpectedSpeed_RightMotor;
 

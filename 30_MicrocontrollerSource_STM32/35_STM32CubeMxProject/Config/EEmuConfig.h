@@ -19,7 +19,8 @@ typedef enum
 	EE_NvmAddr_SenErrWeigth2_F32,
 	EE_NvmAddr_SenErrWeigth3_F32,
 	EE_NvmAddr_SenErrWeigth4_F32,
-	EE_NvmAddr_SenErrWeigth5_F32,
+	EE_NvmAddr_SenErrWeigth5_F32, /*For some reasons it dont work for me correctly why?
+									- I know that i should repair the EEmu.. */
 	EE_NvmAddr_SenErrWeigth6_F32,
 	EE_NvmAddr_SenErrWeigth7_F32,
 	EE_NvmAddr_SenErrWeigth8_F32,
