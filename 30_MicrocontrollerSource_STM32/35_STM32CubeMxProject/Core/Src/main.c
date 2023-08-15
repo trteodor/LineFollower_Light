@@ -115,14 +115,7 @@ int main(void)
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
- LF_AppInit();
-
-//	HAL_UART2_CostumUserInit(961000); /*We are almost sure that bluetooth
-//										* BaudRate is now configured as expected*/
-
-  static char TrDatBuff[120];
-
-static uint32_t TimeDataTrTest = 0;
+  LF_AppInit();
 
   /* USER CODE END 2 */
 

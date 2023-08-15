@@ -92,7 +92,7 @@ static void GetErrorWeightsFromNvm(void)
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth2_F32,&LineEstimator.ErrorWeightValueTable[1]);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth3_F32,&LineEstimator.ErrorWeightValueTable[2]);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth4_F32,&LineEstimator.ErrorWeightValueTable[3]);
-	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthSubtituted5_F32,&LineEstimator.ErrorWeightValueTable[4]);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth5_F32,&LineEstimator.ErrorWeightValueTable[4]);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth6_F32,&LineEstimator.ErrorWeightValueTable[5]);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth7_F32,&LineEstimator.ErrorWeightValueTable[6]);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth8_F32,&LineEstimator.ErrorWeightValueTable[7]);

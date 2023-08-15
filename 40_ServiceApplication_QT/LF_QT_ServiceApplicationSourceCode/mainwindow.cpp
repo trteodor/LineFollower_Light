@@ -209,7 +209,7 @@ void MainWindow::joystick_moved(double x, double y) {
 //    }
 //    MainWin_DrawOrientationIndicator(ExpectedOrientation);
 
-    qDebug() << "VecValX:" << VecValX << "VecValY: " << VecValY;
+    //qDebug() << "VecValX:" << VecValX << "VecValY: " << VecValY;
 }
 
 
@@ -1071,7 +1071,8 @@ void MainWindow::MainWin_DrawOrientationIndicator(float Orientation)
     QPixmap pix(":/RobOri/RobOrientation/robotOriResource/RobotOriIndicator.png");
     QPainter paint(&pix);
     QTransform trans;
-    trans.rotate( -(Orientation*57.2957795) );
+    trans.rotate( ((- 2 * M_PI) * 57.2957795) + (Orientation*57.2957795));
+
     ui->OrientationVectlabel->setPixmap(pix.transformed(trans) );
 
     //    qDebug() << "MainWin_DrawOrientationIndicator TOOK: " << timerIndView.elapsed() << "milliseconds";
@@ -1431,7 +1432,7 @@ void MainWindow::on_BLU_RobotStop_Button_clicked()
         ui->BLU_TrueLogStartButton->setDisabled(false);
         ui->BLU_SimulatorSuspendButton->setDisabled(false);
         ui->BLU_TrueLogStartButton->setDisabled(false);
-
+        ui->BLU_SimulatorStartButton->setDisabled(false);
         ui->BLU_SimulatorSuspendButton->setDisabled(false);
 
         ui->BLU_TrueLogStartButton->setDisabled(false);

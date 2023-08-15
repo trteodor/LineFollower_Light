@@ -3,7 +3,6 @@
 
 
 void LF_MngrInit(void); /*Line Following Menager init */
-
 void LF_MngrTask(void); /*Line Following Menager task */
 
 

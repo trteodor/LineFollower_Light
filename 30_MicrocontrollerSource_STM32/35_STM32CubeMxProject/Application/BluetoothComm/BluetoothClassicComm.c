@@ -3,8 +3,8 @@
  * @author teodor
 
  * @brief This file is a part of Line follower application
- * This is Bluetooth low energy module to communicate wireless with Line Follower
- * I used module JDY-08 - if you are interested about information of the modules please find data sheets in internet.
+ * This is Bluetooth module to communicate wireless with Line Follower
+ * I used module HC-06 - if you are interested about information of the modules please find data sheets in internet.
  */
 
 
@@ -341,7 +341,7 @@ static BLU_CallStatus_t TransmitErrorWeigthData(void)
 	memcpy(&DataBuffer[14],&ErrWDataP4,4);
 	/***********************************************************************/
 	/*Prepare transmit data of part 2*/
-	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthSubtituted5_F32, &ErrWDataP1);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth5_F32, &ErrWDataP1);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth6_F32, &ErrWDataP2);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth7_F32, &ErrWDataP3);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth8_F32, &ErrWDataP4);
@@ -709,7 +709,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth2_F32, ErrW2Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth3_F32, ErrW3Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth4_F32, ErrW4Val);
-					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigthSubtituted5_F32, ErrW5Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth5_F32, ErrW5Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth6_F32, ErrW6Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth7_F32, ErrW7Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth8_F32, ErrW8Val);
@@ -963,7 +963,7 @@ static void TransmitDataHandler(void)
 
 	if( HAL_UART_STATE_READY == huart2.gState)
 	{
-		if(HAL_GetTick() - BLU_StatisticTimer > BLU_STATISTICS_PERIOD)
+		if(HAL_GetTick() - BLU_StatisticTimer >= BLU_STATISTICS_PERIOD)
 		{
 				BLU_StatisticTimer = HAL_GetTick();
 				// /*Transmit the statistics with higher prio than normal messages*/
