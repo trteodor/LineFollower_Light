@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*Initialize all needed connections for Bluetooth Data Manager*/
-    BLE_InitializeQTConnections();
+    BLU_InitializeQTConnections();
 
 
     connect(&NvM_ErrWeigthUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ErrWeigthUpdateDelayTimerTimeout()));
@@ -104,13 +104,13 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
 
-    QSettings settings("LfServiceApp", "BleDeviceName");
+    QSettings settings("LfServiceApp", "BluDeviceName");
 //    settings.setValue("CurrDeviceName", "Franek");
     QVariant CurrDevName = settings.value("CurrDeviceName");
     QString NewLineEditText = CurrDevName.toString();
 //    qDebug() << NewLineEditText ;
 
-    ui->BLE_AutoConnDevNameL->setText(NewLineEditText);
+    ui->BLU_AutoConnDevNameL->setText(NewLineEditText);
 
 
 }
@@ -119,21 +119,21 @@ MainWindow::MainWindow(QWidget *parent)
 /*********************************************************************************************************/
 MainWindow::~MainWindow()
 {
-    on_BLE_SimulatorSuspendButton_clicked();
+    on_BLU_SimulatorSuspendButton_clicked();
     QThread::msleep(25);
-    on_BLE_SimulatorSuspendButton_clicked();
+    on_BLU_SimulatorSuspendButton_clicked();
     QThread::msleep(25);
-    on_BLE_SimulatorSuspendButton_clicked();
+    on_BLU_SimulatorSuspendButton_clicked();
     QThread::msleep(25);
     /*Send the command 3x to be sure that fakeProducer will be stopped, if not then re-connection may be impossible
      * - HW reset may be required
     */
 
-//    TODO: Veriyfy? emit BLE_DisconnectDevice();
+//    TODO: Veriyfy? emit BLU_DisconnectDevice();
 
-    QSettings settings("LfServiceApp", "BleDeviceName");
-    QString NewSearchedBleDeviceName = ui->BLE_AutoConnDevNameL->text();
-    settings.setValue("CurrDeviceName", NewSearchedBleDeviceName);
+    QSettings settings("LfServiceApp", "BluDeviceName");
+    QString NewSearchedBluDeviceName = ui->BLU_AutoConnDevNameL->text();
+    settings.setValue("CurrDeviceName", NewSearchedBluDeviceName);
 
     delete ui;
 
@@ -192,14 +192,14 @@ void MainWindow::joystick_moved(double x, double y) {
     float VecValY= (float)y;
 
 
-    command[0] = (char)BleDataManager::BLU_NvM_ManualCntrlCommand;
+    command[0] = (char)BluDataManager::BLU_NvM_ManualCntrlCommand;
 
     std::memcpy(&command[2],  &VecValX, sizeof(float));
     std::memcpy(&command[6],  &VecValY, sizeof(float));
 
     QByteArray Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 //Debug/ test
 //    float ExpectedOrientation = ( (float)atan2(VecValY,VecValX) );
@@ -222,18 +222,18 @@ void MainWindow::MainWin_bluetoothSlotDeviceDiscovered(QString name)
 {
 //    qDebug() << "MainWin_bluetoothSlotDeviceDiscovered  called";
 
-    ui->BLE_ConnectButton->setEnabled(true);
-    ui->BLE_DetectedDeviceComboBox->setEnabled(true);
+    ui->BLU_ConnectButton->setEnabled(true);
+    ui->BLU_DetectedDeviceComboBox->setEnabled(true);
 
-    ui->BLE_StatusLabel->setText("State:NewDevDet");
+    ui->BLU_StatusLabel->setText("State:NewDevDet");
 
-    ui->BLE_DetectedDeviceComboBox->addItem(name);
+    ui->BLU_DetectedDeviceComboBox->addItem(name);
 
-    QString AutoConnDevName = ui->BLE_AutoConnDevNameL->text();
+    QString AutoConnDevName = ui->BLU_AutoConnDevNameL->text();
 
-    if( name == AutoConnDevName && ui->BLE_AutoConnCheckBox->isChecked() )
+    if( name == AutoConnDevName && ui->BLU_AutoConnCheckBox->isChecked() )
     {
-        ui->BLE_DetectedDeviceComboBox->setCurrentIndex( ui->BLE_DetectedDeviceComboBox->count() - 1 );
+        ui->BLU_DetectedDeviceComboBox->setCurrentIndex( ui->BLU_DetectedDeviceComboBox->count() - 1 );
 
         ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
         ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,
@@ -249,16 +249,17 @@ void MainWindow::MainWin_bluetoothSlotDeviceDiscovered(QString name)
 
 void MainWindow::MainWin_bluetoothSlotDiscoveryFinished(void)
 {
-    ui->BLE_ConnectButton->setEnabled(true);
-    ui->BLE_ScanButton->setEnabled(true);
-    ui->BLE_DetectedDeviceComboBox->setEnabled(true);
+    ui->BLU_ConnectButton->setEnabled(true);
+    ui->BLU_ScanButton->setEnabled(true);
+    ui->BLU_DetectedDeviceComboBox->setEnabled(true);
 
-    ui->BLE_StatusLabel->setText("Bluetooth devices discovery process finished");
+    ui->statusbar->showMessage("DiscoveryFinished",1000);
+//    ui->BLU_StatusLabel->setText("DiscoveryFinished");
 }
 
 void MainWindow::MainWin_bluetoothSlotConnectingStart()
 {
-    ui->BLE_StatusLabel->setText("State:Connecting");
+    ui->BLU_StatusLabel->setText("State:Connecting");
     ui->statusbar->showMessage("Connecting to device...",1000);
 }
 
@@ -266,11 +267,11 @@ void MainWindow::MainWin_bluetoothSlotConnectionEstablished(void)
 {
     ui->statusbar->showMessage("Aquire data",1000);
 
-    ui->BLE_StatusLabel->setText("State:ConnReadyAcqData");
+    ui->BLU_StatusLabel->setText("State:ConnReadyAcqData");
     QVariant variant= QColor (220,255,220);
     QString colcode = variant.toString();
-    ui->BLE_StatusLabel->setAutoFillBackground(true);
-    ui->BLE_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+    ui->BLU_StatusLabel->setAutoFillBackground(true);
+    ui->BLU_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 
     ReadNvMDataFromLineFollower();
 }
@@ -280,41 +281,41 @@ void MainWindow::MainWin_bluetoothSlotConnectionInterrupted(void)
     ui->statusbar->showMessage("Connection interrupted, why?",1000);
 }
 
-void MainWindow::on_BLE_ScanButton_clicked()
+void MainWindow::on_BLU_ScanButton_clicked()
 {
-    ui->BLE_StatusLabel->setText("State:Scanning");
-    ui->BLE_DetectedDeviceComboBox->clear();
-    ui->BLE_ConnectButton->setEnabled(false);
-    ui->BLE_ScanButton->setEnabled(false);
-    ui->BLE_DetectedDeviceComboBox->setEnabled(true);
+    ui->BLU_StatusLabel->setText("State:Scanning");
+    ui->BLU_DetectedDeviceComboBox->clear();
+    ui->BLU_ConnectButton->setEnabled(false);
+    ui->BLU_ScanButton->setEnabled(false);
+    ui->BLU_DetectedDeviceComboBox->setEnabled(true);
     ui->statusbar->showMessage("Searching for bluetooth devices...",1000);
     emit MainWin_bluetoothSignalStartDiscoveryDevices();
 }
 
-void MainWindow::on_BLE_ConnectButton_clicked()
+void MainWindow::on_BLU_ConnectButton_clicked()
 {
-    QString NewAutoConnDevName = ui->BLE_DetectedDeviceComboBox->itemText(ui->BLE_DetectedDeviceComboBox->currentIndex());
-    ui->BLE_AutoConnDevNameL->setText(NewAutoConnDevName);
+    QString NewAutoConnDevName = ui->BLU_DetectedDeviceComboBox->itemText(ui->BLU_DetectedDeviceComboBox->currentIndex());
+    ui->BLU_AutoConnDevNameL->setText(NewAutoConnDevName);
     emit MainWin_bluetootSignalConnectToDeviceByName(NewAutoConnDevName);
 }
 
-void MainWindow::on_BLE_DisconnectButton_clicked()
+void MainWindow::on_BLU_DisconnectButton_clicked()
 {
 
-    on_BLE_SimulatorSuspendButton_clicked();
+    on_BLU_SimulatorSuspendButton_clicked();
     QThread::msleep(30);
-    on_BLE_SimulatorSuspendButton_clicked();
+    on_BLU_SimulatorSuspendButton_clicked();
     QThread::msleep(30);
-    on_BLE_SimulatorSuspendButton_clicked();
+    on_BLU_SimulatorSuspendButton_clicked();
     emit MainWin_bluetoothDisconnect();
 
-    ui->BLE_StatusLabel->setText("State:Disconnected");
-    ui->BLE_ConnectButton->setEnabled(true);
-    ui->BLE_ScanButton->setEnabled(true);
+    ui->BLU_StatusLabel->setText("State:Disconnected");
+    ui->BLU_ConnectButton->setEnabled(true);
+    ui->BLU_ScanButton->setEnabled(true);
     QVariant variant= QColor (255,255,255);
     QString colcode = variant.toString();
-    ui->BLE_StatusLabel->setAutoFillBackground(true);
-    ui->BLE_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
+    ui->BLU_StatusLabel->setAutoFillBackground(true);
+    ui->BLU_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 }
 
 
@@ -322,39 +323,39 @@ void MainWindow::on_BLE_DisconnectButton_clicked()
 /***************************************************************************/
 /***************************************************************************/
 
-void MainWindow::BLE_InitializeQTConnections(void)
+void MainWindow::BLU_InitializeQTConnections(void)
 {
 
     /*Bluetooth connect connections start*/
     connect(
-        &BleInputDataProcessingWrapper.bleutoothClassicConnection,
+        &BluInputDataProcessingWrapper.bleutoothClassicConnection,
         SIGNAL(bluetoothSignalDeviceDiscovered(QString) )
         ,this
         ,SLOT(MainWin_bluetoothSlotDeviceDiscovered(QString) )   );
 
     connect(
-        &BleInputDataProcessingWrapper.bleutoothClassicConnection,
+        &BluInputDataProcessingWrapper.bleutoothClassicConnection,
         SIGNAL(bluetoothSignalDiscoveryFinished() )
         ,this
         ,SLOT(MainWin_bluetoothSlotDiscoveryFinished() ));
 
 
     connect(
-        &BleInputDataProcessingWrapper.bleutoothClassicConnection,
+        &BluInputDataProcessingWrapper.bleutoothClassicConnection,
         SIGNAL(bluetoothSignalConnectingStart() )
         ,this
         ,SLOT(MainWin_bluetoothSlotConnectingStart() ));
 
 
     connect(
-        &BleInputDataProcessingWrapper.bleutoothClassicConnection,
+        &BluInputDataProcessingWrapper.bleutoothClassicConnection,
         SIGNAL( bluetoothSignalConnectionEstablished() )
         ,this
         ,SLOT(MainWin_bluetoothSlotConnectionEstablished() ));
 
 
     connect(
-        &BleInputDataProcessingWrapper.bleutoothClassicConnection,
+        &BluInputDataProcessingWrapper.bleutoothClassicConnection,
         SIGNAL( bluetoothSignalConnectionInterrupted() )
         ,this
         ,SLOT(MainWin_bluetoothSlotConnectionInterrupted() ));
@@ -362,104 +363,104 @@ void MainWindow::BLE_InitializeQTConnections(void)
     connect(
         this,
         SIGNAL( MainWin_bluetoothSignalStartDiscoveryDevices() )
-        ,&BleInputDataProcessingWrapper.bleutoothClassicConnection
+        ,&BluInputDataProcessingWrapper.bleutoothClassicConnection
         ,SLOT(bluetoothStartDiscoveryDevices() ) );
 
     connect(
         this,
         SIGNAL( MainWin_bluetoothDisconnect() )
-        ,&BleInputDataProcessingWrapper.bleutoothClassicConnection
+        ,&BluInputDataProcessingWrapper.bleutoothClassicConnection
         ,SLOT(bluetoothDisconnect() ) );
 
     connect(
         this,
         SIGNAL( MainWin_bluetootSignalConnectToDeviceByName(QString) )
-        ,&BleInputDataProcessingWrapper.bleutoothClassicConnection
+        ,&BluInputDataProcessingWrapper.bleutoothClassicConnection
         ,SLOT(bluetootConnectToDeviceByName(QString) ) );
     /*Bluetooth connect connections end*/
 
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotMapUpdate() )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotMapUpdate() )
         ,this
         ,SLOT(MainWinPlot_PlotMapReplot() ));
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotYawRateUpdate() )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotYawRateUpdate() )
         ,this
         ,SLOT(MainWinPlot_PlotYawRateReplot() ));
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotSpdUpdate() )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotSpdUpdate() )
         ,this
         ,SLOT(MainWinPlot_PlotSpdReplot() ));
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotPosErrUpdate() )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotPosErrUpdate() )
         ,this
         ,SLOT(MainWinPlot_PlotPosErrReplot() ));
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotPidRegValUpdate() )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotPidRegValUpdate() )
         ,this
         ,SLOT(MainWinPlot_PlotPidRegValReplot() ));
 
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotMapAppendData(float,float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotMapAppendData(float,float) )
         ,this
         ,SLOT(MainWinPlot_PlotMapAppendData(float,float) ));
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotYawRateAppendData(uint32_t,float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotYawRateAppendData(uint32_t,float) )
         ,this
         ,SLOT(MainWinPlot_PlotYawRateAppendData(uint32_t,float) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotSpdAppendData(uint32_t,float,float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotSpdAppendData(uint32_t,float,float) )
         ,this
         ,SLOT(MainWinPlot_PlotSpdAppendData(uint32_t,float,float) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotPosErrAppendData(uint32_t,float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotPosErrAppendData(uint32_t,float) )
         ,this
         ,SLOT(MainWinPlot_PlotPosErrAppendData(uint32_t,float) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_PlotPidRegValAppendData(uint32_t,float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotPidRegValAppendData(uint32_t,float) )
         ,this
         ,SLOT(MainWinPlot_PlotPidRegValAppendData(uint32_t,float) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_DebugTable_InsertDataRow(uint32_t,uint32_t,uint8_t,QString,QColor) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_DebugTable_InsertDataRow(uint32_t,uint32_t,uint8_t,QString,QColor) )
         ,this
         ,SLOT(MainWin_DebugTable_InsertDataRow(uint32_t,uint32_t,uint8_t,QString,QColor) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_DebugTable_ScrollToBottom() )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_DebugTable_ScrollToBottom() )
         ,this
         ,SLOT(MainWin_DebugTable_ScrollToBottom() ) );
 
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_RefreshErrorIndicatorView(uint8_t,uint8_t,uint8_t,uint8_t,uint8_t,uint8_t,
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_RefreshErrorIndicatorView(uint8_t,uint8_t,uint8_t,uint8_t,uint8_t,uint8_t,
                                                           uint8_t,uint8_t,uint8_t,uint8_t,uint8_t,uint8_t,
                                                           uint8_t,uint8_t,
                                                           float) )
@@ -471,47 +472,47 @@ void MainWindow::BLE_InitializeQTConnections(void)
         );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_CommunicationStatisticsUpdate(uint32_t,uint16_t,uint16_t,uint16_t,uint16_t) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_CommunicationStatisticsUpdate(uint32_t,uint16_t,uint16_t,uint16_t,uint16_t) )
         ,this
         ,SLOT(MainWin_CommunicationStatisticsUpdate(uint32_t,uint16_t,uint16_t,uint16_t,uint16_t) ) );
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdateErrorWeigthData(float,float,float,float,float,float,float,float,float,float,float,float))
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateErrorWeigthData(float,float,float,float,float,float,float,float,float,float,float,float))
         ,this
         ,SLOT(MainWin_UpdateNvmErrorWeigthData(float,float,float,float,float,float,float,float,float,float,float,float) ) );
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdateVehCfgData(float,uint32_t,uint32_t) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateVehCfgData(float,uint32_t,uint32_t) )
         ,this
         ,SLOT(MainWin_UpdateNvM_VehCfgData(float, uint32_t, uint32_t) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdatePidData(float,float,float,uint32_t) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdatePidData(float,float,float,uint32_t) )
         ,this
         ,SLOT(MainWin_UpdateNvM_PidData(float,float,float,uint32_t) ) );
 
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdateMotorsFactors(uint32_t,uint32_t,uint32_t,uint32_t) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateMotorsFactors(uint32_t,uint32_t,uint32_t,uint32_t) )
         ,this
         ,SLOT(MainWin_UpdateMotorsFactors(uint32_t, uint32_t, uint32_t,uint32_t) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdateEncoderCfgData(float,float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateEncoderCfgData(float,float) )
         ,this
         ,SLOT(MainWin_UpdateEncoderCfgData(float,float) ) );
 
     connect(
-        &BleInputDataProcessingWrapper,
-        SIGNAL(BleDatMngrSignal_UpdateOrientation(float) )
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateOrientation(float) )
         ,this
         ,SLOT(MainWin_DrawOrientationIndicator(float) ) );
 
@@ -867,9 +868,9 @@ void MainWindow::MainWin_CommunicationStatisticsUpdate(uint32_t ucTimeStamp,uint
 void MainWindow::MainWin_DebugTable_ScrollToBottom()
 {
     ui->DebugDataTable->scrollToBottom();
-    BleInputDataProcessingWrapper.DebugTableScrollingBottonMutex.lock();
-    BleInputDataProcessingWrapper.DebugTableScrollingBottomIsActivState = false;
-    BleInputDataProcessingWrapper.DebugTableScrollingBottonMutex.unlock();
+    BluInputDataProcessingWrapper.DebugTableScrollingBottonMutex.lock();
+    BluInputDataProcessingWrapper.DebugTableScrollingBottomIsActivState = false;
+    BluInputDataProcessingWrapper.DebugTableScrollingBottonMutex.unlock();
 }
 
 
@@ -969,9 +970,9 @@ void MainWindow::MainWinPlot_PlotPosErrReplot(void)
         PlotPosErr.LfGraph_UpdateReplot();
     }
 
-    BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
-    BleInputDataProcessingWrapper.PosErrPlotPlottingState = FALSE;
-    BleInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.PosErrPlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
 }
 
 void MainWindow::MainWinPlot_PlotPidRegValReplot()
@@ -982,9 +983,9 @@ void MainWindow::MainWinPlot_PlotPidRegValReplot()
         PlotPidRegVal.LfGraph_UpdateReplot();
     }
 
-    BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
-    BleInputDataProcessingWrapper.PidRegValPlotPlottingState = FALSE;
-    BleInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.PidRegValPlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
 }
 
 void MainWindow::MainWinPlot_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue)
@@ -1025,9 +1026,9 @@ void MainWindow::MainWinPlot_PlotMapReplot(void)
         PlotMap.LfGraph_UpdateReplot();
     }
 //    qDebug() << "MainWinPlot_PlotMapReplot TOOK: " << timer.elapsed() << "milliseconds";
-    BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
-    BleInputDataProcessingWrapper.MapPlotPlottingState = FALSE;
-    BleInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.MapPlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
 }
 /*********************************************************************************************************/
 void MainWindow::MainWinPlot_PlotYawRateReplot(void)
@@ -1038,9 +1039,9 @@ void MainWindow::MainWinPlot_PlotYawRateReplot(void)
     {
         PlotYawRate.LfGraph_UpdateReplot();
     }
-    BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
-    BleInputDataProcessingWrapper.YawRatePlotPlottingState = FALSE;
-    BleInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.YawRatePlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
 }
 /*********************************************************************************************************/
 void MainWindow::MainWinPlot_PlotSpdReplot(void)
@@ -1053,9 +1054,9 @@ void MainWindow::MainWinPlot_PlotSpdReplot(void)
     }
 
 
-    BleInputDataProcessingWrapper.PlottingInfoMutex.lock();
-    BleInputDataProcessingWrapper.SpdPlotPlottingState = FALSE;
-    BleInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.SpdPlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
 }
 /*********************************************************************************************************/
 
@@ -1080,7 +1081,7 @@ void MainWindow::on_BLU_SimulatorStartButton_clicked()
 {
     char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {0};
 
-    command[0] = (char)BleDataManager::BLU_SimulatorStart;
+    command[0] = (char)BluDataManager::BLU_SimulatorStart;
 
     for(int i=1; i<(BLU_SINGLE_TR_MESSAGE_SIZE-2); i++)
     {
@@ -1089,13 +1090,13 @@ void MainWindow::on_BLU_SimulatorStartButton_clicked()
 
     QByteArray Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 /*********************************************************************************************************/
-void MainWindow::on_BLE_SimulatorSuspendButton_clicked()
+void MainWindow::on_BLU_SimulatorSuspendButton_clicked()
 {
     char command[BLU_SINGLE_TR_MESSAGE_SIZE-2];
-    command[0] = (char)BleDataManager::BLU_SimuAndTrueDataLoggingStop;
+    command[0] = (char)BluDataManager::BLU_SimuAndTrueDataLoggingStop;
 
     for(int i=1; i<(BLU_SINGLE_TR_MESSAGE_SIZE-2); i++)
     {
@@ -1104,14 +1105,14 @@ void MainWindow::on_BLE_SimulatorSuspendButton_clicked()
 
     QByteArray Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
 /*********************************************************************************************************/
-void MainWindow::on_BLE_TrueLogStartButton_clicked()
+void MainWindow::on_BLU_TrueLogStartButton_clicked()
 {
     char command[BLU_SINGLE_TR_MESSAGE_SIZE-2];
-    command[0] = (char)BleDataManager::BLU_TrueBaseLoggingStart;
+    command[0] = (char)BluDataManager::BLU_TrueBaseLoggingStart;
 
     for(int i=1; i<(BLU_SINGLE_TR_MESSAGE_SIZE-2); i++)
     {
@@ -1120,7 +1121,7 @@ void MainWindow::on_BLE_TrueLogStartButton_clicked()
 
     QByteArray Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
 /*********************************************************************************************************/
@@ -1130,7 +1131,7 @@ void MainWindow::on_EnableBaseDataLogging_clicked(bool checked)
 {
     if(true == checked)
     {
-        BleInputDataProcessingWrapper.DebugTable_BaseDataLoggingState = true;
+        BluInputDataProcessingWrapper.DebugTable_BaseDataLoggingState = true;
     }
 }
 
@@ -1139,7 +1140,7 @@ void MainWindow::on_DebugTable_DisableBaseDataLogging_clicked(bool checked)
 {
     if(true == checked)
     {
-        BleInputDataProcessingWrapper.DebugTable_BaseDataLoggingState = false;
+        BluInputDataProcessingWrapper.DebugTable_BaseDataLoggingState = false;
     }
 }
 
@@ -1174,31 +1175,31 @@ void MainWindow::ReadNvMDataFromLineFollower()
     ui->TextOneImpDist->clear();
 
     char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
-    command[0] = (char)BleDataManager::BLU_NvM_ErrWeigthSensorDataReq;
+    command[0] = (char)BluDataManager::BLU_NvM_ErrWeigthSensorDataReq;
 
     QByteArray Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
-    command[0] = (char)BleDataManager::BLU_NvM_LinePidRegDataReq;
+    command[0] = (char)BluDataManager::BLU_NvM_LinePidRegDataReq;
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
-    command[0] = (char)BleDataManager::BLU_NvM_VehCfgReq;
+    command[0] = (char)BluDataManager::BLU_NvM_VehCfgReq;
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
-    command[0] = (char)BleDataManager::BLU_NvM_MotorsFactorsReq;
+    command[0] = (char)BluDataManager::BLU_NvM_MotorsFactorsReq;
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
-    command[0] = (char)BleDataManager::BLU_NvM_EncoderModCfgReq;
+    command[0] = (char)BluDataManager::BLU_NvM_EncoderModCfgReq;
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
 
@@ -1246,7 +1247,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     QByteArray Helper;
 
     /***********************************************************************************/
-    command[0] = (char)BleDataManager::BLU_NvM_ErrWeigthSensorData;
+    command[0] = (char)BluDataManager::BLU_NvM_ErrWeigthSensorData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &Err1ValueFloat, sizeof(float));
     std::memcpy(&command[6],  &Err2ValueFloat, sizeof(float));
@@ -1262,7 +1263,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     std::memcpy(&command[46], &ErrMValueFloat, sizeof(float));
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
     /*********************************************************************************************************/
     /*********************************************************************************************************/
@@ -1279,7 +1280,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
 ////    qDebug() << "PID_KDfloat" << PID_KDfloat << "ProbeTimeFloat" << ProbeTimeFloat;
 
 
-    command[0] = (char)BleDataManager::BLU_NvM_LinePidRegData;
+    command[0] = (char)BluDataManager::BLU_NvM_LinePidRegData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &PID_KPfloat, sizeof(float));
     std::memcpy(&command[6],  &PID_KIfloat, sizeof(float));
@@ -1287,7 +1288,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     std::memcpy(&command[14], &ProbeTimeInt, sizeof(float));
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 
     /*********************************************************************************************************/
@@ -1304,14 +1305,14 @@ void MainWindow::on_UpdateNvM_Button_clicked()
 ////    qDebug() << "TryDetEndLineMark" << TryDetEndLineMark;
 
 
-    command[0] = (char)BleDataManager::BLU_NvM_VehCfgData;
+    command[0] = (char)BluDataManager::BLU_NvM_VehCfgData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
     std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
     std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 
     /*********************************************************************************************************/
@@ -1328,7 +1329,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     uint32_t FacB_RhtU32 = FacB_RhtText.toInt();
 
 
-    command[0] = (char)BleDataManager::BLU_NvM_MotorsFactorsData;
+    command[0] = (char)BluDataManager::BLU_NvM_MotorsFactorsData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &FacA_LftU32, sizeof(uint32_t));
     std::memcpy(&command[6],  &FacA_RhtU32, sizeof(uint32_t));
@@ -1336,7 +1337,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     std::memcpy(&command[14], &FacB_RhtU32, sizeof(uint32_t));
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
     /*********************************************************************************************************/
     /*********************************************************************************************************/
@@ -1348,7 +1349,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     float WheelBaseF32 = WheelBaseText.toFloat();
 
 
-    command[0] = (char)BleDataManager::BLU_NvM_EncoderModCfgData;
+    command[0] = (char)BluDataManager::BLU_NvM_EncoderModCfgData;
     command[1] = SyncID;
     std::memcpy(&command[2],  &OneImpDistF32, sizeof(float));
     std::memcpy(&command[6],  &WheelBaseF32, sizeof(float));
@@ -1357,7 +1358,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
 
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
-    BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 
     /*********************************************************************************************************/
@@ -1427,54 +1428,54 @@ void MainWindow::on_ClearLoggerButton_clicked()
 
 void MainWindow::on_BLU_RobotStop_Button_clicked()
 {
-        ui->BLE_TrueLogStartButton->setDisabled(false);
-        ui->BLE_SimulatorSuspendButton->setDisabled(false);
-        ui->BLE_TrueLogStartButton->setDisabled(false);
+        ui->BLU_TrueLogStartButton->setDisabled(false);
+        ui->BLU_SimulatorSuspendButton->setDisabled(false);
+        ui->BLU_TrueLogStartButton->setDisabled(false);
 
-        ui->BLE_SimulatorSuspendButton->setDisabled(false);
+        ui->BLU_SimulatorSuspendButton->setDisabled(false);
 
-        ui->BLE_TrueLogStartButton->setDisabled(false);
+        ui->BLU_TrueLogStartButton->setDisabled(false);
 
         ui->BLU_RobotStart_Button->setDisabled(false);
 //        ui->ReadNvM_Button->setDisabled(false);
         ui->UpdateNvM_Button->setDisabled(false);
-        ui->BLE_DisconnectButton->setDisabled(false);
+        ui->BLU_DisconnectButton->setDisabled(false);
 
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
         QByteArray Helper;
 
-        command[0] = (char)BleDataManager::BLU_RobotStop;
+        command[0] = (char)BluDataManager::BLU_RobotStop;
         command[1] = 0; //SyncID
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
-        BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
 
 void MainWindow::on_BLU_RobotStart_Button_clicked()
 {
-        on_BLE_SimulatorSuspendButton_clicked();
-        on_BLE_TrueLogStartButton_clicked();
+        on_BLU_SimulatorSuspendButton_clicked();
+        on_BLU_TrueLogStartButton_clicked();
 
 
-        ui->BLE_TrueLogStartButton->setDisabled(true);
-        ui->BLE_SimulatorSuspendButton->setDisabled(true);
+        ui->BLU_TrueLogStartButton->setDisabled(true);
+        ui->BLU_SimulatorSuspendButton->setDisabled(true);
         ui->BLU_SimulatorStartButton->setDisabled(true);
-        ui->BLE_SimulatorSuspendButton->setDisabled(true);
-        ui->BLE_TrueLogStartButton->setDisabled(true);
+        ui->BLU_SimulatorSuspendButton->setDisabled(true);
+        ui->BLU_TrueLogStartButton->setDisabled(true);
         ui->BLU_RobotStart_Button->setDisabled(true);
 //        ui->ReadNvM_Button->setDisabled(true);
         ui->UpdateNvM_Button->setDisabled(true);
-        ui->BLE_DisconnectButton->setDisabled(true);
+        ui->BLU_DisconnectButton->setDisabled(true);
 
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
         QByteArray Helper;
 
-        command[0] = (char)BleDataManager::BLU_RobotStart;
+        command[0] = (char)BluDataManager::BLU_RobotStart;
         command[1] = 0; //SyncID
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
-        BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
 
@@ -1490,14 +1491,14 @@ void MainWindow::on_UpdateExpectedAvSpd_clicked()
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
         QByteArray Helper;
 
-        command[0] = (char)BleDataManager::BLU_NvM_VehCfgData;
+        command[0] = (char)BluDataManager::BLU_NvM_VehCfgData;
         command[1] = 0; //SyncID
         std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
         std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
         std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
         Helper = QByteArray::fromRawData(command,(BLU_SINGLE_TR_MESSAGE_SIZE-2));
         Helper.append("\n\r");
-        BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 }
 
@@ -1508,7 +1509,7 @@ void MainWindow::on_UpdateLfNameButton_clicked()
 {
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {0};
         QByteArray Helper;
-        command[0] = (char)BleDataManager::BLU_SetNewRobotName;
+        command[0] = (char)BluDataManager::BLU_SetNewRobotName;
         command[1] = 0; //SyncID
         QString NewLineFollowerName = ui->NewLfNameText->text();
         QByteArray Helper2 = NewLineFollowerName.toUtf8();
@@ -1524,7 +1525,7 @@ void MainWindow::on_UpdateLfNameButton_clicked()
         }
 
 //        qDebug() << Helper;
-        BleInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
 

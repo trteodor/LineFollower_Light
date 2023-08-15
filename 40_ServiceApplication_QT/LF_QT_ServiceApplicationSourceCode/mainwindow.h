@@ -38,12 +38,12 @@ private slots:
 
     void MainWin_DrawOrientationIndicator(float Orientation);
 
-    void BLE_InitializeQTConnections(void);
+    void BLU_InitializeQTConnections(void);
 
-    void on_BLE_DisconnectButton_clicked();
+    void on_BLU_DisconnectButton_clicked();
     void on_BLU_SimulatorStartButton_clicked();
-    void on_BLE_SimulatorSuspendButton_clicked();
-    void on_BLE_TrueLogStartButton_clicked();
+    void on_BLU_SimulatorSuspendButton_clicked();
+    void on_BLU_TrueLogStartButton_clicked();
     void on_BLU_RobotStop_Button_clicked();
     void on_BLU_RobotStart_Button_clicked();
 
@@ -118,9 +118,9 @@ private slots:
     void MainWin_bluetoothSlotConnectionEstablished(void);
     void MainWin_bluetoothSlotConnectionInterrupted(void);
 
-    void on_BLE_ScanButton_clicked();
+    void on_BLU_ScanButton_clicked();
 
-    void on_BLE_ConnectButton_clicked();
+    void on_BLU_ConnectButton_clicked();
 
 signals:
     void MainWin_bluetoothSignalStartDiscoveryDevices(void);
@@ -159,7 +159,7 @@ private:
     uint32_t  NvM_FacB_Rht;
 
     QList<QString> FoundDevices;
-    BleDataManager BleInputDataProcessingWrapper;
+    BluDataManager BluInputDataProcessingWrapper;
 
 
     QDoubleValidator dblValidator;

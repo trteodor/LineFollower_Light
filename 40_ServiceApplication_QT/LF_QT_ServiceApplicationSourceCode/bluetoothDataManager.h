@@ -9,16 +9,16 @@
 
 
 
-class BleDataManager : public QObject
+class BluDataManager : public QObject
 {
     Q_OBJECT
 public:
-    BleDataManager();
-    ~BleDataManager();
+    BluDataManager();
+    ~BluDataManager();
 
-    QThread BleDatMngr_Thread;
+    QThread BluDatMngr_Thread;
 
-    bluetoothClassic bleutoothClassicConnection; /*Must be moved to BleDatMngr_Thread*/
+    bluetoothClassic bleutoothClassicConnection; /*Must be moved to BluDatMngr_Thread*/
 
     volatile bool DebugTable_BaseDataLoggingState = false;
 
@@ -134,60 +134,60 @@ typedef enum
 
 signals:
 
-    void BleDatMngrSignal_UpdateErrorWeigthData( float ErrW1,float ErrW2,float ErrW3,float ErrW4,float ErrW5,float ErrW6,float ErrW7,
+    void BluDatMngrSignal_UpdateErrorWeigthData( float ErrW1,float ErrW2,float ErrW3,float ErrW4,float ErrW5,float ErrW6,float ErrW7,
                                                 float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
-    void BleDatMngrSignal_UpdatePidData(float Kp,float Ki,float Kd,uint32_t ProbeTime);
-    void BleDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
+    void BluDatMngrSignal_UpdatePidData(float Kp,float Ki,float Kd,uint32_t ProbeTime);
+    void BluDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
 
-    void BleDatMngrSignal_UpdateEncoderCfgData(float OneImpDist, float WheelBase);
-    void BleDatMngrSignal_UpdateMotorsFactors(uint32_t FacA_Lft, uint32_t FacA_Rgt,uint32_t FacB_Lft,uint32_t FacB_Rht);
+    void BluDatMngrSignal_UpdateEncoderCfgData(float OneImpDist, float WheelBase);
+    void BluDatMngrSignal_UpdateMotorsFactors(uint32_t FacA_Lft, uint32_t FacA_Rgt,uint32_t FacB_Lft,uint32_t FacB_Rht);
 
-    void BleDatMngrSignal_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
+    void BluDatMngrSignal_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
                                                    uint8_t S6,uint8_t S7,uint8_t S8,uint8_t S9,uint8_t S10,uint8_t S11,
                                                    uint8_t RightLinePosConfif,uint8_t LeftLinePosConfif,
                                                    float PosError);
 
 
-    void BleDatMngrSignal_DebugTable_InsertDataRow(uint32_t ucTimeStamp, uint32_t FrameCounter, uint8_t SyncId, QString DecodedDataString,QColor RowColor = QColor( 255,255,255) );
-    void BleDatMngrSignal_DebugTable_ScrollToBottom();
+    void BluDatMngrSignal_DebugTable_InsertDataRow(uint32_t ucTimeStamp, uint32_t FrameCounter, uint8_t SyncId, QString DecodedDataString,QColor RowColor = QColor( 255,255,255) );
+    void BluDatMngrSignal_DebugTable_ScrollToBottom();
 
 
-    void BleDatMngrSignal_CommunicationStatisticsUpdate(uint32_t ucTimeStamp,uint16_t RingBufferRemainingSize,uint16_t RingBufferOverFlowCounter,
+    void BluDatMngrSignal_CommunicationStatisticsUpdate(uint32_t ucTimeStamp,uint16_t RingBufferRemainingSize,uint16_t RingBufferOverFlowCounter,
                                                             uint16_t TransmisstedMessagesCounter,uint16_t RetransmissionCounter);
 
 
-    void BleDatMngrSignal_UpdateOrientation(float Orientation);
+    void BluDatMngrSignal_UpdateOrientation(float Orientation);
 
-    void BleDatMngrSignal_PlotMapUpdate(void);
-    void BleDatMngrSignal_PlotYawRateUpdate(void);
-    void BleDatMngrSignal_PlotSpdUpdate(void);
-    void BleDatMngrSignal_PlotPosErrUpdate(void);
-    void BleDatMngrSignal_PlotPidRegValUpdate(void);
+    void BluDatMngrSignal_PlotMapUpdate(void);
+    void BluDatMngrSignal_PlotYawRateUpdate(void);
+    void BluDatMngrSignal_PlotSpdUpdate(void);
+    void BluDatMngrSignal_PlotPosErrUpdate(void);
+    void BluDatMngrSignal_PlotPidRegValUpdate(void);
 
-    void BleDatMngrSignal_PlotMapAppendData(float PosX, float PosY);
-    void BleDatMngrSignal_PlotYawRateAppendData(uint32_t FrameId, float YrValue);
-    void BleDatMngrSignal_PlotSpdAppendData(uint32_t FrameId, float SpdValueLeftWh,float SpdValueRightWh);
-    void BleDatMngrSignal_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
-    void BleDatMngrSignal_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
+    void BluDatMngrSignal_PlotMapAppendData(float PosX, float PosY);
+    void BluDatMngrSignal_PlotYawRateAppendData(uint32_t FrameId, float YrValue);
+    void BluDatMngrSignal_PlotSpdAppendData(uint32_t FrameId, float SpdValueLeftWh,float SpdValueRightWh);
+    void BluDatMngrSignal_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
+    void BluDatMngrSignal_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
 
 
 
 private slots:
-    void BleDatMngr_InputHanlder( char* data, uint32_t Size);
+    void BluDatMngr_InputHanlder( char* data, uint32_t Size);
 
 
 private:
 
-    void BleDatMngr_DebugMessagerHandler(char *data,uint32_t size, BleDataManager::BLU_MessageID_t BLE_MessID);
-    void BleDatMngr_BaseDataHandler(char *data,uint32_t Size);
-    void BleDatMngr_ErrorWeigthDataHandler(char *data,uint32_t Size);
-    void BleDatMngr_CommunicationStatistics_Handler(char *data,uint32_t Size);
-    void BleDatMngr_BaseDataInsertToDebugTable(uint32_t FrameCounter);
-    void BleDatMngr_PidDataHandler(char* data, uint32_t Size);
-    void BleDatMngr_VehCfgDataHandler(char* data, uint32_t Size);
-    void BleDatMngr_MotorsFactorsDataHandler(char* data, uint32_t Size);
-    void BleDatMngr_EncodersCfgDataHandler(char* data, uint32_t Size);
+    void BluDatMngr_DebugMessagerHandler(char *data,uint32_t size, BluDataManager::BLU_MessageID_t BLE_MessID);
+    void BluDatMngr_BaseDataHandler(char *data,uint32_t Size);
+    void BluDatMngr_ErrorWeigthDataHandler(char *data,uint32_t Size);
+    void BluDatMngr_CommunicationStatistics_Handler(char *data,uint32_t Size);
+    void BluDatMngr_BaseDataInsertToDebugTable(uint32_t FrameCounter);
+    void BluDatMngr_PidDataHandler(char* data, uint32_t Size);
+    void BluDatMngr_VehCfgDataHandler(char* data, uint32_t Size);
+    void BluDatMngr_MotorsFactorsDataHandler(char* data, uint32_t Size);
+    void BluDatMngr_EncodersCfgDataHandler(char* data, uint32_t Size);
 
 };
 

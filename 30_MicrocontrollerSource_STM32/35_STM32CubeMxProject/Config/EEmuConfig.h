@@ -56,6 +56,7 @@ typedef enum
 
 	EE_NvmAddr_DevNameUpdatedFlag_U32,
 
+	EE_NvmAddr_SenErrWeigthSubtituted5_F32,
 
 	EE_VarsCount
 }EE_Vars_t;

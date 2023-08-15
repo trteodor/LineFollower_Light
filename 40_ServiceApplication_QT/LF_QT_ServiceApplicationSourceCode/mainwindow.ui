@@ -585,7 +585,7 @@
      <item row="0" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QPushButton" name="BLE_ScanButton">
+        <widget class="QPushButton" name="BLU_ScanButton">
          <property name="maximumSize">
           <size>
            <width>60</width>
@@ -598,7 +598,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="BLE_DetectedDeviceComboBox">
+        <widget class="QComboBox" name="BLU_DetectedDeviceComboBox">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -630,14 +630,14 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="BLE_ConnectButton">
+        <widget class="QPushButton" name="BLU_ConnectButton">
          <property name="text">
           <string>Connect</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="BLE_DisconnectButton">
+        <widget class="QPushButton" name="BLU_DisconnectButton">
          <property name="text">
           <string>Disconnect</string>
          </property>
@@ -648,7 +648,7 @@
      <item row="2" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_7">
        <item>
-        <widget class="QCheckBox" name="BLE_AutoConnCheckBox">
+        <widget class="QCheckBox" name="BLU_AutoConnCheckBox">
          <property name="text">
           <string>LookFor:</string>
          </property>
@@ -658,7 +658,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="BLE_AutoConnDevNameL">
+        <widget class="QLineEdit" name="BLU_AutoConnDevNameL">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>1</horstretch>
@@ -681,7 +681,7 @@
      <item row="3" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_19">
        <item>
-        <widget class="QLabel" name="BLE_StatusLabel">
+        <widget class="QLabel" name="BLU_StatusLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -817,7 +817,7 @@ color: rgb(255, 255, 255);</string>
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="BLE_SimulatorSuspendButton">
+        <widget class="QPushButton" name="BLU_SimulatorSuspendButton">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -830,7 +830,7 @@ color: rgb(255, 255, 255);</string>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="BLE_TrueLogStartButton">
+        <widget class="QPushButton" name="BLU_TrueLogStartButton">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -1945,7 +1945,7 @@ color: rgb(255, 255, 255);</string>
   <tabstop>pushButton_2</tabstop>
   <tabstop>GeneralPlotDataClear_pb</tabstop>
   <tabstop>MainTabWidget</tabstop>
-  <tabstop>BLE_DetectedDeviceComboBox</tabstop>
+  <tabstop>BLU_DetectedDeviceComboBox</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>PlotWidgetTab1</tabstop>
   <tabstop>tabWidget_4</tabstop>

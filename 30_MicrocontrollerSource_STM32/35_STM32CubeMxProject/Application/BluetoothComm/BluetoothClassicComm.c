@@ -106,7 +106,7 @@ static uint16_t TransmisstedMessagesCounter = 0;
 static uint16_t volatile UartBusyCounter =0u;
 
 static BluRingBufferTransmit_t BluMainTransmitRingBuffer;
-static uint8_t BleMainTransmitMessagesTab[BLU_TRANSMIT_RING_BUFFER_SIZE][BLU_SINGLE_MESSAGE_SIZE];
+static uint8_t BluMainTransmitMessagesTab[BLU_TRANSMIT_RING_BUFFER_SIZE][BLU_SINGLE_MESSAGE_SIZE];
 
 static BluRingBufferReceive_t BleMainReceiveRingBuffer;
 static uint8_t BluMainReceiveMessagesTab[BLU_RECEIVE_RING_BUFFER_SIZE][BLU_SINGLE_REC_MESSAGE_SIZE];
@@ -142,7 +142,7 @@ static BLU_CallStatus_t TransmitErrorWeigthData(void);
  		// Start listening again
  		// HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
  		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
- 		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+ 		// HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
  	}
  }
 
@@ -166,7 +166,7 @@ static BluRingBufferStatus_t RB_Transmit_Read(BluRingBufferTransmit_t *Buf, uint
 
 	// Write current value from buffer to pointer from argument
 	*MessageSize = Buf->MessageSize[Buf->Tail];
-	*MessagePointer = &BleMainTransmitMessagesTab[Buf->Tail][0];
+	*MessagePointer = &BluMainTransmitMessagesTab[Buf->Tail][0];
 
 	// Calculate new Tail pointer
 	Buf->Tail = (Buf->Tail + 1) % BLU_TRANSMIT_RING_BUFFER_SIZE;
@@ -206,7 +206,7 @@ static BluRingBufferStatus_t RB_Transmit_Write(BluRingBufferTransmit_t *Buf,uint
 	/*Copy the values to new buffer*/
 	for(int i=0; i<MessageSize; i++)
 	{
-		BleMainTransmitMessagesTab[ActualWriteIndex][i] = DataToWrite[i];
+		BluMainTransmitMessagesTab[ActualWriteIndex][i] = DataToWrite[i];
 	}
 	// Everything is ok - return OK status
 	return RB_OK;
@@ -334,16 +334,20 @@ static BLU_CallStatus_t TransmitErrorWeigthData(void)
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth2_F32, &ErrWDataP2);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth3_F32, &ErrWDataP3);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth4_F32, &ErrWDataP4);
+	
 	memcpy(&DataBuffer[2],&ErrWDataP1,4);
 	memcpy(&DataBuffer[6],&ErrWDataP2,4);
 	memcpy(&DataBuffer[10],&ErrWDataP3,4);
 	memcpy(&DataBuffer[14],&ErrWDataP4,4);
 	/***********************************************************************/
 	/*Prepare transmit data of part 2*/
-	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth5_F32, &ErrWDataP1);
+	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthSubtituted5_F32, &ErrWDataP1);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth6_F32, &ErrWDataP2);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth7_F32, &ErrWDataP3);
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigth8_F32, &ErrWDataP4);
+
+	// BLU_DbgMsgTransmit("ErrWeigthRead: W5:%f ",ErrWDataP1);	
+
 	memcpy(&DataBuffer[18],&ErrWDataP1,4);
 	memcpy(&DataBuffer[22],&ErrWDataP2,4);
 	memcpy(&DataBuffer[26],&ErrWDataP3,4);
@@ -705,7 +709,7 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth2_F32, ErrW2Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth3_F32, ErrW3Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth4_F32, ErrW4Val);
-					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth5_F32, ErrW5Val);
+					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigthSubtituted5_F32, ErrW5Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth6_F32, ErrW6Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth7_F32, ErrW7Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth8_F32, ErrW8Val);
@@ -713,6 +717,9 @@ static void ReceiveDataHandler(void)
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth10_F32, ErrW10Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigth11_F32, ErrW11Val);
 					EE_WriteVariableF32(EE_NvmAddr_SenErrWeigthMax_F32, ErrWMVal);
+
+					// BLU_DbgMsgTransmit("ErrWeigthWrite W4:%f ",ErrW4Val );
+						// BLU_DbgMsgTransmit("ErrWeigthWrite: W5:%f ",ErrW5Val);	
 
 					NvmDataUpdatedFlag= true;
 
