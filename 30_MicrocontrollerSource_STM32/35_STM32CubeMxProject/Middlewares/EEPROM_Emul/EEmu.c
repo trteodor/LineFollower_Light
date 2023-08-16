@@ -445,17 +445,29 @@ uint16_t EE_ReadVariableF32(EE_Vars_t VirtAddress, float* Data)
 uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data)
 {
 	__disable_irq();
-  uint16_t Status = 0;
-  
-  /* Write the variable virtual address and value in the EEPROM */
-  Status = EE_VerifyPageFullWriteVariable(VirtAddress, Data);
 
-  /* In case the EEPROM active page is full */
-  if (Status == PAGE_FULL)
-  {
-    /* Perform Page transfer */
-    Status = EE_PageTransfer(VirtAddress, Data);
-  }
+	uint32_t CheckedValue = 0;
+	uint16_t Status = 0;
+
+	do
+	{
+
+
+
+	  /* Write the variable virtual address and value in the EEPROM */
+	  Status = EE_VerifyPageFullWriteVariable(VirtAddress, Data);
+
+	  /* In case the EEPROM active page is full */
+	  if (Status == PAGE_FULL)
+	  {
+		/* Perform Page transfer */
+		Status = EE_PageTransfer(VirtAddress, Data);
+	  }
+
+  	  EE_ReadVariableU32(VirtAddress, &CheckedValue);
+
+	}while(CheckedValue != Data );
+  
   __enable_irq();
   /* Return last operation status */
   return Status;
@@ -474,23 +486,36 @@ uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data)
 uint16_t EE_WriteVariableF32(EE_Vars_t VirtAddress, float Data)
 {
 	__disable_irq();
-    uint16_t Status = 0;
-  uint32_t FloatDataAsUint32;
-  float DataHelper = Data;
 
-  memcpy(&FloatDataAsUint32, &DataHelper,4);
+	float CheckedValue = 0.0F;
+	uint16_t Status = 0;
 
-  /* Write the variable virtual address and value in the EEPROM */
-  Status = EE_VerifyPageFullWriteVariable(VirtAddress, FloatDataAsUint32);
+	do
+	{
 
-  /* In case the EEPROM active page is full */
-  if (Status == PAGE_FULL)
-  {
-    /* Perform Page transfer */
-    Status = EE_PageTransfer(VirtAddress, Data);
-  }
+	  uint32_t FloatDataAsUint32;
+	  float DataHelper = Data;
+
+	  memcpy(&FloatDataAsUint32, &DataHelper,4);
+
+	  /* Write the variable virtual address and value in the EEPROM */
+	  Status = EE_VerifyPageFullWriteVariable(VirtAddress, FloatDataAsUint32);
+
+	  /* In case the EEPROM active page is full */
+	  if (Status == PAGE_FULL)
+	  {
+	    /* Perform Page transfer */
+	    Status = EE_PageTransfer(VirtAddress, Data);
+	  }
+
+	  EE_ReadVariableF32(VirtAddress, &CheckedValue);
+
+	}while(CheckedValue != Data );
+
 
   __enable_irq();
+
+
   /* Return last operation status */
   return Status;
 }
