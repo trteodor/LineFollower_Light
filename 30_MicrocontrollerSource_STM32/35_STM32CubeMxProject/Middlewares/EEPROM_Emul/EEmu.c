@@ -444,8 +444,6 @@ uint16_t EE_ReadVariableF32(EE_Vars_t VirtAddress, float* Data)
   */
 uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data)
 {
-	__disable_irq();
-
 	uint32_t CheckedValue = 0;
 	uint16_t Status = 0;
 
@@ -468,7 +466,6 @@ uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data)
 
 	}while(CheckedValue != Data );
   
-  __enable_irq();
   /* Return last operation status */
   return Status;
 }
@@ -485,7 +482,7 @@ uint16_t EE_WriteVariableU32(EE_Vars_t VirtAddress, uint32_t Data)
   */
 uint16_t EE_WriteVariableF32(EE_Vars_t VirtAddress, float Data)
 {
-	__disable_irq();
+
 
 	float CheckedValue = 0.0F;
 	uint16_t Status = 0;
@@ -511,10 +508,6 @@ uint16_t EE_WriteVariableF32(EE_Vars_t VirtAddress, float Data)
 	  EE_ReadVariableF32(VirtAddress, &CheckedValue);
 
 	}while(CheckedValue != Data );
-
-
-  __enable_irq();
-
 
   /* Return last operation status */
   return Status;

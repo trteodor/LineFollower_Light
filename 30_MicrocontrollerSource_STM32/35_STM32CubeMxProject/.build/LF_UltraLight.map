@@ -2093,7 +2093,7 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
                 0x08000000                g_pfnVectors
                 0x08000298                . = ALIGN (0x4)
 
-.text           0x080002a0     0xf0ec
+.text           0x080002a0     0xf0e4
                 0x080002a0                . = ALIGN (0x4)
  *(.text)
  .text          0x080002a0       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
@@ -2820,568 +2820,568 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
                 0x0800b2fc       0x14 .build/EEmu.o
                 0x0800b2fc                EE_ReadVariableF32
  .text.EE_WriteVariableU32
-                0x0800b310       0x40 .build/EEmu.o
+                0x0800b310       0x3c .build/EEmu.o
                 0x0800b310                EE_WriteVariableU32
  .text.EE_WriteVariableF32
-                0x0800b350       0x5c .build/EEmu.o
-                0x0800b350                EE_WriteVariableF32
+                0x0800b34c       0x58 .build/EEmu.o
+                0x0800b34c                EE_WriteVariableF32
  .text.Reset_Handler
-                0x0800b3ac       0x50 .build/startup_stm32h743xx.o
-                0x0800b3ac                Reset_Handler
+                0x0800b3a4       0x50 .build/startup_stm32h743xx.o
+                0x0800b3a4                Reset_Handler
  .text.Default_Handler
-                0x0800b3fc        0x2 .build/startup_stm32h743xx.o
-                0x0800b3fc                RTC_Alarm_IRQHandler
-                0x0800b3fc                EXTI2_IRQHandler
-                0x0800b3fc                TIM8_CC_IRQHandler
-                0x0800b3fc                HRTIM1_Master_IRQHandler
-                0x0800b3fc                UART8_IRQHandler
-                0x0800b3fc                SPI4_IRQHandler
-                0x0800b3fc                TIM1_CC_IRQHandler
-                0x0800b3fc                BDMA_Channel6_IRQHandler
-                0x0800b3fc                DMA2_Stream5_IRQHandler
-                0x0800b3fc                HRTIM1_FLT_IRQHandler
-                0x0800b3fc                JPEG_IRQHandler
-                0x0800b3fc                DMA1_Stream5_IRQHandler
-                0x0800b3fc                BDMA_Channel1_IRQHandler
-                0x0800b3fc                HRTIM1_TIMD_IRQHandler
-                0x0800b3fc                TAMP_STAMP_IRQHandler
-                0x0800b3fc                EXTI3_IRQHandler
-                0x0800b3fc                LPTIM4_IRQHandler
-                0x0800b3fc                TIM8_TRG_COM_TIM14_IRQHandler
-                0x0800b3fc                LPTIM2_IRQHandler
-                0x0800b3fc                DFSDM1_FLT1_IRQHandler
-                0x0800b3fc                DMAMUX2_OVR_IRQHandler
-                0x0800b3fc                TIM8_UP_TIM13_IRQHandler
-                0x0800b3fc                I2C3_ER_IRQHandler
-                0x0800b3fc                DFSDM1_FLT2_IRQHandler
-                0x0800b3fc                MDMA_IRQHandler
-                0x0800b3fc                LPTIM3_IRQHandler
-                0x0800b3fc                HSEM1_IRQHandler
-                0x0800b3fc                EXTI0_IRQHandler
-                0x0800b3fc                FPU_IRQHandler
-                0x0800b3fc                OTG_HS_WKUP_IRQHandler
-                0x0800b3fc                FDCAN1_IT1_IRQHandler
-                0x0800b3fc                LTDC_ER_IRQHandler
-                0x0800b3fc                DMA2_Stream2_IRQHandler
-                0x0800b3fc                HRTIM1_TIME_IRQHandler
-                0x0800b3fc                SPI1_IRQHandler
-                0x0800b3fc                TIM6_DAC_IRQHandler
-                0x0800b3fc                DCMI_IRQHandler
-                0x0800b3fc                HRTIM1_TIMC_IRQHandler
-                0x0800b3fc                DMA2_Stream3_IRQHandler
-                0x0800b3fc                SAI2_IRQHandler
-                0x0800b3fc                DFSDM1_FLT3_IRQHandler
-                0x0800b3fc                USART6_IRQHandler
-                0x0800b3fc                TIM17_IRQHandler
-                0x0800b3fc                USART3_IRQHandler
-                0x0800b3fc                BDMA_Channel7_IRQHandler
-                0x0800b3fc                LPTIM5_IRQHandler
-                0x0800b3fc                UART5_IRQHandler
-                0x0800b3fc                ADC3_IRQHandler
-                0x0800b3fc                DMA2_Stream0_IRQHandler
-                0x0800b3fc                TIM4_IRQHandler
-                0x0800b3fc                BDMA_Channel2_IRQHandler
-                0x0800b3fc                QUADSPI_IRQHandler
-                0x0800b3fc                DMA1_Stream6_IRQHandler
-                0x0800b3fc                DMAMUX1_OVR_IRQHandler
-                0x0800b3fc                TIM16_IRQHandler
-                0x0800b3fc                UART4_IRQHandler
-                0x0800b3fc                BDMA_Channel5_IRQHandler
-                0x0800b3fc                TIM3_IRQHandler
-                0x0800b3fc                RCC_IRQHandler
-                0x0800b3fc                TIM8_BRK_TIM12_IRQHandler
-                0x0800b3fc                TIM1_TRG_COM_IRQHandler
-                0x0800b3fc                Default_Handler
-                0x0800b3fc                ECC_IRQHandler
-                0x0800b3fc                CEC_IRQHandler
-                0x0800b3fc                EXTI15_10_IRQHandler
-                0x0800b3fc                BDMA_Channel0_IRQHandler
-                0x0800b3fc                ADC_IRQHandler
-                0x0800b3fc                DMA1_Stream7_IRQHandler
-                0x0800b3fc                HRTIM1_TIMA_IRQHandler
-                0x0800b3fc                SPI5_IRQHandler
-                0x0800b3fc                TIM7_IRQHandler
-                0x0800b3fc                SDMMC1_IRQHandler
-                0x0800b3fc                DMA2_Stream7_IRQHandler
-                0x0800b3fc                TIM15_IRQHandler
-                0x0800b3fc                PVD_AVD_IRQHandler
-                0x0800b3fc                I2C3_EV_IRQHandler
-                0x0800b3fc                EXTI9_5_IRQHandler
-                0x0800b3fc                RTC_WKUP_IRQHandler
-                0x0800b3fc                LTDC_IRQHandler
-                0x0800b3fc                SAI3_IRQHandler
-                0x0800b3fc                ETH_WKUP_IRQHandler
-                0x0800b3fc                SPDIF_RX_IRQHandler
-                0x0800b3fc                SPI2_IRQHandler
-                0x0800b3fc                OTG_HS_EP1_IN_IRQHandler
-                0x0800b3fc                CRS_IRQHandler
-                0x0800b3fc                EXTI4_IRQHandler
-                0x0800b3fc                RNG_IRQHandler
-                0x0800b3fc                HRTIM1_TIMB_IRQHandler
-                0x0800b3fc                FDCAN2_IT1_IRQHandler
-                0x0800b3fc                ETH_IRQHandler
-                0x0800b3fc                TIM1_UP_IRQHandler
-                0x0800b3fc                BDMA_Channel4_IRQHandler
-                0x0800b3fc                OTG_HS_EP1_OUT_IRQHandler
-                0x0800b3fc                WWDG_IRQHandler
-                0x0800b3fc                SPI6_IRQHandler
-                0x0800b3fc                MDIOS_IRQHandler
-                0x0800b3fc                I2C4_EV_IRQHandler
-                0x0800b3fc                FDCAN2_IT0_IRQHandler
-                0x0800b3fc                LPUART1_IRQHandler
-                0x0800b3fc                FDCAN1_IT0_IRQHandler
-                0x0800b3fc                OTG_FS_WKUP_IRQHandler
-                0x0800b3fc                OTG_HS_IRQHandler
-                0x0800b3fc                DMA2D_IRQHandler
-                0x0800b3fc                TIM1_BRK_IRQHandler
-                0x0800b3fc                EXTI1_IRQHandler
-                0x0800b3fc                SDMMC2_IRQHandler
-                0x0800b3fc                OTG_FS_EP1_OUT_IRQHandler
-                0x0800b3fc                BDMA_Channel3_IRQHandler
-                0x0800b3fc                UART7_IRQHandler
-                0x0800b3fc                MDIOS_WKUP_IRQHandler
-                0x0800b3fc                DFSDM1_FLT0_IRQHandler
-                0x0800b3fc                SAI4_IRQHandler
-                0x0800b3fc                DMA2_Stream1_IRQHandler
-                0x0800b3fc                FLASH_IRQHandler
-                0x0800b3fc                DMA2_Stream4_IRQHandler
-                0x0800b3fc                USART1_IRQHandler
-                0x0800b3fc                OTG_FS_IRQHandler
-                0x0800b3fc                SPI3_IRQHandler
-                0x0800b3fc                WAKEUP_PIN_IRQHandler
-                0x0800b3fc                DMA1_Stream4_IRQHandler
-                0x0800b3fc                OTG_FS_EP1_IN_IRQHandler
-                0x0800b3fc                FMC_IRQHandler
-                0x0800b3fc                FDCAN_CAL_IRQHandler
-                0x0800b3fc                SWPMI1_IRQHandler
-                0x0800b3fc                COMP1_IRQHandler
-                0x0800b3fc                LPTIM1_IRQHandler
-                0x0800b3fc                I2C4_ER_IRQHandler
-                0x0800b3fc                DMA2_Stream6_IRQHandler
-                0x0800b3fc                SAI1_IRQHandler
-                0x0800b3fc                DMA1_Stream3_IRQHandler
- *fill*         0x0800b3fe        0x2 
+                0x0800b3f4        0x2 .build/startup_stm32h743xx.o
+                0x0800b3f4                RTC_Alarm_IRQHandler
+                0x0800b3f4                EXTI2_IRQHandler
+                0x0800b3f4                TIM8_CC_IRQHandler
+                0x0800b3f4                HRTIM1_Master_IRQHandler
+                0x0800b3f4                UART8_IRQHandler
+                0x0800b3f4                SPI4_IRQHandler
+                0x0800b3f4                TIM1_CC_IRQHandler
+                0x0800b3f4                BDMA_Channel6_IRQHandler
+                0x0800b3f4                DMA2_Stream5_IRQHandler
+                0x0800b3f4                HRTIM1_FLT_IRQHandler
+                0x0800b3f4                JPEG_IRQHandler
+                0x0800b3f4                DMA1_Stream5_IRQHandler
+                0x0800b3f4                BDMA_Channel1_IRQHandler
+                0x0800b3f4                HRTIM1_TIMD_IRQHandler
+                0x0800b3f4                TAMP_STAMP_IRQHandler
+                0x0800b3f4                EXTI3_IRQHandler
+                0x0800b3f4                LPTIM4_IRQHandler
+                0x0800b3f4                TIM8_TRG_COM_TIM14_IRQHandler
+                0x0800b3f4                LPTIM2_IRQHandler
+                0x0800b3f4                DFSDM1_FLT1_IRQHandler
+                0x0800b3f4                DMAMUX2_OVR_IRQHandler
+                0x0800b3f4                TIM8_UP_TIM13_IRQHandler
+                0x0800b3f4                I2C3_ER_IRQHandler
+                0x0800b3f4                DFSDM1_FLT2_IRQHandler
+                0x0800b3f4                MDMA_IRQHandler
+                0x0800b3f4                LPTIM3_IRQHandler
+                0x0800b3f4                HSEM1_IRQHandler
+                0x0800b3f4                EXTI0_IRQHandler
+                0x0800b3f4                FPU_IRQHandler
+                0x0800b3f4                OTG_HS_WKUP_IRQHandler
+                0x0800b3f4                FDCAN1_IT1_IRQHandler
+                0x0800b3f4                LTDC_ER_IRQHandler
+                0x0800b3f4                DMA2_Stream2_IRQHandler
+                0x0800b3f4                HRTIM1_TIME_IRQHandler
+                0x0800b3f4                SPI1_IRQHandler
+                0x0800b3f4                TIM6_DAC_IRQHandler
+                0x0800b3f4                DCMI_IRQHandler
+                0x0800b3f4                HRTIM1_TIMC_IRQHandler
+                0x0800b3f4                DMA2_Stream3_IRQHandler
+                0x0800b3f4                SAI2_IRQHandler
+                0x0800b3f4                DFSDM1_FLT3_IRQHandler
+                0x0800b3f4                USART6_IRQHandler
+                0x0800b3f4                TIM17_IRQHandler
+                0x0800b3f4                USART3_IRQHandler
+                0x0800b3f4                BDMA_Channel7_IRQHandler
+                0x0800b3f4                LPTIM5_IRQHandler
+                0x0800b3f4                UART5_IRQHandler
+                0x0800b3f4                ADC3_IRQHandler
+                0x0800b3f4                DMA2_Stream0_IRQHandler
+                0x0800b3f4                TIM4_IRQHandler
+                0x0800b3f4                BDMA_Channel2_IRQHandler
+                0x0800b3f4                QUADSPI_IRQHandler
+                0x0800b3f4                DMA1_Stream6_IRQHandler
+                0x0800b3f4                DMAMUX1_OVR_IRQHandler
+                0x0800b3f4                TIM16_IRQHandler
+                0x0800b3f4                UART4_IRQHandler
+                0x0800b3f4                BDMA_Channel5_IRQHandler
+                0x0800b3f4                TIM3_IRQHandler
+                0x0800b3f4                RCC_IRQHandler
+                0x0800b3f4                TIM8_BRK_TIM12_IRQHandler
+                0x0800b3f4                TIM1_TRG_COM_IRQHandler
+                0x0800b3f4                Default_Handler
+                0x0800b3f4                ECC_IRQHandler
+                0x0800b3f4                CEC_IRQHandler
+                0x0800b3f4                EXTI15_10_IRQHandler
+                0x0800b3f4                BDMA_Channel0_IRQHandler
+                0x0800b3f4                ADC_IRQHandler
+                0x0800b3f4                DMA1_Stream7_IRQHandler
+                0x0800b3f4                HRTIM1_TIMA_IRQHandler
+                0x0800b3f4                SPI5_IRQHandler
+                0x0800b3f4                TIM7_IRQHandler
+                0x0800b3f4                SDMMC1_IRQHandler
+                0x0800b3f4                DMA2_Stream7_IRQHandler
+                0x0800b3f4                TIM15_IRQHandler
+                0x0800b3f4                PVD_AVD_IRQHandler
+                0x0800b3f4                I2C3_EV_IRQHandler
+                0x0800b3f4                EXTI9_5_IRQHandler
+                0x0800b3f4                RTC_WKUP_IRQHandler
+                0x0800b3f4                LTDC_IRQHandler
+                0x0800b3f4                SAI3_IRQHandler
+                0x0800b3f4                ETH_WKUP_IRQHandler
+                0x0800b3f4                SPDIF_RX_IRQHandler
+                0x0800b3f4                SPI2_IRQHandler
+                0x0800b3f4                OTG_HS_EP1_IN_IRQHandler
+                0x0800b3f4                CRS_IRQHandler
+                0x0800b3f4                EXTI4_IRQHandler
+                0x0800b3f4                RNG_IRQHandler
+                0x0800b3f4                HRTIM1_TIMB_IRQHandler
+                0x0800b3f4                FDCAN2_IT1_IRQHandler
+                0x0800b3f4                ETH_IRQHandler
+                0x0800b3f4                TIM1_UP_IRQHandler
+                0x0800b3f4                BDMA_Channel4_IRQHandler
+                0x0800b3f4                OTG_HS_EP1_OUT_IRQHandler
+                0x0800b3f4                WWDG_IRQHandler
+                0x0800b3f4                SPI6_IRQHandler
+                0x0800b3f4                MDIOS_IRQHandler
+                0x0800b3f4                I2C4_EV_IRQHandler
+                0x0800b3f4                FDCAN2_IT0_IRQHandler
+                0x0800b3f4                LPUART1_IRQHandler
+                0x0800b3f4                FDCAN1_IT0_IRQHandler
+                0x0800b3f4                OTG_FS_WKUP_IRQHandler
+                0x0800b3f4                OTG_HS_IRQHandler
+                0x0800b3f4                DMA2D_IRQHandler
+                0x0800b3f4                TIM1_BRK_IRQHandler
+                0x0800b3f4                EXTI1_IRQHandler
+                0x0800b3f4                SDMMC2_IRQHandler
+                0x0800b3f4                OTG_FS_EP1_OUT_IRQHandler
+                0x0800b3f4                BDMA_Channel3_IRQHandler
+                0x0800b3f4                UART7_IRQHandler
+                0x0800b3f4                MDIOS_WKUP_IRQHandler
+                0x0800b3f4                DFSDM1_FLT0_IRQHandler
+                0x0800b3f4                SAI4_IRQHandler
+                0x0800b3f4                DMA2_Stream1_IRQHandler
+                0x0800b3f4                FLASH_IRQHandler
+                0x0800b3f4                DMA2_Stream4_IRQHandler
+                0x0800b3f4                USART1_IRQHandler
+                0x0800b3f4                OTG_FS_IRQHandler
+                0x0800b3f4                SPI3_IRQHandler
+                0x0800b3f4                WAKEUP_PIN_IRQHandler
+                0x0800b3f4                DMA1_Stream4_IRQHandler
+                0x0800b3f4                OTG_FS_EP1_IN_IRQHandler
+                0x0800b3f4                FMC_IRQHandler
+                0x0800b3f4                FDCAN_CAL_IRQHandler
+                0x0800b3f4                SWPMI1_IRQHandler
+                0x0800b3f4                COMP1_IRQHandler
+                0x0800b3f4                LPTIM1_IRQHandler
+                0x0800b3f4                I2C4_ER_IRQHandler
+                0x0800b3f4                DMA2_Stream6_IRQHandler
+                0x0800b3f4                SAI1_IRQHandler
+                0x0800b3f4                DMA1_Stream3_IRQHandler
+ *fill*         0x0800b3f6        0x2 
  .text.__libc_init_array
-                0x0800b400       0x48 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-init.o)
-                0x0800b400                __libc_init_array
- .text.memset   0x0800b448       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-memset.o)
-                0x0800b448                memset
- .text.__cvt    0x0800b458       0xa4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0800b458                __cvt
+                0x0800b3f8       0x48 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-init.o)
+                0x0800b3f8                __libc_init_array
+ .text.memset   0x0800b440       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-memset.o)
+                0x0800b440                memset
+ .text.__cvt    0x0800b450       0xa4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800b450                __cvt
  .text.__exponent
-                0x0800b4fc       0x7c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0800b4fc                __exponent
+                0x0800b4f4       0x7c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800b4f4                __exponent
  .text._printf_float
-                0x0800b578      0x43c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0800b578                _printf_float
+                0x0800b570      0x43c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800b570                _printf_float
  .text._printf_common
-                0x0800b9b4       0xda e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x0800b9b4                _printf_common
- *fill*         0x0800ba8e        0x2 
+                0x0800b9ac       0xda e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0800b9ac                _printf_common
+ *fill*         0x0800ba86        0x2 
  .text._printf_i
-                0x0800ba90      0x24c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x0800ba90                _printf_i
+                0x0800ba88      0x24c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0800ba88                _printf_i
  .text._vsprintf_r
-                0x0800bcdc       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-vsprintf.o)
-                0x0800bcdc                _vsprintf_r
-                0x0800bcdc                _vsiprintf_r
+                0x0800bcd4       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-vsprintf.o)
+                0x0800bcd4                _vsprintf_r
+                0x0800bcd4                _vsiprintf_r
  .text.vsprintf
-                0x0800bd08       0x14 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-vsprintf.o)
-                0x0800bd08                vsiprintf
-                0x0800bd08                vsprintf
- .text.quorem   0x0800bd1c      0x116 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-dtoa.o)
- *fill*         0x0800be32        0x6 
- .text._dtoa_r  0x0800be38      0xadc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-dtoa.o)
-                0x0800be38                _dtoa_r
+                0x0800bd00       0x14 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-vsprintf.o)
+                0x0800bd00                vsiprintf
+                0x0800bd00                vsprintf
+ .text.quorem   0x0800bd14      0x116 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-dtoa.o)
+ *fill*         0x0800be2a        0x6 
+ .text._dtoa_r  0x0800be30      0xadc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-dtoa.o)
+                0x0800be30                _dtoa_r
  .text._localeconv_r
-                0x0800c914        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-localeconv.o)
-                0x0800c914                _localeconv_r
- .text.malloc   0x0800c91c       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-malloc.o)
-                0x0800c91c                malloc
- .text.memcpy   0x0800c92c       0x1c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-memcpy-stub.o)
-                0x0800c92c                memcpy
- .text._Balloc  0x0800c948       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800c948                _Balloc
- .text._Bfree   0x0800c9c8       0x44 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800c9c8                _Bfree
+                0x0800c90c        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-localeconv.o)
+                0x0800c90c                _localeconv_r
+ .text.malloc   0x0800c914       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-malloc.o)
+                0x0800c914                malloc
+ .text.memcpy   0x0800c924       0x1c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+                0x0800c924                memcpy
+ .text._Balloc  0x0800c940       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800c940                _Balloc
+ .text._Bfree   0x0800c9c0       0x44 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800c9c0                _Bfree
  .text.__multadd
-                0x0800ca0c       0x8c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800ca0c                __multadd
+                0x0800ca04       0x8c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800ca04                __multadd
  .text.__hi0bits
-                0x0800ca98       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800ca98                __hi0bits
+                0x0800ca90       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800ca90                __hi0bits
  .text.__lo0bits
-                0x0800cad8       0x5e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800cad8                __lo0bits
- *fill*         0x0800cb36        0x2 
- .text.__i2b    0x0800cb38       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800cb38                __i2b
+                0x0800cad0       0x5e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cad0                __lo0bits
+ *fill*         0x0800cb2e        0x2 
+ .text.__i2b    0x0800cb30       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cb30                __i2b
  .text.__multiply
-                0x0800cb64      0x154 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800cb64                __multiply
+                0x0800cb5c      0x154 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cb5c                __multiply
  .text.__pow5mult
-                0x0800ccb8       0xb4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800ccb8                __pow5mult
+                0x0800ccb0       0xb4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800ccb0                __pow5mult
  .text.__lshift
-                0x0800cd6c       0xe0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800cd6c                __lshift
- .text.__mcmp   0x0800ce4c       0x38 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800ce4c                __mcmp
- .text.__mdiff  0x0800ce84      0x114 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800ce84                __mdiff
- .text.__d2b    0x0800cf98       0xb8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800cf98                __d2b
+                0x0800cd64       0xe0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cd64                __lshift
+ .text.__mcmp   0x0800ce44       0x38 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800ce44                __mcmp
+ .text.__mdiff  0x0800ce7c      0x114 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800ce7c                __mdiff
+ .text.__d2b    0x0800cf90       0xb8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cf90                __d2b
  .text._calloc_r
-                0x0800d050       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-callocr.o)
-                0x0800d050                _calloc_r
- .text._free_r  0x0800d07c       0x98 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-freer.o)
-                0x0800d07c                _free_r
+                0x0800d048       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-callocr.o)
+                0x0800d048                _calloc_r
+ .text._free_r  0x0800d074       0x98 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-freer.o)
+                0x0800d074                _free_r
  .text.sbrk_aligned
-                0x0800d114       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-mallocr.o)
+                0x0800d10c       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-mallocr.o)
  .text._malloc_r
-                0x0800d154       0xe8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-mallocr.o)
-                0x0800d154                _malloc_r
+                0x0800d14c       0xe8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-mallocr.o)
+                0x0800d14c                _malloc_r
  .text.__ssputs_r
-                0x0800d23c       0xb6 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x0800d23c                __ssputs_r
- *fill*         0x0800d2f2        0x2 
+                0x0800d234       0xb6 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0800d234                __ssputs_r
+ *fill*         0x0800d2ea        0x2 
  .text._svfprintf_r
-                0x0800d2f4      0x200 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x0800d2f4                _svfiprintf_r
-                0x0800d2f4                _svfprintf_r
- .text._sbrk_r  0x0800d4f4       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-sbrkr.o)
-                0x0800d4f4                _sbrk_r
+                0x0800d2ec      0x200 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0800d2ec                _svfiprintf_r
+                0x0800d2ec                _svfprintf_r
+ .text._sbrk_r  0x0800d4ec       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-sbrkr.o)
+                0x0800d4ec                _sbrk_r
  .text.__assert_func
-                0x0800d514       0x3c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-assert.o)
-                0x0800d514                __assert_func
- .text.fprintf  0x0800d550       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fprintf.o)
-                0x0800d550                fiprintf
-                0x0800d550                fprintf
+                0x0800d50c       0x3c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-assert.o)
+                0x0800d50c                __assert_func
+ .text.fprintf  0x0800d548       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fprintf.o)
+                0x0800d548                fiprintf
+                0x0800d548                fprintf
  .text.__ascii_mbtowc
-                0x0800d574       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mbtowc_r.o)
-                0x0800d574                __ascii_mbtowc
- .text.memmove  0x0800d598       0x34 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-memmove.o)
-                0x0800d598                memmove
+                0x0800d56c       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mbtowc_r.o)
+                0x0800d56c                __ascii_mbtowc
+ .text.memmove  0x0800d590       0x34 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-memmove.o)
+                0x0800d590                memmove
  .text.__malloc_lock
-                0x0800d5cc        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mlock.o)
-                0x0800d5cc                __malloc_lock
+                0x0800d5c4        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mlock.o)
+                0x0800d5c4                __malloc_lock
  .text.__malloc_unlock
-                0x0800d5d8        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mlock.o)
-                0x0800d5d8                __malloc_unlock
+                0x0800d5d0        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mlock.o)
+                0x0800d5d0                __malloc_unlock
  .text._realloc_r
-                0x0800d5e4       0x5e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-reallocr.o)
-                0x0800d5e4                _realloc_r
+                0x0800d5dc       0x5e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-reallocr.o)
+                0x0800d5dc                _realloc_r
  .text.__sfputc_r
-                0x0800d642       0x2e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
+                0x0800d63a       0x2e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
  .text.__sfputs_r
-                0x0800d670       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
-                0x0800d670                __sfputs_r
+                0x0800d668       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
+                0x0800d668                __sfputs_r
  .text._vfprintf_r
-                0x0800d694      0x260 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
-                0x0800d694                _vfprintf_r
-                0x0800d694                _vfiprintf_r
+                0x0800d68c      0x260 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
+                0x0800d68c                _vfprintf_r
+                0x0800d68c                _vfiprintf_r
  .text.__swbuf_r
-                0x0800d8f4       0xa4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-wbuf.o)
-                0x0800d8f4                __swbuf_r
+                0x0800d8ec       0xa4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-wbuf.o)
+                0x0800d8ec                __swbuf_r
  .text.__ascii_wctomb
-                0x0800d998       0x1a e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-wctomb_r.o)
-                0x0800d998                __ascii_wctomb
- *fill*         0x0800d9b2        0x2 
+                0x0800d990       0x1a e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-wctomb_r.o)
+                0x0800d990                __ascii_wctomb
+ *fill*         0x0800d9aa        0x2 
  .text.__swsetup_r
-                0x0800d9b4       0xdc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-wsetup.o)
-                0x0800d9b4                __swsetup_r
- .text.abort    0x0800da90        0xe e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-abort.o)
-                0x0800da90                abort
- *fill*         0x0800da9e        0x2 
+                0x0800d9ac       0xdc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-wsetup.o)
+                0x0800d9ac                __swsetup_r
+ .text.abort    0x0800da88        0xe e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-abort.o)
+                0x0800da88                abort
+ *fill*         0x0800da96        0x2 
  .text.__sflush_r
-                0x0800daa0      0x10c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fflush.o)
-                0x0800daa0                __sflush_r
+                0x0800da98      0x10c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fflush.o)
+                0x0800da98                __sflush_r
  .text._fflush_r
-                0x0800dbac       0x78 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fflush.o)
-                0x0800dbac                _fflush_r
- .text.std      0x0800dc24       0x48 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dba4       0x78 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fflush.o)
+                0x0800dba4                _fflush_r
+ .text.std      0x0800dc1c       0x48 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
  .text._cleanup_r
-                0x0800dc6c        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dc6c                _cleanup_r
+                0x0800dc64        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dc64                _cleanup_r
  .text.__sfmoreglue
-                0x0800dc78       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dc78                __sfmoreglue
+                0x0800dc70       0x2c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dc70                __sfmoreglue
  .text.__sfp_lock_acquire
-                0x0800dca4        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dca4                __sfp_lock_acquire
+                0x0800dc9c        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dc9c                __sfp_lock_acquire
  .text.__sfp_lock_release
-                0x0800dcb0        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dcb0                __sfp_lock_release
+                0x0800dca8        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dca8                __sfp_lock_release
  .text.__sinit_lock_acquire
-                0x0800dcbc        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dcbc                __sinit_lock_acquire
+                0x0800dcb4        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dcb4                __sinit_lock_acquire
  .text.__sinit_lock_release
-                0x0800dcc8        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dcc8                __sinit_lock_release
- .text.__sinit  0x0800dcd4       0x70 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dcd4                __sinit
- .text.__sfp    0x0800dd44       0x8c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800dd44                __sfp
+                0x0800dcc0        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dcc0                __sinit_lock_release
+ .text.__sinit  0x0800dccc       0x70 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dccc                __sinit
+ .text.__sfp    0x0800dd3c       0x8c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800dd3c                __sfp
  .text._fwalk_reent
-                0x0800ddd0       0x3e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fwalk.o)
-                0x0800ddd0                _fwalk_reent
+                0x0800ddc8       0x3e e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fwalk.o)
+                0x0800ddc8                _fwalk_reent
  .text.__retarget_lock_init_recursive
-                0x0800de0e        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lock.o)
-                0x0800de0e                __retarget_lock_init_recursive
+                0x0800de06        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lock.o)
+                0x0800de06                __retarget_lock_init_recursive
  .text.__retarget_lock_acquire_recursive
-                0x0800de10        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lock.o)
-                0x0800de10                __retarget_lock_acquire_recursive
+                0x0800de08        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lock.o)
+                0x0800de08                __retarget_lock_acquire_recursive
  .text.__retarget_lock_release_recursive
-                0x0800de12        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lock.o)
-                0x0800de12                __retarget_lock_release_recursive
+                0x0800de0a        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lock.o)
+                0x0800de0a                __retarget_lock_release_recursive
  .text.__swhatbuf_r
-                0x0800de14       0x4a e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-makebuf.o)
-                0x0800de14                __swhatbuf_r
- *fill*         0x0800de5e        0x2 
+                0x0800de0c       0x4a e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-makebuf.o)
+                0x0800de0c                __swhatbuf_r
+ *fill*         0x0800de56        0x2 
  .text.__smakebuf_r
-                0x0800de60       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-makebuf.o)
-                0x0800de60                __smakebuf_r
+                0x0800de58       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-makebuf.o)
+                0x0800de58                __smakebuf_r
  .text._malloc_usable_size_r
-                0x0800dee0       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-msizer.o)
-                0x0800dee0                _malloc_usable_size_r
+                0x0800ded8       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-msizer.o)
+                0x0800ded8                _malloc_usable_size_r
  .text._raise_r
-                0x0800def0       0x50 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signal.o)
-                0x0800def0                _raise_r
- .text.raise    0x0800df40       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signal.o)
-                0x0800df40                raise
- .text._kill_r  0x0800df50       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signalr.o)
-                0x0800df50                _kill_r
+                0x0800dee8       0x50 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signal.o)
+                0x0800dee8                _raise_r
+ .text.raise    0x0800df38       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signal.o)
+                0x0800df38                raise
+ .text._kill_r  0x0800df48       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signalr.o)
+                0x0800df48                _kill_r
  .text._getpid_r
-                0x0800df74        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signalr.o)
-                0x0800df74                _getpid_r
- .text.__sread  0x0800df78       0x22 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
-                0x0800df78                __sread
+                0x0800df6c        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-signalr.o)
+                0x0800df6c                _getpid_r
+ .text.__sread  0x0800df70       0x22 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
+                0x0800df70                __sread
  .text.__swrite
-                0x0800df9a       0x38 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
-                0x0800df9a                __swrite
- .text.__sseek  0x0800dfd2       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
-                0x0800dfd2                __sseek
+                0x0800df92       0x38 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
+                0x0800df92                __swrite
+ .text.__sseek  0x0800dfca       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
+                0x0800dfca                __sseek
  .text.__sclose
-                0x0800dff6        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
-                0x0800dff6                __sclose
- *fill*         0x0800dffe        0x2 
+                0x0800dfee        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-stdio.o)
+                0x0800dfee                __sclose
+ *fill*         0x0800dff6        0x2 
  .text._write_r
-                0x0800e000       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-writer.o)
-                0x0800e000                _write_r
+                0x0800dff8       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-writer.o)
+                0x0800dff8                _write_r
  .text._close_r
-                0x0800e024       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-closer.o)
-                0x0800e024                _close_r
+                0x0800e01c       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-closer.o)
+                0x0800e01c                _close_r
  .text._fstat_r
-                0x0800e044       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fstatr.o)
-                0x0800e044                _fstat_r
+                0x0800e03c       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-fstatr.o)
+                0x0800e03c                _fstat_r
  .text._isatty_r
-                0x0800e068       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-isattyr.o)
-                0x0800e068                _isatty_r
+                0x0800e060       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-isattyr.o)
+                0x0800e060                _isatty_r
  .text._lseek_r
-                0x0800e088       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lseekr.o)
-                0x0800e088                _lseek_r
- .text._read_r  0x0800e0ac       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-readr.o)
-                0x0800e0ac                _read_r
- .text.cos      0x0800e0d0       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_cos.o)
-                0x0800e0d0                cos
- .text.sin      0x0800e150       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_sin.o)
-                0x0800e150                sin
- .text.atan2    0x0800e1d0        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-w_atan2.o)
-                0x0800e1d0                atan2
- *fill*         0x0800e1d4        0x4 
+                0x0800e080       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-lseekr.o)
+                0x0800e080                _lseek_r
+ .text._read_r  0x0800e0a4       0x24 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-readr.o)
+                0x0800e0a4                _read_r
+ .text.cos      0x0800e0c8       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_cos.o)
+                0x0800e0c8                cos
+ .text.sin      0x0800e148       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_sin.o)
+                0x0800e148                sin
+ .text.atan2    0x0800e1c8        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-w_atan2.o)
+                0x0800e1c8                atan2
+ *fill*         0x0800e1cc        0x4 
  .text.__ieee754_atan2
-                0x0800e1d8      0x19c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_atan2.o)
-                0x0800e1d8                __ieee754_atan2
- *fill*         0x0800e374        0x4 
+                0x0800e1d0      0x19c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_atan2.o)
+                0x0800e1d0                __ieee754_atan2
+ *fill*         0x0800e36c        0x4 
  .text.__ieee754_rem_pio2
-                0x0800e378      0x294 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_rem_pio2.o)
-                0x0800e378                __ieee754_rem_pio2
- *fill*         0x0800e60c        0x4 
+                0x0800e370      0x294 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_rem_pio2.o)
+                0x0800e370                __ieee754_rem_pio2
+ *fill*         0x0800e604        0x4 
  .text.__kernel_cos
-                0x0800e610      0x130 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_cos.o)
-                0x0800e610                __kernel_cos
+                0x0800e608      0x130 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_cos.o)
+                0x0800e608                __kernel_cos
  .text.__kernel_rem_pio2
-                0x0800e740      0x6b0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_rem_pio2.o)
-                0x0800e740                __kernel_rem_pio2
+                0x0800e738      0x6b0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_rem_pio2.o)
+                0x0800e738                __kernel_rem_pio2
  .text.__kernel_sin
-                0x0800edf0       0xb0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_sin.o)
-                0x0800edf0                __kernel_sin
- .text.atan     0x0800eea0      0x20c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_atan.o)
-                0x0800eea0                atan
- .text.fabs     0x0800f0ac       0x14 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_fabs.o)
-                0x0800f0ac                fabs
- .text.floor    0x0800f0c0      0x108 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_floor.o)
-                0x0800f0c0                floor
- .text.scalbn   0x0800f1c8      0x10c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_scalbn.o)
-                0x0800f1c8                scalbn
- .text._close   0x0800f2d4       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(close.o)
-                0x0800f2d4                _close
- .text._fstat   0x0800f2e4       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(fstat.o)
-                0x0800f2e4                _fstat
- .text._getpid  0x0800f2f4       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(getpid.o)
-                0x0800f2f4                _getpid
- .text._isatty  0x0800f304       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(isatty.o)
-                0x0800f304                _isatty
- .text._kill    0x0800f314       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(kill.o)
-                0x0800f314                _kill
- .text._lseek   0x0800f324       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(lseek.o)
-                0x0800f324                _lseek
- .text._read    0x0800f334       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(read.o)
-                0x0800f334                _read
- .text._sbrk    0x0800f344       0x1c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(sbrk.o)
-                0x0800f344                _sbrk
- .text._write   0x0800f360       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(write.o)
-                0x0800f360                _write
- .text._exit    0x0800f370        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(_exit.o)
-                0x0800f370                _exit
+                0x0800ede8       0xb0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_sin.o)
+                0x0800ede8                __kernel_sin
+ .text.atan     0x0800ee98      0x20c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_atan.o)
+                0x0800ee98                atan
+ .text.fabs     0x0800f0a4       0x14 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_fabs.o)
+                0x0800f0a4                fabs
+ .text.floor    0x0800f0b8      0x108 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_floor.o)
+                0x0800f0b8                floor
+ .text.scalbn   0x0800f1c0      0x10c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_scalbn.o)
+                0x0800f1c0                scalbn
+ .text._close   0x0800f2cc       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(close.o)
+                0x0800f2cc                _close
+ .text._fstat   0x0800f2dc       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(fstat.o)
+                0x0800f2dc                _fstat
+ .text._getpid  0x0800f2ec       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(getpid.o)
+                0x0800f2ec                _getpid
+ .text._isatty  0x0800f2fc       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(isatty.o)
+                0x0800f2fc                _isatty
+ .text._kill    0x0800f30c       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(kill.o)
+                0x0800f30c                _kill
+ .text._lseek   0x0800f31c       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(lseek.o)
+                0x0800f31c                _lseek
+ .text._read    0x0800f32c       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(read.o)
+                0x0800f32c                _read
+ .text._sbrk    0x0800f33c       0x1c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(sbrk.o)
+                0x0800f33c                _sbrk
+ .text._write   0x0800f358       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(write.o)
+                0x0800f358                _write
+ .text._exit    0x0800f368        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libnosys.a(_exit.o)
+                0x0800f368                _exit
  *(.glue_7)
- .glue_7        0x0800f374        0x0 linker stubs
+ .glue_7        0x0800f36c        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0800f374        0x0 linker stubs
+ .glue_7t       0x0800f36c        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x0800f374        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+ .eh_frame      0x0800f36c        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
  *(.init)
- .init          0x0800f374        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crti.o
-                0x0800f374                _init
- .init          0x0800f378        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtn.o
+ .init          0x0800f36c        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crti.o
+                0x0800f36c                _init
+ .init          0x0800f370        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtn.o
  *(.fini)
- .fini          0x0800f380        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crti.o
-                0x0800f380                _fini
- .fini          0x0800f384        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtn.o
-                0x0800f38c                . = ALIGN (0x4)
-                0x0800f38c                _etext = .
+ .fini          0x0800f378        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crti.o
+                0x0800f378                _fini
+ .fini          0x0800f37c        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtn.o
+                0x0800f384                . = ALIGN (0x4)
+                0x0800f384                _etext = .
 
-.vfp11_veneer   0x0800f38c        0x0
- .vfp11_veneer  0x0800f38c        0x0 linker stubs
+.vfp11_veneer   0x0800f384        0x0
+ .vfp11_veneer  0x0800f384        0x0 linker stubs
 
-.v4_bx          0x0800f38c        0x0
- .v4_bx         0x0800f38c        0x0 linker stubs
+.v4_bx          0x0800f384        0x0
+ .v4_bx         0x0800f384        0x0 linker stubs
 
-.iplt           0x0800f38c        0x0
- .iplt          0x0800f38c        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+.iplt           0x0800f384        0x0
+ .iplt          0x0800f384        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
 
-.rodata         0x0800f390      0x7b8
-                0x0800f390                . = ALIGN (0x4)
+.rodata         0x0800f388      0x7b8
+                0x0800f388                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x0800f390       0x19 .build/BluetoothClassicComm.o
+ .rodata        0x0800f388       0x19 .build/BluetoothClassicComm.o
  *(.rodata*)
- *fill*         0x0800f3a9        0x3 
+ *fill*         0x0800f3a1        0x3 
  .rodata.ReceiveDataHandler.str1.4
-                0x0800f3ac       0xc6 .build/BluetoothClassicComm.o
- *fill*         0x0800f472        0x2 
+                0x0800f3a4       0xc6 .build/BluetoothClassicComm.o
+ *fill*         0x0800f46a        0x2 
  .rodata.ManageRobotMovingState.str1.4
-                0x0800f474       0x25 .build/LF_Menager.o
- *fill*         0x0800f499        0x3 
+                0x0800f46c       0x25 .build/LF_Menager.o
+ *fill*         0x0800f491        0x3 
  .rodata.D1CorePrescTable
-                0x0800f49c       0x10 .build/system_stm32h7xx.o
-                0x0800f49c                D1CorePrescTable
+                0x0800f494       0x10 .build/system_stm32h7xx.o
+                0x0800f494                D1CorePrescTable
  .rodata.flagBitshiftOffset.0
-                0x0800f4ac        0x8 .build/stm32h7xx_hal_dma.o
+                0x0800f4a4        0x8 .build/stm32h7xx_hal_dma.o
  .rodata.UARTPrescTable
-                0x0800f4b4       0x18 .build/stm32h7xx_hal_uart.o
-                0x0800f4b4                UARTPrescTable
+                0x0800f4ac       0x18 .build/stm32h7xx_hal_uart.o
+                0x0800f4ac                UARTPrescTable
  .rodata.denominator.0
-                0x0800f4cc        0x8 .build/stm32h7xx_hal_uart_ex.o
+                0x0800f4c4        0x8 .build/stm32h7xx_hal_uart_ex.o
  .rodata.numerator.1
-                0x0800f4d4        0x8 .build/stm32h7xx_hal_uart_ex.o
+                0x0800f4cc        0x8 .build/stm32h7xx_hal_uart_ex.o
  .rodata._global_impure_ptr
-                0x0800f4dc        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-impure.o)
-                0x0800f4dc                _global_impure_ptr
+                0x0800f4d4        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-impure.o)
+                0x0800f4d4                _global_impure_ptr
  .rodata._printf_float.str1.1
-                0x0800f4e0       0x12 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800f4d8       0x12 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
  .rodata._printf_i.str1.1
-                0x0800f4f2       0x22 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0800f4ea       0x22 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
  .rodata._dtoa_r.str1.1
-                0x0800f514       0xb3 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-dtoa.o)
+                0x0800f50c       0xb3 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-dtoa.o)
                                  0xb5 (size before relaxing)
  .rodata._Balloc.str1.1
-                0x0800f5c7       0x7f e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800f5bf       0x7f e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
                                  0x96 (size before relaxing)
  .rodata.__multadd.str1.1
-                0x0800f646       0x11 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
- *fill*         0x0800f646        0x2 
+                0x0800f63e       0x11 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+ *fill*         0x0800f63e        0x2 
  .rodata.__mprec_bigtens
-                0x0800f648       0x28 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800f648                __mprec_bigtens
+                0x0800f640       0x28 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800f640                __mprec_bigtens
  .rodata.__mprec_tens
-                0x0800f670       0xc8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800f670                __mprec_tens
- .rodata.p05.0  0x0800f738        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800f668       0xc8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800f668                __mprec_tens
+ .rodata.p05.0  0x0800f730        0xc e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-mprec.o)
  .rodata._svfprintf_r.str1.1
-                0x0800f744       0x11 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0800f73c       0x11 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
  .rodata.__assert_func.str1.1
-                0x0800f755       0x3c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-assert.o)
+                0x0800f74d       0x3c e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-assert.o)
                                  0x3d (size before relaxing)
  .rodata._setlocale_r.str1.1
-                0x0800f791        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-locale.o)
+                0x0800f789        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-locale.o)
                                   0x9 (size before relaxing)
  .rodata.str1.1
-                0x0800f799        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-locale.o)
+                0x0800f791        0x2 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-locale.o)
  .rodata._vfprintf_r.str1.1
-                0x0800f79b       0x11 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
+                0x0800f793       0x11 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-nano-vfprintf.o)
  .rodata._ctype_
-                0x0800f79b      0x101 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-ctype_.o)
-                0x0800f79b                _ctype_
+                0x0800f793      0x101 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-ctype_.o)
+                0x0800f793                _ctype_
  .rodata.__sf_fake_stderr
-                0x0800f89c       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800f89c                __sf_fake_stderr
+                0x0800f894       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800f894                __sf_fake_stderr
  .rodata.__sf_fake_stdin
-                0x0800f8bc       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800f8bc                __sf_fake_stdin
+                0x0800f8b4       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800f8b4                __sf_fake_stdin
  .rodata.__sf_fake_stdout
-                0x0800f8dc       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
-                0x0800f8dc                __sf_fake_stdout
- *fill*         0x0800f8fc        0x4 
+                0x0800f8d4       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libc_nano.a(lib_a-findfp.o)
+                0x0800f8d4                __sf_fake_stdout
+ *fill*         0x0800f8f4        0x4 
  .rodata.CSWTCH.8
-                0x0800f900       0x18 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_atan2.o)
+                0x0800f8f8       0x18 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_atan2.o)
  .rodata.CSWTCH.9
-                0x0800f918       0x18 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_atan2.o)
+                0x0800f910       0x18 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_atan2.o)
  .rodata.npio2_hw
-                0x0800f930       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_rem_pio2.o)
+                0x0800f928       0x80 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_rem_pio2.o)
  .rodata.two_over_pi
-                0x0800f9b0      0x108 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_rem_pio2.o)
- .rodata.PIo2   0x0800fab8       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_rem_pio2.o)
+                0x0800f9a8      0x108 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-e_rem_pio2.o)
+ .rodata.PIo2   0x0800fab0       0x40 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_rem_pio2.o)
  .rodata.init_jk
-                0x0800faf8       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_rem_pio2.o)
+                0x0800faf0       0x10 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-k_rem_pio2.o)
  .rodata.atanhi
-                0x0800fb08       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_atan.o)
+                0x0800fb00       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_atan.o)
  .rodata.atanlo
-                0x0800fb28       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_atan.o)
-                0x0800fb48                . = ALIGN (0x4)
+                0x0800fb20       0x20 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a(lib_a-s_atan.o)
+                0x0800fb40                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0800fb48        0x8
-                0x0800fb48                __exidx_start = .
+.ARM            0x0800fb40        0x8
+                0x0800fb40                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0800fb48        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard\libgcc.a(_udivmoddi4.o)
-                0x0800fb50                __exidx_end = .
+ .ARM.exidx     0x0800fb40        0x8 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard\libgcc.a(_udivmoddi4.o)
+                0x0800fb48                __exidx_end = .
 
-.rel.dyn        0x0800fb50        0x0
- .rel.iplt      0x0800fb50        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+.rel.dyn        0x0800fb48        0x0
+ .rel.iplt      0x0800fb48        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
 
-.preinit_array  0x0800fb50        0x0
-                0x0800fb50                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0800fb48        0x0
+                0x0800fb48                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x0800fb50                PROVIDE (__preinit_array_end = .)
+                0x0800fb48                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0800fb50        0x4
-                0x0800fb50                PROVIDE (__init_array_start = .)
+.init_array     0x0800fb48        0x4
+                0x0800fb48                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x0800fb50        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
-                0x0800fb54                PROVIDE (__init_array_end = .)
+ .init_array    0x0800fb48        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+                0x0800fb4c                PROVIDE (__init_array_end = .)
 
-.fini_array     0x0800fb54        0x4
+.fini_array     0x0800fb4c        0x4
                 [!provide]                PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0800fb54        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+ .fini_array    0x0800fb4c        0x4 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
                 [!provide]                PROVIDE (__fini_array_end = .)
-                0x0800fb58                _sidata = LOADADDR (.data)
+                0x0800fb50                _sidata = LOADADDR (.data)
 
-.data           0x24000000      0x218 load address 0x0800fb58
+.data           0x24000000      0x218 load address 0x0800fb50
                 0x24000000                . = ALIGN (0x4)
                 0x24000000                _sdata = .
  *(.data)
@@ -3418,11 +3418,11 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
                 0x24000218                . = ALIGN (0x4)
                 0x24000218                _edata = .
 
-.igot.plt       0x24000218        0x0 load address 0x0800fd70
+.igot.plt       0x24000218        0x0 load address 0x0800fd68
  .igot.plt      0x24000218        0x0 e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard/crtbegin.o
                 0x24000218                . = ALIGN (0x4)
 
-.bss            0x24000218     0x644c load address 0x0800fd70
+.bss            0x24000218     0x644c load address 0x0800fd68
                 0x24000218                _sbss = .
                 0x24000218                __bss_start__ = _sbss
  *(.bss)
@@ -3611,7 +3611,7 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
                 0x24006664                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x24006664      0x604 load address 0x0800fd70
+                0x24006664      0x604 load address 0x0800fd68
                 0x24006668                . = ALIGN (0x8)
  *fill*         0x24006664        0x4 
                 0x24006668                PROVIDE (end = .)
@@ -3858,7 +3858,7 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
 LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a
 LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+dp/hard\libgcc.a
 
-.debug_info     0x00000000    0x359d0
+.debug_info     0x00000000    0x3595c
  .debug_info    0x00000000     0x281f .build/BluetoothClassicComm.o
  .debug_info    0x0000281f      0xf68 .build/EncodersHandler.o
  .debug_info    0x00003787      0x28b .build/LF_MainRunnable.o
@@ -3893,10 +3893,10 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
  .debug_info    0x0002ef01     0x1bfb .build/stm32h7xx_ll_tim.o
  .debug_info    0x00030afc     0x2bac .build/stm32h7xx_hal_uart.o
  .debug_info    0x000336a8     0x106e .build/stm32h7xx_hal_uart_ex.o
- .debug_info    0x00034716     0x1298 .build/EEmu.o
- .debug_info    0x000359ae       0x22 .build/startup_stm32h743xx.o
+ .debug_info    0x00034716     0x1224 .build/EEmu.o
+ .debug_info    0x0003593a       0x22 .build/startup_stm32h743xx.o
 
-.debug_abbrev   0x00000000     0x5479
+.debug_abbrev   0x00000000     0x5450
  .debug_abbrev  0x00000000      0x45c .build/BluetoothClassicComm.o
  .debug_abbrev  0x0000045c      0x26e .build/EncodersHandler.o
  .debug_abbrev  0x000006ca       0xa0 .build/LF_MainRunnable.o
@@ -3931,8 +3931,8 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
  .debug_abbrev  0x000049cc      0x2c7 .build/stm32h7xx_ll_tim.o
  .debug_abbrev  0x00004c93      0x2e1 .build/stm32h7xx_hal_uart.o
  .debug_abbrev  0x00004f74      0x267 .build/stm32h7xx_hal_uart_ex.o
- .debug_abbrev  0x000051db      0x28c .build/EEmu.o
- .debug_abbrev  0x00005467       0x12 .build/startup_stm32h743xx.o
+ .debug_abbrev  0x000051db      0x263 .build/EEmu.o
+ .debug_abbrev  0x0000543e       0x12 .build/startup_stm32h743xx.o
 
 .debug_loc      0x00000000    0x211bb
  .debug_loc     0x00000000      0xbcf .build/BluetoothClassicComm.o
@@ -4083,7 +4083,7 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
  .debug_ranges  0x00001f50       0x70 .build/EEmu.o
  .debug_ranges  0x00001fc0       0x20 .build/startup_stm32h743xx.o
 
-.debug_line     0x00000000    0x241be
+.debug_line     0x00000000    0x24151
  .debug_line    0x00000000     0x122c .build/BluetoothClassicComm.o
  .debug_line    0x0000122c      0x5c7 .build/EncodersHandler.o
  .debug_line    0x000017f3      0x27c .build/LF_MainRunnable.o
@@ -4118,10 +4118,10 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
  .debug_line    0x0001efe2      0xec4 .build/stm32h7xx_ll_tim.o
  .debug_line    0x0001fea6     0x2cb5 .build/stm32h7xx_hal_uart.o
  .debug_line    0x00022b5b      0xab8 .build/stm32h7xx_hal_uart_ex.o
- .debug_line    0x00023613      0xb35 .build/EEmu.o
- .debug_line    0x00024148       0x76 .build/startup_stm32h743xx.o
+ .debug_line    0x00023613      0xac8 .build/EEmu.o
+ .debug_line    0x000240db       0x76 .build/startup_stm32h743xx.o
 
-.debug_str      0x00000000     0xa8ae
+.debug_str      0x00000000     0xa893
  .debug_str     0x00000000     0x1728 .build/BluetoothClassicComm.o
                                0x1858 (size before relaxing)
  .debug_str     0x00001728      0x5f8 .build/EncodersHandler.o
@@ -4190,9 +4190,9 @@ LOAD e:/gnu_tools/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-
                                0x1484 (size before relaxing)
  .debug_str     0x0000a4bb      0x225 .build/stm32h7xx_hal_uart_ex.o
                                 0xb53 (size before relaxing)
- .debug_str     0x0000a6e0      0x1aa .build/EEmu.o
-                                0xa97 (size before relaxing)
- .debug_str     0x0000a88a       0x24 .build/startup_stm32h743xx.o
+ .debug_str     0x0000a6e0      0x18f .build/EEmu.o
+                                0xa7c (size before relaxing)
+ .debug_str     0x0000a86f       0x24 .build/startup_stm32h743xx.o
                                  0x85 (size before relaxing)
 
 .comment        0x00000000       0x49
