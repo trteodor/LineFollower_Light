@@ -31,6 +31,8 @@ void bluetoothClassic::bluetoothStartDiscoveryDevices(void)
 
 void bluetoothClassic::bluetootConnectToDeviceByName(QString DevName)
 {
+
+
     qDebug() << "bluetoothClassic:bluetootConnectToDeviceByName Name:" << DevName ;
 
     int indexOfDevice = -1;

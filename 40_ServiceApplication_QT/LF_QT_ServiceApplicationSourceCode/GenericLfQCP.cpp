@@ -75,7 +75,7 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
 
 /***********************************/
         Graph3 = UIplotP->addGraph();
-        redDotPen.setColor(QColor(5, 5, 120, 180));
+        redDotPen.setColor(QColor(255, 255, 255, 180));
         Graph3->setPen(redDotPen);
         Graph3->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::blue, 1.5), QBrush(Qt::blue), 3));
 /***********************************/
@@ -90,6 +90,15 @@ void GenericLfQCP::LfGraphInitialize(QCustomPlot *UIPassedplot,QCPGraph::LineSty
         Graph6 = UIplotP->addGraph();
         Graph6->setPen(redDotPen);
         Graph6->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
+/***********************************/
+        SelectedPointMarkerGraphX = UIplotP->addGraph();
+        redDotPen.setColor(QColor(2, 156, 161, 180));
+        SelectedPointMarkerGraphX->setPen(redDotPen);
+        SelectedPointMarkerGraphX->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
+        /***********************************/
+        SelectedPointMarkerGraphY = UIplotP->addGraph();
+        SelectedPointMarkerGraphY->setPen(redDotPen);
+        SelectedPointMarkerGraphY->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDot, QPen(Qt::white, 1.5), QBrush(Qt::white), 3));
 /***********************************/
 
 //        //Graph2->set
@@ -163,6 +172,10 @@ GenericLfQCP::~GenericLfQCP()
               delete Graph2;  }
     if(Graph6){
               delete Graph2;  }
+    if(SelectedPointMarkerGraphX){
+              delete SelectedPointMarkerGraphX;  }
+    if(SelectedPointMarkerGraphY){
+              delete SelectedPointMarkerGraphY;  }
 }
 
 
@@ -224,7 +237,36 @@ void GenericLfQCP::LfGraph_ClearData(void)
     DataVector_X1.clear();
     DataVector_Y1.clear();
 
+    DataVector_X2.clear();
+    DataVector_Y2.clear();
+
+    DataVector_X3.clear();
+    DataVector_Y3.clear();
+
+    DataVector_X4.clear();
+    DataVector_Y4.clear();
+
+    DataVector_X5.clear();
+    DataVector_Y5.clear();
+
+    DataVector_X6.clear();
+    DataVector_Y6.clear();
+
+    DataVector_PointX_x.clear();
+    DataVector_PointX_y.clear();
+
+    DataVector_PointY_x.clear();
+    DataVector_PointY_y.clear();
+
     Graph1->setData(DataVector_X1,DataVector_Y1);
+    Graph2->setData(DataVector_X2,DataVector_Y2);
+    Graph3->setData(DataVector_X3,DataVector_Y3);
+    Graph4->setData(DataVector_X4,DataVector_Y4);
+    Graph5->setData(DataVector_X5,DataVector_Y5);
+    Graph6->setData(DataVector_X6,DataVector_Y6);
+
+    SelectedPointMarkerGraphY->setData(DataVector_PointY_x,DataVector_PointY_y);
+    SelectedPointMarkerGraphX->setData(DataVector_PointX_x,DataVector_PointX_y);
 
     UIplotP->xAxis->setRange
         ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
@@ -399,11 +441,11 @@ void GenericLfQCP::LfGraph_contextMenuRequest(QPoint pos)
         menu->addAction("Move to bottom left", this, SLOT(LfGraph_moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignLeft));
     } else  // general context menu on graphs requested
     {
-        menu->addAction("Add random graph", this, SLOT(LfGraph_addRandomGraph()));
-        if (UIplotP->selectedGraphs().size() > 0)
-            menu->addAction("Remove selected graph", this, SLOT(LfGraph_removeSelectedGraph()));
-        if (UIplotP->graphCount() > 0)
-            menu->addAction("Remove all graphs", this, SLOT(LfGraph_removeAllGraphs()));
+//        menu->addAction("Add random graph", this, SLOT(LfGraph_addRandomGraph()));
+//        if (UIplotP->selectedGraphs().size() > 0)
+//            menu->addAction("Remove selected graph", this, SLOT(LfGraph_removeSelectedGraph()));
+//        if (UIplotP->graphCount() > 0)
+//            menu->addAction("Remove all graphs", this, SLOT(LfGraph_removeAllGraphs()));
     }
 
     menu->popup(UIplotP->mapToGlobal(pos));
@@ -432,17 +474,50 @@ void GenericLfQCP::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dat
     QString message = QString("Clicked on graph '%1' at data point #%2 with value %3.").arg(plottable->name()).arg(dataIndex).arg(dataValue);
 
     QString message2 = QString("DatVal2: %1").arg(dataValue2) ;
-
-//    qDebug() << message2;
-
-    //Graph2->set
-    QVector<double>  Test_X;
-    QVector<double>  Test_Y;
-    Test_X.append( ((float)dataValue2));
-    Test_Y.append( ((float)-5000.0F));
-    Test_X.append( ((float)dataValue2));
-    Test_Y.append( ((float)5000.0F ));
-    Graph2->setData(Test_X,Test_Y);
-
     qDebug() << message << message2;
+
+    emit LfGraphSignal_graphClicked(dataIndex);
+
+}
+
+
+void GenericLfQCP::LfGraph_DrawMarkersAtDataIndex(int DataIndex)
+{
+    /*Align to Graph1 it\s best idea what I figured out*/
+    double dataValueVer =    Graph1->dataMainKey(DataIndex);
+    double dataValueHor =    Graph1->dataMainValue(DataIndex);
+
+    if(DataIndex != 0)
+    {
+        {
+            QVector<double>  Test_X;
+            QVector<double>  Test_Y;
+            Test_X.append( ((float)dataValueVer));
+            Test_Y.append( ((float)-5000.0F));
+            Test_X.append( ((float)dataValueVer));
+            Test_Y.append( ((float)5000.0F ));
+            SelectedPointMarkerGraphX->setData(Test_X,Test_Y);
+        }
+
+        {
+            /*Draw horizontal line*/
+            //Graph2->set
+            QVector<double>  Test_X;
+            QVector<double>  Test_Y;
+            Test_X.append( ((float) -5000.0F));
+            Test_Y.append( ((float)dataValueHor ));
+            Test_X.append( ((float) 5000.0F));
+            Test_Y.append( ((float)dataValueHor ));
+            SelectedPointMarkerGraphY->setData(Test_X,Test_Y);
+        }
+    }
+    else{
+        QVector<double>  Test_X;
+        QVector<double>  Test_Y;
+        SelectedPointMarkerGraphX->setData(Test_X,Test_Y);
+        SelectedPointMarkerGraphY->setData(Test_X,Test_Y);
+    }
+
+
+    LfGraph_UpdateReplot(); //?? is need?
 }

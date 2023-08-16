@@ -1,7 +1,12 @@
 # Light Follower Light
 
 Demonstration video:
-* https://www.youtube.com/watch?v=ulPPqBeZhOw
+
+https://www.youtube.com/watch?v=ulPPqBeZhOw
+
+Real word prototype:
+
+![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/RobotFotoMain.png)
 
   * You will need to spend around 200$ if you want recreate this design (PCB order included)
 
@@ -19,32 +24,11 @@ PCB and 3D Assemblyis prepared, real world prototype prepared
 TODO:
 * Add support for MPU-6050
 * Add support for VL53l0
-* Generally much things..
 * Development of QT service application..
+* Generally much things..
 
 The repository contains all the files used to create this project (PCB, Mechanic models, Embedded source Code, QT serv. App code)
 
-# Few Photos
+QT service app overview screen shot:
 
-Real word prototype:
-
-![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/RobotFotoMain.png)
-
-
-Simulation:
-
-![draftView](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyFrontSide.PNG)
-
-![draftView2](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyBackSide.jpg)
-
-QT Service App:
-
-![QtApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/QTServAppScreenShot.png)
-
-General Concept:
-
-![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_Light_Gen_Concept.png)
-
-Simplified view MCU application layers:
-
-![genConcept](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/Simplified_view_MCU_application_layers_N.png)
+![QtApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/QT_servApplScreenShot.jpg)

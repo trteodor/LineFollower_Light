@@ -90,6 +90,9 @@ private slots:
     void MainWinPlot_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
     void MainWinPlot_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
 
+
+    void MainWinPlot_DrawMarkersAtDataIndexInfo(int DataIndex);
+
     void on_EnableBaseDataLogging_clicked(bool checked);
     void on_DebugTable_DisableBaseDataLogging_clicked(bool checked);
 
@@ -121,6 +124,8 @@ private slots:
     void on_BLU_ScanButton_clicked();
 
     void on_BLU_ConnectButton_clicked();
+
+    void on_RemoveMarkers_pb_clicked();
 
 signals:
     void MainWin_bluetoothSignalStartDiscoveryDevices(void);

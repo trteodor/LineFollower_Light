@@ -26,6 +26,12 @@ MainWindow::MainWindow(QWidget *parent)
     PlotPosErr.LfGraphInitialize(ui->PlotPosErrW,QCPGraph::lsLine);
     PlotPidRegVal.LfGraphInitialize(ui->PlotPidRegValW,QCPGraph::lsLine);
 
+    connect(&PlotMap, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotYawRate, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotSpd, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotPosErr, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotPidRegVal, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+
 
     /*Initialize all needed connections for Bluetooth Data Manager*/
     BLU_InitializeQTConnections();
@@ -278,7 +284,15 @@ void MainWindow::MainWin_bluetoothSlotConnectionEstablished(void)
 
 void MainWindow::MainWin_bluetoothSlotConnectionInterrupted(void)
 {
+
     ui->statusbar->showMessage("Connection interrupted, why?",1000);
+
+
+    ui->BLU_StatusLabel->setText("State:Disconnected");
+    QVariant variant= QColor (255,255,255);
+    QString colcode = variant.toString();
+    ui->BLU_StatusLabel->setAutoFillBackground(true);
+    ui->BLU_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 }
 
 void MainWindow::on_BLU_ScanButton_clicked()
@@ -302,11 +316,11 @@ void MainWindow::on_BLU_ConnectButton_clicked()
 void MainWindow::on_BLU_DisconnectButton_clicked()
 {
 
-    on_BLU_SimulatorSuspendButton_clicked();
+    on_BLU_RobotStop_Button_clicked();
     QThread::msleep(30);
-    on_BLU_SimulatorSuspendButton_clicked();
+    on_BLU_RobotStop_Button_clicked();
     QThread::msleep(30);
-    on_BLU_SimulatorSuspendButton_clicked();
+    on_BLU_RobotStop_Button_clicked();
     emit MainWin_bluetoothDisconnect();
 
     ui->BLU_StatusLabel->setText("State:Disconnected");
@@ -997,6 +1011,60 @@ void MainWindow::MainWinPlot_PlotPidRegValAppendData(uint32_t FrameId, float Pid
     PlotPidRegVal.LfGraph_AppendData(FrameId,PidRegVal);
 }
 
+void MainWindow::MainWinPlot_DrawMarkersAtDataIndexInfo(int DataIndex)
+{
+    static uint32_t CallCounter = 0;
+
+    PlotMap.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotYawRate.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotSpd.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotPosErr.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotPidRegVal.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+
+    float ClickedPosX = PlotMap.DataVector_X1.at(DataIndex);
+    float ClickedPosY = PlotMap.DataVector_Y1.at(DataIndex);
+
+    float ClickedYr = PlotYawRate.DataVector_Y1.at(DataIndex);
+    float ClickedSpdL = PlotSpd.DataVector_Y1.at(DataIndex);
+    float ClickedSpdR = PlotSpd.DataVector_Y2.at(DataIndex);
+    float ClickedPosErr = PlotPosErr.DataVector_Y1.at(DataIndex);
+    float ClickedPid = PlotPidRegVal.DataVector_Y1.at(DataIndex);
+
+    QString ClickedPointString = QString("Clicked at point: PosX:%1  |PosY:%2  |Yr:%3  |SpdL:%4  |SpdR:%5  |PosErr:%6  |PidV:%7")
+                                     .arg(ClickedPosX).arg(ClickedPosY).arg(ClickedYr)
+                                     .arg(ClickedSpdL).arg(ClickedSpdR).arg(ClickedPosErr)
+                                     .arg(ClickedPid);
+
+    if(CallCounter % 2 == 0)
+    {
+        QVariant variant= QColor (35,35,45,255);
+        QString colcode = variant.toString();
+        ui->ClickedPointInfo_lb->setAutoFillBackground(true);
+        ui->ClickedPointInfo_lb->setStyleSheet("QLabel { background-color :"+colcode+" ; color : white; }");
+    }
+    else{
+        QVariant variant= QColor (25,45,45,255);
+        QString colcode = variant.toString();
+        ui->ClickedPointInfo_lb->setAutoFillBackground(true);
+        ui->ClickedPointInfo_lb->setStyleSheet("QLabel { background-color :"+colcode+" ; color : white; }");
+    }
+
+
+    ui->ClickedPointInfo_lb->setText(ClickedPointString);
+
+    CallCounter++;
+}
+
+void MainWindow::on_RemoveMarkers_pb_clicked()
+{
+    PlotMap.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotYawRate.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotSpd.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotPosErr.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotPidRegVal.LfGraph_DrawMarkersAtDataIndex(0);
+}
+
+
 
 void MainWindow::MainWinPlot_PlotMapAppendData(float PosX, float PosY)
 {
@@ -1242,7 +1310,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     QString ErrMText = ui->ErrWM_Text->text();
     float ErrMValueFloat = ErrMText.toFloat();
 
-    if(ErrMText.size() > 0) /*Update Nvm only if something is this variable*/
+    if(ErrMText.size() > 0) /*Update Nvm only if something is this text line*/
     {
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
         QByteArray Helper;
@@ -1541,6 +1609,8 @@ void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
     PlotSpd.LfGraph_UpdateReplot();
     PlotMap.LfGraph_UpdateReplot();
 }
+
+
 
 
 
