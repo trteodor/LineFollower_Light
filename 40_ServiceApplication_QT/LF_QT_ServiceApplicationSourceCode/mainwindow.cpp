@@ -834,8 +834,7 @@ void MainWindow::MainWin_DebugTable_InsertDataRow(uint32_t ucTimeStamp, uint32_t
     ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,1,new QTableWidgetItem(QString::number(ucTimeStamp) ));
     ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,2,new QTableWidgetItem(QString::number(FrameCounter) ));
     ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,3,new QTableWidgetItem(QString::number(SyncId)));
-    ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,
-                                new QTableWidgetItem((QString)DecodedDataString.data() ) );
+    ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem((QString)DecodedDataString.data() ) );
 
 
     QDateTime t = QDateTime::currentDateTime();
@@ -1243,131 +1242,135 @@ void MainWindow::on_UpdateNvM_Button_clicked()
     QString ErrMText = ui->ErrWM_Text->text();
     float ErrMValueFloat = ErrMText.toFloat();
 
+    if(ErrMText.size() > 0) /*Update Nvm only if something is this variable*/
+    {
+        char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
+        QByteArray Helper;
 
-    char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
-    QByteArray Helper;
+        /***********************************************************************************/
+        command[0] = (char)BluDataManager::BLU_NvM_ErrWeigthSensorData;
+        command[1] = SyncID;
+        std::memcpy(&command[2],  &Err1ValueFloat, sizeof(float));
+        std::memcpy(&command[6],  &Err2ValueFloat, sizeof(float));
+        std::memcpy(&command[10], &Err3ValueFloat, sizeof(float));
+        std::memcpy(&command[14], &Err4ValueFloat, sizeof(float));
+        std::memcpy(&command[18], &Err5ValueFloat, sizeof(float));
+        std::memcpy(&command[22], &Err6ValueFloat, sizeof(float));
+        std::memcpy(&command[26], &Err7ValueFloat, sizeof(float));
+        std::memcpy(&command[30], &Err8ValueFloat, sizeof(float));
+        std::memcpy(&command[34], &Err9ValueFloat, sizeof(float));
+        std::memcpy(&command[38], &Err10ValueFloat, sizeof(float));
+        std::memcpy(&command[42], &Err11ValueFloat, sizeof(float));
+        std::memcpy(&command[46], &ErrMValueFloat, sizeof(float));
+        Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+        Helper.append("\n\r");
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
-    /***********************************************************************************/
-    command[0] = (char)BluDataManager::BLU_NvM_ErrWeigthSensorData;
-    command[1] = SyncID;
-    std::memcpy(&command[2],  &Err1ValueFloat, sizeof(float));
-    std::memcpy(&command[6],  &Err2ValueFloat, sizeof(float));
-    std::memcpy(&command[10], &Err3ValueFloat, sizeof(float));
-    std::memcpy(&command[14], &Err4ValueFloat, sizeof(float));
-    std::memcpy(&command[18], &Err5ValueFloat, sizeof(float));
-    std::memcpy(&command[22], &Err6ValueFloat, sizeof(float));
-    std::memcpy(&command[26], &Err7ValueFloat, sizeof(float));
-    std::memcpy(&command[30], &Err8ValueFloat, sizeof(float));
-    std::memcpy(&command[34], &Err9ValueFloat, sizeof(float));
-    std::memcpy(&command[38], &Err10ValueFloat, sizeof(float));
-    std::memcpy(&command[42], &Err11ValueFloat, sizeof(float));
-    std::memcpy(&command[46], &ErrMValueFloat, sizeof(float));
-    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
-    Helper.append("\n\r");
-    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        QString PID_KPtext = ui->PID_KP_text->text();
+        float PID_KPfloat = PID_KPtext.toFloat();
+        QString PID_KItext = ui->PID_KI_text->text();
+        float PID_KIfloat = PID_KItext.toFloat();
+        QString PID_KDtext = ui->PID_KD_text->text();
+        float PID_KDfloat = PID_KDtext.toFloat();
+        QString ProbeTimeText = ui->ProbeTimeText->text();
+        uint32_t ProbeTimeInt = ProbeTimeText.toInt();
 
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-    QString PID_KPtext = ui->PID_KP_text->text();
-    float PID_KPfloat = PID_KPtext.toFloat();
-    QString PID_KItext = ui->PID_KI_text->text();
-    float PID_KIfloat = PID_KItext.toFloat();
-    QString PID_KDtext = ui->PID_KD_text->text();
-    float PID_KDfloat = PID_KDtext.toFloat();
-    QString ProbeTimeText = ui->ProbeTimeText->text();
-    uint32_t ProbeTimeInt = ProbeTimeText.toInt();
-
-////    qDebug() << "PID_KDfloat" << PID_KDfloat << "ProbeTimeFloat" << ProbeTimeFloat;
-
-
-    command[0] = (char)BluDataManager::BLU_NvM_LinePidRegData;
-    command[1] = SyncID;
-    std::memcpy(&command[2],  &PID_KPfloat, sizeof(float));
-    std::memcpy(&command[6],  &PID_KIfloat, sizeof(float));
-    std::memcpy(&command[10], &PID_KDfloat, sizeof(float));
-    std::memcpy(&command[14], &ProbeTimeInt, sizeof(float));
-    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
-    Helper.append("\n\r");
-    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        ////    qDebug() << "PID_KDfloat" << PID_KDfloat << "ProbeTimeFloat" << ProbeTimeFloat;
 
 
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-
-    QString ExpectedAvSpdText = ui->ExpectedAvSpdText->text();
-    float ExpectedAvSpdFloat = ExpectedAvSpdText.toFloat();
-
-    uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
-    uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
-
-////    qDebug() << "BlinkingLedsState" << BlinkingLedsState;
-////    qDebug() << "TryDetEndLineMark" << TryDetEndLineMark;
+        command[0] = (char)BluDataManager::BLU_NvM_LinePidRegData;
+        command[1] = SyncID;
+        std::memcpy(&command[2],  &PID_KPfloat, sizeof(float));
+        std::memcpy(&command[6],  &PID_KIfloat, sizeof(float));
+        std::memcpy(&command[10], &PID_KDfloat, sizeof(float));
+        std::memcpy(&command[14], &ProbeTimeInt, sizeof(float));
+        Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+        Helper.append("\n\r");
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 
-    command[0] = (char)BluDataManager::BLU_NvM_VehCfgData;
-    command[1] = SyncID;
-    std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
-    std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
-    std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
-    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
-    Helper.append("\n\r");
-    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+
+        QString ExpectedAvSpdText = ui->ExpectedAvSpdText->text();
+        float ExpectedAvSpdFloat = ExpectedAvSpdText.toFloat();
+
+        uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
+        uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+
+        ////    qDebug() << "BlinkingLedsState" << BlinkingLedsState;
+        ////    qDebug() << "TryDetEndLineMark" << TryDetEndLineMark;
 
 
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-
-    QString FacA_LftText = ui->TextPwmToSpAFacL->text();
-    uint32_t FacA_LftU32 = FacA_LftText.toInt();
-    QString FacA_RhtText = ui->TextPwmToSpAFacR->text();
-    uint32_t FacA_RhtU32 = FacA_RhtText.toInt();
-    QString FacB_LftText = ui->TextPwmToSpBFacL->text();
-    uint32_t FacB_LftU32 = FacB_LftText.toInt();
-    QString FacB_RhtText = ui->TextPwmToSpBFacR->text();
-    uint32_t FacB_RhtU32 = FacB_RhtText.toInt();
+        command[0] = (char)BluDataManager::BLU_NvM_VehCfgData;
+        command[1] = SyncID;
+        std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
+        std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
+        std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
+        Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+        Helper.append("\n\r");
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 
-    command[0] = (char)BluDataManager::BLU_NvM_MotorsFactorsData;
-    command[1] = SyncID;
-    std::memcpy(&command[2],  &FacA_LftU32, sizeof(uint32_t));
-    std::memcpy(&command[6],  &FacA_RhtU32, sizeof(uint32_t));
-    std::memcpy(&command[10], &FacB_LftU32, sizeof(uint32_t));
-    std::memcpy(&command[14], &FacB_RhtU32, sizeof(uint32_t));
-    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
-    Helper.append("\n\r");
-    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
 
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-
-    QString OneImpDistText = ui->TextOneImpDist->text();
-    float OneImpDistF32 = OneImpDistText.toFloat();
-    QString WheelBaseText = ui->TextWheelBase->text();
-    float WheelBaseF32 = WheelBaseText.toFloat();
+        QString FacA_LftText = ui->TextPwmToSpAFacL->text();
+        uint32_t FacA_LftU32 = FacA_LftText.toInt();
+        QString FacA_RhtText = ui->TextPwmToSpAFacR->text();
+        uint32_t FacA_RhtU32 = FacA_RhtText.toInt();
+        QString FacB_LftText = ui->TextPwmToSpBFacL->text();
+        uint32_t FacB_LftU32 = FacB_LftText.toInt();
+        QString FacB_RhtText = ui->TextPwmToSpBFacR->text();
+        uint32_t FacB_RhtU32 = FacB_RhtText.toInt();
 
 
-    command[0] = (char)BluDataManager::BLU_NvM_EncoderModCfgData;
-    command[1] = SyncID;
-    std::memcpy(&command[2],  &OneImpDistF32, sizeof(float));
-    std::memcpy(&command[6],  &WheelBaseF32, sizeof(float));
+        command[0] = (char)BluDataManager::BLU_NvM_MotorsFactorsData;
+        command[1] = SyncID;
+        std::memcpy(&command[2],  &FacA_LftU32, sizeof(uint32_t));
+        std::memcpy(&command[6],  &FacA_RhtU32, sizeof(uint32_t));
+        std::memcpy(&command[10], &FacB_LftU32, sizeof(uint32_t));
+        std::memcpy(&command[14], &FacB_RhtU32, sizeof(uint32_t));
+        Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+        Helper.append("\n\r");
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
-//    qDebug() << "OneImpDistF32" << OneImpDistF32 << "WheelBaseF32" << WheelBaseF32;
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
 
-    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
-    Helper.append("\n\r");
-    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
-
-
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
-    /*********************************************************************************************************/
+        QString OneImpDistText = ui->TextOneImpDist->text();
+        float OneImpDistF32 = OneImpDistText.toFloat();
+        QString WheelBaseText = ui->TextWheelBase->text();
+        float WheelBaseF32 = WheelBaseText.toFloat();
 
 
-    SyncID++;
+        command[0] = (char)BluDataManager::BLU_NvM_EncoderModCfgData;
+        command[1] = SyncID;
+        std::memcpy(&command[2],  &OneImpDistF32, sizeof(float));
+        std::memcpy(&command[6],  &WheelBaseF32, sizeof(float));
+
+        //    qDebug() << "OneImpDistF32" << OneImpDistF32 << "WheelBaseF32" << WheelBaseF32;
+
+        Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+        Helper.append("\n\r");
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+
+
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+
+
+        SyncID++;
+    }
+
+
 }
 
 void MainWindow::NvM_ErrWeigthUpdateDelayTimerTimeout()
@@ -1421,7 +1424,7 @@ void MainWindow::NvM_EncodersConfigDataUpdateDelayTimerTimeout()
 
 void MainWindow::on_ClearLoggerButton_clicked()
 {
-        ui->DebugDataTable->clear();
+        ui->DebugDataTable->clearContents();
         ui->DebugDataTable->setRowCount(0);
 }
 

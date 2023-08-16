@@ -665,17 +665,9 @@ static void ReceiveDataHandler(void)
 
 	uint8_t *MessageToRead_p = NULL;
 	uint8_t MessageToReadSize= 0U;
-	if(HAL_GetTick() - LastMessageTime > 50)
+
+
 	{
-	/*
-	 * TODO:
-	 * "if(HAL_GetTick() - LastMessageTime > 50)"
-	 * Temporary solution Wait till communication don't exist
-	 * software can't write/erase flash while for example IRQ is trying to read flash(execution code)
-	 * as i understand - to solve the issue I need to study more about the subject..
-	 * However for current usage of application this workaround working perfectly :)
-	 * - function EEWriteVariable.. is disabling iterrupts that's why it's a good idea
-	 */
 
 		if(RB_Receive_Read(&BleMainReceiveRingBuffer, &MessageToReadSize,&MessageToRead_p) == RB_OK)
 		{
@@ -751,8 +743,6 @@ static void ReceiveDataHandler(void)
 					memcpy(&PidKd,  &ReceivedMessageBuff[10], sizeof(float));
 					memcpy(&ProbeTime,  &ReceivedMessageBuff[14], sizeof(float));
 
-//	BLU_DbgMsgTransmit("Received PidKp: %f,PidKi: %f,PidKd: %f,ProbeTime: %f",
-//			PidKp,PidKi,PidKd,ProbeTime );
 					EE_WriteVariableF32(EE_NvmAddr_PidKp_F32, PidKp);
 					EE_WriteVariableF32(EE_NvmAddr_PidKi_F32, PidKi);
 					EE_WriteVariableF32(EE_NvmAddr_PidKd_F32, PidKd);
@@ -942,6 +932,8 @@ static void ReceiveDataHandler(void)
 					NvmUpdateCallBacks[i]();
 				}
 			}
+
+			BLU_DbgMsgTransmit("Nvm Data updated and commited");
 		}
 
 	}
