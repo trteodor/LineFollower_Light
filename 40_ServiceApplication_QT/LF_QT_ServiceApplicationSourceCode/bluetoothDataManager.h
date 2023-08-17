@@ -32,7 +32,9 @@ public:
     volatile bool SpdPlotPlottingState = false;
     volatile bool PosErrPlotPlottingState = false;
     volatile bool PidRegValPlotPlottingState = false;
-
+    volatile bool OrientationPlotPlottingState = false;
+    volatile bool TrvDistancePlotPlottingState = false;
+    volatile bool LinePosConfPlotPlottingState = false;
 
     QMutex DebugTableScrollingBottonMutex;
     volatile bool DebugTableScrollingBottomIsActivState = false;
@@ -164,12 +166,19 @@ signals:
     void BluDatMngrSignal_PlotSpdUpdate(void);
     void BluDatMngrSignal_PlotPosErrUpdate(void);
     void BluDatMngrSignal_PlotPidRegValUpdate(void);
+    void BluDatMngrSignal_PlotOrientationReplot(void);
+    void BluDatMngrSignal_PlotTrvDistanceReplot(void);
+    void BluDatMngrSignal_PlotPosConfidenceReplot(void);
+
 
     void BluDatMngrSignal_PlotMapAppendData(float PosX, float PosY);
     void BluDatMngrSignal_PlotYawRateAppendData(uint32_t FrameId, float YrValue);
     void BluDatMngrSignal_PlotSpdAppendData(uint32_t FrameId, float SpdValueLeftWh,float SpdValueRightWh);
     void BluDatMngrSignal_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
     void BluDatMngrSignal_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
+    void BluDatMngrSignal_PlotOrientationAppendData(uint32_t FrameId, float Orientation);
+    void BluDatMngrSignal_PlotTrvDistanceAppendData(uint32_t FrameId, float TrvDistance);
+    void BluDatMngrSignal_PlotPosConfidenceAppendData(uint32_t FrameId, uint8_t LeftPosConf, uint8_t RightPosConf);
 
 
 

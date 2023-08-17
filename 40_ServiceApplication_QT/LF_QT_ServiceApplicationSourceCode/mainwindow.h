@@ -83,12 +83,19 @@ private slots:
     void MainWinPlot_PlotSpdReplot(void);
     void MainWinPlot_PlotPosErrReplot(void);
     void MainWinPlot_PlotPidRegValReplot(void);
+    void MainWinPlot_PlotOrientationReplot(void);
+    void MainWinPlot_PlotTrvDistanceReplot(void);
+    void MainWinPlot_PlotPosConfidenceReplot(void);
+
 
     void MainWinPlot_PlotMapAppendData(float PosX, float PosY);
     void MainWinPlot_PlotYawRateAppendData(uint32_t FrameId, float YrValue);
     void MainWinPlot_PlotSpdAppendData(uint32_t FrameId, float SpdValueLeftWh,float SpdValueRightWh);
     void MainWinPlot_PlotPosErrAppendData(uint32_t FrameId, float PossErrValue);
     void MainWinPlot_PlotPidRegValAppendData(uint32_t FrameId, float PidRegVal);
+    void MainWinPlot_PlotOrientationAppendData(uint32_t FrameId, float Orientation);
+    void MainWinPlot_PlotTrvDistanceAppendData(uint32_t FrameId, float TrvDistance);
+    void MainWinPlot_PlotPosConfidenceAppendData(uint32_t FrameId, uint8_t LeftPosConf, uint8_t RightPosConf);
 
 
     void MainWinPlot_DrawMarkersAtDataIndexInfo(int DataIndex);
@@ -180,8 +187,9 @@ private:
     GenericLfQCP PlotSpd;
     GenericLfQCP PlotPosErr;
     GenericLfQCP PlotPidRegVal;
-
-
+    GenericLfQCP PlotTrvDistance;
+    GenericLfQCP PlotOrientation;
+    GenericLfQCP PlotLinePosConfidence;
 
 };
 #endif // MAINWINDOW_H

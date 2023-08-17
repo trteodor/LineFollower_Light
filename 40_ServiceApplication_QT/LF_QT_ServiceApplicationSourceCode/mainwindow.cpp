@@ -25,12 +25,18 @@ MainWindow::MainWindow(QWidget *parent)
     PlotSpd.LfGraphInitialize(ui->PlotSpdW,QCPGraph::lsLine);
     PlotPosErr.LfGraphInitialize(ui->PlotPosErrW,QCPGraph::lsLine);
     PlotPidRegVal.LfGraphInitialize(ui->PlotPidRegValW,QCPGraph::lsLine);
+    PlotTrvDistance.LfGraphInitialize(ui->PlotTrvDistanceW,QCPGraph::lsLine);
+    PlotOrientation.LfGraphInitialize(ui->PlotOrientationW,QCPGraph::lsLine);
+    PlotLinePosConfidence.LfGraphInitialize(ui->PlotLinePosConfW,QCPGraph::lsLine);
 
     connect(&PlotMap, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
     connect(&PlotYawRate, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
     connect(&PlotSpd, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
     connect(&PlotPosErr, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
     connect(&PlotPidRegVal, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotTrvDistance, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotOrientation, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
+    connect(&PlotLinePosConfidence, SIGNAL(LfGraphSignal_graphClicked(int)), this, SLOT(MainWinPlot_DrawMarkersAtDataIndexInfo(int) ));
 
 
     /*Initialize all needed connections for Bluetooth Data Manager*/
@@ -457,6 +463,53 @@ void MainWindow::BLU_InitializeQTConnections(void)
         SIGNAL(BluDatMngrSignal_PlotPidRegValAppendData(uint32_t,float) )
         ,this
         ,SLOT(MainWinPlot_PlotPidRegValAppendData(uint32_t,float) ) );
+
+
+
+
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotOrientationAppendData(uint32_t,float) )
+        ,this
+        ,SLOT(MainWinPlot_PlotOrientationAppendData(uint32_t,float) ) );
+
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotOrientationReplot() )
+        ,this
+        ,SLOT(MainWinPlot_PlotOrientationReplot() ));
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotTrvDistanceAppendData(uint32_t,float) )
+        ,this
+        ,SLOT(MainWinPlot_PlotTrvDistanceAppendData(uint32_t,float) ) );
+
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotTrvDistanceReplot() )
+        ,this
+        ,SLOT(MainWinPlot_PlotTrvDistanceReplot() ));
+
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotPosConfidenceAppendData(uint32_t, uint8_t, uint8_t) )
+        ,this
+        ,SLOT(MainWinPlot_PlotPosConfidenceAppendData(uint32_t, uint8_t, uint8_t) ) );
+
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_PlotPosConfidenceReplot() )
+        ,this
+        ,SLOT(MainWinPlot_PlotPosConfidenceReplot() ));
+
+
+
 
     connect(
         &BluInputDataProcessingWrapper,
@@ -903,6 +956,9 @@ void MainWindow::on_GeneralPlotDataClear_pb_clicked()
     PlotYawRate.LfGraph_ClearData();
     PlotPosErr.LfGraph_ClearData();
     PlotPidRegVal.LfGraph_ClearData();
+    PlotTrvDistance.LfGraph_ClearData();
+    PlotOrientation.LfGraph_ClearData();
+    PlotLinePosConfidence.LfGraph_ClearData();
 }
 
 void MainWindow::MainWin_UpdateNvmErrorWeigthData(float ErrW1, float ErrW2, float ErrW3, float ErrW4, float ErrW5,
@@ -1011,6 +1067,64 @@ void MainWindow::MainWinPlot_PlotPidRegValAppendData(uint32_t FrameId, float Pid
     PlotPidRegVal.LfGraph_AppendData(FrameId,PidRegVal);
 }
 
+
+void MainWindow::MainWinPlot_PlotOrientationReplot()
+{
+    int Index = ui->PlotWidgetTab1->currentIndex();
+    if(Index== 3)
+    {
+        PlotOrientation.LfGraph_UpdateReplot();
+    }
+
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.OrientationPlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+}
+
+void MainWindow::MainWinPlot_PlotTrvDistanceReplot()
+{
+    int Index = ui->PlotWidgetTab1->currentIndex();
+    if(Index== 2)
+    {
+        PlotTrvDistance.LfGraph_UpdateReplot();
+    }
+
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.TrvDistancePlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+}
+
+void MainWindow::MainWinPlot_PlotPosConfidenceReplot()
+{
+    int Index = ui->tabWidget_4->currentIndex();
+    if(Index== 4)
+    {
+        PlotLinePosConfidence.LfGraph_UpdateReplot();
+    }
+
+    BluInputDataProcessingWrapper.PlottingInfoMutex.lock();
+    BluInputDataProcessingWrapper.LinePosConfPlotPlottingState = FALSE;
+    BluInputDataProcessingWrapper.PlottingInfoMutex.unlock();
+}
+
+
+void MainWindow::MainWinPlot_PlotOrientationAppendData(uint32_t FrameId, float Orientation)
+{
+    PlotOrientation.LfGraph_AppendData(FrameId,Orientation);
+}
+
+void MainWindow::MainWinPlot_PlotTrvDistanceAppendData(uint32_t FrameId, float TrvDistance)
+{
+    PlotTrvDistance.LfGraph_AppendData(FrameId,TrvDistance);
+}
+
+void MainWindow::MainWinPlot_PlotPosConfidenceAppendData(uint32_t FrameId, uint8_t LeftPosConf, uint8_t RightPosConf)
+{
+    PlotLinePosConfidence.LfGraph_AppendData(FrameId,LeftPosConf, FrameId,RightPosConf);
+}
+
+
+
 void MainWindow::MainWinPlot_DrawMarkersAtDataIndexInfo(int DataIndex)
 {
     static uint32_t CallCounter = 0;
@@ -1020,9 +1134,19 @@ void MainWindow::MainWinPlot_DrawMarkersAtDataIndexInfo(int DataIndex)
     PlotSpd.LfGraph_DrawMarkersAtDataIndex(DataIndex);
     PlotPosErr.LfGraph_DrawMarkersAtDataIndex(DataIndex);
     PlotPidRegVal.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotTrvDistance.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotOrientation.LfGraph_DrawMarkersAtDataIndex(DataIndex);
+    PlotLinePosConfidence.LfGraph_DrawMarkersAtDataIndex(DataIndex);
 
     float ClickedPosX = PlotMap.DataVector_X1.at(DataIndex);
     float ClickedPosY = PlotMap.DataVector_Y1.at(DataIndex);
+
+    float ClickedOri = PlotOrientation.DataVector_Y1.at(DataIndex);
+    MainWin_DrawOrientationIndicator(ClickedOri);
+
+    float ClickedTrvDist = PlotTrvDistance.DataVector_Y1.at(DataIndex);
+    uint8_t PlotLinePosConfidenceLeft = PlotLinePosConfidence.DataVector_Y1.at(DataIndex);
+    uint8_t PlotLinePosConfidenceRight = PlotLinePosConfidence.DataVector_Y2.at(DataIndex);
 
     float ClickedYr = PlotYawRate.DataVector_Y1.at(DataIndex);
     float ClickedSpdL = PlotSpd.DataVector_Y1.at(DataIndex);
@@ -1030,10 +1154,12 @@ void MainWindow::MainWinPlot_DrawMarkersAtDataIndexInfo(int DataIndex)
     float ClickedPosErr = PlotPosErr.DataVector_Y1.at(DataIndex);
     float ClickedPid = PlotPidRegVal.DataVector_Y1.at(DataIndex);
 
-    QString ClickedPointString = QString("Clicked at point: PosX:%1  |PosY:%2  |Yr:%3  |SpdL:%4  |SpdR:%5  |PosErr:%6  |PidV:%7")
+    QString ClickedPointString = QString("Clicked at point: PosX:%1  |PosY:%2  |Yr:%3  |SpdL:%4  |SpdR:%5  |PosErr:%6  |PidV:%7"
+                                         " |Ori:%8 |TrvDist:%9 |LineConfL:%10  |LineConfR:%11")
                                      .arg(ClickedPosX).arg(ClickedPosY).arg(ClickedYr)
                                      .arg(ClickedSpdL).arg(ClickedSpdR).arg(ClickedPosErr)
-                                     .arg(ClickedPid);
+                                     .arg(ClickedPid).arg(ClickedOri).arg(ClickedTrvDist)
+                                     .arg(PlotLinePosConfidenceLeft).arg(PlotLinePosConfidenceRight);
 
     if(CallCounter % 2 == 0)
     {
@@ -1062,6 +1188,9 @@ void MainWindow::on_RemoveMarkers_pb_clicked()
     PlotSpd.LfGraph_DrawMarkersAtDataIndex(0);
     PlotPosErr.LfGraph_DrawMarkersAtDataIndex(0);
     PlotPidRegVal.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotTrvDistance.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotOrientation.LfGraph_DrawMarkersAtDataIndex(0);
+    PlotLinePosConfidence.LfGraph_DrawMarkersAtDataIndex(0);
 }
 
 
@@ -1608,6 +1737,9 @@ void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
     PlotYawRate.LfGraph_UpdateReplot();
     PlotSpd.LfGraph_UpdateReplot();
     PlotMap.LfGraph_UpdateReplot();
+    PlotTrvDistance.LfGraph_UpdateReplot();
+    PlotOrientation.LfGraph_UpdateReplot();
+    PlotLinePosConfidence.LfGraph_UpdateReplot();
 }
 
 

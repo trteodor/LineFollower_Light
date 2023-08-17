@@ -293,12 +293,12 @@
           <string>YawRate</string>
          </attribute>
         </widget>
-        <widget class="QWidget" name="tab_8">
+        <widget class="QCustomPlot" name="PlotTrvDistanceW">
          <attribute name="title">
           <string>TrvDist</string>
          </attribute>
         </widget>
-        <widget class="QWidget" name="tab_3">
+        <widget class="QCustomPlot" name="PlotOrientationW">
          <attribute name="title">
           <string>Ori</string>
          </attribute>
@@ -340,7 +340,7 @@
           <string>PidRegVal</string>
          </attribute>
         </widget>
-        <widget class="QWidget" name="tab_9">
+        <widget class="QCustomPlot" name="PlotLinePosConfW">
          <attribute name="title">
           <string>Conf</string>
          </attribute>

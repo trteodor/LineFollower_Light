@@ -603,6 +603,7 @@ void Sim_FakeBaseDataReportTask(void)
 		NewestLfDataReport.ucTimeStamp = HAL_GetTick();
 		NewestLfDataReport.CurrMapData.PosX = SimFakeXY_MapDat.X[ProbeIterator];
 		NewestLfDataReport.CurrMapData.PosY = SimFakeXY_MapDat.Y[ProbeIterator];
+		NewestLfDataReport.CurrMapData.TravelledDistance = SyncIdIter;
 		NewestLfDataReport.CurrMapData.PosO = M_PI * sin(2 * M_PI * WaveHelper);
 		NewestLfDataReport.CurrMapData.WhLftSp = (2 * sin( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 3 * WaveHelper));
 		NewestLfDataReport.CurrMapData.WhRhtSp = (2 * cos( 2 * M_PI * WaveHelper)) + (0.05 * sin( 2* M_PI * 7 * WaveHelper));
@@ -619,6 +620,8 @@ void Sim_FakeBaseDataReportTask(void)
 		NewestLfDataReport.CurrSensorData.SensorData[9] = 40;
 		NewestLfDataReport.CurrSensorData.SensorData[10] = 40;
 		NewestLfDataReport.CurrSensorData.SensorData[11] = 40;
+		NewestLfDataReport.CurrSensorData.LastLeftLinePosConfidence = SyncIdIter;
+		NewestLfDataReport.CurrSensorData.LastRightLinePosConfidence = SyncIdIter+5;
 		NewestLfDataReport.CurrSensorData.PosError = 1 * sin( 2 * M_PI * WaveHelper);
 		NewestLfDataReport.LinePidRegData.LinePidRegVal = (2 * sin( 2 * M_PI * WaveHelper)) + (0.2 * sin( 2* M_PI * 13 * WaveHelper));;
 

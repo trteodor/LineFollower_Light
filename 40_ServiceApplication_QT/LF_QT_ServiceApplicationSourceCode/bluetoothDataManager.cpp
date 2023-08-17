@@ -175,10 +175,16 @@ void BluDataManager::BluDatMngr_BaseDataHandler(char *data,uint32_t Size)
     emit BluDatMngrSignal_PlotSpdAppendData(FullFrameCounter,FullBaseData.CurrMapData.WhLftSp,FullBaseData.CurrMapData.WhRhtSp);
     emit BluDatMngrSignal_PlotPosErrAppendData(FullFrameCounter,FullBaseData.CurrSensorData.PosError);
     emit BluDatMngrSignal_PlotPidRegValAppendData(FullFrameCounter,FullBaseData.LinePidRegData.PidRegCorrValue);
+    emit BluDatMngrSignal_PlotOrientationAppendData(FullFrameCounter, FullBaseData.CurrMapData.PosO);
+    emit BluDatMngrSignal_PlotTrvDistanceAppendData(FullFrameCounter, FullBaseData.CurrMapData.TravelledDistance);
+    emit BluDatMngrSignal_PlotPosConfidenceAppendData(FullFrameCounter,
+                                                      FullBaseData.CurrSensorData.LastLeftLinePosConfidence,
+                                                      FullBaseData.CurrSensorData.LastRightLinePosConfidence);
 
 
     if( (false == MapPlotPlottingState) && (false == YawRatePlotPlottingState) && (false == SpdPlotPlottingState)
-        && (false == DebugTableScrollingBottomIsActivState) && (false == PosErrPlotPlottingState) && (false == PidRegValPlotPlottingState) )
+        && (false == DebugTableScrollingBottomIsActivState) && (false == PosErrPlotPlottingState) && (false == PidRegValPlotPlottingState)
+        && (false == LinePosConfPlotPlottingState) && (false == TrvDistancePlotPlottingState) && (false == OrientationPlotPlottingState) )
     {
         PlottingInfoMutex.lock();
         MapPlotPlottingState = true;
@@ -186,6 +192,10 @@ void BluDataManager::BluDatMngr_BaseDataHandler(char *data,uint32_t Size)
         SpdPlotPlottingState = true;
         PosErrPlotPlottingState = true;
         PidRegValPlotPlottingState = true;
+        LinePosConfPlotPlottingState = true;
+        TrvDistancePlotPlottingState = true;
+        OrientationPlotPlottingState = true;
+
         PlottingInfoMutex.unlock();
 
 
@@ -201,6 +211,10 @@ void BluDataManager::BluDatMngr_BaseDataHandler(char *data,uint32_t Size)
         emit BluDatMngrSignal_PlotSpdUpdate(); /*Move plotting to MainWindow process*/
         emit BluDatMngrSignal_PlotPosErrUpdate();
         emit BluDatMngrSignal_PlotPidRegValUpdate();
+        emit BluDatMngrSignal_PlotOrientationReplot();
+        emit BluDatMngrSignal_PlotTrvDistanceReplot();
+        emit BluDatMngrSignal_PlotPosConfidenceReplot();
+
     }
 
 
