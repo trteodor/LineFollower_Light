@@ -134,6 +134,10 @@ private slots:
 
     void on_RemoveMarkers_pb_clicked();
 
+    void on_SavePlotData_pb_clicked();
+
+    void on_LoadPlotData_pb_clicked();
+
 signals:
     void MainWin_bluetoothSignalStartDiscoveryDevices(void);
     void MainWin_bluetoothDisconnect(void);

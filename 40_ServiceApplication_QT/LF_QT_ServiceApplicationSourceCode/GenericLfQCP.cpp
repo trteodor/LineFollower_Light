@@ -211,25 +211,27 @@ void GenericLfQCP::LfGraph_UpdateReplot(void)
     Graph6->setData(DataVector_X6,DataVector_Y6);
 
     uint32_t VectorXSize = DataVector_X1.size();
-
-    if(VectorXSize > 300)
+    if(VectorXSize > 0)
     {
-      UIplotP->xAxis->setRange
-          ( *std::min_element(DataVector_X1.end() - 300,DataVector_X1.end() ) -1,
-           *std::max_element(DataVector_X1.end() - 300,DataVector_X1.end() ) +1);
-    }
-    else{
-      UIplotP->xAxis->setRange
-          ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
-           *std::max_element(DataVector_X1.begin(),DataVector_X1.end() ) +1);
-    }
+      if(VectorXSize > 300)
+      {
+          UIplotP->xAxis->setRange
+              ( *std::min_element(DataVector_X1.end() - 300,DataVector_X1.end() ) -1,
+               *std::max_element(DataVector_X1.end() - 300,DataVector_X1.end() ) +1);
+      }
+      else{
+          UIplotP->xAxis->setRange
+              ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
+               *std::max_element(DataVector_X1.begin(),DataVector_X1.end() ) +1);
+      }
 
-    UIplotP->yAxis->setRange
-        (  *std::min_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) -1,
-         *std::max_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) +2 );
+      UIplotP->yAxis->setRange
+          (  *std::min_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) -1,
+           *std::max_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) +2 );
 
-    UIplotP->replot();
-//    UIplotP->update();
+      UIplotP->replot();
+      //    UIplotP->update();
+    }
 }
 
 void GenericLfQCP::LfGraph_ClearData(void)

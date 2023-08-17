@@ -501,21 +501,21 @@
       <item>
        <widget class="QPushButton" name="RemoveMarkers_pb">
         <property name="text">
-         <string>RemMarkers</string>
+         <string>RemoveMarkers</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="SavePlotData_pb">
         <property name="text">
-         <string>PushButton</string>
+         <string>SavePlotsData</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="LoadPlotData_pb">
         <property name="text">
-         <string>PushButton</string>
+         <string>LoadPlotsData</string>
         </property>
        </widget>
       </item>
@@ -985,7 +985,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
-         <string>NvmCfg</string>
+         <string>Cfg1</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="leftMargin">
@@ -1478,7 +1478,7 @@ color: rgb(255, 255, 255);</string>
        </widget>
        <widget class="QWidget" name="NvmCfg2">
         <attribute name="title">
-         <string>NvmCfg2</string>
+         <string>Cfg2</string>
         </attribute>
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
