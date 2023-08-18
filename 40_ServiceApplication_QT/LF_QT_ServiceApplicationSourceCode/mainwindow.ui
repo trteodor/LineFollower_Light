@@ -960,7 +960,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <property name="iconSize">
         <size>
@@ -1474,13 +1474,20 @@ color: rgb(255, 255, 255);</string>
            </property>
           </widget>
          </item>
+         <item row="8" column="1">
+          <widget class="QCheckBox" name="IrSensorCheckBox">
+           <property name="text">
+            <string>IrSensor</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="NvmCfg2">
         <attribute name="title">
          <string>Cfg2</string>
         </attribute>
-        <widget class="QWidget" name="layoutWidget">
+        <widget class="QWidget" name="layoutWidget_lab24">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -1568,10 +1575,10 @@ color: rgb(255, 255, 255);</string>
         <widget class="QWidget" name="layoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>130</x>
+           <x>90</x>
            <y>60</y>
            <width>81</width>
-           <height>241</height>
+           <height>276</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1620,7 +1627,7 @@ color: rgb(255, 255, 255);</string>
         <widget class="QLabel" name="label_4">
          <property name="geometry">
           <rect>
-           <x>50</x>
+           <x>20</x>
            <y>0</y>
            <width>121</width>
            <height>16</height>
@@ -1646,7 +1653,7 @@ color: rgb(255, 255, 255);</string>
         <widget class="QLabel" name="label_7">
          <property name="geometry">
           <rect>
-           <x>79</x>
+           <x>40</x>
            <y>40</y>
            <width>141</width>
            <height>16</height>
@@ -1659,7 +1666,7 @@ color: rgb(255, 255, 255);</string>
         <widget class="QCheckBox" name="SpdProfileEnabled">
          <property name="geometry">
           <rect>
-           <x>140</x>
+           <x>100</x>
            <y>0</y>
            <width>71</width>
            <height>22</height>
@@ -1669,13 +1676,13 @@ color: rgb(255, 255, 255);</string>
           <string>Enabled</string>
          </property>
         </widget>
-        <widget class="QWidget" name="layoutWidget">
+        <widget class="QWidget" name="layoutWidget_Spd">
          <property name="geometry">
           <rect>
            <x>0</x>
            <y>60</y>
            <width>71</width>
-           <height>241</height>
+           <height>276</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1739,7 +1746,7 @@ color: rgb(255, 255, 255);</string>
         <attribute name="title">
          <string>Name</string>
         </attribute>
-        <widget class="QWidget" name="layoutWidget">
+        <widget class="QWidget" name="layoutWidgetLab8">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -1849,7 +1856,7 @@ color: rgb(255, 255, 255);</string>
     <bool>false</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>
@@ -1987,6 +1994,9 @@ color: rgb(255, 255, 255);</string>
      <width>0</width>
      <height>0</height>
     </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>

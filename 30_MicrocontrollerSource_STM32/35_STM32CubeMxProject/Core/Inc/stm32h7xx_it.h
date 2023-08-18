@@ -68,7 +68,7 @@ void USART2_IRQHandler(void);
 void TIM5_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
-uint32_t HAL_Get100usTick(void); /*HAL Prefix to show that's comming directly from hardware*/
+uint32_t HAL_GetTick100us(void); /*HAL Prefix to show that's comming directly from hardware*/
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

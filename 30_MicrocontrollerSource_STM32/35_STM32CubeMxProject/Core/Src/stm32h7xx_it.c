@@ -254,7 +254,10 @@ void TIM2_IRQHandler(void)
 	us100Timer++;
   /* USER CODE END TIM2_IRQn 0 */
   /* USER CODE BEGIN TIM2_IRQn 1 */
-LL_TIM_ClearFlag_CC1(TIM2);
+  while( LL_TIM_IsActiveFlag_CC1(TIM2)  )
+  {
+      LL_TIM_ClearFlag_CC1(TIM2);
+  }
   /* USER CODE END TIM2_IRQn 1 */
 }
 
@@ -343,7 +346,7 @@ void TIM5_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-uint32_t HAL_Get100usTick(void)
+uint32_t HAL_GetTick100us(void)
 {
   return us100Timer;
 }

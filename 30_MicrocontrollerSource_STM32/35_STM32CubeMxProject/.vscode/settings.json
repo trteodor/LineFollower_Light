@@ -77,7 +77,8 @@
         "encodershandler.h": "c",
         "tim.h": "c",
         "lf_appconfig.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "stm32h7xx_it.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

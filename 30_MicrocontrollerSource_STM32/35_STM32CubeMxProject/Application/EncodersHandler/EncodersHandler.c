@@ -256,9 +256,9 @@ void ENC_Task(void)
 {
 	static uint32_t EncodersSavedTime;
 
-	if(HAL_Get100usTick() >EncodersSavedTime + EncodersProbeTime)
+	if(HAL_GetTick100us() >EncodersSavedTime + EncodersProbeTime)
 	{
-		EncodersSavedTime= HAL_Get100usTick();
+		EncodersSavedTime= HAL_GetTick100us();
 
 
 		CalculateBasicBasedOnEncodersData();
