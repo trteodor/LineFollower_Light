@@ -30,7 +30,7 @@ public:
 
     void addJoyStick(QLayout *layout_, JoyType type = XY);
 
-
+    QString CurrentLfProjectFilePath;
 
 private slots:
 
@@ -183,7 +183,7 @@ private:
     void ReadNvMDataFromLineFollower();
     void RefreshErrorIndicatorView(void);
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
-
+    void LoadPlotDataFromLfProjectFileOrJson(QString FilePath);
 
 
     GenericLfQCP PlotMap;

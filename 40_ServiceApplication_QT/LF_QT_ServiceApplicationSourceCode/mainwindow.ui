@@ -960,7 +960,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="iconSize">
         <size>
@@ -1559,6 +1559,180 @@ color: rgb(255, 255, 255);</string>
            </layout>
           </item>
          </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>Cfg3</string>
+        </attribute>
+        <widget class="QWidget" name="layoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>60</y>
+           <width>81</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <property name="spacing">
+           <number>1</number>
+          </property>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd1">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd2"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd3"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd4"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd5"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd6"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd7"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd8"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd9"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd10"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileBspd11"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="label_4">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>0</y>
+           <width>121</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Speed Profile:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_5">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>22</y>
+           <width>171</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>IfTravelledDistanceHigerThan:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_7">
+         <property name="geometry">
+          <rect>
+           <x>79</x>
+           <y>40</y>
+           <width>141</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>ThenSetBaseSpeedEqual:</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="SpdProfileEnabled">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>0</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enabled</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>60</y>
+           <width>71</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <property name="spacing">
+           <number>1</number>
+          </property>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD1">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD2"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD3"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD4"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD5"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD6"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD7"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD8"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD9"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD10"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="SpdProfileTrvD11"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="label_8">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>90</y>
+           <width>121</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Not Supported Yet</string>
+         </property>
         </widget>
        </widget>
        <widget class="QWidget" name="tab_2">

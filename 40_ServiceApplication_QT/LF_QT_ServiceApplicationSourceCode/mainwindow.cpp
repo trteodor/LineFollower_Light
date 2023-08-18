@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "qforeach.h"
 #include "ui_mainwindow.h"
 
 #include <QtQuick/QQuickView>
@@ -16,8 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     QThread::currentThread()->setObjectName("Main Window Thread");
-
-
 
     ui->setupUi(this);
 
@@ -130,6 +127,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->BLU_AutoConnDevNameL->setText(NewLineEditText);
 
 
+//    if(qApp->arguments().count() > 0)
+//    {
+//        qDebug() << "argumentsCount" << qApp->arguments().at(0);
+//    }
+
+    if(qApp->arguments().count() > 1  && qApp->arguments().at(1).endsWith(".lfp") ==true)
+    {
+//        qDebug() << "AA";
+        CurrentLfProjectFilePath = qApp->arguments().at(1);
+        LoadPlotDataFromLfProjectFileOrJson(CurrentLfProjectFilePath);
+        QString LoadedProjectInfo = QString("StartupProjectPath: %1").arg(CurrentLfProjectFilePath);
+        MainWin_DebugTable_InsertDataRow(0, 0, 0, LoadedProjectInfo);
+    }
 }
 
 
@@ -1889,13 +1899,9 @@ void MainWindow::on_SavePlotData_pb_clicked()
 }
 
 
-void MainWindow::on_LoadPlotData_pb_clicked()
+void MainWindow::LoadPlotDataFromLfProjectFileOrJson(QString FilePath)
 {
-    QString filter = "LfProject (*.lfp) ;; All files (*)";
-    QString desktopPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-    QString file_name = QFileDialog::getOpenFileName(this,"choose file to overwrite",desktopPath,filter);
-
-    QFile loadFile(file_name);
+    QFile loadFile(FilePath);
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open load file.");
@@ -1919,7 +1925,7 @@ void MainWindow::on_LoadPlotData_pb_clicked()
             for (const QJsonValue &v : YawRate_Yarr) {
                 QJsonObject DataPoint_json = v.toObject();
                 float DataPoint =  DataPoint_json["Y"].toDouble();
-//                qDebug() << "LoadPlotDataTestYawRate DataPointValue: " << DataPoint;
+                //                qDebug() << "LoadPlotDataTestYawRate DataPointValue: " << DataPoint;
                 PlotYawRate.DataVector_X1.append(IterCounter);
                 PlotYawRate.DataVector_Y1.append(DataPoint);
                 IterCounter++;
@@ -1927,135 +1933,135 @@ void MainWindow::on_LoadPlotData_pb_clicked()
 
         }
         {
-                QJsonArray PlotSpdL_Y_JsArr = loadDoc.object()["PlotSpdL_Y"].toArray();
-                PlotSpd.DataVector_Y1.clear();
-                PlotSpd.DataVector_X1.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotSpdL_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotSpd.DataVector_X1.append(IterCounter);
-                    PlotSpd.DataVector_Y1.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotSpdL_Y_JsArr = loadDoc.object()["PlotSpdL_Y"].toArray();
+            PlotSpd.DataVector_Y1.clear();
+            PlotSpd.DataVector_X1.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotSpdL_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotSpd.DataVector_X1.append(IterCounter);
+                PlotSpd.DataVector_Y1.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotSpdR_Y_JsArr = loadDoc.object()["PlotSpdR_Y"].toArray();
-                PlotSpd.DataVector_Y2.clear();
-                PlotSpd.DataVector_X2.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotSpdR_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotSpd.DataVector_X2.append(IterCounter);
-                    PlotSpd.DataVector_Y2.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotSpdR_Y_JsArr = loadDoc.object()["PlotSpdR_Y"].toArray();
+            PlotSpd.DataVector_Y2.clear();
+            PlotSpd.DataVector_X2.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotSpdR_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotSpd.DataVector_X2.append(IterCounter);
+                PlotSpd.DataVector_Y2.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotPosErr_Y_JsArr = loadDoc.object()["PlotPosErr_Y"].toArray();
-                PlotPosErr.DataVector_Y1.clear();
-                PlotPosErr.DataVector_X1.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotPosErr_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotPosErr.DataVector_X1.append(IterCounter);
-                    PlotPosErr.DataVector_Y1.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotPosErr_Y_JsArr = loadDoc.object()["PlotPosErr_Y"].toArray();
+            PlotPosErr.DataVector_Y1.clear();
+            PlotPosErr.DataVector_X1.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotPosErr_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotPosErr.DataVector_X1.append(IterCounter);
+                PlotPosErr.DataVector_Y1.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotPidRegVal_Y_JsArr = loadDoc.object()["PlotPidRegVal_Y"].toArray();
-                PlotPidRegVal.DataVector_Y1.clear();
-                PlotPidRegVal.DataVector_X1.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotPidRegVal_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotPidRegVal.DataVector_X1.append(IterCounter);
-                    PlotPidRegVal.DataVector_Y1.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotPidRegVal_Y_JsArr = loadDoc.object()["PlotPidRegVal_Y"].toArray();
+            PlotPidRegVal.DataVector_Y1.clear();
+            PlotPidRegVal.DataVector_X1.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotPidRegVal_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotPidRegVal.DataVector_X1.append(IterCounter);
+                PlotPidRegVal.DataVector_Y1.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotTrvDistance_Y_JsArr = loadDoc.object()["PlotTrvDistance_Y"].toArray();
-                PlotTrvDistance.DataVector_Y1.clear();
-                PlotTrvDistance.DataVector_X1.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotTrvDistance_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotTrvDistance.DataVector_X1.append(IterCounter);
-                    PlotTrvDistance.DataVector_Y1.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotTrvDistance_Y_JsArr = loadDoc.object()["PlotTrvDistance_Y"].toArray();
+            PlotTrvDistance.DataVector_Y1.clear();
+            PlotTrvDistance.DataVector_X1.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotTrvDistance_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotTrvDistance.DataVector_X1.append(IterCounter);
+                PlotTrvDistance.DataVector_Y1.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotOrientation_Y_JsArr = loadDoc.object()["PlotOrientation_Y"].toArray();
-                PlotOrientation.DataVector_Y1.clear();
-                PlotOrientation.DataVector_X1.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotOrientation_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotOrientation.DataVector_X1.append(IterCounter);
-                    PlotOrientation.DataVector_Y1.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotOrientation_Y_JsArr = loadDoc.object()["PlotOrientation_Y"].toArray();
+            PlotOrientation.DataVector_Y1.clear();
+            PlotOrientation.DataVector_X1.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotOrientation_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotOrientation.DataVector_X1.append(IterCounter);
+                PlotOrientation.DataVector_Y1.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotLinePosConfidenceL_Y_JsArr = loadDoc.object()["PlotLinePosConfidenceL_Y"].toArray();
-                PlotLinePosConfidence.DataVector_Y1.clear();
-                PlotLinePosConfidence.DataVector_X1.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotLinePosConfidenceL_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotLinePosConfidence.DataVector_X1.append(IterCounter);
-                    PlotLinePosConfidence.DataVector_Y1.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotLinePosConfidenceL_Y_JsArr = loadDoc.object()["PlotLinePosConfidenceL_Y"].toArray();
+            PlotLinePosConfidence.DataVector_Y1.clear();
+            PlotLinePosConfidence.DataVector_X1.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotLinePosConfidenceL_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotLinePosConfidence.DataVector_X1.append(IterCounter);
+                PlotLinePosConfidence.DataVector_Y1.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotLinePosConfidenceR_Y_JsArr = loadDoc.object()["PlotLinePosConfidenceR_Y"].toArray();
-                PlotLinePosConfidence.DataVector_Y2.clear();
-                PlotLinePosConfidence.DataVector_X2.clear();
-                int IterCounter = 0;
-                for (const QJsonValue &v : PlotLinePosConfidenceR_Y_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotLinePosConfidence.DataVector_X2.append(IterCounter);
-                    PlotLinePosConfidence.DataVector_Y2.append(DataPoint);
-                    IterCounter++;
-                }
+            QJsonArray PlotLinePosConfidenceR_Y_JsArr = loadDoc.object()["PlotLinePosConfidenceR_Y"].toArray();
+            PlotLinePosConfidence.DataVector_Y2.clear();
+            PlotLinePosConfidence.DataVector_X2.clear();
+            int IterCounter = 0;
+            for (const QJsonValue &v : PlotLinePosConfidenceR_Y_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotLinePosConfidence.DataVector_X2.append(IterCounter);
+                PlotLinePosConfidence.DataVector_Y2.append(DataPoint);
+                IterCounter++;
+            }
 
         }
         {
-                QJsonArray PlotMap_PosX_JsArr = loadDoc.object()["PlotMap_PosX"].toArray();
-                PlotMap.DataVector_X1.clear();
-                for (const QJsonValue &v : PlotMap_PosX_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["X"].toDouble();
-                    PlotMap.DataVector_X1.append(DataPoint);
-                }
+            QJsonArray PlotMap_PosX_JsArr = loadDoc.object()["PlotMap_PosX"].toArray();
+            PlotMap.DataVector_X1.clear();
+            for (const QJsonValue &v : PlotMap_PosX_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["X"].toDouble();
+                PlotMap.DataVector_X1.append(DataPoint);
+            }
 
         }
         {
-                QJsonArray PlotMap_PosY_JsArr = loadDoc.object()["PlotMap_PosY"].toArray();
-                PlotMap.DataVector_Y1.clear();
-                for (const QJsonValue &v : PlotMap_PosY_JsArr) {
-                    QJsonObject DataPoint_json = v.toObject();
-                    float DataPoint =  DataPoint_json["Y"].toDouble();
-                    PlotMap.DataVector_Y1.append(DataPoint);
-                }
+            QJsonArray PlotMap_PosY_JsArr = loadDoc.object()["PlotMap_PosY"].toArray();
+            PlotMap.DataVector_Y1.clear();
+            for (const QJsonValue &v : PlotMap_PosY_JsArr) {
+                QJsonObject DataPoint_json = v.toObject();
+                float DataPoint =  DataPoint_json["Y"].toDouble();
+                PlotMap.DataVector_Y1.append(DataPoint);
+            }
 
         }
 
@@ -2063,5 +2069,13 @@ void MainWindow::on_LoadPlotData_pb_clicked()
 
 
     on_GeneraReplotAllPlots_pb_clicked();
+}
+
+void MainWindow::on_LoadPlotData_pb_clicked()
+{
+    QString filter = "LfProject (*.lfp) ;; All files (*)";
+    QString desktopPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+    QString file_name = QFileDialog::getOpenFileName(this,"choose file to overwrite",desktopPath,filter);
+    LoadPlotDataFromLfProjectFileOrJson(file_name);
 }
 
