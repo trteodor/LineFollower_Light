@@ -49,6 +49,7 @@ typedef enum
 	EE_NvmAddr_EncodersWheelBaseInfo_F32,
 
 	EE_NvmAddr_IrSensorState_U32,
+	
 	EE_NvmAddr_SpProfileEnableFlag_U32,
 
 	EE_NvmAddr_SpPofileD01_F32,

@@ -7,4 +7,8 @@
 
 #define LED_TOGGLE_TIME 500
 
+
+// #define ONE_IMPULS_DISTANCE 0.000788 //depends on the size of the wheel and the gear on the motor
+// #define WHEEL_BASE 0.14700
+
 #endif //_INC_LF_AppConfig_H

@@ -43,44 +43,46 @@ public:
     /*
  * Type definition of Common Header or message ID for Embedded software and desktop application
  * */
-typedef enum
-{
-    BLU_None = 0,
-    BLU_ConfirmationTag,
-    BLU_DebugMessage,
+    typedef enum
+    {
+        BLU_None = 0,
+        BLU_ConfirmationTag,
+        BLU_DebugMessage,
 
-    BLU_RobotStart,
-    BLU_RobotStop,
+        BLU_RobotStart,
+        BLU_RobotStop,
 
-    BLU_SimulatorStart,
-    BLU_TrueBaseLoggingStart,
-    BLU_SimuAndTrueDataLoggingStop,
+        BLU_SimulatorStart,
+        BLU_TrueBaseLoggingStart,
+        BLU_SimuAndTrueDataLoggingStop,
 
-    BLU_CommunicationStats,
-    BLU_BaseDataReport,
+        BLU_CommunicationStats,
+        BLU_BaseDataReport,
 
-    BLU_NvM_ErrWeigthSensorDataReq,
-    BLU_NvM_ErrWeigthSensorData,
+        BLU_NvM_ErrWeigthSensorDataReq,
+        BLU_NvM_ErrWeigthSensorData,
 
-    BLU_NvM_LinePidRegDataReq,
-    BLU_NvM_LinePidRegData,
+        BLU_NvM_LinePidRegDataReq,
+        BLU_NvM_LinePidRegData,
 
-    BLU_NvM_VehCfgReq,
-    BLU_NvM_VehCfgData,
+        BLU_NvM_VehCfgReq,
+        BLU_NvM_VehCfgData,
 
-    BLU_NvM_MotorsFactorsReq,
-    BLU_NvM_MotorsFactorsData,
+        BLU_NvM_MotorsFactorsReq,
+        BLU_NvM_MotorsFactorsData,
 
-    BLU_NvM_EncoderModCfgReq,
-    BLU_NvM_EncoderModCfgData,
+        BLU_NvM_EncoderModCfgReq,
+        BLU_NvM_EncoderModCfgData,
 
-    BLU_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
+        BLU_NvM_SpdProfileReq,
+        BLU_NvM_SpdProfileData,
 
-    BLU_SetNewRobotName,
+        BLU_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
 
-}BLU_MessageID_t;
+        BLU_SetNewRobotName,
 
- /*
+    }BLU_MessageID_t;
+    /*
  * Modules should report the newest data then BLE module will transmit it
  * */
 
@@ -93,7 +95,7 @@ typedef enum
         float PosY;
         float PosO;
         float TravelledDistance;
-    }BLE_MapDataReport_t; /*Current size 6*4 = 28*/
+    }BLU_MapDataReport_t; /*Current size 6*4 = 28*/
 
 
     typedef struct
@@ -102,22 +104,29 @@ typedef enum
         float PosError;
         uint8_t LastLeftLinePosConfidence;
         uint8_t LastRightLinePosConfidence;
-    }BLE_SensorDataReport_t;  /*Current size= 12+4+1+1 = 18*/
+    }BLU_SensorDataReport_t;  /*Current size= 12+4+1+1 = 18*/
 
     typedef struct
     {
         float PidRegCorrValue;
-    }BLE_PidRegData_t; /*Current size= 4*/
+    }BLU_PidRegData_t; /*Current size= 4*/
 
     typedef struct
     {
         uint8_t SyncId;
         uint32_t ucTimeStamp; //5
-        BLE_MapDataReport_t CurrMapData;
-        BLE_SensorDataReport_t CurrSensorData;
-        BLE_PidRegData_t LinePidRegData;
-    }BLE_LfDataReport_t; /*55bytes total size
+        BLU_MapDataReport_t CurrMapData;
+        BLU_SensorDataReport_t CurrSensorData;
+        BLU_PidRegData_t LinePidRegData;
+    }BLU_LfDataReport_t; /*55bytes total size
                         (3*(Frame+SyncID): 54DataBytes (Left 0 free)*/
+
+    typedef struct
+    {
+        uint32_t EnabledFlag;
+        float TrvDistance[11];
+        float BaseSpeedValue[11];
+    }BLU_NvM_SpdProfileData_t ;
 
 
     typedef struct
@@ -128,10 +137,11 @@ typedef enum
         uint16_t RingBufferOverFlowCounter;
         uint16_t TransmisstedMessagesCounter;
         uint16_t RetransmissionCounter;
-    }BLE_StatisticData_t ;
+    }BLU_StatisticData_t ;
 
 
-    BLE_LfDataReport_t FullBaseData;
+
+    BLU_LfDataReport_t FullBaseData;
 
 
 signals:
@@ -140,9 +150,10 @@ signals:
                                                 float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
     void BluDatMngrSignal_UpdatePidData(float Kp,float Ki,float Kd,uint32_t ProbeTime);
-    void BluDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
+    void BluDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled);
 
     void BluDatMngrSignal_UpdateEncoderCfgData(float OneImpDist, float WheelBase);
+    void BluDatMngrSignal_UpdateSpeedProfileData(BLU_NvM_SpdProfileData_t SpdProfileData);
     void BluDatMngrSignal_UpdateMotorsFactors(uint32_t FacA_Lft, uint32_t FacA_Rgt,uint32_t FacB_Lft,uint32_t FacB_Rht);
 
     void BluDatMngrSignal_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
@@ -188,7 +199,7 @@ private slots:
 
 private:
 
-    void BluDatMngr_DebugMessagerHandler(char *data,uint32_t size, BluDataManager::BLU_MessageID_t BLE_MessID);
+    void BluDatMngr_DebugMessagerHandler(char *data,uint32_t size, BLU_MessageID_t BLE_MessID);
     void BluDatMngr_BaseDataHandler(char *data,uint32_t Size);
     void BluDatMngr_ErrorWeigthDataHandler(char *data,uint32_t Size);
     void BluDatMngr_CommunicationStatistics_Handler(char *data,uint32_t Size);
@@ -197,6 +208,8 @@ private:
     void BluDatMngr_VehCfgDataHandler(char* data, uint32_t Size);
     void BluDatMngr_MotorsFactorsDataHandler(char* data, uint32_t Size);
     void BluDatMngr_EncodersCfgDataHandler(char* data, uint32_t Size);
+    void BluDatMngr_SpeedProfileDataHandler(char* data, uint32_t Size);
+    void BluDatMngr_SpeedProfileHandler( char* data, uint32_t Size);
 
 };
 

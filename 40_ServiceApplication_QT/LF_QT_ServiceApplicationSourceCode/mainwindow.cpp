@@ -43,16 +43,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     /*Initialize all needed connections for Bluetooth Data Manager*/
     BLU_InitializeQTConnections();
-
-
-    connect(&NvM_ErrWeigthUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ErrWeigthUpdateDelayTimerTimeout()));
-    connect(&NvM_PidDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_PidDatahUpdateDelayTimerTimeout()));
-    connect(&NvM_VehCfghUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_VehCfgDataUpdateDelayTimerTimeout()));
-    connect(&NvM_MotorsFactorsUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_MotorsFactorsDataUpdateDelayTimerTimeout()));
-    connect(&NvM_EncoderCfgUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_EncodersConfigDataUpdateDelayTimerTimeout()));
+    ConfigureTextLineAndNvMConnections();
 
 
     addJoyStick(ui->RobotMoverXYGridLayout);
+
 
     /*Debug Table configure*/
     ui->DebugDataTable->setRowCount(1);
@@ -62,37 +57,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->DebugDataTable->setColumnWidth(3,10);
     ui->DebugDataTable->setColumnWidth(4,600);
     ui->DebugDataTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
-
-
-    dblValidator.setNotation(QDoubleValidator::StandardNotation);
-    dblValidator.setLocale(QLocale::C);
-
-    ui->ErrW1_Text->setValidator(&dblValidator);
-    ui->ErrW2_Text->setValidator(&dblValidator);
-    ui->ErrW3_Text->setValidator(&dblValidator);
-    ui->ErrW4_Text->setValidator(&dblValidator);
-    ui->ErrW5_Text->setValidator(&dblValidator);
-    ui->ErrW6_Text->setValidator(&dblValidator);
-    ui->ErrW7_Text->setValidator(&dblValidator);
-    ui->ErrW8_Text->setValidator(&dblValidator);
-    ui->ErrW9_Text->setValidator(&dblValidator);
-    ui->ErrW10_Text->setValidator(&dblValidator);
-    ui->ErrW11_Text->setValidator(&dblValidator);
-    ui->ErrWM_Text->setValidator(&dblValidator);
-
-    ui->ExpectedAvSpdText->setValidator(&dblValidator);
-    ui->PID_KP_text->setValidator(&dblValidator);
-    ui->PID_KI_text->setValidator(&dblValidator);
-    ui->PID_KD_text->setValidator(&dblValidator);
-    ui->ProbeTimeText->setValidator(&dblValidator);
-
-    ui->TextWheelBase->setValidator(&dblValidator);
-    ui->TextOneImpDist->setValidator(&dblValidator);
-
-    ui->TextPwmToSpAFacL->setValidator(&dblValidator);
-    ui->TextPwmToSpAFacR->setValidator(&dblValidator);
-    ui->TextPwmToSpBFacL->setValidator(&dblValidator);
-    ui->TextPwmToSpBFacR->setValidator(&dblValidator);
 
 
     QPalette pal = ui->BLU_RobotStart_Button->palette();
@@ -239,6 +203,70 @@ void MainWindow::joystick_moved(double x, double y) {
     //qDebug() << "VecValX:" << VecValX << "VecValY: " << VecValY;
 }
 
+void MainWindow::ConfigureTextLineAndNvMConnections(void)
+{
+    dblValidator.setNotation(QDoubleValidator::StandardNotation);
+    dblValidator.setLocale(QLocale::C);
+
+    ui->ErrW1_Text->setValidator(&dblValidator);
+    ui->ErrW2_Text->setValidator(&dblValidator);
+    ui->ErrW3_Text->setValidator(&dblValidator);
+    ui->ErrW4_Text->setValidator(&dblValidator);
+    ui->ErrW5_Text->setValidator(&dblValidator);
+    ui->ErrW6_Text->setValidator(&dblValidator);
+    ui->ErrW7_Text->setValidator(&dblValidator);
+    ui->ErrW8_Text->setValidator(&dblValidator);
+    ui->ErrW9_Text->setValidator(&dblValidator);
+    ui->ErrW10_Text->setValidator(&dblValidator);
+    ui->ErrW11_Text->setValidator(&dblValidator);
+    ui->ErrWM_Text->setValidator(&dblValidator);
+
+    ui->ExpectedAvSpdText->setValidator(&dblValidator);
+    ui->PID_KP_text->setValidator(&dblValidator);
+    ui->PID_KI_text->setValidator(&dblValidator);
+    ui->PID_KD_text->setValidator(&dblValidator);
+    ui->ProbeTimeText->setValidator(&dblValidator);
+
+    ui->TextWheelBase->setValidator(&dblValidator);
+    ui->TextOneImpDist->setValidator(&dblValidator);
+
+    ui->TextPwmToSpAFacL->setValidator(&dblValidator);
+    ui->TextPwmToSpAFacR->setValidator(&dblValidator);
+    ui->TextPwmToSpBFacL->setValidator(&dblValidator);
+    ui->TextPwmToSpBFacR->setValidator(&dblValidator);
+
+    ui->SpdProfileTrvD1->setValidator(&dblValidator);
+    ui->SpdProfileTrvD2->setValidator(&dblValidator);
+    ui->SpdProfileTrvD3->setValidator(&dblValidator);
+    ui->SpdProfileTrvD4->setValidator(&dblValidator);
+    ui->SpdProfileTrvD5->setValidator(&dblValidator);
+    ui->SpdProfileTrvD6->setValidator(&dblValidator);
+    ui->SpdProfileTrvD7->setValidator(&dblValidator);
+    ui->SpdProfileTrvD8->setValidator(&dblValidator);
+    ui->SpdProfileTrvD9->setValidator(&dblValidator);
+    ui->SpdProfileTrvD10->setValidator(&dblValidator);
+    ui->SpdProfileTrvD11->setValidator(&dblValidator);
+
+    ui->SpdProfileBspd1->setValidator(&dblValidator);
+    ui->SpdProfileBspd2->setValidator(&dblValidator);
+    ui->SpdProfileBspd3->setValidator(&dblValidator);
+    ui->SpdProfileBspd4->setValidator(&dblValidator);
+    ui->SpdProfileBspd5->setValidator(&dblValidator);
+    ui->SpdProfileBspd6->setValidator(&dblValidator);
+    ui->SpdProfileBspd7->setValidator(&dblValidator);
+    ui->SpdProfileBspd8->setValidator(&dblValidator);
+    ui->SpdProfileBspd9->setValidator(&dblValidator);
+    ui->SpdProfileBspd10->setValidator(&dblValidator);
+    ui->SpdProfileBspd11->setValidator(&dblValidator);
+
+    connect(&NvM_ErrWeigthUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ErrWeigthUpdateDelayTimerTimeout()));
+    connect(&NvM_PidDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_PidDatahUpdateDelayTimerTimeout()));
+    connect(&NvM_VehCfghUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_VehCfgDataUpdateDelayTimerTimeout()));
+    connect(&NvM_MotorsFactorsUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_MotorsFactorsDataUpdateDelayTimerTimeout()));
+    connect(&NvM_EncoderCfgUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_EncodersConfigDataUpdateDelayTimerTimeout()));
+    connect(&NvM_SpeedProfileUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ProfileSpeedConfigDataUpdateDelayTimerTimeout()));
+
+}
 
 
 
@@ -569,9 +597,9 @@ void MainWindow::BLU_InitializeQTConnections(void)
 
     connect(
         &BluInputDataProcessingWrapper,
-        SIGNAL(BluDatMngrSignal_UpdateVehCfgData(float,uint32_t,uint32_t) )
+        SIGNAL(BluDatMngrSignal_UpdateVehCfgData(float,uint32_t,uint32_t,uint32_t) )
         ,this
-        ,SLOT(MainWin_UpdateNvM_VehCfgData(float, uint32_t, uint32_t) ) );
+        ,SLOT(MainWin_UpdateNvM_VehCfgData(float, uint32_t, uint32_t,uint32_t) ) );
 
     connect(
         &BluInputDataProcessingWrapper,
@@ -591,6 +619,12 @@ void MainWindow::BLU_InitializeQTConnections(void)
         SIGNAL(BluDatMngrSignal_UpdateEncoderCfgData(float,float) )
         ,this
         ,SLOT(MainWin_UpdateEncoderCfgData(float,float) ) );
+
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateSpeedProfileData(BluDataManager::BLU_NvM_SpdProfileData_t) )
+        ,this
+        ,SLOT(MainWin_UpdateSpeedProfileData(BluDataManager::BLU_NvM_SpdProfileData_t) ));
 
     connect(
         &BluInputDataProcessingWrapper,
@@ -1009,12 +1043,12 @@ void MainWindow::MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_
     NvM_PidDatahUpdateDelayTimer.start(100);
 }
 
-void MainWindow::MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd, uint32_t BlinkLedSt, uint32_t TryDetEndLin)
+void MainWindow::MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd, uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled)
 {
     NvM_ExpectedAvSpeed = ExpectedAvSpd;
     NvM_BlinkLedSt = BlinkLedSt;
     NvM_TryDetEndLinSt = TryDetEndLin;
-
+    NvM_isIrSensorEnabled = IrSensorIsEnabled;
 
 
     NvM_VehCfghUpdateDelayTimer.setSingleShot(true);
@@ -1028,6 +1062,13 @@ void MainWindow::MainWin_UpdateEncoderCfgData(float OneImpDist, float WheelBase)
 
     NvM_EncoderCfgUpdateDelayTimer.setSingleShot(true);
     NvM_EncoderCfgUpdateDelayTimer.start(100);
+}
+
+void MainWindow::MainWin_UpdateSpeedProfileData(BluDataManager::BLU_NvM_SpdProfileData_t SpdProfileData)
+{
+    this->MW_NvM_SpdProfileData = SpdProfileData;
+    NvM_SpeedProfileUpdateDelayTimer.setSingleShot(true);
+    NvM_SpeedProfileUpdateDelayTimer.start(100);
 }
 
 
@@ -1386,6 +1427,29 @@ void MainWindow::ReadNvMDataFromLineFollower()
     ui->TextWheelBase->clear();
     ui->TextOneImpDist->clear();
 
+    ui->SpdProfileBspd1->clear();
+    ui->SpdProfileBspd2->clear();
+    ui->SpdProfileBspd3->clear();
+    ui->SpdProfileBspd4->clear();
+    ui->SpdProfileBspd5->clear();
+    ui->SpdProfileBspd6->clear();
+    ui->SpdProfileBspd7->clear();
+    ui->SpdProfileBspd8->clear();
+    ui->SpdProfileBspd9->clear();
+    ui->SpdProfileBspd10->clear();
+    ui->SpdProfileBspd11->clear();
+    ui->SpdProfileTrvD1->clear();
+    ui->SpdProfileTrvD2->clear();
+    ui->SpdProfileTrvD3->clear();
+    ui->SpdProfileTrvD4->clear();
+    ui->SpdProfileTrvD5->clear();
+    ui->SpdProfileTrvD6->clear();
+    ui->SpdProfileTrvD7->clear();
+    ui->SpdProfileTrvD8->clear();
+    ui->SpdProfileTrvD9->clear();
+    ui->SpdProfileTrvD10->clear();
+    ui->SpdProfileTrvD11->clear();
+
     char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
     command[0] = (char)BluDataManager::BLU_NvM_ErrWeigthSensorDataReq;
 
@@ -1409,6 +1473,11 @@ void MainWindow::ReadNvMDataFromLineFollower()
     BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
     command[0] = (char)BluDataManager::BLU_NvM_EncoderModCfgReq;
+    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+    Helper.append("\n\r");
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+
+    command[0] = (char)BluDataManager::BLU_NvM_SpdProfileReq;
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
     BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
@@ -1513,6 +1582,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
 
         uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
         uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+        uint32_t isIrSensorEnabled = (uint32_t) ui->IrSensorCheckBox->isChecked();
 
         ////    qDebug() << "BlinkingLedsState" << BlinkingLedsState;
         ////    qDebug() << "TryDetEndLineMark" << TryDetEndLineMark;
@@ -1523,6 +1593,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
         std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
         std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
+        std::memcpy(&command[14], &isIrSensorEnabled, sizeof(uint32_t));
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
@@ -1577,6 +1648,74 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         /*********************************************************************************************************/
         /*********************************************************************************************************/
         /*********************************************************************************************************/
+        {
+            float SpdProfileBaseSpd[11];
+            float SpdProfileTrvDist[11];
+
+            QString SpdProfileBaseSpd1 = ui->SpdProfileBspd1->text();
+            QString SpdProfileBaseSpd2 = ui->SpdProfileBspd2->text();
+            QString SpdProfileBaseSpd3 = ui->SpdProfileBspd3->text();
+            QString SpdProfileBaseSpd4 = ui->SpdProfileBspd4->text();
+            QString SpdProfileBaseSpd5 = ui->SpdProfileBspd5->text();
+            QString SpdProfileBaseSpd6 = ui->SpdProfileBspd6->text();
+            QString SpdProfileBaseSpd7 = ui->SpdProfileBspd7->text();
+            QString SpdProfileBaseSpd8 = ui->SpdProfileBspd8->text();
+            QString SpdProfileBaseSpd9 = ui->SpdProfileBspd9->text();
+            QString SpdProfileBaseSpd10 = ui->SpdProfileBspd10->text();
+            QString SpdProfileBaseSpd11 = ui->SpdProfileBspd11->text();
+
+            QString SpdProfileBaseTrvD1 = ui->SpdProfileTrvD1->text();
+            QString SpdProfileBaseTrvD2 = ui->SpdProfileTrvD2->text();
+            QString SpdProfileBaseTrvD3 = ui->SpdProfileTrvD3->text();
+            QString SpdProfileBaseTrvD4 = ui->SpdProfileTrvD4->text();
+            QString SpdProfileBaseTrvD5=  ui->SpdProfileTrvD5->text();
+            QString SpdProfileBaseTrvD6 = ui->SpdProfileTrvD6->text();
+            QString SpdProfileBaseTrvD7 = ui->SpdProfileTrvD7->text();
+            QString SpdProfileBaseTrvD8 = ui->SpdProfileTrvD8->text();
+            QString SpdProfileBaseTrvD9 = ui->SpdProfileTrvD9->text();
+            QString SpdProfileBaseTrvD10 = ui->SpdProfileTrvD10->text();
+            QString SpdProfileBaseTrvD11 = ui->SpdProfileTrvD11->text();
+
+            SpdProfileBaseSpd[0] = SpdProfileBaseSpd1.toFloat();
+            SpdProfileBaseSpd[1] = SpdProfileBaseSpd2.toFloat();
+            SpdProfileBaseSpd[2] = SpdProfileBaseSpd3.toFloat();
+            SpdProfileBaseSpd[3] = SpdProfileBaseSpd4.toFloat();
+            SpdProfileBaseSpd[4] = SpdProfileBaseSpd5.toFloat();
+            SpdProfileBaseSpd[5] = SpdProfileBaseSpd6.toFloat();
+            SpdProfileBaseSpd[6] = SpdProfileBaseSpd7.toFloat();
+            SpdProfileBaseSpd[7] = SpdProfileBaseSpd8.toFloat();
+            SpdProfileBaseSpd[8] = SpdProfileBaseSpd9.toFloat();
+            SpdProfileBaseSpd[9] = SpdProfileBaseSpd10.toFloat();
+            SpdProfileBaseSpd[10] = SpdProfileBaseSpd11.toFloat();
+
+            SpdProfileTrvDist[0] = SpdProfileBaseTrvD1.toFloat();
+            SpdProfileTrvDist[1] = SpdProfileBaseTrvD2.toFloat();
+            SpdProfileTrvDist[2] = SpdProfileBaseTrvD3.toFloat();
+            SpdProfileTrvDist[3] = SpdProfileBaseTrvD4.toFloat();
+            SpdProfileTrvDist[4] = SpdProfileBaseTrvD5.toFloat();
+            SpdProfileTrvDist[5] = SpdProfileBaseTrvD6.toFloat();
+            SpdProfileTrvDist[6] = SpdProfileBaseTrvD7.toFloat();
+            SpdProfileTrvDist[7] = SpdProfileBaseTrvD8.toFloat();
+            SpdProfileTrvDist[8] = SpdProfileBaseTrvD9.toFloat();
+            SpdProfileTrvDist[9] = SpdProfileBaseTrvD10.toFloat();
+            SpdProfileTrvDist[10] = SpdProfileBaseTrvD11.toFloat();
+
+            uint32_t isSpdProfileEnabled = (uint32_t)ui->SpdProfileEnabled->isChecked();
+
+            command[0] = (char)BluDataManager::BLU_NvM_SpdProfileData;
+            command[1] = SyncID;
+            std::memcpy(&command[2                          ],&isSpdProfileEnabled, sizeof(isSpdProfileEnabled));
+            std::memcpy(&command[6                          ],&SpdProfileTrvDist, sizeof(SpdProfileTrvDist ));
+            std::memcpy(&command[6+sizeof(SpdProfileTrvDist)],&SpdProfileBaseSpd, sizeof(SpdProfileBaseSpd));
+
+            Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+            Helper.append("\n\r");
+            BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        }
+
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
 
 
         SyncID++;
@@ -1615,9 +1754,9 @@ void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()
 
 //    qDebug() << "NvM_BlinkLedSt" << NvM_BlinkLedSt;
 //    qDebug() << "NvM_TryDetEndLinSt" << NvM_TryDetEndLinSt;
-
-    (NvM_TryDetEndLinSt == 0)     ? ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
-    (NvM_BlinkLedSt == 0) ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
+    (NvM_isIrSensorEnabled== 0)?  ui->IrSensorCheckBox->setChecked(false) : ui->IrSensorCheckBox->setChecked(true);
+    (NvM_TryDetEndLinSt == 0)  ?  ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
+    (NvM_BlinkLedSt == 0)      ?  ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
 }
 
 void MainWindow::NvM_MotorsFactorsDataUpdateDelayTimerTimeout()
@@ -1632,6 +1771,35 @@ void MainWindow::NvM_EncodersConfigDataUpdateDelayTimerTimeout()
 {
     ui->TextWheelBase->setText(QString::number(NVM_WheelBase,'f',5) );
     ui->TextOneImpDist->setText(QString::number(NVM_OneImpulsDistance,'f',8) );
+}
+
+void MainWindow::NvM_ProfileSpeedConfigDataUpdateDelayTimerTimeout()
+{
+    (MW_NvM_SpdProfileData.EnabledFlag == 0) ? ui->SpdProfileEnabled->setChecked(false) : ui->SpdProfileEnabled->setChecked(true);
+
+    ui->SpdProfileBspd1->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[0],'f',2) );
+    ui->SpdProfileBspd2->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[1],'f',2) );
+    ui->SpdProfileBspd3->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[2],'f',2) );
+    ui->SpdProfileBspd4->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[3],'f',2) );
+    ui->SpdProfileBspd5->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[4],'f',2) );
+    ui->SpdProfileBspd6->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[5],'f',2) );
+    ui->SpdProfileBspd7->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[6],'f',2) );
+    ui->SpdProfileBspd8->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[7],'f',2) );
+    ui->SpdProfileBspd9->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[8],'f',2) );
+    ui->SpdProfileBspd10->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[9],'f',2) );
+    ui->SpdProfileBspd11->setText( QString::number(MW_NvM_SpdProfileData.BaseSpeedValue[10],'f',2) );
+
+    ui->SpdProfileTrvD1->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[0],'f',2) );
+    ui->SpdProfileTrvD2->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[1],'f',2) );
+    ui->SpdProfileTrvD3->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[2],'f',2) );
+    ui->SpdProfileTrvD4->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[3],'f',2) );
+    ui->SpdProfileTrvD5->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[4],'f',2) );
+    ui->SpdProfileTrvD6->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[5],'f',2) );
+    ui->SpdProfileTrvD7->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[6],'f',2) );
+    ui->SpdProfileTrvD8->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[7],'f',2) );
+    ui->SpdProfileTrvD9->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[8],'f',2) );
+    ui->SpdProfileTrvD10->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[9],'f',2) );
+    ui->SpdProfileTrvD11->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[10],'f',2) );
 }
 
 void MainWindow::on_ClearLoggerButton_clicked()
@@ -1758,7 +1926,8 @@ void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
 }
 
 
-void MainWindow::on_SavePlotData_pb_clicked()
+
+void MainWindow::on_SaveAppState_pb_clicked()
 {
     QString filter = "LfProject (*.lfp) ;; All files (*)";
     QString desktopPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
@@ -2071,7 +2240,11 @@ void MainWindow::LoadPlotDataFromLfProjectFileOrJson(QString FilePath)
     on_GeneraReplotAllPlots_pb_clicked();
 }
 
-void MainWindow::on_LoadPlotData_pb_clicked()
+
+
+
+
+void MainWindow::on_LoadProject_pb_clicked()
 {
     QString filter = "LfProject (*.lfp) ;; All files (*)";
     QString desktopPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));

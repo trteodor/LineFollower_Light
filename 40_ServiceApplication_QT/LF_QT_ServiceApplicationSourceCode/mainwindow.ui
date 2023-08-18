@@ -506,16 +506,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="SavePlotData_pb">
+       <widget class="QPushButton" name="SaveAppState_pb">
         <property name="text">
-         <string>SavePlotsData</string>
+         <string>SaveAs..</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="LoadPlotData_pb">
+       <widget class="QPushButton" name="LoadProject_pb">
         <property name="text">
-         <string>LoadPlotsData</string>
+         <string>Load</string>
         </property>
        </widget>
       </item>
@@ -1728,19 +1728,6 @@ color: rgb(255, 255, 255);</string>
           </item>
          </layout>
         </widget>
-        <widget class="QLabel" name="label_8">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>90</y>
-           <width>121</width>
-           <height>61</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Not Supported Yet</string>
-         </property>
-        </widget>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -2150,11 +2137,11 @@ color: rgb(255, 255, 255);</string>
  <tabstops>
   <tabstop>DebugDataTable</tabstop>
   <tabstop>GeneraReplotAllPlots_pb</tabstop>
-  <tabstop>SavePlotData_pb</tabstop>
+  <tabstop>SaveAppState_pb</tabstop>
   <tabstop>GeneralPlotDataClear_pb</tabstop>
   <tabstop>MainTabWidget</tabstop>
   <tabstop>BLU_DetectedDeviceComboBox</tabstop>
-  <tabstop>LoadPlotData_pb</tabstop>
+  <tabstop>LoadProject_pb</tabstop>
   <tabstop>PlotWidgetTab1</tabstop>
   <tabstop>tabWidget_4</tabstop>
  </tabstops>

@@ -59,9 +59,10 @@ private slots:
 
 
     void MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_t ProbeTime);
-    void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin);
+    void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled);
 
     void MainWin_UpdateEncoderCfgData(float OneImpDist, float WheelBase);
+    void MainWin_UpdateSpeedProfileData(BluDataManager::BLU_NvM_SpdProfileData_t SpdProfileData);
     void MainWin_UpdateMotorsFactors(uint32_t FacA_Lft, uint32_t FacA_Rgt,uint32_t FacB_Lft,uint32_t FacB_Rht);
 
     void MainWin_RefreshErrorIndicatorView( uint8_t S0,uint8_t S1,uint8_t S2,uint8_t S3,uint8_t S4,uint8_t S5,
@@ -117,6 +118,7 @@ private slots:
     void NvM_VehCfgDataUpdateDelayTimerTimeout();
     void NvM_MotorsFactorsDataUpdateDelayTimerTimeout();
     void NvM_EncodersConfigDataUpdateDelayTimerTimeout();
+    void NvM_ProfileSpeedConfigDataUpdateDelayTimerTimeout();
 
     void on_GeneraReplotAllPlots_pb_clicked();
 
@@ -134,9 +136,9 @@ private slots:
 
     void on_RemoveMarkers_pb_clicked();
 
-    void on_SavePlotData_pb_clicked();
+    void on_SaveAppState_pb_clicked();
 
-    void on_LoadPlotData_pb_clicked();
+    void on_LoadProject_pb_clicked();
 
 signals:
     void MainWin_bluetoothSignalStartDiscoveryDevices(void);
@@ -152,6 +154,7 @@ private:
 
     QTimer NvM_EncoderCfgUpdateDelayTimer;
     QTimer NvM_MotorsFactorsUpdateDelayTimer;
+    QTimer NvM_SpeedProfileUpdateDelayTimer;
 
     float  NVM_ErrWeitghtsTabHolder[12];
 
@@ -163,7 +166,7 @@ private:
     float  NvM_ExpectedAvSpeed;
     uint32_t  NvM_BlinkLedSt;
     uint32_t  NvM_TryDetEndLinSt;
-
+    uint32_t  NvM_isIrSensorEnabled;
 
 
     float  NVM_OneImpulsDistance;
@@ -173,6 +176,9 @@ private:
     uint32_t  NvM_FacA_Rgt;
     uint32_t  NvM_FacB_Lft;
     uint32_t  NvM_FacB_Rht;
+
+    BluDataManager::BLU_NvM_SpdProfileData_t MW_NvM_SpdProfileData;
+
 
     QList<QString> FoundDevices;
     BluDataManager BluInputDataProcessingWrapper;
@@ -184,7 +190,7 @@ private:
     void RefreshErrorIndicatorView(void);
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
     void LoadPlotDataFromLfProjectFileOrJson(QString FilePath);
-
+    void ConfigureTextLineAndNvMConnections(void);
 
     GenericLfQCP PlotMap;
     GenericLfQCP PlotYawRate;

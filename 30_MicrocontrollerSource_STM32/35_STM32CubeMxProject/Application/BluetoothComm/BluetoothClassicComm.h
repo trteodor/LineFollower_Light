@@ -81,6 +81,9 @@ typedef enum
 	BLU_NvM_EncoderModCfgReq,
     BLU_NvM_EncoderModCfgData,
 
+	BLU_NvM_SpdProfileReq,
+    BLU_NvM_SpdProfileData,
+
 	BLU_NvM_ManualCntrlCommand,/* Virutal analog controller frame */
 
     BLU_SetNewRobotName,
@@ -117,7 +120,7 @@ typedef struct
 typedef struct
 {
     float LinePidRegVal;
-}__attribute__((__packed__)) BLE_PidRegData_t; /*Current size= 4*/
+}__attribute__((__packed__)) BLU_PidRegData_t; /*Current size= 4*/
 
 typedef struct
 {
@@ -125,7 +128,7 @@ typedef struct
     uint32_t ucTimeStamp; //5
     BLU_MapDataReport_t CurrMapData; /*33*/
     BLU_SensorDataReport_t CurrSensorData; /*51*/
-    BLE_PidRegData_t LinePidRegData; /*55*/
+    BLU_PidRegData_t LinePidRegData; /*55*/
 }__attribute__((__packed__)) BLU_LfDataReport_t;/*55bytes total size*/
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -159,8 +162,15 @@ typedef struct
 	float ExpectedAvSpeed;
 	uint8_t BlinkLedState;
 	uint8_t TryDetectEndLineMark;
+	uint8_t IrSensorIsEnabled;
 }BLU_NvM_VehCfgData_t; /*Current size 6*4 = 24*/
 
+typedef struct
+{
+	uint32_t EnabledFlag;
+	float TrvDistance[11];
+	float BaseSpeedValue[11];
+}BLU_NvM_SpdProfileData_t ;
 
 typedef struct
 {
@@ -170,7 +180,9 @@ typedef struct
 	uint16_t RingBufferOverFlowCounter;
 	uint16_t TransmisstedMessagesCounter;
 	uint16_t RetransmissionCounter;
-}BLE_StatisticData_t ;
+}BLU_StatisticData_t ;
+
+
 
 
 /*

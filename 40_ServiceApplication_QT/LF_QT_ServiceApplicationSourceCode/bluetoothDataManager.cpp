@@ -43,7 +43,7 @@ float ieee_uint32_AsBitsTo_float32(uint32_t f)
 void BluDataManager::BluDatMngr_CommunicationStatistics_Handler(char *data,uint32_t Size)
 {
     (void)Size;
-    static BluDataManager::BLE_StatisticData_t StatisticData = {0};
+    static BLU_StatisticData_t StatisticData = {0};
     static uint8_t PreviousSyncId = 255U;
 
 //    qDebug() << "StatisticHandler SyncId" <<  ((uint8_t)value.at(1)) ;
@@ -232,6 +232,7 @@ void BluDataManager::BluDatMngr_BaseDataHandler(char *data,uint32_t Size)
 
 void BluDataManager::BluDatMngr_ErrorWeigthDataHandler(char *data,uint32_t Size)
 {
+    (void)Size;
 
     static uint32_t PrevSyncId = 255U;
 
@@ -283,7 +284,7 @@ void BluDataManager::BluDatMngr_ErrorWeigthDataHandler(char *data,uint32_t Size)
 }
 
 
-void BluDataManager::BluDatMngr_DebugMessagerHandler(char *data,uint32_t size, BluDataManager::BLU_MessageID_t BLE_MessID)
+void BluDataManager::BluDatMngr_DebugMessagerHandler(char *data,uint32_t size, BLU_MessageID_t BLE_MessID)
 {
     (void )BLE_MessID;
     (void)size;
@@ -332,10 +333,11 @@ void BluDataManager::BluDatMngr_VehCfgDataHandler( char* data, uint32_t Size)
     float ExpAvSpd                = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[2]));
     uint32_t BlinkSt              = ConvToUint32(&data[6]);
     uint32_t TryDetEndLineMark    = ConvToUint32(&data[10]);
+    uint32_t IrSensorIsEnabled    = ConvToUint32(&data[14]);
 
 //    qDebug() << "BlinkSt:" << BlinkSt << "TryDetEndLineMark:" << TryDetEndLineMark;
 
-    emit BluDatMngrSignal_UpdateVehCfgData(ExpAvSpd,BlinkSt,TryDetEndLineMark);
+    emit BluDatMngrSignal_UpdateVehCfgData(ExpAvSpd,BlinkSt,TryDetEndLineMark,IrSensorIsEnabled);
 }
 
 void BluDataManager::BluDatMngr_MotorsFactorsDataHandler( char* data, uint32_t Size)
@@ -354,6 +356,14 @@ void BluDataManager::BluDatMngr_EncodersCfgDataHandler( char* data, uint32_t Siz
     float OneImpDist    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[2]));
     float WheelBase    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[6]));
     emit BluDatMngrSignal_UpdateEncoderCfgData(OneImpDist,WheelBase);
+}
+
+void BluDataManager::BluDatMngr_SpeedProfileHandler( char* data, uint32_t Size)
+{
+    (void)Size;
+    BLU_NvM_SpdProfileData_t SpdProfileData;
+    memcpy(&SpdProfileData,&data[2],sizeof(BLU_NvM_SpdProfileData_t) );
+    emit BluDatMngrSignal_UpdateSpeedProfileData(SpdProfileData);
 }
 
 void BluDataManager::BluDatMngr_InputHanlder( char* data, uint32_t Size)
@@ -408,12 +418,18 @@ void BluDataManager::BluDatMngr_InputHanlder( char* data, uint32_t Size)
             break;
         }
 
+        case BLU_MessageID_t::BLU_NvM_SpdProfileData:
+        {
+            BluDatMngr_SpeedProfileHandler(data,BLU_MessageID);
+            break;
+        }
 
         case BLU_MessageID_t::BLU_DebugMessage:
         {
             BluDatMngr_DebugMessagerHandler(data,Size,BLU_MessageID);
             break;
         }
+
 
 
         default:

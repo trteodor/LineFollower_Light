@@ -376,7 +376,7 @@ static BLU_CallStatus_t TransmitErrorWeigthData(void)
 
 static BLU_CallStatus_t TransmitPidData(void)
 {
-	uint8_t DataBuffer[20] = {0};
+	uint8_t DataBuffer[BLU_SINGLE_MESSAGE_SIZE] = {0};
 	static uint8_t _SyncID = 0;
 
 	BLU_CallStatus_t retval = BLU_Ok;
@@ -409,25 +409,26 @@ static BLU_CallStatus_t TransmitPidData(void)
 
 static BLU_CallStatus_t TransmitVehCfgData(void)
 {
-	uint8_t DataBuffer[20] = {0};
+	uint8_t DataBuffer[BLU_SINGLE_MESSAGE_SIZE] = {0};
 	static uint8_t _SyncID = 0;
 
 	BLU_CallStatus_t retval = BLU_Ok;
 
 	float BaseMSpd;
-	uint32_t BlinkLedSt,TryDetEndLineMFlag;
+	uint32_t BlinkLedSt,TryDetEndLineMFlag, isIrSensorEnabled;
 
 	/***********************************************************************/
 	EE_ReadVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, &BaseMSpd);
 	EE_ReadVariableU32(EE_NvmAddr_BlinkLadeState_U32, &BlinkLedSt);
 	EE_ReadVariableU32(EE_NvmAddr_TryDetectEndLine_U32, &TryDetEndLineMFlag);
-
+	EE_ReadVariableU32(EE_NvmAddr_IrSensorState_U32, &isIrSensorEnabled);
 
 	DataBuffer[0] = BLU_NvM_VehCfgData;
 	DataBuffer[1] = _SyncID;
 	memcpy(&DataBuffer[2],&BaseMSpd,4);
 	memcpy(&DataBuffer[6],&BlinkLedSt,4);
 	memcpy(&DataBuffer[10],&TryDetEndLineMFlag,4);
+	memcpy(&DataBuffer[14],&isIrSensorEnabled,4);
 
 	if(RB_Transmit_Write(&BluMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLU_SINGLE_MESSAGE_SIZE) != RB_OK)
 	{
@@ -441,7 +442,7 @@ static BLU_CallStatus_t TransmitVehCfgData(void)
 
 static BLU_CallStatus_t TransmitMotorFactorsData(void)
 {
-	uint8_t DataBuffer[20] = {0};
+	uint8_t DataBuffer[BLU_SINGLE_MESSAGE_SIZE] = {0};
 	static uint8_t _SyncID = 0;
 
 	BLU_CallStatus_t retval = BLU_Ok;
@@ -475,7 +476,7 @@ static BLU_CallStatus_t TransmitMotorFactorsData(void)
 
 static BLU_CallStatus_t TransmitEncoderData(void)
 {
-	uint8_t DataBuffer[20] = {0};
+	uint8_t DataBuffer[BLU_SINGLE_MESSAGE_SIZE] = {0};
 	static uint8_t _SyncID = 0;
 
 	BLU_CallStatus_t retval = BLU_Ok;
@@ -503,6 +504,84 @@ static BLU_CallStatus_t TransmitEncoderData(void)
 	_SyncID++;
 	return retval;
 }
+
+void TransmitSpeedProfileData(void)
+{
+		BLU_NvM_SpdProfileData_t NewSpeedProfileData;
+		uint8_t DataBuffer[BLU_SINGLE_MESSAGE_SIZE] = {0};
+		static uint8_t _SyncID = 0;
+
+
+		EE_ReadVariableU32(EE_NvmAddr_SpProfileEnableFlag_U32,&NewSpeedProfileData.EnabledFlag);
+
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD01_F32, &NewSpeedProfileData.TrvDistance[0]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD02_F32, &NewSpeedProfileData.TrvDistance[1]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD03_F32, &NewSpeedProfileData.TrvDistance[2]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD04_F32, &NewSpeedProfileData.TrvDistance[3]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD05_F32, &NewSpeedProfileData.TrvDistance[4]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD06_F32, &NewSpeedProfileData.TrvDistance[5]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD07_F32, &NewSpeedProfileData.TrvDistance[6]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD08_F32, &NewSpeedProfileData.TrvDistance[7]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD09_F32, &NewSpeedProfileData.TrvDistance[8]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD10_F32, &NewSpeedProfileData.TrvDistance[9]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD11_F32, &NewSpeedProfileData.TrvDistance[10]);
+
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp01_F32, &NewSpeedProfileData.BaseSpeedValue[0]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp02_F32, &NewSpeedProfileData.BaseSpeedValue[1]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp03_F32, &NewSpeedProfileData.BaseSpeedValue[2]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp04_F32, &NewSpeedProfileData.BaseSpeedValue[3]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp05_F32, &NewSpeedProfileData.BaseSpeedValue[4]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp06_F32, &NewSpeedProfileData.BaseSpeedValue[5]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp07_F32, &NewSpeedProfileData.BaseSpeedValue[6]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp08_F32, &NewSpeedProfileData.BaseSpeedValue[7]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp09_F32, &NewSpeedProfileData.BaseSpeedValue[8]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp10_F32, &NewSpeedProfileData.BaseSpeedValue[9]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp11_F32, &NewSpeedProfileData.BaseSpeedValue[10]);
+
+
+		DataBuffer[0] = BLU_NvM_SpdProfileData;
+		DataBuffer[1] = _SyncID;
+		memcpy(&DataBuffer[2],&NewSpeedProfileData,sizeof(BLU_NvM_SpdProfileData_t));
+
+
+		if(RB_Transmit_Write(&BluMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLU_SINGLE_MESSAGE_SIZE) != RB_OK)
+		{
+			LogDroppedFlag = true;
+		}
+
+		_SyncID++;
+}
+
+void ReceiveSpeedProfileData(BLU_NvM_SpdProfileData_t *NewSpeedProfileData)
+{
+		EE_WriteVariableU32(EE_NvmAddr_SpProfileEnableFlag_U32,NewSpeedProfileData->EnabledFlag);
+
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD01_F32, NewSpeedProfileData->TrvDistance[0]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD02_F32, NewSpeedProfileData->TrvDistance[1]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD03_F32, NewSpeedProfileData->TrvDistance[2]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD04_F32, NewSpeedProfileData->TrvDistance[3]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD05_F32, NewSpeedProfileData->TrvDistance[4]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD06_F32, NewSpeedProfileData->TrvDistance[5]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD07_F32, NewSpeedProfileData->TrvDistance[6]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD08_F32, NewSpeedProfileData->TrvDistance[7]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD09_F32, NewSpeedProfileData->TrvDistance[8]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD10_F32, NewSpeedProfileData->TrvDistance[9]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileD11_F32, NewSpeedProfileData->TrvDistance[10]);
+
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp01_F32, NewSpeedProfileData->BaseSpeedValue[0]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp02_F32, NewSpeedProfileData->BaseSpeedValue[1]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp03_F32, NewSpeedProfileData->BaseSpeedValue[2]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp04_F32, NewSpeedProfileData->BaseSpeedValue[3]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp05_F32, NewSpeedProfileData->BaseSpeedValue[4]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp06_F32, NewSpeedProfileData->BaseSpeedValue[5]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp07_F32, NewSpeedProfileData->BaseSpeedValue[6]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp08_F32, NewSpeedProfileData->BaseSpeedValue[7]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp09_F32, NewSpeedProfileData->BaseSpeedValue[8]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp10_F32, NewSpeedProfileData->BaseSpeedValue[9]);
+		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp11_F32, NewSpeedProfileData->BaseSpeedValue[10]);
+}
+
+
 
 
 static void Statistics_CreateAndTransmitCommunicationStatistics(void)
@@ -764,20 +843,18 @@ static void ReceiveDataHandler(void)
 				case BLU_NvM_VehCfgData:
 				{
 					static float BaseMotSpd  = 0.0F;
-					static uint32_t LedState = 0U, TryDetEndLine = 0U;
+					static uint32_t LedState = 0U, TryDetEndLine = 0U,isIrSensorEnabled=0U;
 
 	    			memcpy(&BaseMotSpd,  &ReceivedMessageBuff[2], sizeof(float));
 	    			memcpy(&LedState,  &ReceivedMessageBuff[6], sizeof(uint32_t));
 					memcpy(&TryDetEndLine,  &ReceivedMessageBuff[10], sizeof(uint32_t));
+					memcpy(&isIrSensorEnabled,  &ReceivedMessageBuff[14], sizeof(uint32_t));
 
 					EE_WriteVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, BaseMotSpd);
+					EE_WriteVariableU32(EE_NvmAddr_BlinkLadeState_U32, LedState);
+					EE_WriteVariableU32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
+					EE_WriteVariableU32(EE_NvmAddr_IrSensorState_U32, isIrSensorEnabled);
 
-					if(LedState == 0 || LedState == 1){
-						EE_WriteVariableU32(EE_NvmAddr_BlinkLadeState_U32, LedState);
-					}
-					if(TryDetEndLine ==0 || TryDetEndLine == 1){
-						EE_WriteVariableU32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
-					}
 					NvmDataUpdatedFlag= true;
 					// BLU_DbgMsgTransmit("Received BaseMotSpd: %f, LedSt %d, EndLMark %d",
 					// 		BaseMotSpd,LedState,TryDetEndLine );
@@ -885,6 +962,22 @@ static void ReceiveDataHandler(void)
 					break;
 				}
 
+				case BLU_NvM_SpdProfileReq:
+				{
+					TransmitSpeedProfileData();
+					break;
+				}
+
+				case BLU_NvM_SpdProfileData:
+				{
+					BLU_NvM_SpdProfileData_t SpdProfileNvmData;
+					memcpy(&SpdProfileNvmData , &ReceivedMessageBuff[2], sizeof(BLU_NvM_SpdProfileData_t) );
+
+					ReceiveSpeedProfileData(&SpdProfileNvmData);
+					NvmDataUpdatedFlag= true;
+					break;
+				}
+
 				case BLU_SetNewRobotName:
 				{
 					uint32_t AuxilaryNameVar1 = 0;
@@ -943,6 +1036,7 @@ static void ReceiveDataHandler(void)
 
 
 }
+
 
 
 static void TransmitDataHandler(void)
