@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    this->setWindowTitle("LineFollower QT ServApp");
+    this->setWindowTitle("Line Follower Ligth QT Service Application");
 
 
     /*All declared plots/ graph must be initialized!!!*/
@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*Debug Table configure*/
-    ui->DebugDataTable->setRowCount(1);
+    ui->DebugDataTable->setRowCount(0);
     ui->DebugDataTable->setColumnWidth(0,10);
     ui->DebugDataTable->setColumnWidth(1,10);
     ui->DebugDataTable->setColumnWidth(2,10);
@@ -98,11 +98,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     if(qApp->arguments().count() > 1  && qApp->arguments().at(1).endsWith(".lfp") ==true)
     {
-//        qDebug() << "AA";
         CurrentLfProjectFilePath = qApp->arguments().at(1);
-        LoadDataLineFollowerProjecrOrJson(CurrentLfProjectFilePath);
-        QString LoadedProjectInfo = QString("StartupProjectPath: %1").arg(CurrentLfProjectFilePath);
+        QString LoadedProjectInfo = QString("DataLoadedFromProjectFile: %1").arg(CurrentLfProjectFilePath);
         MainWin_DebugTable_InsertDataRow(0, 0, 0, LoadedProjectInfo);
+
+        LoadDataLineFollowerProjecrOrJson(CurrentLfProjectFilePath);
     }
 }
 
@@ -328,7 +328,12 @@ void MainWindow::MainWin_bluetoothSlotConnectionEstablished(void)
     ui->BLU_StatusLabel->setAutoFillBackground(true);
     ui->BLU_StatusLabel->setStyleSheet("QLabel { background-color :"+colcode+" ; color : black; }");
 
-    ReadNvMDataFromLineFollower();
+    if(false == NvM_DataLoadedFromExternalSourceFlag)
+    {
+        NvM_DataLoadedFromExternalSourceFlag = true;
+        ReadNvMDataFromLineFollower();
+    }
+
 }
 
 void MainWindow::MainWin_bluetoothSlotConnectionInterrupted(void)
@@ -1332,6 +1337,8 @@ void MainWindow::MainWin_DrawOrientationIndicator(float Orientation)
 
 void MainWindow::on_BLU_SimulatorStartButton_clicked()
 {
+    on_GeneralPlotDataClear_pb_clicked(); /*clear plot data...*/
+
     char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {0};
 
     command[0] = (char)BluDataManager::BLU_SimulatorStart;
@@ -1344,6 +1351,8 @@ void MainWindow::on_BLU_SimulatorStartButton_clicked()
     QByteArray Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
     BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+
+
 }
 /*********************************************************************************************************/
 void MainWindow::on_BLU_SimulatorSuspendButton_clicked()
@@ -1838,6 +1847,8 @@ void MainWindow::on_BLU_RobotStop_Button_clicked()
 
 void MainWindow::on_BLU_RobotStart_Button_clicked()
 {
+        on_GeneralPlotDataClear_pb_clicked(); /*clear plot data...*/
+
         on_BLU_SimulatorSuspendButton_clicked();
         on_BLU_TrueLogStartButton_clicked();
 
@@ -1859,7 +1870,7 @@ void MainWindow::on_BLU_RobotStart_Button_clicked()
         command[1] = 0; //SyncID
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
-        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);        
 }
 
 void MainWindow::on_UpdateExpectedAvSpd_clicked()
@@ -2053,7 +2064,6 @@ void MainWindow::on_SaveAppState_pb_clicked()
         }
         object["PlotMap_PosY"] = PlotMapPosY_JsArr;
     }
-
     {
 
         QJsonArray NvM_Data_JsArr;
@@ -2230,13 +2240,34 @@ void MainWindow::on_SaveAppState_pb_clicked()
 
 
         object["NvmData"] = NvM_Data_JsArr;
-
-
     }
+    {
+        QJsonArray DebugDataTable_JsArr;
 
+        for(int i=0; i< ui->DebugDataTable->rowCount(); i++)
+        {
+            QTableWidgetItem *Cell_rowI_Cell0_sysTime      = (ui->DebugDataTable->item(i,0) );
+            QTableWidgetItem *Cell_rowI_Cell1_ucTimeStamp  = (ui->DebugDataTable->item(i,1) );
+            QTableWidgetItem *Cell_rowI_Cell2_FrameCounter = (ui->DebugDataTable->item(i,2) );
+            QTableWidgetItem *Cell_rowI_Cell3_SyncId       = (ui->DebugDataTable->item(i,3) );
+            QTableWidgetItem *Cell_rowI_Cell4_Data         = (ui->DebugDataTable->item(i,4) );
+
+            QJsonObject RowData;
+            RowData["sysTime"]= Cell_rowI_Cell0_sysTime ? Cell_rowI_Cell0_sysTime->text() : 0;
+            RowData["ucTimeStamp"]= Cell_rowI_Cell1_ucTimeStamp ? Cell_rowI_Cell1_ucTimeStamp->text() : 0;
+            RowData["FrameCounter"]= Cell_rowI_Cell2_FrameCounter ? Cell_rowI_Cell2_FrameCounter->text() : 0;
+            RowData["SyncId"]= Cell_rowI_Cell3_SyncId ? Cell_rowI_Cell3_SyncId->text() : 0;
+            RowData["Data"]= Cell_rowI_Cell4_Data ? Cell_rowI_Cell4_Data->text() : 0;
+
+            DebugDataTable_JsArr.append(RowData);
+        }
+
+        object["mDebugDataLogger"] = DebugDataTable_JsArr;
+    }
     saveFile.write(QJsonDocument(object).toJson() );
 
-    qDebug() << "Sucessfully saved Json file";
+    QString MessageBoxString = QString("Sucessfully saved \n NvM Data \n Plot Data \n Logger Table Data \n to file:\n %1").arg(file_name);
+    QMessageBox::about(this,"Success!", MessageBoxString);
 }
 
 void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
@@ -2465,10 +2496,32 @@ void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
             }
 
         }
+        {
+            QJsonArray DebugDataTable_JsArr = loadDoc.object()["mDebugDataLogger"].toArray();
+
+            for (const QJsonValue &v : DebugDataTable_JsArr)
+            {
+                QJsonObject DataRow_json = v.toObject();
+                QString sysTime = DataRow_json["sysTime"].toString();
+                uint32_t ucTimeStamp = DataRow_json["ucTimeStamp"].toInt();
+                uint32_t FrameCounter = DataRow_json["FrameCounter"].toInt();
+                uint32_t SyncId = DataRow_json["SyncId"].toInt();
+                QString DataString = DataRow_json["Data"].toString();
+
+                ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,0,new QTableWidgetItem((QString)sysTime.data() ) );
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,1,new QTableWidgetItem(QString::number(ucTimeStamp) ));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,2,new QTableWidgetItem(QString::number(FrameCounter) ));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,3,new QTableWidgetItem(QString::number(SyncId)));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem((QString)DataString.data() ) );
+            }
+
+        }
+
 
     }
 
-
+    NvM_DataLoadedFromExternalSourceFlag = true;
     on_GeneraReplotAllPlots_pb_clicked();
 }
 
@@ -2482,5 +2535,22 @@ void MainWindow::on_LoadProject_pb_clicked()
     QString desktopPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     QString file_name = QFileDialog::getOpenFileName(this,"choose file to overwrite",desktopPath,filter);
     LoadDataLineFollowerProjecrOrJson(file_name);
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QString MessageBoxString = QString("This is Line Follower Service application Release 1.1 \n"
+                                       "\nAuthor: Teodor Rosolowski \n"
+                                       "\nAppSite: github.com/trteodor/LineFollower_Light \n"
+                                       "\nCreated using QT Framework 6.5 and QT Creator 10.0.2"
+                                       "\n"
+                                       "\n Feel free to use the App in your project!\n"
+                                       "\nIf you liked this application please let me star in a git repo\n"
+                                       "\n"
+                                       "\nRed plots are associated with left side\n"
+                                       ""
+                                       "");
+
+    QMessageBox::about(this,"About Line Follower Service App", MessageBoxString);
 }
 

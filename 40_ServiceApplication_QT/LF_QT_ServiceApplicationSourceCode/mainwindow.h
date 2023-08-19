@@ -140,6 +140,8 @@ private slots:
 
     void on_LoadProject_pb_clicked();
 
+    void on_actionAbout_triggered();
+
 signals:
     void MainWin_bluetoothSignalStartDiscoveryDevices(void);
     void MainWin_bluetoothDisconnect(void);
@@ -148,6 +150,8 @@ signals:
 private:
     Ui::MainWindow *ui;
 
+    bool  NvM_DataLoadedFromExternalSourceFlag = false;
+
     QTimer NvM_ErrWeigthUpdateDelayTimer;
     QTimer NvM_PidDatahUpdateDelayTimer;
     QTimer NvM_VehCfghUpdateDelayTimer;
@@ -155,6 +159,8 @@ private:
     QTimer NvM_EncoderCfgUpdateDelayTimer;
     QTimer NvM_MotorsFactorsUpdateDelayTimer;
     QTimer NvM_SpeedProfileUpdateDelayTimer;
+
+
 
     float  NVM_ErrWeitghtsTabHolder[12];
 
