@@ -113,6 +113,7 @@ void bluetoothClassic::bluetoothSocketReadyToRead(void)
   while(bluetoothClassicSocket->bytesAvailable() >99 ) {
         static char Data[5000] = {0};
         uint32_t Size = bluetoothClassicSocket->read(&Data[0],100);
+        (void)Size;
         emit bluetoothSignalNewDataReceived(Data,100);
 
 //        qDebug() << "SyncID:" << (uint8_t)Data[1] << "Size:" << Size <<"FullFramesCount:" << FullFramesCount;

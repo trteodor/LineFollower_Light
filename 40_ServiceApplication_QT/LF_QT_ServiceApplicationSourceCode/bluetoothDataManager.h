@@ -139,8 +139,6 @@ public:
         uint16_t RetransmissionCounter;
     }BLU_StatisticData_t ;
 
-
-
     BLU_LfDataReport_t FullBaseData;
 
 

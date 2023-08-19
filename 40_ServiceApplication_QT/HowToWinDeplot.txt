@@ -1,0 +1,1 @@
+windeployqt.exe --qmldir "...\VirtualJoystickQML" "...\Release_1.1"

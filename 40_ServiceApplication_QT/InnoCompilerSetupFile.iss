@@ -4,7 +4,7 @@
 #define MyAppName "LF_ServiceApp"
 #define MyAppVersion "1.1"
 #define MyAppPublisher "Teodor Rosolowski"
-#define MyAppURL "https://github.com/trteodor/LineFollower_Light"
+#define MyAppURL "github.com/trteodor/LineFollower_Light"
 #define MyAppExeName "LF_ServiceApplication.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".lfp"
@@ -13,7 +13,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{D8FB9048-F47C-4746-9612-9EDBA48365B9}
+AppId={{B6C77B32-4DBA-4CB3-BFCA-3F2791F77488}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -28,7 +28,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT
-OutputBaseFilename=LF_ServApp_1.1
+OutputBaseFilename=LF_ServiceApp_1.1_Installer
 SetupIconFile=E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT\LF_QT_ServiceApplicationSourceCode\LfProjectApp.ico
 Compression=lzma
 SolidCompression=yes

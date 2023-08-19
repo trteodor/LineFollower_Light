@@ -270,13 +270,13 @@ void GenericLfQCP::LfGraph_ClearData(void)
     SelectedPointMarkerGraphY->setData(DataVector_PointY_x,DataVector_PointY_y);
     SelectedPointMarkerGraphX->setData(DataVector_PointX_x,DataVector_PointX_y);
 
-    UIplotP->xAxis->setRange
-        ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
-         *std::max_element(DataVector_X1.begin(),DataVector_X1.end() ) +1);
+//    UIplotP->xAxis->setRange
+//        ( *std::min_element(DataVector_X1.begin(),DataVector_X1.end() ) -1,
+//         *std::max_element(DataVector_X1.begin(),DataVector_X1.end() ) +1);
 
-    UIplotP->yAxis->setRange
-        (  *std::min_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) -1,
-         *std::max_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) +2 );
+//    UIplotP->yAxis->setRange
+//        (  *std::min_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) -1,
+//         *std::max_element(DataVector_Y1.begin() ,DataVector_Y1.end() ) +2 );
 
     UIplotP->replot();
     UIplotP->update();
