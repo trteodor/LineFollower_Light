@@ -100,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent)
     {
 //        qDebug() << "AA";
         CurrentLfProjectFilePath = qApp->arguments().at(1);
-        LoadPlotDataFromLfProjectFileOrJson(CurrentLfProjectFilePath);
+        LoadDataLineFollowerProjecrOrJson(CurrentLfProjectFilePath);
         QString LoadedProjectInfo = QString("StartupProjectPath: %1").arg(CurrentLfProjectFilePath);
         MainWin_DebugTable_InsertDataRow(0, 0, 0, LoadedProjectInfo);
     }
@@ -1802,13 +1802,14 @@ void MainWindow::NvM_ProfileSpeedConfigDataUpdateDelayTimerTimeout()
     ui->SpdProfileTrvD11->setText( QString::number(MW_NvM_SpdProfileData.TrvDistance[10],'f',2) );
 }
 
+
+
+
 void MainWindow::on_ClearLoggerButton_clicked()
 {
         ui->DebugDataTable->clearContents();
         ui->DebugDataTable->setRowCount(0);
 }
-
-
 
 void MainWindow::on_BLU_RobotStop_Button_clicked()
 {
@@ -1834,7 +1835,6 @@ void MainWindow::on_BLU_RobotStop_Button_clicked()
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
-
 
 void MainWindow::on_BLU_RobotStart_Button_clicked()
 {
@@ -1862,7 +1862,6 @@ void MainWindow::on_BLU_RobotStart_Button_clicked()
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
-
 void MainWindow::on_UpdateExpectedAvSpd_clicked()
 {
         QString ExpectedAvSpdText = ui->ExpectedAvSpdText->text();
@@ -1885,9 +1884,6 @@ void MainWindow::on_UpdateExpectedAvSpd_clicked()
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
 }
-
-
-
 
 void MainWindow::on_UpdateLfNameButton_clicked()
 {
@@ -1912,7 +1908,6 @@ void MainWindow::on_UpdateLfNameButton_clicked()
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 }
 
-
 void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
 {
     PlotPosErr.LfGraph_UpdateReplot();
@@ -1924,8 +1919,6 @@ void MainWindow::on_GeneraReplotAllPlots_pb_clicked()
     PlotOrientation.LfGraph_UpdateReplot();
     PlotLinePosConfidence.LfGraph_UpdateReplot();
 }
-
-
 
 void MainWindow::on_SaveAppState_pb_clicked()
 {
@@ -2061,14 +2054,192 @@ void MainWindow::on_SaveAppState_pb_clicked()
         object["PlotMap_PosY"] = PlotMapPosY_JsArr;
     }
 
+    {
+
+        QJsonArray NvM_Data_JsArr;
+        QJsonObject DataToStore;
+
+        float SpdProfileBaseSpd[11];
+        float SpdProfileTrvDist[11];
+
+        QString SpdProfileBaseSpd1 = ui->SpdProfileBspd1->text();
+        QString SpdProfileBaseSpd2 = ui->SpdProfileBspd2->text();
+        QString SpdProfileBaseSpd3 = ui->SpdProfileBspd3->text();
+        QString SpdProfileBaseSpd4 = ui->SpdProfileBspd4->text();
+        QString SpdProfileBaseSpd5 = ui->SpdProfileBspd5->text();
+        QString SpdProfileBaseSpd6 = ui->SpdProfileBspd6->text();
+        QString SpdProfileBaseSpd7 = ui->SpdProfileBspd7->text();
+        QString SpdProfileBaseSpd8 = ui->SpdProfileBspd8->text();
+        QString SpdProfileBaseSpd9 = ui->SpdProfileBspd9->text();
+        QString SpdProfileBaseSpd10 = ui->SpdProfileBspd10->text();
+        QString SpdProfileBaseSpd11 = ui->SpdProfileBspd11->text();
+
+        QString SpdProfileBaseTrvD1 = ui->SpdProfileTrvD1->text();
+        QString SpdProfileBaseTrvD2 = ui->SpdProfileTrvD2->text();
+        QString SpdProfileBaseTrvD3 = ui->SpdProfileTrvD3->text();
+        QString SpdProfileBaseTrvD4 = ui->SpdProfileTrvD4->text();
+        QString SpdProfileBaseTrvD5=  ui->SpdProfileTrvD5->text();
+        QString SpdProfileBaseTrvD6 = ui->SpdProfileTrvD6->text();
+        QString SpdProfileBaseTrvD7 = ui->SpdProfileTrvD7->text();
+        QString SpdProfileBaseTrvD8 = ui->SpdProfileTrvD8->text();
+        QString SpdProfileBaseTrvD9 = ui->SpdProfileTrvD9->text();
+        QString SpdProfileBaseTrvD10 = ui->SpdProfileTrvD10->text();
+        QString SpdProfileBaseTrvD11 = ui->SpdProfileTrvD11->text();
+        SpdProfileBaseSpd[0] = SpdProfileBaseSpd1.toFloat();
+        SpdProfileBaseSpd[1] = SpdProfileBaseSpd2.toFloat();
+        SpdProfileBaseSpd[2] = SpdProfileBaseSpd3.toFloat();
+        SpdProfileBaseSpd[3] = SpdProfileBaseSpd4.toFloat();
+        SpdProfileBaseSpd[4] = SpdProfileBaseSpd5.toFloat();
+        SpdProfileBaseSpd[5] = SpdProfileBaseSpd6.toFloat();
+        SpdProfileBaseSpd[6] = SpdProfileBaseSpd7.toFloat();
+        SpdProfileBaseSpd[7] = SpdProfileBaseSpd8.toFloat();
+        SpdProfileBaseSpd[8] = SpdProfileBaseSpd9.toFloat();
+        SpdProfileBaseSpd[9] = SpdProfileBaseSpd10.toFloat();
+        SpdProfileBaseSpd[10] = SpdProfileBaseSpd11.toFloat();
+        SpdProfileTrvDist[0] = SpdProfileBaseTrvD1.toFloat();
+        SpdProfileTrvDist[1] = SpdProfileBaseTrvD2.toFloat();
+        SpdProfileTrvDist[2] = SpdProfileBaseTrvD3.toFloat();
+        SpdProfileTrvDist[3] = SpdProfileBaseTrvD4.toFloat();
+        SpdProfileTrvDist[4] = SpdProfileBaseTrvD5.toFloat();
+        SpdProfileTrvDist[5] = SpdProfileBaseTrvD6.toFloat();
+        SpdProfileTrvDist[6] = SpdProfileBaseTrvD7.toFloat();
+        SpdProfileTrvDist[7] = SpdProfileBaseTrvD8.toFloat();
+        SpdProfileTrvDist[8] = SpdProfileBaseTrvD9.toFloat();
+        SpdProfileTrvDist[9] = SpdProfileBaseTrvD10.toFloat();
+        SpdProfileTrvDist[10] = SpdProfileBaseTrvD11.toFloat();
+        uint32_t isSpdProfileEnabled = (uint32_t)ui->SpdProfileEnabled->isChecked();
+        DataToStore["SpdProfileBaseSpd_0"]=SpdProfileBaseSpd[0];
+        DataToStore["SpdProfileBaseSpd_1"]=SpdProfileBaseSpd[1];
+        DataToStore["SpdProfileBaseSpd_2"]=SpdProfileBaseSpd[2];
+        DataToStore["SpdProfileBaseSpd_3"]=SpdProfileBaseSpd[3];
+        DataToStore["SpdProfileBaseSpd_4"]=SpdProfileBaseSpd[4];
+        DataToStore["SpdProfileBaseSpd_5"]=SpdProfileBaseSpd[5];
+        DataToStore["SpdProfileBaseSpd_6"]=SpdProfileBaseSpd[6];
+        DataToStore["SpdProfileBaseSpd_7"]=SpdProfileBaseSpd[7];
+        DataToStore["SpdProfileBaseSpd_8"]=SpdProfileBaseSpd[8];
+        DataToStore["SpdProfileBaseSpd_9"]=SpdProfileBaseSpd[9];
+        DataToStore["SpdProfileBaseSpd_10"]=SpdProfileBaseSpd[10];
+
+        DataToStore["SpdProfileTrvDist_0"]=SpdProfileTrvDist[0];
+        DataToStore["SpdProfileTrvDist_1"]=SpdProfileTrvDist[1];
+        DataToStore["SpdProfileTrvDist_2"]=SpdProfileTrvDist[2];
+        DataToStore["SpdProfileTrvDist_3"]=SpdProfileTrvDist[3];
+        DataToStore["SpdProfileTrvDist_4"]=SpdProfileTrvDist[4];
+        DataToStore["SpdProfileTrvDist_5"]=SpdProfileTrvDist[5];
+        DataToStore["SpdProfileTrvDist_6"]=SpdProfileTrvDist[6];
+        DataToStore["SpdProfileTrvDist_7"]=SpdProfileTrvDist[7];
+        DataToStore["SpdProfileTrvDist_8"]=SpdProfileTrvDist[8];
+        DataToStore["SpdProfileTrvDist_9"]=SpdProfileTrvDist[9];
+        DataToStore["SpdProfileTrvDist_10"]=SpdProfileTrvDist[10];
+
+        DataToStore["isSpdProfileEnabled"]=(int)isSpdProfileEnabled;
+
+
+        QString Err1Text = ui->ErrW1_Text->text();
+        float Err1ValueFloat = Err1Text.toFloat();
+        QString Err2Text = ui->ErrW2_Text->text();
+        float Err2ValueFloat = Err2Text.toFloat();
+        QString Err3Text = ui->ErrW3_Text->text();
+        float Err3ValueFloat = Err3Text.toFloat();
+        QString Err4Text = ui->ErrW4_Text->text();
+        float Err4ValueFloat = Err4Text.toFloat();
+        QString Err5Text = ui->ErrW5_Text->text();
+        float Err5ValueFloat = Err5Text.toFloat();
+        QString Err6Text = ui->ErrW6_Text->text();
+        float Err6ValueFloat = Err6Text.toFloat();
+        QString Err7Text = ui->ErrW7_Text->text();
+        float Err7ValueFloat = Err7Text.toFloat();
+        QString Err8Text = ui->ErrW8_Text->text();
+        float Err8ValueFloat = Err8Text.toFloat();
+        QString Err9Text = ui->ErrW9_Text->text();
+        float Err9ValueFloat = Err9Text.toFloat();
+        QString Err10Text = ui->ErrW10_Text->text();
+        float Err10ValueFloat = Err10Text.toFloat();
+        QString Err11Text = ui->ErrW11_Text->text();
+        float Err11ValueFloat = Err11Text.toFloat();
+        QString ErrMText = ui->ErrWM_Text->text();
+        float ErrMValueFloat = ErrMText.toFloat();
+
+        DataToStore["Err1ValueFloat"]= Err1ValueFloat;
+        DataToStore["Err2ValueFloat"]= Err2ValueFloat;
+        DataToStore["Err3ValueFloat"]= Err3ValueFloat;
+        DataToStore["Err4ValueFloat"]= Err4ValueFloat;
+        DataToStore["Err5ValueFloat"]= Err5ValueFloat;
+        DataToStore["Err6ValueFloat"]= Err6ValueFloat;
+        DataToStore["Err7ValueFloat"]= Err7ValueFloat;
+        DataToStore["Err8ValueFloat"]= Err8ValueFloat;
+        DataToStore["Err9ValueFloat"]= Err9ValueFloat;
+        DataToStore["Err10ValueFloat"]= Err10ValueFloat;
+        DataToStore["Err11ValueFloat"]= Err11ValueFloat;
+        DataToStore["ErrMValueFloat"]= ErrMValueFloat;
+
+        QString PID_KPtext = ui->PID_KP_text->text();
+        float PID_KPfloat = PID_KPtext.toFloat();
+        QString PID_KItext = ui->PID_KI_text->text();
+        float PID_KIfloat = PID_KItext.toFloat();
+        QString PID_KDtext = ui->PID_KD_text->text();
+        float PID_KDfloat = PID_KDtext.toFloat();
+        QString ProbeTimeText = ui->ProbeTimeText->text();
+        uint32_t ProbeTimeInt = ProbeTimeText.toInt();
+        QString ExpectedAvSpdText = ui->ExpectedAvSpdText->text();
+        float ExpectedAvSpdFloat = ExpectedAvSpdText.toFloat();
+
+        DataToStore["PID_KPfloat"]= PID_KPfloat;
+        DataToStore["PID_KIfloat"]= PID_KIfloat;
+        DataToStore["PID_KDfloat"]= PID_KDfloat;
+        DataToStore["ProbeTimeInt"]= (int)ProbeTimeInt;
+        DataToStore["ExpectedAvSpdFloat"]= ExpectedAvSpdFloat;
+
+
+        uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
+        uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+        uint32_t isIrSensorEnabled = (uint32_t) ui->IrSensorCheckBox->isChecked();
+
+        DataToStore["BlinkingLedsState"]= (int)BlinkingLedsState;
+        DataToStore["TryDetEndLineMark"]= (int)TryDetEndLineMark;
+        DataToStore["isIrSensorEnabled"]= (int)isIrSensorEnabled;
+
+
+        QString FacA_LftText = ui->TextPwmToSpAFacL->text();
+        uint32_t FacA_LftU32 = FacA_LftText.toInt();
+        QString FacA_RhtText = ui->TextPwmToSpAFacR->text();
+        uint32_t FacA_RhtU32 = FacA_RhtText.toInt();
+        QString FacB_LftText = ui->TextPwmToSpBFacL->text();
+        uint32_t FacB_LftU32 = FacB_LftText.toInt();
+        QString FacB_RhtText = ui->TextPwmToSpBFacR->text();
+        uint32_t FacB_RhtU32 = FacB_RhtText.toInt();
+
+        DataToStore["FacA_LftU32"]= (int)FacA_LftU32;
+        DataToStore["FacA_RhtU32"]= (int)FacA_RhtU32;
+        DataToStore["FacB_LftU32"]= (int)FacB_LftU32;
+        DataToStore["FacB_RhtU32"]= (int)FacB_RhtU32;
+
+
+
+        QString OneImpDistText = ui->TextOneImpDist->text();
+        float OneImpDistF32 = OneImpDistText.toFloat();
+        QString WheelBaseText = ui->TextWheelBase->text();
+        float WheelBaseF32 = WheelBaseText.toFloat();
+
+        DataToStore["OneImpDistF32"]= OneImpDistF32;
+        DataToStore["WheelBaseF32"]= WheelBaseF32;
+
+
+
+        NvM_Data_JsArr.append(DataToStore);
+
+
+        object["NvmData"] = NvM_Data_JsArr;
+
+
+    }
 
     saveFile.write(QJsonDocument(object).toJson() );
 
     qDebug() << "Sucessfully saved Json file";
 }
 
-
-void MainWindow::LoadPlotDataFromLfProjectFileOrJson(QString FilePath)
+void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
 {
     QFile loadFile(FilePath);
 
@@ -2081,7 +2252,68 @@ void MainWindow::LoadPlotDataFromLfProjectFileOrJson(QString FilePath)
 
     QJsonDocument loadDoc( QJsonDocument::fromJson(loadedData));
 
+    if (loadDoc.object().contains("NvmData") && loadDoc.object()["NvmData"].isArray())
+    {
+        QJsonArray NvmData = loadDoc.object()["NvmData"].toArray();
+        QJsonObject NvmDataObject = NvmData.at(0).toObject();
 
+        ui->SpdProfileTrvD1->setText( QString::number(NvmDataObject["SpdProfileTrvDist_0"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD2->setText( QString::number(NvmDataObject["SpdProfileTrvDist_1"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD3->setText( QString::number(NvmDataObject["SpdProfileTrvDist_2"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD4->setText( QString::number(NvmDataObject["SpdProfileTrvDist_3"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD5->setText( QString::number(NvmDataObject["SpdProfileTrvDist_4"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD6->setText( QString::number(NvmDataObject["SpdProfileTrvDist_5"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD7->setText( QString::number(NvmDataObject["SpdProfileTrvDist_6"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD8->setText( QString::number(NvmDataObject["SpdProfileTrvDist_7"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD9->setText( QString::number(NvmDataObject["SpdProfileTrvDist_8"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD10->setText( QString::number(NvmDataObject["SpdProfileTrvDist_9"].toDouble(),'f',2) );
+        ui->SpdProfileTrvD11->setText( QString::number(NvmDataObject["SpdProfileTrvDist_10"].toDouble(),'f',2) );
+
+        ui->SpdProfileBspd1->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_0"].toDouble(),'f',2) );
+        ui->SpdProfileBspd2->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_1"].toDouble(),'f',2) );
+        ui->SpdProfileBspd3->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_2"].toDouble(),'f',2) );
+        ui->SpdProfileBspd4->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_3"].toDouble(),'f',2) );
+        ui->SpdProfileBspd5->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_4"].toDouble(),'f',2) );
+        ui->SpdProfileBspd6->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_5"].toDouble(),'f',2) );
+        ui->SpdProfileBspd7->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_6"].toDouble(),'f',2) );
+        ui->SpdProfileBspd8->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_7"].toDouble(),'f',2) );
+        ui->SpdProfileBspd9->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_8"].toDouble(),'f',2) );
+        ui->SpdProfileBspd10->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_9"].toDouble(),'f',2) );
+        ui->SpdProfileBspd11->setText( QString::number(NvmDataObject["SpdProfileBaseSpd_10"].toDouble(),'f',2) );
+
+        ui->ErrW1_Text->setText(QString::number(NvmDataObject["Err1ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW2_Text->setText(QString::number(NvmDataObject["Err2ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW3_Text->setText(QString::number(NvmDataObject["Err3ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW4_Text->setText(QString::number(NvmDataObject["Err4ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW5_Text->setText(QString::number(NvmDataObject["Err5ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW6_Text->setText(QString::number(NvmDataObject["Err6ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW7_Text->setText(QString::number(NvmDataObject["Err7ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW8_Text->setText(QString::number(NvmDataObject["Err8ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW9_Text->setText(QString::number(NvmDataObject["Err9ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW10_Text->setText(QString::number(NvmDataObject["Err10ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrW11_Text->setText(QString::number(NvmDataObject["Err11ValueFloat"].toDouble() ,'f',2) );
+        ui->ErrWM_Text->setText(QString::number(NvmDataObject["ErrMValueFloat"].toDouble() ,'f',2) );
+
+        ui->PID_KP_text->setText(QString::number(NvmDataObject["PID_KPfloat"].toDouble() ,'f',2) );
+        ui->PID_KI_text->setText(QString::number(NvmDataObject["PID_KIfloat"].toDouble() ,'f',2) );
+        ui->PID_KD_text->setText(QString::number(NvmDataObject["PID_KDfloat"].toDouble() ,'f',2) );
+        ui->ProbeTimeText->setText(QString::number(NvmDataObject["ProbeTimeInt"].toDouble() ,'f',2) );
+        ui->ExpectedAvSpdText->setText(QString::number(NvmDataObject["ExpectedAvSpdFloat"].toDouble() ,'f',2) );
+
+        (NvmDataObject["BlinkingLedsState"].toInt() == 0)   ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
+        (NvmDataObject["TryDetEndLineMark"].toInt() == 0)   ? ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
+        (NvmDataObject["isIrSensorEnabled"].toInt() == 0)   ? ui->IrSensorCheckBox->setChecked(false) : ui->IrSensorCheckBox->setChecked(true);
+        (NvmDataObject["isSpdProfileEnabled"].toInt() == 0) ? ui->SpdProfileEnabled->setChecked(false) : ui->SpdProfileEnabled->setChecked(true);
+
+        ui->TextPwmToSpAFacL->setText(QString::number(NvmDataObject["FacA_LftU32"].toInt()) );
+        ui->TextPwmToSpAFacR->setText(QString::number(NvmDataObject["FacA_RhtU32"].toInt()) );
+        ui->TextPwmToSpBFacL->setText(QString::number(NvmDataObject["FacB_LftU32"].toInt()) );
+        ui->TextPwmToSpBFacR->setText(QString::number(NvmDataObject["FacB_RhtU32"].toInt()) );
+
+        ui->TextOneImpDist->setText(QString::number(NvmDataObject["OneImpDistF32"].toDouble() ,'f',7) );
+        ui->TextWheelBase->setText(QString::number(NvmDataObject["WheelBaseF32"].toDouble() ,'f',7) );
+
+    }
 
     if (loadDoc.object().contains("YawRate_Y") && loadDoc.object()["YawRate_Y"].isArray())
     {
@@ -2249,6 +2481,6 @@ void MainWindow::on_LoadProject_pb_clicked()
     QString filter = "LfProject (*.lfp) ;; All files (*)";
     QString desktopPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     QString file_name = QFileDialog::getOpenFileName(this,"choose file to overwrite",desktopPath,filter);
-    LoadPlotDataFromLfProjectFileOrJson(file_name);
+    LoadDataLineFollowerProjecrOrJson(file_name);
 }
 

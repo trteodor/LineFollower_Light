@@ -189,7 +189,7 @@ private:
     void ReadNvMDataFromLineFollower();
     void RefreshErrorIndicatorView(void);
     void BLE_CommunicationStatistics_Handler(const QByteArray &value);
-    void LoadPlotDataFromLfProjectFileOrJson(QString FilePath);
+    void LoadDataLineFollowerProjecrOrJson(QString FilePath);
     void ConfigureTextLineAndNvMConnections(void);
 
     GenericLfQCP PlotMap;
