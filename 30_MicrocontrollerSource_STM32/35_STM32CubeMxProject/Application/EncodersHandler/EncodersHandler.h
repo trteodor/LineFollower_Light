@@ -21,4 +21,7 @@ float ENC_GetTravelledDistance(void);
 
 float ENC_GetCurrentOrientation(void);
 
+float ENC_GetLeftWhSpeed(void);
+float ENC_GetRightWhSpeed(void);
+
 #endif //_Encoders_Module_H
