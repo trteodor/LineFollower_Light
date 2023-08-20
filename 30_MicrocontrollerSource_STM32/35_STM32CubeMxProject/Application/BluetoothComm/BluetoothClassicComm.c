@@ -114,7 +114,6 @@ static uint8_t BluMainReceiveMessagesTab[BLU_RECEIVE_RING_BUFFER_SIZE][BLU_SINGL
 
 static BLU_LfDataReport_t NewestLfDataReport = {0};
 
-static uint32_t LastMessageTime = 0U;
 
 /*
  *********************************************************************************************
@@ -130,21 +129,31 @@ static BluRingBufferStatus_t RB_Receive_Read(BluRingBufferReceive_t *Buf, uint8_
 static BLU_CallStatus_t TransmitErrorWeigthData(void);
 
 /************************************************************************************************/
- void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+//  void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+//  	if(huart->Instance == USART2)
+//  	{
+//  		uint8_t *MessageReceiveBufferAddress;
+
+//  		/*Start listen again as fast as possible*/
+//  		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
+//  		// Start listening again
+//  		// HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
+//  		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
+//  		// HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+//  	}
+//  }
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+	static uint8_t *MessageReceiveBufferAddress;
+
  	if(huart->Instance == USART2)
  	{
- 		uint8_t *MessageReceiveBufferAddress;
-
- 		LastMessageTime = HAL_GetTick();
-
- 		/*Start listen again as fast as possible*/
  		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
- 		// Start listening again
- 		// HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
- 		HAL_UART_Receive_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
- 		// HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+ 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
  	}
- }
+}
+
 
 /*!
  ************************************************************************************************
@@ -1133,8 +1142,8 @@ void BLU_Init(void)
 		EE_ReadVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32,false);
 	}
 
-	HAL_UART_Receive_DMA(&huart2, &BluMainReceiveMessagesTab[0][0], BLU_SINGLE_REC_MESSAGE_SIZE);
-//	  HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BluMainReceiveMessagesTab[0][0], BLU_SINGLE_REC_MESSAGE_SIZE);
+	// HAL_UART_Receive_DMA(&huart2, &BluMainReceiveMessagesTab[0][0], BLU_SINGLE_REC_MESSAGE_SIZE);
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &BluMainReceiveMessagesTab[0][0], BLU_SINGLE_REC_MESSAGE_SIZE);
 	Sim_Create_XY_FakeMap();
 
 }

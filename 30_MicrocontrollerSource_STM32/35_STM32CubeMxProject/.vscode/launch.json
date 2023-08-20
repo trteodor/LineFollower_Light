@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "STM32H747_D",
+            "name": "STM32H743_D",
             "cwd": "${workspaceRoot}",
-            "executable": "./.build/h747disco_tut.elf",
-            "preLaunchTask": "build_eth_tut",
-            "request": "launch",
+            "executable": "./.build/LF_UltraLight.elf",
+            // "preLaunchTask": "build_Code",
+            "request": "attach", //attach //launch
             "type": "cortex-debug",
             "servertype": "openocd",
-            "device": "STM32F747XI",
-            "svdFile": "STM32H747_CM7.svd",
+            "device": "STM32F743VI",
+            "svdFile": "STM32H743.svd",
             "configFiles": [
                 "interface/stlink.cfg",
                 "target/stm32h7x.cfg"

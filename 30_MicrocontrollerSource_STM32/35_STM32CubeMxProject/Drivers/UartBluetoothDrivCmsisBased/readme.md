@@ -1,0 +1,1 @@
+Due to some confusion while using HAL libary, it has been decided to implement own simple uart driver to communicate with Bluetooth module. 

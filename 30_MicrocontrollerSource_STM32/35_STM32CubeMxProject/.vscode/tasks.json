@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build_eth_tut",
+            "label": "build_Code",
             "type": "shell",
-            "command": "make flash",
+            "command": "make flash -j16",
             "args": [
             ],
             "group": "build",
