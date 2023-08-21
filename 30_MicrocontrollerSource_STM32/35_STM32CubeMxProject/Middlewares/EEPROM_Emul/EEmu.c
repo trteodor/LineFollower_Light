@@ -371,9 +371,10 @@ uint16_t EE_VerifyPageFullyErased(uint32_t Address)
   */
 uint16_t EE_ReadVariableU32(EE_Vars_t VirtAddress, uint32_t* Data)
 {
-  uint16_t ValidPage = PAGE0;
-  uint16_t AddressValue = 0x5555, ReadStatus = 1;
-  uint32_t Address = EEPROM_START_ADDRESS, PageStartAddress = EEPROM_START_ADDRESS;
+  static volatile uint16_t ValidPage = PAGE0;
+  static volatile uint16_t AddressValue = 0x5555, ReadStatus = 1;
+  static volatile uint32_t Address = EEPROM_START_ADDRESS;
+  static volatile uint32_t PageStartAddress = EEPROM_START_ADDRESS;
 
   /* Get active Page for read operation */
   ValidPage = EE_FindValidPage(READ_FROM_VALID_PAGE);

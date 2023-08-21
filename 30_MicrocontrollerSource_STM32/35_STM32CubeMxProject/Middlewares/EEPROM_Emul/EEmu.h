@@ -79,20 +79,20 @@
 
 /* EEPROM emulation start address in Flash */
 
-#define EEPROM_START_ADDRESS  ADDR_FLASH_SECTOR_6_BANK2 /* sector6 of bank 2 */
+#define EEPROM_START_ADDRESS  ADDR_FLASH_SECTOR_0_BANK2 /* sector6 of bank 2 */
 
 
 /* Pages 0 and 1 base and end addresses */
 #define PAGE0_BASE_ADDRESS    ((uint32_t)(EEPROM_START_ADDRESS + 0x0000))
 #define PAGE0_END_ADDRESS     ((uint32_t)(EEPROM_START_ADDRESS + (PAGE_SIZE - 1)))
 
-  #define PAGE0_ID               FLASH_SECTOR_6
+  #define PAGE0_ID               FLASH_SECTOR_0
 
 
 #define PAGE1_BASE_ADDRESS    ((uint32_t)(EEPROM_START_ADDRESS + PAGE_SIZE))
 #define PAGE1_END_ADDRESS     ((uint32_t)(EEPROM_START_ADDRESS + (2 * PAGE_SIZE - 1)))
 
-  #define PAGE1_ID               FLASH_SECTOR_7
+  #define PAGE1_ID               FLASH_SECTOR_1
 
 
 /* Used Flash pages for EEPROM emulation */
@@ -115,7 +115,7 @@
 #define PAGE_FULL             ((uint8_t)0x80)
 
 /* Variables' number */
-#define NB_OF_VAR             ((uint8_t)EE_VarsCount)
+#define NB_OF_VAR             ((uint8_t)EE_VarsCount) //
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

@@ -1602,7 +1602,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
-
+        QThread::msleep(25);
 
         /*********************************************************************************************************/
         /*********************************************************************************************************/
@@ -1628,7 +1628,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
-
+        QThread::msleep(25);
 
         /*********************************************************************************************************/
         /*********************************************************************************************************/
@@ -1653,7 +1653,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
-
+        QThread::msleep(25);
         /*********************************************************************************************************/
         /*********************************************************************************************************/
         /*********************************************************************************************************/
@@ -1674,6 +1674,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        QThread::msleep(25);
 
 
         /*********************************************************************************************************/
@@ -1742,6 +1743,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
             Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
             Helper.append("\n\r");
             BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+            QThread::msleep(25);
         }
 
         /*********************************************************************************************************/
