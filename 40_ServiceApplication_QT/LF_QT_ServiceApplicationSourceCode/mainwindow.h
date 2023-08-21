@@ -34,6 +34,10 @@ public:
 
 private slots:
 
+
+    void changeEvent( QEvent* e );
+
+
     void joystick_moved(double x, double y);
 
     void MainWin_DrawOrientationIndicator(float Orientation);

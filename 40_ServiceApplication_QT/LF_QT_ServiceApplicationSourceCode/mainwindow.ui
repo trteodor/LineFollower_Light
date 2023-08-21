@@ -960,7 +960,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="iconSize">
         <size>
@@ -1960,13 +1960,13 @@ color: rgb(255, 255, 255);</string>
    </property>
    <property name="minimumSize">
     <size>
-     <width>320</width>
+     <width>500</width>
      <height>167</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>524287</width>
+     <width>1000</width>
      <height>524287</height>
     </size>
    </property>

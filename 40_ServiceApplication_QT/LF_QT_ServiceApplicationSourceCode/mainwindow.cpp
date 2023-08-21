@@ -131,6 +131,28 @@ MainWindow::~MainWindow()
     qDebug("Reached end");
 }
 
+void MainWindow::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        qDebug() << "this->windowState()" << this->windowState();
+
+        QWindowStateChangeEvent* event = static_cast< QWindowStateChangeEvent* >( e );
+
+        if( event->oldState() & Qt::WindowMinimized )
+        {
+            qDebug() << "Window restored (to normal or maximized state)!";
+        }
+        else if( event->oldState() == Qt::WindowNoState && this->windowState() == Qt::WindowMaximized )
+        {
+            qDebug() << "Window Maximized!";
+
+        }
+        else if(this->windowState() == Qt::WindowNoState && event->oldState() == Qt::WindowMaximized){
+            qDebug() << "Window restored to normal from maximazed state";
+        }
+    }
+}
 
 void MainWindow::addJoyStick(QLayout *layout_, JoyType type)
 {
