@@ -143,14 +143,31 @@ static BLU_CallStatus_t TransmitErrorWeigthData(void);
 //  	}
 //  }
 
+static bool Received50BytesAndHitIdleFlag;
+
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
 	static uint8_t *MessageReceiveBufferAddress;
 
  	if(huart->Instance == USART2)
  	{
- 		RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
- 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
+		if( (Size == BLU_SINGLE_REC_MESSAGE_SIZE) || (true == Received50BytesAndHitIdleFlag) )
+		{
+			Received50BytesAndHitIdleFlag = false; /*Clear the flag..*/
+			RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
+			HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
+		}
+		else if(Size == (BLU_SINGLE_REC_MESSAGE_SIZE/2))
+		{
+			Received50BytesAndHitIdleFlag=true;
+			HAL_UARTEx_ReceiveToIdle_DMA(&huart2, &MessageReceiveBufferAddress[BLU_SINGLE_REC_MESSAGE_SIZE/2], BLU_SINGLE_REC_MESSAGE_SIZE/2);
+		}else{
+			RB_Receive_GetNextMessageAddress(&BleMainReceiveRingBuffer,&MessageReceiveBufferAddress);
+			HAL_UARTEx_ReceiveToIdle_DMA(&huart2, MessageReceiveBufferAddress, BLU_SINGLE_REC_MESSAGE_SIZE);
+		}
+
+
+
  	}
 }
 
@@ -588,6 +605,8 @@ void ReceiveSpeedProfileData(BLU_NvM_SpdProfileData_t *NewSpeedProfileData)
 		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp09_F32, NewSpeedProfileData->BaseSpeedValue[8]);
 		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp10_F32, NewSpeedProfileData->BaseSpeedValue[9]);
 		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp11_F32, NewSpeedProfileData->BaseSpeedValue[10]);
+
+		
 }
 
 
@@ -756,7 +775,6 @@ static void ReceiveDataHandler(void)
 
 	uint8_t *MessageToRead_p = NULL;
 	uint8_t MessageToReadSize= 0U;
-
 
 	{
 

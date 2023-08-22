@@ -4,7 +4,7 @@
             "BlinkingLedsState": 1,
             "Err10ValueFloat": 6.03000020980835,
             "Err11ValueFloat": 8.029999732971191,
-            "Err1ValueFloat": 0.14000000059604645,
+            "Err1ValueFloat": 0,
             "Err2ValueFloat": 0.25999999046325684,
             "Err3ValueFloat": 0.4300000071525574,
             "Err4ValueFloat": 1.0199999809265137,
@@ -46,9 +46,9 @@
             "SpdProfileTrvDist_7": 8,
             "SpdProfileTrvDist_8": 9,
             "SpdProfileTrvDist_9": 10,
-            "TryDetEndLineMark": 1,
+            "TryDetEndLineMark": 0,
             "WheelBaseF32": 0.1469999998807907,
-            "isIrSensorEnabled": 1,
+            "isIrSensorEnabled": 0,
             "isSpdProfileEnabled": 0
         }
     ],
@@ -76,13 +76,6 @@
     ],
     "mDebugDataLogger": [
         {
-            "Data": "DataLoadedFromProjectFile: E:\\STM32_VSCodeWorkSpace\\LineFollower_Light\\40_ServiceApplication_QT\\NvmDataFristTemplateQtApp.lfp",
-            "FrameCounter": "0",
-            "SyncId": "0",
-            "sysTime": "23/08/19 13:59:50.620",
-            "ucTimeStamp": "0"
-        },
-        {
             "Data": "DevNameMatched:Connecting ",
             "FrameCounter": "",
             "SyncId": "",
@@ -90,39 +83,11 @@
             "ucTimeStamp": ""
         },
         {
-            "Data": "Nvm Data updated and commited",
-            "FrameCounter": "2",
-            "SyncId": "51",
-            "sysTime": "23/08/19 14:00:02.306",
-            "ucTimeStamp": "3108293"
-        },
-        {
-            "Data": "!!!Synchronization Error!!! DebugMessagerHandler SyncId: 51 |PrSyncId: 255 ",
+            "Data": "!!!Synchronization Error!!! ErrorWeigthDataHandler SyncId: 2 |PrSyncId: 255 ",
             "FrameCounter": "0",
             "SyncId": "0",
-            "sysTime": "23/08/19 14:00:02.306",
+            "sysTime": "23/08/22 15:50:04.355",
             "ucTimeStamp": "0"
-        },
-        {
-            "Data": "Nvm Data updated and commited",
-            "FrameCounter": "2",
-            "SyncId": "52",
-            "sysTime": "23/08/19 14:00:03.765",
-            "ucTimeStamp": "3109793"
-        },
-        {
-            "Data": "!!!Synchronization Error!!! ErrorWeigthDataHandler SyncId: 13 |PrSyncId: 255 ",
-            "FrameCounter": "0",
-            "SyncId": "0",
-            "sysTime": "23/08/19 14:00:04.989",
-            "ucTimeStamp": "0"
-        },
-        {
-            "Data": "Nvm Data updated and commited",
-            "FrameCounter": "2",
-            "SyncId": "53",
-            "sysTime": "23/08/19 14:00:09.096",
-            "ucTimeStamp": "3115147"
         }
     ]
 }

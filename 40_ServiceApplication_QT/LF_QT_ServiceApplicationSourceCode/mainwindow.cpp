@@ -198,15 +198,12 @@ void MainWindow::addJoyStick(QLayout *layout_, JoyType type)
  * @param y Mouse y position
  */
 void MainWindow::joystick_moved(double x, double y) {
-    char command[BLU_SINGLE_TR_MESSAGE_SIZE-2];
-
 
     float VecValX= (float)x;
     float VecValY= (float)y;
-
+    char command[BLU_SINGLE_TR_MESSAGE_SIZE-2];
 
     command[0] = (char)BluDataManager::BLU_NvM_ManualCntrlCommand;
-
     std::memcpy(&command[2],  &VecValX, sizeof(float));
     std::memcpy(&command[6],  &VecValY, sizeof(float));
 
@@ -2352,7 +2349,7 @@ void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
         ui->PID_KP_text->setText(QString::number(NvmDataObject["PID_KPfloat"].toDouble() ,'f',2) );
         ui->PID_KI_text->setText(QString::number(NvmDataObject["PID_KIfloat"].toDouble() ,'f',2) );
         ui->PID_KD_text->setText(QString::number(NvmDataObject["PID_KDfloat"].toDouble() ,'f',2) );
-        ui->ProbeTimeText->setText(QString::number(NvmDataObject["ProbeTimeInt"].toDouble() ,'f',2) );
+        ui->ProbeTimeText->setText(QString::number(NvmDataObject["ProbeTimeInt"].toInt() ) );
         ui->ExpectedAvSpdText->setText(QString::number(NvmDataObject["ExpectedAvSpdFloat"].toDouble() ,'f',2) );
 
         (NvmDataObject["BlinkingLedsState"].toInt() == 0)   ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
