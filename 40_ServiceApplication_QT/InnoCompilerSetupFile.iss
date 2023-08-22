@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LF_ServiceApp"
-#define MyAppVersion "1.2"
+#define MyAppVersion "1.3"
 #define MyAppPublisher "Teodor Rosolowski"
 #define MyAppURL "github.com/trteodor/LineFollower_Light"
 #define MyAppExeName "LF_ServiceApplication.exe"
@@ -28,7 +28,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT
-OutputBaseFilename=LF_ServiceApp_1.2_Installer
+OutputBaseFilename=LF_ServiceApp_1.3_Installer
 SetupIconFile=E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT\LF_QT_ServiceApplicationSourceCode\LfProjectApp.ico
 Compression=lzma
 SolidCompression=yes
@@ -41,8 +41,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT\Release_1.2\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT\Release_1.2\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT\Release_1.3\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\STM32_VSCodeWorkSpace\LineFollower_Light\40_ServiceApplication_QT\Release_1.3\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
