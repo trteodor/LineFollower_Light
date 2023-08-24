@@ -134,8 +134,8 @@ static void MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
   __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue  - RightMotorSpeed);//-->> Forward
   __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);
 
-  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue - LeftMotorSpeed );  //-->> Forward
-  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
+  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue );  //-->> Forward
+  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed);
 }
 /**************************************************************************************************/
 static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
@@ -144,8 +144,8 @@ static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue );
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed);  //-->> Reverse
 
-	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue  - LeftMotorSpeed);  //-->> Forward
-	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue);
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);  //-->> Forward
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed);
 }
 /**************************************************************************************************/
 static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
@@ -153,8 +153,8 @@ static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue - RightMotorSpeed); //-->> Forward
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue );
 
-	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);
-	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed);  //-->> Reverse
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue - LeftMotorSpeed);
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue );  //-->> Reverse
 
 }
 /**************************************************************************************************/
@@ -184,6 +184,33 @@ static void ComputeLinePidVal(void)
 		LinePid.PID_value = (LinePid.Kp * LinePid.P)+(LinePid.Kd * LinePid.D);
 }
 /**************************************************************************************************/
+static void CompensateBatteryDischarge(float *SpeedLftMot,float *SpdRightMot)
+{
+	// static const float DeltaKpIfSpeedIsTooLow = 2;
+
+	// if(*SpdRightMot >= Robot_Cntrl.input_RightWhSpeed)
+	// {
+	// 	float delta_sp=fabs(*SpdRightMot-Robot_Cntrl.input_RightWhSpeed);
+	// 	*SpdRightMot=*SpdRightMot - (delta_sp);
+	// }
+	// else //(SpdRightMot < Predkosc_P)
+	// {
+	// 	float delta_sp=fabs(*SpdRightMot - Robot_Cntrl.input_RightWhSpeed);
+	// 	*SpdRightMot=*SpdRightMot + (delta_sp * DeltaKpIfSpeedIsTooLow);
+	// }
+
+	// if(*SpeedLftMot > Robot_Cntrl.input_LeftWhSpeed)
+	// {
+	// 	float delta_sp=fabs(*SpeedLftMot-Robot_Cntrl.input_LeftWhSpeed);
+	// 	*SpeedLftMot=*SpeedLftMot - (delta_sp);
+	// }
+	// else //ExpectedPresetSpeed_LeftMotor < Enc_Module.LeftWheelSpeed)
+	// {
+	// 	float delta_pr=fabs(*SpeedLftMot-Robot_Cntrl.input_LeftWhSpeed);
+	// 	*SpeedLftMot=*SpeedLftMot + (delta_pr * DeltaKpIfSpeedIsTooLow);
+	// }
+}
+
 static void ComputeExpectedPwmValues(void)
 {
 	float ExpectedSpeed=LinePid.BaseMotorSpeed;
@@ -193,37 +220,16 @@ static void ComputeExpectedPwmValues(void)
 	ExpectedSpeed_LeftMotor=ExpectedSpeed + LinePid.PID_value;
 	ExpectedSpeed_RightMotor=ExpectedSpeed - LinePid.PID_value;
 
-	float PresetSpeed_LeftMotor=  ExpectedSpeed_LeftMotor;
-	float PresetSpeed_RightMotor= ExpectedSpeed_RightMotor;
+	float ExpectedPresetSpeed_LeftMotor=  ExpectedSpeed_LeftMotor;
+	float ExpectedPresetSpeed_RightMotor= ExpectedSpeed_RightMotor;
 
-
-	if(PresetSpeed_RightMotor >= Robot_Cntrl.input_RightWhSpeed)
-	{
-		float delta_sp=PresetSpeed_RightMotor-Robot_Cntrl.input_RightWhSpeed;
-		PresetSpeed_RightMotor=PresetSpeed_RightMotor + (delta_sp);
-	}
-	else //(PresetSpeed_RightMotor < Predkosc_P)
-	{
-		float delta_sp=PresetSpeed_RightMotor - Robot_Cntrl.input_RightWhSpeed;
-		PresetSpeed_RightMotor=PresetSpeed_RightMotor+(delta_sp);
-	}
-
-	if(PresetSpeed_LeftMotor > Robot_Cntrl.input_LeftWhSpeed)
-	{
-		float delta_sp=PresetSpeed_LeftMotor-Robot_Cntrl.input_LeftWhSpeed;
-		PresetSpeed_LeftMotor=PresetSpeed_LeftMotor+(delta_sp);
-	}
-	else //PresetSpeed_LeftMotor < Enc_Module.LeftWheelSpeed)
-	{
-		float delta_pr=PresetSpeed_LeftMotor-Robot_Cntrl.input_LeftWhSpeed;
-		PresetSpeed_LeftMotor=PresetSpeed_LeftMotor+(delta_pr);
-	}
+	CompensateBatteryDischarge(&ExpectedPresetSpeed_LeftMotor,&ExpectedPresetSpeed_RightMotor);
 
 
 	//Convert speed value to PWM value 
 	//RealMotorSpeed = ax +b
-	LinePid.ComputedLeftWhPwmVal= (LinePid.NVM_MotAFacPwmToSpdLeft*PresetSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft +  (LinePid.NVM_MotAFacPwmToSpdLeft* LinePid.PID_value);
-	LinePid.ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*PresetSpeed_RightMotor)+LinePid.NVM_MotBFacPwmToSpdRight - (LinePid.NVM_MotAFacPwmToSpdRight* LinePid.PID_value);
+	LinePid.ComputedLeftWhPwmVal= (LinePid.NVM_MotAFacPwmToSpdLeft*ExpectedPresetSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft +  (LinePid.NVM_MotAFacPwmToSpdLeft* LinePid.PID_value);
+	LinePid.ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*ExpectedPresetSpeed_RightMotor)+LinePid.NVM_MotBFacPwmToSpdRight - (LinePid.NVM_MotAFacPwmToSpdRight* LinePid.PID_value);
 
 	if(LinePid.ComputedLeftWhPwmVal>MaxPWMValue){
 		LinePid.ComputedLeftWhPwmVal=MaxPWMValue;
@@ -250,7 +256,7 @@ static void SetMotorSpeedsBaseOnLinePid(void)
 		MotorLeftDrivingReverse(_CalculatedLeftMotorSpeed, LinePid.ComputedRightWhPwmVal);
 	}
 	else if(LinePid.ComputedRightWhPwmVal < 0){
-	    int _CalculatedRightMotorSpeed=LinePid.ComputedRightWhPwmVal*(-1);
+	    int _CalculatedRightMotorSpeed=LinePid.ComputedRightWhPwmVal*(-1); /*Revert*/
 		MotorRightDrivingReverse(LinePid.ComputedLeftWhPwmVal, _CalculatedRightMotorSpeed);
 	}
 	else{ /*LinePid.ComputedLeftWhPwmVal>0 && (LinePid.ComputedRightWhPwmVal>0*/
@@ -268,35 +274,13 @@ static void SetMotorSpeedsBaseOnLinePid(void)
  * */
 static void SetMotorSpeeds(float MotSpeedLeft, float MotSpeedRight)
 {
-	float PresetSpeed_LeftMotor=  MotSpeedLeft;
-	float PresetSpeed_RightMotor= MotSpeedRight;
+	float ExpectedPresetSpeed_LeftMotor=  MotSpeedLeft;
+	float ExpectedPresetSpeed_RightMotor= MotSpeedRight;
 
+	CompensateBatteryDischarge(&ExpectedPresetSpeed_LeftMotor,&ExpectedPresetSpeed_RightMotor);
 
-	if(PresetSpeed_RightMotor >= Robot_Cntrl.input_RightWhSpeed)
-	{
-		float delta_sp=PresetSpeed_RightMotor-Robot_Cntrl.input_RightWhSpeed;
-		PresetSpeed_RightMotor=PresetSpeed_RightMotor + (delta_sp);
-	}
-	else //(PresetSpeed_RightMotor < Predkosc_P)
-	{
-		float delta_sp=PresetSpeed_RightMotor - Robot_Cntrl.input_RightWhSpeed;
-		PresetSpeed_RightMotor=PresetSpeed_RightMotor+(delta_sp);
-	}
-
-	if(PresetSpeed_LeftMotor > Robot_Cntrl.input_LeftWhSpeed)
-	{
-		float delta_sp=PresetSpeed_LeftMotor-Robot_Cntrl.input_LeftWhSpeed;
-		PresetSpeed_LeftMotor=PresetSpeed_LeftMotor+(delta_sp);
-	}
-	else //PresetSpeed_LeftMotor < Enc_Module.LeftWheelSpeed)
-	{
-		float delta_pr=PresetSpeed_LeftMotor-Robot_Cntrl.input_LeftWhSpeed;
-		PresetSpeed_LeftMotor=PresetSpeed_LeftMotor+(delta_pr);
-	}
-
-
-	int L_ComputedLeftWhPwmVal=   (LinePid.NVM_MotAFacPwmToSpdLeft* PresetSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft;
-	int L_ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*PresetSpeed_RightMotor )+LinePid.NVM_MotBFacPwmToSpdRight;
+	int L_ComputedLeftWhPwmVal=   (LinePid.NVM_MotAFacPwmToSpdLeft* ExpectedPresetSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft;
+	int L_ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*ExpectedPresetSpeed_RightMotor )+LinePid.NVM_MotBFacPwmToSpdRight;
 
 	if(L_ComputedLeftWhPwmVal>MaxPWMValue){
 		L_ComputedLeftWhPwmVal=MaxPWMValue;
