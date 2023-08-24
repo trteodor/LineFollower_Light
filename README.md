@@ -8,6 +8,10 @@ Real word prototype:
 
 ![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/RobotFotoMain.png)
 
+Simulated assembly izometric view:
+
+![Izometric3D_View](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/IzometricViewAssembly.jpg)
+
   * You will need to spend around 200$ if you want recreate this design (PCB order included)
 
 In Embedded source code is implemented many algorithms, PID Controller is used to follow for the black line on white theme. 
@@ -32,3 +36,20 @@ The repository contains all the files used to create this project (PCB, Mechanic
 QT service app overview screen shot:
 
 ![QtApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/QT_servApplScreenShot.jpg)
+
+
+Installer wizard:  (created using Inno Compiler)
+https://github.com/trteodor/LineFollower_Light/blob/master/40_ServiceApplication_QT/LF_ServiceApp_1.3_Installer.exe
+
+After installation associated "*.lfp" extension should be opened by default by LF_ServiceApp"
+
+
+# References
+* https://github.com/trteodor/Line_Follower_STM32H7
+* https://forbot.pl/blog/algorytm-linefollowera-c-poczatkujacych-id2722
+* https://kcir.pwr.edu.pl/~mucha/Pracki/Jedrzej_Stolarz_praca_inzynierska.pdf
+* https://kcir.pwr.edu.pl/~mucha/Pracki/Witek_Lipieta_praca_magisterska.pdf
+* https://kcir.pwr.edu.pl/~mucha/Pracki/Rafal_Cyminski_praca_magisterska.pdf
+* https://forbot.pl/forum/topic/13552-cukiereczek/
+
+**_If you have question please open issue to this repository, or write comment under video on youtube._**

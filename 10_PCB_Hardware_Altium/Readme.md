@@ -14,5 +14,6 @@ Some of the most important items or items not shown in the altium schematics:
 * https://abc-rc.pl/product-pol-7891-Modul-BMS-PCM-PCB-ladowania-i-ochrony-ogniw-Li-ion-2S-8-4V-5A-18650.html (to get lion protection circuit elements)
 * https://botland.com.pl/akumulatory-li-pol-2s-74v-/8973-pakiet-li-pol-dualsky-250mah-30c-2s-74v-eco-s-6941047104631.html or
 * https://botland.com.pl/akumulatory-li-pol-2s-74v-/8248-pakiet-li-pol-dualsky-150mah-30c-2s-74v-eco-s-6941047106321.html 
+* https://www.tme.eu/pl/details/cmj2101/dlawiki-smd-pozostale/talema/cmj-2-101/
 * Distance sensor VL53
-* Bluetooth Low Energy Module JDY-08 
+* https://kamami.pl/moduly-bluetooth/211365-modul-bluetooth-hc-06-20edr.html
