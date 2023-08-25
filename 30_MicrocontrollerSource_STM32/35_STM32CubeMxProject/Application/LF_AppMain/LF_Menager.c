@@ -131,8 +131,8 @@ static void UpdateInputData(void)
 /**************************************************************************************************/
 static void MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
 {
-  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue  - RightMotorSpeed);//-->> Forward
-  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);
+  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue);//-->> Forward
+  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed);
 
   __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue );  //-->> Forward
   __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed);
@@ -141,8 +141,8 @@ static void MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed)
 static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
 
-	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue );
-	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed);  //-->> Reverse
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue - RightMotorSpeed );
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);  //-->> Reverse
 
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue);  //-->> Forward
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue - LeftMotorSpeed);
@@ -150,8 +150,8 @@ static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 /**************************************************************************************************/
 static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
-	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue - RightMotorSpeed); //-->> Forward
-	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue );
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue); //-->> Forward
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed );
 
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue - LeftMotorSpeed);
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue );  //-->> Reverse
