@@ -469,25 +469,43 @@ void GenericLfQCP::LfGraph_moveLegend()
 
 void GenericLfQCP::LfGraph_graphClicked(QCPAbstractPlottable *plottable, int dataIndex)
 {
-    // since we know we only have QCPGraphs in the plot, we can immediately access interface1D()
-    // usually it's better to first check whether interface1D() returns non-zero, and only then use it.
-    double dataValue = plottable->interface1D()->dataMainValue(dataIndex);
-    double dataValue2 = plottable->interface1D()->dataMainKey(dataIndex);
-    QString message = QString("Clicked on graph '%1' at data point #%2 with value %3.").arg(plottable->name()).arg(dataIndex).arg(dataValue);
+    double ValY = plottable->interface1D()->dataMainValue(dataIndex);
+    double ValX = plottable->interface1D()->dataMainKey(dataIndex);
 
-    QString message2 = QString("DatVal2: %1").arg(dataValue2) ;
-    qDebug() << message << message2;
+    uint32_t resVectorDataIndex = 0;
+    uint32_t DataSizeGr1 = Graph1->data()->size();
 
-    emit LfGraphSignal_graphClicked(dataIndex);
+    if(DataSizeGr1 > 0)
+    {
+        for(int i=0; i<DataSizeGr1; i++)
+        {
+            if(DataVector_X1.at(i) == ValX && DataVector_Y1.at(i) == ValY)
+            {
+                resVectorDataIndex = i;
+                break;
+            }
+        }
+    }
 
+//    QString message = QString("Clicked on graph '%1' at data point #%2 with value ValX %3: ValY %4: VecDataIndex %5")
+//                          .arg(plottable->name()).arg(dataIndex).arg(ValX).arg(ValY).arg(resVectorDataIndex);
+//    qDebug() << message;
+
+    if(resVectorDataIndex > 0)
+    {
+        emit LfGraphSignal_graphClicked(resVectorDataIndex);
+    }
 }
 
 
 void GenericLfQCP::LfGraph_DrawMarkersAtDataIndex(int DataIndex)
 {
     /*Align to Graph1 it\s best idea what I figured out*/
-    double dataValueVer =    Graph1->dataMainKey(DataIndex);
-    double dataValueHor =    Graph1->dataMainValue(DataIndex);
+//    double dataValueVer =    Graph1->dataMainKey(DataIndex);
+        double dataValueVer =    DataVector_X1.at(DataIndex);
+    double dataValueHor =    DataVector_Y1.at(DataIndex);
+
+//        DataVector_X1, DataVector_Y1;
 
     if(DataIndex != 0)
     {

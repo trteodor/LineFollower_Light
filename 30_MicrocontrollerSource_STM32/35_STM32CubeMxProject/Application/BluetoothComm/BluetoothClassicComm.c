@@ -1113,17 +1113,17 @@ static void TransmitDataHandler(void)
 
 void BLU_Init(void)
 {
-//	HAL_UART2_CostumUserInit(9600); /*Configure default HC-06 uart speed for few operations*/
-//	HAL_Delay(200); /* While startup after power on
-//		* and after experimental test it was observed that short delay is required to stabilize bluetooth module
-//		* It is required for AT Commands like AT+NAME...
-//		* */
-//
-//	HAL_UART_Transmit(&huart2, (uint8_t *)"AT+BAUDA",8,1000);
-//	HAL_Delay(500);
-//	HAL_UART2_CostumUserInit(460800); /*We are almost sure that bluetooth
-//										* BaudRate is now configured as expected*/
-//	HAL_Delay(500);
+	HAL_UART2_CostumUserInit(9600); /*Configure default HC-06 uart speed for few operations*/
+	HAL_Delay(200); /* While startup after power on
+		* and after experimental test it was observed that short delay is required to stabilize bluetooth module
+		* It is required for AT Commands like AT+NAME...
+		* */
+
+	HAL_UART_Transmit(&huart2, (uint8_t *)"AT+BAUDA",8,1000);
+	HAL_Delay(500);
+	HAL_UART2_CostumUserInit(460800); /*We are almost sure that bluetooth
+										* BaudRate is now configured as expected*/
+	// HAL_Delay(500);
 
 	uint32_t DevNameUpdateFlag = 0;
 	EE_ReadVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32,&DevNameUpdateFlag);

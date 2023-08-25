@@ -10,7 +10,7 @@ Real word prototype:
 
 Simulated assembly izometric view:
 
-![Izometric3D_View](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/IzometricViewAssembly.jpg)
+![Izometric3D_View](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/IzometricAssemblySimu.jpg)
 
   * You will need to spend around 200$ if you want recreate this design (PCB order included)
 
@@ -35,7 +35,7 @@ The repository contains all the files used to create this project (PCB, Mechanic
 
 QT service app overview screen shot:
 
-![QtApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/QT_servApplScreenShot.jpg)
+![QtApp](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/QT_servApplScreenShotEx.jpg)
 
 
 Installer wizard:  (created using Inno Compiler)

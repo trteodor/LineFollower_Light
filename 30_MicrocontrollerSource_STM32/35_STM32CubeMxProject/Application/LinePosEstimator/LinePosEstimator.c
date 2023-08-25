@@ -5,6 +5,7 @@
 #include "LinePosEstimator.h"
 #include "EEmu.h"
 #include "BluetoothClassicComm.h"
+#include "EncodersHandler.h"
 
 
 /**********************************************************************/
@@ -18,6 +19,14 @@
 /**********************************************************************/
 /**********************************************************************/
 /**********************************************************************/
+typedef enum
+{
+	LineSideClear,
+	LineOnLeftSide,
+	LineOnRightSide,
+}LinePostionEnum_t;
+
+
 
 typedef struct
 {
@@ -233,12 +242,42 @@ static float EstimatePositionError(void)
 	return LINE_NOT_DETECTED_MAGIC_NUMBER;
 }
 
-typedef enum
+
+void TryDetectRightAngle(void)
 {
-	LineSideClear,
-	LineOnLeftSide,
-	LineOnRightSide,
-}LinePostionEnum_t;
+
+
+
+}
+
+#define LF_DRIVING_STRIGHT_YAW_RATE_VALUE 0.4
+
+/** @brief TryDetectStrigthLine
+* @details 
+* @return  
+*/
+void TryDetectStrigthLine(void)
+{
+	const uint32_t MeasurePeriod = 20;
+	float yawRateValue = ENC_GetYawRateWhBased();
+	float travelledDistance = ENC_GetTravelledDistance();
+	float posError = LineEstimator.PositionErrorValue;
+
+	static float travelledDistanceYrStart;
+	static float travelledDistanceTrEnd;
+	static float travelledDistancePosErrStart;
+	static float travelledDistancePosErrEnd;
+
+	uint32_t counter;
+	uint32_t timerErrorBased;
+	uint32_t timerYawRateBasedStart;
+
+	if(yawRateValue < LF_DRIVING_STRIGHT_YAW_RATE_VALUE)
+	{
+		
+	}
+
+}
 
 LinePostionEnum_t LinePositionEstimator(void)
 {

@@ -1881,7 +1881,7 @@ void MainWindow::on_BLU_RobotStart_Button_clicked()
         ui->BLU_TrueLogStartButton->setDisabled(true);
         ui->BLU_RobotStart_Button->setDisabled(true);
 //        ui->ReadNvM_Button->setDisabled(true);
-        ui->UpdateNvM_Button->setDisabled(true);
+//        ui->UpdateNvM_Button->setDisabled(true);
         ui->BLU_DisconnectButton->setDisabled(true);
 
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
@@ -2523,17 +2523,18 @@ void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
             for (const QJsonValue &v : DebugDataTable_JsArr)
             {
                 QJsonObject DataRow_json = v.toObject();
+
                 QString sysTime = DataRow_json["sysTime"].toString();
-                uint32_t ucTimeStamp = DataRow_json["ucTimeStamp"].toInt();
-                uint32_t FrameCounter = DataRow_json["FrameCounter"].toInt();
-                uint32_t SyncId = DataRow_json["SyncId"].toInt();
+                QString ucTimeStamp = DataRow_json["ucTimeStamp"].toString();
+                QString FrameCounter = DataRow_json["FrameCounter"].toString();
+                QString SyncId = DataRow_json["SyncId"].toString();
                 QString DataString = DataRow_json["Data"].toString();
 
                 ui->DebugDataTable->insertRow(ui->DebugDataTable->rowCount() );
                 ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,0,new QTableWidgetItem((QString)sysTime.data() ) );
-                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,1,new QTableWidgetItem(QString::number(ucTimeStamp) ));
-                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,2,new QTableWidgetItem(QString::number(FrameCounter) ));
-                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,3,new QTableWidgetItem(QString::number(SyncId)));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,1,new QTableWidgetItem((QString)ucTimeStamp.data() ));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,2,new QTableWidgetItem((QString)FrameCounter.data() ));
+                ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,3,new QTableWidgetItem((QString)SyncId.data() ));
                 ui->DebugDataTable->setItem(ui->DebugDataTable->rowCount() -1 ,4,new QTableWidgetItem((QString)DataString.data() ) );
             }
 

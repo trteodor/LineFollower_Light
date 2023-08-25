@@ -39,8 +39,9 @@ typedef struct Robot_Cntrl_t
 
 	float input_TravelledDistance;
 	float input_RobotOrientation;
-	float input_LeftWhSpeed;
-	float input_RightWhSpeed;
+	float input_AverageSpeed;
+	float input_EncLeftWhSpeed;
+	float input_EncRightWhSpeed;
 
 }Robot_Cntrl_t;
 /*************************************************************************/
@@ -123,8 +124,9 @@ static void UpdateInputData(void)
 {
 	Robot_Cntrl.input_RobotOrientation = ENC_GetCurrentOrientation();
 	Robot_Cntrl.input_TravelledDistance = ENC_GetTravelledDistance();
-	Robot_Cntrl.input_LeftWhSpeed = ENC_GetLeftWhSpeed();
-	Robot_Cntrl.input_RightWhSpeed = ENC_GetRightWhSpeed();
+	Robot_Cntrl.input_AverageSpeed = ENC_GetAverageSpeed();
+	Robot_Cntrl.input_EncLeftWhSpeed = ENC_GetLeftWhSpeed();
+	Robot_Cntrl.input_EncRightWhSpeed = ENC_GetRightWhSpeed();
 
 	LinePid.input_PositionError = LPE_GetPosError();
 }
@@ -184,31 +186,31 @@ static void ComputeLinePidVal(void)
 		LinePid.PID_value = (LinePid.Kp * LinePid.P)+(LinePid.Kd * LinePid.D);
 }
 /**************************************************************************************************/
-static void CompensateBatteryDischarge(float *SpeedLftMot,float *SpdRightMot)
+static void CompensateBatteryDischarge(float *ExpectedSpeedLftMot,float *ExpectedSpdRightMot)
 {
-	// static const float DeltaKpIfSpeedIsTooLow = 2;
+	static const float DeltaKpIfSpeedIsTooLow = 2;
 
-	// if(*SpdRightMot >= Robot_Cntrl.input_RightWhSpeed)
-	// {
-	// 	float delta_sp=fabs(*SpdRightMot-Robot_Cntrl.input_RightWhSpeed);
-	// 	*SpdRightMot=*SpdRightMot - (delta_sp);
-	// }
-	// else //(SpdRightMot < Predkosc_P)
-	// {
-	// 	float delta_sp=fabs(*SpdRightMot - Robot_Cntrl.input_RightWhSpeed);
-	// 	*SpdRightMot=*SpdRightMot + (delta_sp * DeltaKpIfSpeedIsTooLow);
-	// }
+	if(*ExpectedSpdRightMot >= Robot_Cntrl.input_EncRightWhSpeed)
+	{
+		float delta_sp=fabs(*ExpectedSpdRightMot-Robot_Cntrl.input_EncRightWhSpeed);
+		*ExpectedSpdRightMot=*ExpectedSpdRightMot + (delta_sp * DeltaKpIfSpeedIsTooLow);
+	}
+	else //(*ExpectedSpdRightMot < Robot_Cntrl.input_EncRightWhSpeed)
+	{
+		float delta_sp=fabs(*ExpectedSpdRightMot - Robot_Cntrl.input_EncRightWhSpeed);
+		*ExpectedSpdRightMot=*ExpectedSpdRightMot - (delta_sp);
+	}
 
-	// if(*SpeedLftMot > Robot_Cntrl.input_LeftWhSpeed)
-	// {
-	// 	float delta_sp=fabs(*SpeedLftMot-Robot_Cntrl.input_LeftWhSpeed);
-	// 	*SpeedLftMot=*SpeedLftMot - (delta_sp);
-	// }
-	// else //ExpectedPresetSpeed_LeftMotor < Enc_Module.LeftWheelSpeed)
-	// {
-	// 	float delta_pr=fabs(*SpeedLftMot-Robot_Cntrl.input_LeftWhSpeed);
-	// 	*SpeedLftMot=*SpeedLftMot + (delta_pr * DeltaKpIfSpeedIsTooLow);
-	// }
+	if(*ExpectedSpeedLftMot > Robot_Cntrl.input_EncLeftWhSpeed)
+	{
+		float delta_sp=fabs(*ExpectedSpeedLftMot-Robot_Cntrl.input_EncLeftWhSpeed);
+		*ExpectedSpeedLftMot=*ExpectedSpeedLftMot + (delta_sp * DeltaKpIfSpeedIsTooLow);
+	}
+	else //(*ExpectedSpeedLftMot < Robot_Cntrl.input_EncLeftWhSpeed)
+	{
+		float delta_pr=fabs(*ExpectedSpeedLftMot-Robot_Cntrl.input_EncLeftWhSpeed);
+		*ExpectedSpeedLftMot=*ExpectedSpeedLftMot - (delta_pr);
+	}
 }
 
 static void ComputeExpectedPwmValues(void)
@@ -477,8 +479,8 @@ void ManageRobotMovingState(void)
 		if(true == prevExpectedrDrivingState)
 		{/*Changed from driving to standstill*/
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
-			BLU_DbgMsgTransmit("LineFollowing mSec: %d TakenDist: %f", 
-										DrivingTime, Robot_Cntrl.input_TravelledDistance);
+			BLU_DbgMsgTransmit("Following mS: %d takeDist: %.3f AvSpd: %.3f ", 
+										DrivingTime, Robot_Cntrl.input_TravelledDistance,Robot_Cntrl.input_AverageSpeed);
 
 			MotorsForceStop();
 

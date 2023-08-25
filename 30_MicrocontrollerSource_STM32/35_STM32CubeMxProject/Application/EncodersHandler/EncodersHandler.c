@@ -11,12 +11,18 @@
 #include "EEmu.h"
 
 #include "math.h"
+
 #include "tim.h"
 #include "../BluetoothComm/BluetoothClassicComm.h"
+
 
 /*************************************************************************************/
 /*************************************************************************************/
 /*************************************************************************************/
+
+#ifndef M_PI
+#define M_PI		3.14159265358979323846
+#endif 
 
 #define LeftEncoderCnt htim8.Instance->CNT
 #define RightEncoderCnt htim4.Instance->CNT
@@ -59,6 +65,8 @@ typedef struct EncHandlerDescr_t
 
 	float TakenDistance;
 	float AverageSpeed;
+
+	float yawRateWheelBased;
 
 }Encoders_Module_t ;
 
@@ -115,17 +123,20 @@ static void CalculateBasicBasedOnEncodersData(void)
 	EncHandlerDescr.LineFollowerSpeed= (EncHandlerDescr.LeftWheelSpeed + EncHandlerDescr.RightWheelSpeed) / 2;
 
 	/*Integral of speed is equal distance*/
-	EncHandlerDescr.TakenDistance += EncHandlerDescr.LineFollowerSpeed /2;
+	EncHandlerDescr.TakenDistance += ( (EncHandlerDescr.LineFollowerSpeed /2) * EncodersProbeTimeInSeconds ) ;
 
 
 	/*Estimage Average speed  Xav[n] = Xav[n-1] + (1/n)*(Zn-Xav[n-1])   */
-	EncHandlerDescr.AverageSpeed += EncHandlerDescr.AverageSpeed +
-									 ( (1/EncHandlerDescr.ProbeCounter) *
+	EncHandlerDescr.AverageSpeed += ( (float)(1.0F/EncHandlerDescr.ProbeCounter) *
 									  	   (EncHandlerDescr.LineFollowerSpeed - EncHandlerDescr.AverageSpeed) );
 
 	/* Save current data as previos (input handled)*/
 	EncHandlerDescr.PreviousLeftEncoderCntImpulsCount=TmpLeftEncImpCnt;
 	EncHandlerDescr.PreviousRightEncoderCntImpulsCount=TmpRightEncImpCnt;
+
+	/*Turning right - positive values*/
+	EncHandlerDescr.yawRateWheelBased = ((( (EncHandlerDescr.RightWheelSpeed - EncHandlerDescr.LeftWheelSpeed) ) / EncHandlerDescr.NVM_WheelBase) / M_PI);
+
 
 }
 
@@ -156,7 +167,7 @@ static void UpdateEncBleDataReport(void)
 	BLE_MapDataReport.PosY = RobotPosition.Y;
 	BLE_MapDataReport.PosO = RobotPosition.O;
 	BLE_MapDataReport.TravelledDistance = EncHandlerDescr.TakenDistance;
-	// BLE_MapDataReport.YawRate =
+	BLE_MapDataReport.YawRate = EncHandlerDescr.yawRateWheelBased;
 
 	BLU_ReportMapData(&BLE_MapDataReport);
 }
@@ -243,6 +254,12 @@ void ENC_Init(void)
 	EncHandlerDescr.LineFollowerSpeed =0;
 	EncHandlerDescr.TakenDistance = 0;
 	EncHandlerDescr.AverageSpeed=0;
+	RobotPosition.O = 0;
+	RobotPosition.prO = 0;
+	RobotPosition.prX = 0;
+	RobotPosition.prY = 0;
+	RobotPosition.X = 0;
+	RobotPosition.Y = 0;
 
 	HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
 	HAL_TIM_Encoder_Start(&htim8,TIM_CHANNEL_ALL);
@@ -288,5 +305,15 @@ float ENC_GetCurrentOrientation(void)
 float ENC_GetTravelledDistance(void)
 {
 	return EncHandlerDescr.TakenDistance;
+}
+
+float ENC_GetYawRateWhBased(void)
+{
+	return EncHandlerDescr.yawRateWheelBased;
+}
+
+float ENC_GetAverageSpeed(void)
+{
+	return EncHandlerDescr.AverageSpeed;
 }
 
