@@ -351,4 +351,3 @@ uint32_t HAL_GetTick100us(void)
   return us100Timer;
 }
 /* USER CODE END 1 */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

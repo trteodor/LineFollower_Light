@@ -76,5 +76,3 @@ uint32_t HAL_GetTick100us(void); /*HAL Prefix to show that's comming directly fr
 #endif
 
 #endif /* __STM32H7xx_IT_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

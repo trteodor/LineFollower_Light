@@ -108,6 +108,7 @@ void Error_Handler(void);
 #define EEPROM_WC_GPIO_Port GPIOE
 #define MPU6050_INT_Pin GPIO_PIN_1
 #define MPU6050_INT_GPIO_Port GPIOE
+
 /* USER CODE BEGIN Private defines */
 
 
@@ -118,5 +119,3 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
