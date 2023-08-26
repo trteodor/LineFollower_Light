@@ -2,11 +2,11 @@
 
 Demonstration video:
 
-https://www.youtube.com/watch?v=ulPPqBeZhOw
+https://youtu.be/CcTioGpEkXc
 
 Real word prototype:
 
-![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/RobotFotoMain.png)
+![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/FotoIzoFront.jpg)
 
 Simulated assembly izometric view:
 
@@ -43,6 +43,9 @@ https://github.com/trteodor/LineFollower_Light/blob/master/40_ServiceApplication
 
 After installation associated "*.lfp" extension should be opened by default by LF_ServiceApp"
 
+QT_AppIco
+
+![QtAppIco](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyBackSideRightIco.png)
 
 # References
 * https://github.com/trteodor/Line_Follower_STM32H7

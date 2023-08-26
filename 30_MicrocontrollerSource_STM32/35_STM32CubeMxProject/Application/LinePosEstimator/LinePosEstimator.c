@@ -250,7 +250,7 @@ void TryDetectRightAngle(void)
 
 }
 
-#define LF_DRIVING_STRIGHT_YAW_RATE_VALUE 0.4
+#define LF_DRIVING_STRIGHT_YAW_RATE_VALUE 1.2
 
 /** @brief TryDetectStrigthLine
 * @details 
@@ -258,13 +258,23 @@ void TryDetectRightAngle(void)
 */
 void TryDetectStrigthLine(void)
 {
-	const uint32_t MeasurePeriod = 20;
+	bool VehicleIsOnStrightLine = false;
+
+	static uint32_t LogStrightLineTimer = 0;
+
+	static const uint32_t MeasurePeriod = 20;
+	static uint32_t MesaureTimerPeriod = 0; 
+
 	float yawRateValue = ENC_GetYawRateWhBased();
 	float travelledDistance = ENC_GetTravelledDistance();
 	float posError = LineEstimator.PositionErrorValue;
 
-	static float travelledDistanceYrStart;
-	static float travelledDistanceTrEnd;
+	static float TimeStrightLineYrStart;
+	static float TimeStrightLineYrEnd;
+	static float DistanceStrightLineYrStart;
+	static float DistanceStrightLineYrEnd;
+
+
 	static float travelledDistancePosErrStart;
 	static float travelledDistancePosErrEnd;
 
@@ -272,9 +282,59 @@ void TryDetectStrigthLine(void)
 	uint32_t timerErrorBased;
 	uint32_t timerYawRateBasedStart;
 
-	if(yawRateValue < LF_DRIVING_STRIGHT_YAW_RATE_VALUE)
+	static bool PreviousStateIsStrightLine = false;
+	static bool CurrentStateIsStrightLine = false;
+
+	if( (HAL_GetTick() - MesaureTimerPeriod) > MeasurePeriod)
 	{
+		if(fabs(yawRateValue) < fabs(LF_DRIVING_STRIGHT_YAW_RATE_VALUE) )
+		{
+			
+			if(PreviousStateIsStrightLine == false)
+			{
+				TimeStrightLineYrStart = HAL_GetTick();
+				DistanceStrightLineYrStart = ENC_GetTravelledDistance();
+				CurrentStateIsStrightLine = true;
+				LogStrightLineTimer = HAL_GetTick();
+			}
+		}
+		else{
+			if(PreviousStateIsStrightLine == true)
+			{
+				TimeStrightLineYrEnd = HAL_GetTick();
+				DistanceStrightLineYrEnd = ENC_GetTravelledDistance();
+				CurrentStateIsStrightLine = false;
+
+				LogStrightLineTimer = HAL_GetTick();
+			}
+		}
+
+		if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
+		{
+			if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > 0.1F)
+			{
+				BLU_DbgMsgTransmit("LeftStrightLine: TrvDSt: %f, TrvDend:%f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
+				// TimeStrightLineYrEnd = 0;
+				// DistanceStrightLineYrEnd= 0;
+				// DistanceStrightLineYrStart= 0;
+				// TimeStrightLineYrStart = 0;
+			}
+		}
 		
+		if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > 0.2F )  //m
+				&& (PreviousStateIsStrightLine == true) 
+				&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
+		{
+
+
+			if( (HAL_GetTick() - LogStrightLineTimer) > 1000)
+			{
+				LogStrightLineTimer = HAL_GetTick();
+				BLU_DbgMsgTransmit("VehAtStrightLine: TrvDSt: %f ucTSt: %f CurrD: %f",DistanceStrightLineYrStart,TimeStrightLineYrStart, ENC_GetTravelledDistance() );
+			}
+		}
+
+		PreviousStateIsStrightLine = CurrentStateIsStrightLine;
 	}
 
 }
@@ -375,6 +435,7 @@ void LPE_Task(void)
 {
 	LinePositionEstimator();
 	SendLinePosEstDataReportForBle();
+	TryDetectStrigthLine();
 
 	// BLU_DbgMsgTransmit("MappedValue 3000: %d", MapValueToUint8_Range(3000) );
 

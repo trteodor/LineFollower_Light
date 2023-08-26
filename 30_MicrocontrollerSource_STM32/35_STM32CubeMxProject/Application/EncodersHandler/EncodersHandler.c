@@ -240,6 +240,8 @@ void ENC_Init(void)
 {
 	HAL_TIM_Encoder_Stop(&htim4,TIM_CHANNEL_ALL);
 	HAL_TIM_Encoder_Stop(&htim8,TIM_CHANNEL_ALL);
+
+	/*Reset ENC data...*/
 	LeftEncoderCnt = 0;
 	RightEncoderCnt = 0;
 	EncHandlerDescr.LeftEncoderCntImpulsCount = (uint16_t*)&LeftEncoderCnt;
@@ -295,6 +297,11 @@ float ENC_GetLeftWhSpeed(void)
 float ENC_GetRightWhSpeed(void)
 {
 	return EncHandlerDescr.RightWheelSpeed;
+}
+
+float ENC_GetVehicleSpeed(void)
+{
+	return EncHandlerDescr.LineFollowerSpeed;
 }
 
 float ENC_GetCurrentOrientation(void)
