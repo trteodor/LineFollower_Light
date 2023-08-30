@@ -8,13 +8,26 @@
 #include "EncodersHandler.h"
 
 
-/**********************************************************************/
-/**********************************************************************/
-/**********************************************************************/
+
+#define TimeMSToClearBigErrorFlag    70
+
+// #define LineSideClear    0
+// #define LineOnLeftSide   1
+// #define LineOnRightSide  2
+
+
+#define LINE_EVENT_CONFIRMATION_MAGIC_VALUE_MS 2 //TODO:(explanation) (10 / 2.0m/s = 5ms )
+#define LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE 5
+#define LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 4
+#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.05F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
+
+
+#define LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT  0.2 //m
 
 #define LINE_NOT_DETECTED_MAGIC_NUMBER        999
 #define LINE_DETECTED_ADC_VALUE               3000
 #define LINE_SENSOR_DATA_COUNT 				  12
+
 
 /**********************************************************************/
 /**********************************************************************/
@@ -35,12 +48,14 @@ typedef struct
 	float ErrorWeightValueTable[11];
 	float SensorErrorMaxValue;
 	int LineDetectValue;
+	uint16_t LeftLinePosConfidence;
+	uint16_t RightLinePosConfidence;
 }LineEstimatorDesc_t;
 
 static LineEstimatorDesc_t LineEstimator;
 
-
-
+static void (*LineEventCorruptedCallBack_p)(LinePosEstimatorEvent_t LinePosEstEv);
+static void (*DrivingAtStrightLineCallBack_p)(void);
 
 /**********************************************************************/
 /**********************************************************************/
@@ -56,25 +71,54 @@ static LineEstimatorDesc_t LineEstimator;
  * +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
  */
 /*Extra Macros start*/
-#define Mid1 LineEstimator.LineSensorsADCVal[5]
-#define Mid2 LineEstimator.LineSensorsADCVal[6]
-#define SideL1 LineEstimator.LineSensorsADCVal[4]
-#define SideL2 LineEstimator.LineSensorsADCVal[3]
-#define SideL3 LineEstimator.LineSensorsADCVal[2]
-#define SideL4 LineEstimator.LineSensorsADCVal[1]
-#define SideL_Max LineEstimator.LineSensorsADCVal[0]
-#define SideR1 LineEstimator.LineSensorsADCVal[7]
-#define SideR2 LineEstimator.LineSensorsADCVal[8]
-#define SideR3 LineEstimator.LineSensorsADCVal[9]
-#define SideR4 LineEstimator.LineSensorsADCVal[10]
-#define SideR_Max LineEstimator.LineSensorsADCVal[11]
+
+typedef enum{
+	LeftMax,
+	LeftW4,
+	LeftW3,
+	LeftW2,
+	LeftW1,
+	MidL,
+	MidR,
+	RightW1,
+	RightW2,
+	RightW3,
+	RightW4,
+	RightMax
+}ErrPosition_e;
+
+
+#define Mid1 LineEstimator.LineSensorsADCVal[MidL]
+#define Mid2 LineEstimator.LineSensorsADCVal[MidR]
+#define SideL1 LineEstimator.LineSensorsADCVal[LeftW1]
+#define SideL2 LineEstimator.LineSensorsADCVal[LeftW2]
+#define SideL3 LineEstimator.LineSensorsADCVal[LeftW3]
+#define SideL4 LineEstimator.LineSensorsADCVal[LeftW4]
+#define SideL_Max LineEstimator.LineSensorsADCVal[LeftMax]
+#define SideR1 LineEstimator.LineSensorsADCVal[RightW1]
+#define SideR2 LineEstimator.LineSensorsADCVal[RightW2]
+#define SideR3 LineEstimator.LineSensorsADCVal[RightW3]
+#define SideR4 LineEstimator.LineSensorsADCVal[RightW4]
+#define SideR_Max LineEstimator.LineSensorsADCVal[RightMax]
 /*Extra Macros END*/
 
-#define TimeMSToClearBigErrorFlag 30
 
 /**********************************************************************/
 static void GetErrorWeightsFromNvm();
+
 static float EstimatePositionError();
+
+void LPE_RegisterLineEventCallBack(void LineEvCallback(LinePosEstimatorEvent_t LinePosEstEv) )
+{
+	LineEventCorruptedCallBack_p = LineEvCallback;
+}
+
+void LPE_RegisterDrivingAtStrightLineCallBack(void DrivStrightLineEvCallback(void) )
+{
+DrivingAtStrightLineCallBack_p = DrivStrightLineEvCallback;
+}
+
+
 
 static uint16_t MapValueToUint8_Range(uint16_t InputValue)
 {
@@ -92,8 +136,6 @@ static uint16_t MapValueToUint8_Range(uint16_t InputValue)
 	
 	return (uint16_t)output;
 }
-
-
 /**********************************************************************/
 static void GetErrorWeightsFromNvm(void)
 {
@@ -243,55 +285,52 @@ static float EstimatePositionError(void)
 }
 
 
-void TryDetectRightAngle(void)
-{
 
+#define LF_DRIVING_STRIGHT_YAW_RATE_VALUE     1.2
+#define LF_DRIV_SRIGHT_MEAS_PERIOD_MS         20
 
-
-}
-
-#define LF_DRIVING_STRIGHT_YAW_RATE_VALUE 1.2
-
-/** @brief TryDetectStrigthLine
+/** @brief TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
 * @details 
 * @return  
 */
-void TryDetectStrigthLine(void)
+void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
 {
-	bool VehicleIsOnStrightLine = false;
 
 	static uint32_t LogStrightLineTimer = 0;
-
-	static const uint32_t MeasurePeriod = 20;
 	static uint32_t MesaureTimerPeriod = 0; 
-
-	float yawRateValue = ENC_GetYawRateWhBased();
-	float travelledDistance = ENC_GetTravelledDistance();
-	float posError = LineEstimator.PositionErrorValue;
-
 	static float TimeStrightLineYrStart;
-	static float TimeStrightLineYrEnd;
 	static float DistanceStrightLineYrStart;
 	static float DistanceStrightLineYrEnd;
-
-
-	static float travelledDistancePosErrStart;
-	static float travelledDistancePosErrEnd;
-
-	uint32_t counter;
-	uint32_t timerErrorBased;
-	uint32_t timerYawRateBasedStart;
-
 	static bool PreviousStateIsStrightLine = false;
 	static bool CurrentStateIsStrightLine = false;
+	static uint32_t LastTimeOfBigError = 0;
+	static bool DetectedDrivAtStrightLineCommitedFlag = false;
 
-	if( (HAL_GetTick() - MesaureTimerPeriod) > MeasurePeriod)
+	float yawRateValue = ENC_GetYawRateWhBased();
+
+
+	/**/
+	CurrentStateIsStrightLine = PreviousStateIsStrightLine;
+	/**/
+
+
+
+
+	if(fabs(CurrErrPosValue) > fabs(LineEstimator.ErrorWeightValueTable[6]) )
+	{
+		LastTimeOfBigError = HAL_GetTick();
+		CurrentStateIsStrightLine = false;
+	}
+
+	if( ( (HAL_GetTick() - MesaureTimerPeriod) > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) 
+								&& (HAL_GetTick() - LastTimeOfBigError > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) )
 	{
 		if(fabs(yawRateValue) < fabs(LF_DRIVING_STRIGHT_YAW_RATE_VALUE) )
 		{
 			
 			if(PreviousStateIsStrightLine == false)
 			{
+				DetectedDrivAtStrightLineCommitedFlag = false;
 				TimeStrightLineYrStart = HAL_GetTick();
 				DistanceStrightLineYrStart = ENC_GetTravelledDistance();
 				CurrentStateIsStrightLine = true;
@@ -301,42 +340,206 @@ void TryDetectStrigthLine(void)
 		else{
 			if(PreviousStateIsStrightLine == true)
 			{
-				TimeStrightLineYrEnd = HAL_GetTick();
+				DetectedDrivAtStrightLineCommitedFlag = false;
 				DistanceStrightLineYrEnd = ENC_GetTravelledDistance();
 				CurrentStateIsStrightLine = false;
 
 				LogStrightLineTimer = HAL_GetTick();
 			}
 		}
-
-		if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
-		{
-			if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > 0.1F)
-			{
-				BLU_DbgMsgTransmit("LeftStrightLine: TrvDSt: %f, TrvDend:%f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
-				// TimeStrightLineYrEnd = 0;
-				// DistanceStrightLineYrEnd= 0;
-				// DistanceStrightLineYrStart= 0;
-				// TimeStrightLineYrStart = 0;
-			}
-		}
-		
-		if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > 0.2F )  //m
-				&& (PreviousStateIsStrightLine == true) 
-				&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
-		{
-
-
-			if( (HAL_GetTick() - LogStrightLineTimer) > 1000)
-			{
-				LogStrightLineTimer = HAL_GetTick();
-				BLU_DbgMsgTransmit("VehAtStrightLine: TrvDSt: %f ucTSt: %f CurrD: %f",DistanceStrightLineYrStart,TimeStrightLineYrStart, ENC_GetTravelledDistance() );
-			}
-		}
-
-		PreviousStateIsStrightLine = CurrentStateIsStrightLine;
 	}
 
+	if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
+	{
+		DetectedDrivAtStrightLineCommitedFlag = false;
+		if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT)
+		{
+			BLU_DbgMsgTransmit("Leaving StrightLine: TrvDSt: %.3f, TrvDend:%.3f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
+		}
+	}
+	
+	if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT )  //m
+			&& (CurrentStateIsStrightLine == true) && (PreviousStateIsStrightLine == true)
+			&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
+	{
+		/*Veh driving at stright line*/
+		if(false == DetectedDrivAtStrightLineCommitedFlag)
+		{
+			if(DrivingAtStrightLineCallBack_p != NULL){
+				DrivingAtStrightLineCallBack_p();
+			}
+			BLU_DbgMsgTransmit("VehAtStrightLine: AtLeastBy: %f[m]",LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT);
+			DetectedDrivAtStrightLineCommitedFlag = true;
+		}
+
+		if( (HAL_GetTick() - LogStrightLineTimer) > 1000)
+		{
+			LogStrightLineTimer = HAL_GetTick();
+			(void)TimeStrightLineYrStart;
+			// BLU_DbgMsgTransmit("VehAtStrightLine: TrvDStart: %.3f ucTStamp: %d CurrD: %.3f",DistanceStrightLineYrStart,TimeStrightLineYrStart, ENC_GetTravelledDistance() );
+		}
+	}
+
+
+	PreviousStateIsStrightLine = CurrentStateIsStrightLine;
+
+}
+
+
+
+
+LinePosEstimatorEvent_t TryDetectRightAnglesAndCrosses(void)
+{
+	uint32_t CrossLineDetCounterLeft = 0;
+	uint32_t CrossLineDetCounterRight = 0;
+	LinePosEstimatorEvent_t LinePosEstimatorEvent = Event_None;
+
+	static bool AlreadyOnCrossOrRightAngle = false;
+
+	// static uint32_t isOnCrossProbingTimer = 0;
+	// static bool isOnCrossProbingFlag =false;
+
+	static bool isOnRightRightAngleProbingFlag=false;
+	static bool isOnLeftRightAngleProbingFlag =false;
+	static uint32_t isOnRightRightAngleProbingTimer = 0;
+	static uint32_t isOnLeftRightAngleProbingTimer = 0;
+
+	float RequiredConfirmationMagicValue =  LINE_EVENT_CONFIRMATION_MAGIC_VALUE_MS / ENC_GetVehicleSpeed();
+	if(RequiredConfirmationMagicValue > 50.0F)
+	{
+		RequiredConfirmationMagicValue  = 50.0F;
+	}
+	uint32_t RequiredConfirmationMagicValue_u32 = (uint32_t)RequiredConfirmationMagicValue;
+
+
+	static float travelledDistanceEvent = 0.0F;
+	float travelledDistanceCurr = ENC_GetTravelledDistance();
+
+	if(travelledDistanceCurr == 0.0F)
+	{
+		travelledDistanceEvent = 0.0F;
+	}
+
+	static uint32_t lastEventDetectedTimer = 0;
+
+
+	for(int i=LeftMax; i<MidL; i++)
+	{
+		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+		{
+			CrossLineDetCounterRight++;
+		}
+	}
+
+	for(int i=RightMax; i>MidR; i--)
+	{
+		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+		{
+			CrossLineDetCounterLeft++;
+		}
+	}
+
+	if(CrossLineDetCounterLeft == 0 && CrossLineDetCounterRight == 0 && AlreadyOnCrossOrRightAngle == true)
+	{
+		AlreadyOnCrossOrRightAngle = false;
+		travelledDistanceEvent= travelledDistanceCurr;
+		lastEventDetectedTimer = HAL_GetTick();
+	}
+
+
+	if( ( fabs(travelledDistanceCurr - travelledDistanceEvent) > LINE_MINIMUM_ONE_EVENT_DIFF_DIST) && (HAL_GetTick() - lastEventDetectedTimer > 20 ) )
+	{
+		// if(CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 
+		// 					&& CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS
+		// 					&& (false == AlreadyOnCrossOrRightAngle) ) 
+		// {
+		// 	if(false == isOnCrossProbingFlag)
+		// 	{
+		// 		isOnCrossProbingFlag = true;
+		// 		isOnCrossProbingTimer = HAL_GetTick();
+		// 	}
+		// 	else
+		// 	{
+		// 		if( HAL_GetTick() - isOnCrossProbingTimer > RequiredConfirmationMagicValue_u32)
+		// 		{
+					
+		// 			/*If at least by 20ms the error is detected then mark it as high confiedence and transmit event...
+		// 			should be only 2ms max...
+		// 			for that reason i can't use travelled distance as a confidence source...
+		// 			even if speed is ~ 2m/s then in time of 2ms travelled distance is around 4mm
+		// 			oneImpulse distance ~0.7mm so you know...
+		// 			*/
+		// 			isOnCrossProbingFlag = false;
+		// 			isOnCrossProbingTimer = HAL_GetTick();
+		// 			travelledDistanceEvent = travelledDistanceCurr;
+		// 			lastEventDetectedTimer = HAL_GetTick();
+		// 			// eventCrossDetected();
+		// 			BLU_DbgMsgTransmit("Cross Detected TrvD: %.3f",travelledDistanceCurr);
+		// 			LinePosEstimatorEvent = Event_Cross;
+		// 		}
+		// 	}
+		// }
+		if( (CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE 
+									|| CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE)
+									&& (false == AlreadyOnCrossOrRightAngle) ) 
+		{
+			// isOnCrossProbingFlag = false;
+
+			{
+				if(CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE && CrossLineDetCounterRight  ==0)
+				{
+					if(false == isOnLeftRightAngleProbingFlag)
+					{
+						isOnLeftRightAngleProbingFlag = true;
+						isOnLeftRightAngleProbingTimer = HAL_GetTick();
+
+					}
+					else
+					{
+						if( HAL_GetTick() - isOnLeftRightAngleProbingTimer > RequiredConfirmationMagicValue_u32)
+						{
+							isOnLeftRightAngleProbingTimer = HAL_GetTick();
+							isOnLeftRightAngleProbingFlag = false;
+							travelledDistanceEvent = travelledDistanceCurr;
+							lastEventDetectedTimer = HAL_GetTick();
+							LinePosEstimatorEvent = Event_LeftRightAngle;
+							BLU_DbgMsgTransmit("Left|| RightAngleDetected TrvD: %.3f",travelledDistanceCurr);
+						}
+					}
+				}
+				else if(CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE  && CrossLineDetCounterLeft  ==0)
+				{
+					if(false == isOnRightRightAngleProbingFlag)
+					{
+						isOnRightRightAngleProbingFlag = true;
+						isOnRightRightAngleProbingTimer = HAL_GetTick();
+
+					}
+					else
+					{
+						if( HAL_GetTick() - isOnRightRightAngleProbingTimer > RequiredConfirmationMagicValue_u32)
+						{
+							isOnRightRightAngleProbingTimer = HAL_GetTick();
+							isOnRightRightAngleProbingFlag = false;
+							travelledDistanceEvent = travelledDistanceCurr;
+							lastEventDetectedTimer = HAL_GetTick();
+							LinePosEstimatorEvent = Event_RightRightAngle;
+							BLU_DbgMsgTransmit("Right|| RightAngleDetected TrvD: %.3f",travelledDistanceCurr);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			isOnRightRightAngleProbingFlag = false;
+			isOnLeftRightAngleProbingFlag = false;
+			// isOnCrossProbingFlag = false;
+		}
+	}
+
+	return LinePosEstimatorEvent;
+	
 }
 
 LinePostionEnum_t LinePositionEstimator(void)
@@ -348,7 +551,7 @@ LinePostionEnum_t LinePositionEstimator(void)
 
 
 		/*Try detect big error position*/
-	for(int i=0; i<3; i++)
+	for(int i=LeftMax; i<LeftW2; i++)
 	{
 		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
 		{
@@ -357,7 +560,7 @@ LinePostionEnum_t LinePositionEstimator(void)
 		}
 	}
 
-	for(int i=11; i>9; i--)
+	for(int i=RightMax; i>RightW2; i--)
 	{
 		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
 		{
@@ -430,14 +633,18 @@ void LPE_Init(void)
 }
 
 
-
+/*Expected call period <= 1ms*/
 void LPE_Task(void)
 {
+	LinePosEstimatorEvent_t LinePosEstEv = Event_None;
+
 	LinePositionEstimator();
 	SendLinePosEstDataReportForBle();
-	TryDetectStrigthLine();
-
-	// BLU_DbgMsgTransmit("MappedValue 3000: %d", MapValueToUint8_Range(3000) );
+	LinePosEstEv = TryDetectRightAnglesAndCrosses();
+	if(LinePosEstEv != Event_None && LineEventCorruptedCallBack_p != NULL){
+		LineEventCorruptedCallBack_p(LinePosEstEv);
+	}
+	TryDetectStrigthLine(LinePosEstEv,LineEstimator.PositionErrorValue);
 
 }
 

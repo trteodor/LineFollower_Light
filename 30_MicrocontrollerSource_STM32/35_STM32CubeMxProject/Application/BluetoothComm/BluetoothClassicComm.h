@@ -240,5 +240,6 @@ void BLU_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, f
 */
 void BLU_DbgMsgTransmit(char *DbgString, ...);
 
+// #define BLU_LOG(str, ...)  BLU_DbgMsgTransmit((char *) str, ##__VA_ARGS__)
 
 #endif //_BLE_ServiceModule_H
