@@ -208,9 +208,11 @@ uint8_t MPU6050_Init(I2C_HandleTypeDef *hi2c)
 {
 	i2c = hi2c;
 
-	if(MPU6050_GetDeviceID() != MPU6050_ADDRESS) return 0;
+	// if(MPU6050_GetDeviceID() != MPU6050_ADDRESS) return 0;
 
 	uint8_t tmp;
+
+	MPU6050_DeviceReset(1);
 
 	tmp = 0x00;
 	HAL_I2C_Mem_Write(i2c, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1, &tmp, 1, I2C_TIMEOUT);
@@ -234,7 +236,7 @@ uint8_t MPU6050_Init(I2C_HandleTypeDef *hi2c)
 
 uint8_t MPU6050_GetDeviceID(void)
 {
-	uint8_t tmp;
+	uint8_t tmp =0U;
 	HAL_I2C_Mem_Read(i2c, MPU6050_ADDRESS, MPU6050_RA_WHO_AM_I, 1, &tmp, 1, I2C_TIMEOUT);
 	return tmp<<1;
 }
@@ -333,8 +335,8 @@ void MPU6050_Start_IRQ(void) //Enable Int
 	uint8_t tmp = 0x01;
 	HAL_I2C_Mem_Write(i2c, MPU6050_ADDRESS, MPU6050_RA_INT_ENABLE, 1, &tmp, 1, I2C_TIMEOUT);
 
-	HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
-  	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+	HAL_NVIC_SetPriority(IRQ_GPIO_LINE, 0, 0);
+  	HAL_NVIC_EnableIRQ(IRQ_GPIO_LINE);
 }
 
 void MPU6050_Stop_IRQ(void) //Disable_Int

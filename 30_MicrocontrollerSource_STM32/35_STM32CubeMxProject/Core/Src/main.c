@@ -66,6 +66,7 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint32_t RecMpuDataCounter = 0;
 
 //extern float mpu[2][3];
 
@@ -82,6 +83,7 @@ MpuData_t MpuData;
 void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
   MPU6050_ReadDmaDataEndCallBack(&MpuData);
+  RecMpuDataCounter++;
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -139,25 +141,48 @@ int main(void)
   LL_TIM_EnableIT_CC1(TIM2);
   LL_TIM_EnableCounter(TIM2);
 
+    // volatile int resultId = 0u;
+
+  	// HAL_StatusTypeDef result;
+   	// uint8_t i;
+   	// for (i=1; i<128; i++)
+   	// {
+   	//   result = HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t)(i<<1), 2, 2);
+   	//   if (result != HAL_OK) // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
+   	//   {
+        
+   	// 	 //not found on the addres
+   	//   }
+   	//   if (result == HAL_OK)
+   	//   {
+    //     resultId = i;
+   	// 	 //device found -- put break point for example
+   	//   }
+   	// }
+
   LF_AppInit();
 
-  while(!MPU6050_Init(&hi2c1))
+  HAL_Delay(1000);
+
+  while(!MPU6050_Init(&hi2c1) )
   {
     MPU6050_DeviceReset(0);
-    HAL_Delay(100);
+    HAL_Delay(1000);
     MPU6050_DeviceReset(1);
   }
 
-  //The sensor must not move during calibration.
-  uint8_t* newCalibData = MPU6050_Calibrate_Gyro();
-  BLU_DbgMsgTransmit("\ngyroCalibValues[6] = %hi, %hi, %hi, %hi, %hi, %hi\n", 
-                                      *newCalibData, *(newCalibData+1), *(newCalibData+2), 
-                                      *(newCalibData+3), *(newCalibData+4), *(newCalibData+5));
+  // //The sensor must not move during calibration.
+  // uint8_t* newCalibData = MPU6050_Calibrate_Gyro();
+  // BLU_DbgMsgTransmit("\ngyroCalibValues[6] = %hi, %hi, %hi, %hi, %hi, %hi\n", 
+  //                                     *newCalibData, *(newCalibData+1), *(newCalibData+2), 
+  //                                     *(newCalibData+3), *(newCalibData+4), *(newCalibData+5));
 
   //You can calibrate with your previous calibration values for a hot start.
   //MPU6050_Set_Calibrate_Gyro(gyroCalibValues);
   MPU6050_Start_IRQ();
 
+
+  MPU6050_Read_DMA();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -166,11 +191,15 @@ int main(void)
   {
     static uint32_t LogAccelTimer = 0;
 
-    if(HAL_GetTick() - LogAccelTimer > 100)
+    if( (HAL_GetTick() - LogAccelTimer > 100 ) ) //
     {
-      BLU_DbgMsgTransmit("yaw: %f pitch: %f roll: %f Ax:%f Ay:%f Az:%f", 
+      LogAccelTimer = HAL_GetTick();
+      BLU_DbgMsgTransmit("yaw: %.2f pitch: %.2f roll: %.2f Ax:%.2f Ay:%2f Az:%.2f, recDatCnt: %lu", 
                                     MpuData.yaw, MpuData.pitch,MpuData.roll,
-                                    MpuData.accX,MpuData.accY,MpuData.accZ);
+                                    MpuData.accX,MpuData.accY,MpuData.accZ,RecMpuDataCounter);
+      // BLU_DbgMsgTransmit("DevId: %d",MPU6050_GetDeviceID() );
+
+      MPU6050_Read_DMA();
     }
 
     LF_AppTask();

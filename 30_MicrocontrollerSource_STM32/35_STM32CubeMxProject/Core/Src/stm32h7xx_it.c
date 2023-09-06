@@ -57,6 +57,8 @@ volatile uint32_t  us100Timer=0;
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
+extern DMA_HandleTypeDef hdma_i2c1_rx;
+extern DMA_HandleTypeDef hdma_i2c1_tx;
 extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c2;
 extern TIM_HandleTypeDef htim5;
@@ -204,6 +206,20 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles EXTI line1 interrupt.
+  */
+void EXTI1_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI1_IRQn 0 */
+
+  /* USER CODE END EXTI1_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(MPU6050_INT_Pin);
+  /* USER CODE BEGIN EXTI1_IRQn 1 */
+
+  /* USER CODE END EXTI1_IRQn 1 */
+}
+
+/**
   * @brief This function handles DMA1 stream0 global interrupt.
   */
 void DMA1_Stream0_IRQHandler(void)
@@ -243,6 +259,34 @@ void DMA1_Stream2_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream2_IRQn 1 */
 
   /* USER CODE END DMA1_Stream2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream3 global interrupt.
+  */
+void DMA1_Stream3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_i2c1_rx);
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream4 global interrupt.
+  */
+void DMA1_Stream4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_i2c1_tx);
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 1 */
 }
 
 /**

@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "stm32h743xx.h": "c",
+        "bluetoothclassiccomm.h": "c"
+    }
+}
