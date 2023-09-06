@@ -31,6 +31,10 @@
 #include "LF_MainRunnable.h"
 
 #include "stdio.h"
+
+#include "mpu6050.h"
+
+#include "BluetoothClassicComm.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,7 +67,27 @@ void PeriphCommonClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+//extern float mpu[2][3];
 
+//These values are the calibration values of my sensor. These values will be different for each sensor. 
+//You can calibrate with your previous calibration values for a hot start.
+uint8_t gyroCalibValues[6] = {0, 23, 0, 63, 0, 27};
+
+MpuData_t MpuData;
+
+// As the sensor is set in init, the sensor takes a sample every 5ms (200hz),
+// creates an interrupt, then puts the dma data in the buffer, 
+// then the data is scaled and the orientations are calculated.
+// This process is repeated automatically every 5ms. So dt is 0.005 seconds
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+  MPU6050_ReadDmaDataEndCallBack(&MpuData);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  MPU6050_Read_DMA();
+}
 /* USER CODE END 0 */
 
 /**
@@ -117,12 +141,37 @@ int main(void)
 
   LF_AppInit();
 
+  while(!MPU6050_Init(&hi2c1))
+  {
+    MPU6050_DeviceReset(0);
+    HAL_Delay(100);
+    MPU6050_DeviceReset(1);
+  }
+
+  //The sensor must not move during calibration.
+  uint8_t* newCalibData = MPU6050_Calibrate_Gyro();
+  BLU_DbgMsgTransmit("\ngyroCalibValues[6] = %hi, %hi, %hi, %hi, %hi, %hi\n", 
+                                      *newCalibData, *(newCalibData+1), *(newCalibData+2), 
+                                      *(newCalibData+3), *(newCalibData+4), *(newCalibData+5));
+
+  //You can calibrate with your previous calibration values for a hot start.
+  //MPU6050_Set_Calibrate_Gyro(gyroCalibValues);
+  MPU6050_Start_IRQ();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    static uint32_t LogAccelTimer = 0;
+
+    if(HAL_GetTick() - LogAccelTimer > 100)
+    {
+      BLU_DbgMsgTransmit("yaw: %f pitch: %f roll: %f Ax:%f Ay:%f Az:%f", 
+                                    MpuData.yaw, MpuData.pitch,MpuData.roll,
+                                    MpuData.accX,MpuData.accY,MpuData.accZ);
+    }
 
     LF_AppTask();
     /* USER CODE END WHILE */

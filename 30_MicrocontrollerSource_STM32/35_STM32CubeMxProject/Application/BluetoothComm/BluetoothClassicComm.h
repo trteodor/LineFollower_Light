@@ -216,14 +216,14 @@ void BLU_ReportSensorData(BLU_SensorDataReport_t *SensorData);
 */
 void BLU_ReportMapData(BLU_MapDataReport_t *MapData);
 
-/* brief BLU_RegisterNvMdataUpdateInfoCallBack
+/** @brief BLU_RegisterNvMdataUpdateInfoCallBack
 * Register call back if you want be informed that Non Volatile data has been updated
 * by BLE communication module
 * CallBack function will be called always if NvM data will be updated
 */
 void BLU_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
 
-/* brief BLU_RegisterNvMdataUpdateInfoCallBack
+/** @brief BLU_RegisterNvMdataUpdateInfoCallBack
 * Register call back if, interface dedicated for handler in LF_Menager to cntrl manually 
 * the linne follower robot for example during standstill state using a virutal analog cntroller
 * in QT desktop application
@@ -232,7 +232,7 @@ void BLU_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
 void BLU_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, float vecV_Y) );
 
 
-/* brief BLU_DbgMsgTransmit
+/** @brief BLU_DbgMsgTransmit
 * A simple function to send debug message through BLE (to QT Application)
 * String length is limited to ~100chars
 * Input format is the same as in "printf" function.. 
