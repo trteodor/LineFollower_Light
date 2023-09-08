@@ -19,7 +19,7 @@
 #define LINE_EVENT_CONFIRMATION_MAGIC_VALUE_MS 2 //TODO:(explanation) (10 / 2.0m/s = 5ms )
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE 5
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 4
-#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.05F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
+#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.01F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
 
 
 #define LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT  0.2 //m
@@ -289,101 +289,101 @@ static float EstimatePositionError(void)
 #define LF_DRIVING_STRIGHT_YAW_RATE_VALUE     1.2
 #define LF_DRIV_SRIGHT_MEAS_PERIOD_MS         20
 
-/** @brief TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
-* @details 
-* @return  
-*/
-void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
-{
+// /** @brief TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
+// * @details 
+// * @return  
+// */
+// void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
+// {
 
-	static uint32_t LogStrightLineTimer = 0;
-	static uint32_t MesaureTimerPeriod = 0; 
-	static float TimeStrightLineYrStart;
-	static float DistanceStrightLineYrStart;
-	static float DistanceStrightLineYrEnd;
-	static bool PreviousStateIsStrightLine = false;
-	static bool CurrentStateIsStrightLine = false;
-	static uint32_t LastTimeOfBigError = 0;
-	static bool DetectedDrivAtStrightLineCommitedFlag = false;
+// 	static uint32_t LogStrightLineTimer = 0;
+// 	static uint32_t MesaureTimerPeriod = 0; 
+// 	static float TimeStrightLineYrStart;
+// 	static float DistanceStrightLineYrStart;
+// 	static float DistanceStrightLineYrEnd;
+// 	static bool PreviousStateIsStrightLine = false;
+// 	static bool CurrentStateIsStrightLine = false;
+// 	static uint32_t LastTimeOfBigError = 0;
+// 	static bool DetectedDrivAtStrightLineCommitedFlag = false;
 
-	float yawRateValue = ENC_GetYawRateWhBased();
-
-
-	/**/
-	CurrentStateIsStrightLine = PreviousStateIsStrightLine;
-	/**/
+// 	float yawRateValue = ENC_GetYawRateWhBased();
 
 
+// 	/**/
+// 	CurrentStateIsStrightLine = PreviousStateIsStrightLine;
+// 	/**/
 
 
-	if(fabs(CurrErrPosValue) > fabs(LineEstimator.ErrorWeightValueTable[6]) )
-	{
-		LastTimeOfBigError = HAL_GetTick();
-		CurrentStateIsStrightLine = false;
-	}
 
-	if( ( (HAL_GetTick() - MesaureTimerPeriod) > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) 
-								&& (HAL_GetTick() - LastTimeOfBigError > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) )
-	{
-		if(fabs(yawRateValue) < fabs(LF_DRIVING_STRIGHT_YAW_RATE_VALUE) )
-		{
+
+// 	if(fabs(CurrErrPosValue) > fabs(LineEstimator.ErrorWeightValueTable[6]) )
+// 	{
+// 		LastTimeOfBigError = HAL_GetTick();
+// 		CurrentStateIsStrightLine = false;
+// 	}
+
+// 	if( ( (HAL_GetTick() - MesaureTimerPeriod) > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) 
+// 								&& (HAL_GetTick() - LastTimeOfBigError > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) )
+// 	{
+// 		if(fabs(yawRateValue) < fabs(LF_DRIVING_STRIGHT_YAW_RATE_VALUE) )
+// 		{
 			
-			if(PreviousStateIsStrightLine == false)
-			{
-				DetectedDrivAtStrightLineCommitedFlag = false;
-				TimeStrightLineYrStart = HAL_GetTick();
-				DistanceStrightLineYrStart = ENC_GetTravelledDistance();
-				CurrentStateIsStrightLine = true;
-				LogStrightLineTimer = HAL_GetTick();
-			}
-		}
-		else{
-			if(PreviousStateIsStrightLine == true)
-			{
-				DetectedDrivAtStrightLineCommitedFlag = false;
-				DistanceStrightLineYrEnd = ENC_GetTravelledDistance();
-				CurrentStateIsStrightLine = false;
+// 			if(PreviousStateIsStrightLine == false)
+// 			{
+// 				DetectedDrivAtStrightLineCommitedFlag = false;
+// 				TimeStrightLineYrStart = HAL_GetTick();
+// 				DistanceStrightLineYrStart = ENC_GetTravelledDistance();
+// 				CurrentStateIsStrightLine = true;
+// 				LogStrightLineTimer = HAL_GetTick();
+// 			}
+// 		}
+// 		else{
+// 			if(PreviousStateIsStrightLine == true)
+// 			{
+// 				DetectedDrivAtStrightLineCommitedFlag = false;
+// 				DistanceStrightLineYrEnd = ENC_GetTravelledDistance();
+// 				CurrentStateIsStrightLine = false;
 
-				LogStrightLineTimer = HAL_GetTick();
-			}
-		}
-	}
+// 				LogStrightLineTimer = HAL_GetTick();
+// 			}
+// 		}
+// 	}
 
-	if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
-	{
-		DetectedDrivAtStrightLineCommitedFlag = false;
-		if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT)
-		{
-			BLU_DbgMsgTransmit("Leaving StrightLine: TrvDSt: %.3f, TrvDend:%.3f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
-		}
-	}
+// 	if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
+// 	{
+// 		DetectedDrivAtStrightLineCommitedFlag = false;
+// 		if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT)
+// 		{
+// 			BLU_DbgMsgTransmit("Leaving StrightLine: TrvDSt: %.3f, TrvDend:%.3f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
+// 		}
+// 	}
 	
-	if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT )  //m
-			&& (CurrentStateIsStrightLine == true) && (PreviousStateIsStrightLine == true)
-			&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
-	{
-		/*Veh driving at stright line*/
-		if(false == DetectedDrivAtStrightLineCommitedFlag)
-		{
-			if(DrivingAtStrightLineCallBack_p != NULL){
-				DrivingAtStrightLineCallBack_p();
-			}
-			BLU_DbgMsgTransmit("VehAtStrightLine: AtLeastBy: %f[m]",LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT);
-			DetectedDrivAtStrightLineCommitedFlag = true;
-		}
+// 	if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT )  //m
+// 			&& (CurrentStateIsStrightLine == true) && (PreviousStateIsStrightLine == true)
+// 			&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
+// 	{
+// 		/*Veh driving at stright line*/
+// 		if(false == DetectedDrivAtStrightLineCommitedFlag)
+// 		{
+// 			if(DrivingAtStrightLineCallBack_p != NULL){
+// 				DrivingAtStrightLineCallBack_p();
+// 			}
+// 			BLU_DbgMsgTransmit("VehAtStrightLine: AtLeastBy: %f[m]",LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT);
+// 			DetectedDrivAtStrightLineCommitedFlag = true;
+// 		}
 
-		if( (HAL_GetTick() - LogStrightLineTimer) > 1000)
-		{
-			LogStrightLineTimer = HAL_GetTick();
-			(void)TimeStrightLineYrStart;
-			// BLU_DbgMsgTransmit("VehAtStrightLine: TrvDStart: %.3f ucTStamp: %d CurrD: %.3f",DistanceStrightLineYrStart,TimeStrightLineYrStart, ENC_GetTravelledDistance() );
-		}
-	}
+// 		if( (HAL_GetTick() - LogStrightLineTimer) > 1000)
+// 		{
+// 			LogStrightLineTimer = HAL_GetTick();
+// 			(void)TimeStrightLineYrStart;
+// 			// BLU_DbgMsgTransmit("VehAtStrightLine: TrvDStart: %.3f ucTStamp: %d CurrD: %.3f",DistanceStrightLineYrStart,TimeStrightLineYrStart, ENC_GetTravelledDistance() );
+// 		}
+// 	}
 
 
-	PreviousStateIsStrightLine = CurrentStateIsStrightLine;
+// 	PreviousStateIsStrightLine = CurrentStateIsStrightLine;
 
-}
+// }
 
 
 
@@ -449,95 +449,57 @@ LinePosEstimatorEvent_t TryDetectRightAnglesAndCrosses(void)
 
 	if( ( fabs(travelledDistanceCurr - travelledDistanceEvent) > LINE_MINIMUM_ONE_EVENT_DIFF_DIST) && (HAL_GetTick() - lastEventDetectedTimer > 20 ) )
 	{
-		// if(CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 
-		// 					&& CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS
-		// 					&& (false == AlreadyOnCrossOrRightAngle) ) 
-		// {
-		// 	if(false == isOnCrossProbingFlag)
-		// 	{
-		// 		isOnCrossProbingFlag = true;
-		// 		isOnCrossProbingTimer = HAL_GetTick();
-		// 	}
-		// 	else
-		// 	{
-		// 		if( HAL_GetTick() - isOnCrossProbingTimer > RequiredConfirmationMagicValue_u32)
-		// 		{
-					
-		// 			/*If at least by 20ms the error is detected then mark it as high confiedence and transmit event...
-		// 			should be only 2ms max...
-		// 			for that reason i can't use travelled distance as a confidence source...
-		// 			even if speed is ~ 2m/s then in time of 2ms travelled distance is around 4mm
-		// 			oneImpulse distance ~0.7mm so you know...
-		// 			*/
-		// 			isOnCrossProbingFlag = false;
-		// 			isOnCrossProbingTimer = HAL_GetTick();
-		// 			travelledDistanceEvent = travelledDistanceCurr;
-		// 			lastEventDetectedTimer = HAL_GetTick();
-		// 			// eventCrossDetected();
-		// 			BLU_DbgMsgTransmit("Cross Detected TrvD: %.3f",travelledDistanceCurr);
-		// 			LinePosEstimatorEvent = Event_Cross;
-		// 		}
-		// 	}
-		// }
-		if( (CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE 
-									|| CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE)
-									&& (false == AlreadyOnCrossOrRightAngle) ) 
+		if(CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE && CrossLineDetCounterRight <= 1)
 		{
-			// isOnCrossProbingFlag = false;
-
+			if(false == isOnLeftRightAngleProbingFlag)
 			{
-				if(CrossLineDetCounterLeft >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE && CrossLineDetCounterRight  ==0)
-				{
-					if(false == isOnLeftRightAngleProbingFlag)
-					{
-						isOnLeftRightAngleProbingFlag = true;
-						isOnLeftRightAngleProbingTimer = HAL_GetTick();
+				isOnLeftRightAngleProbingFlag = true;
+				isOnLeftRightAngleProbingTimer = HAL_GetTick();
 
-					}
-					else
-					{
-						if( HAL_GetTick() - isOnLeftRightAngleProbingTimer > RequiredConfirmationMagicValue_u32)
-						{
-							isOnLeftRightAngleProbingTimer = HAL_GetTick();
-							isOnLeftRightAngleProbingFlag = false;
-							travelledDistanceEvent = travelledDistanceCurr;
-							lastEventDetectedTimer = HAL_GetTick();
-							LinePosEstimatorEvent = Event_LeftRightAngle;
-							BLU_DbgMsgTransmit("Left|| RightAngleDetected TrvD: %.3f",travelledDistanceCurr);
-						}
-					}
-				}
-				else if(CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE  && CrossLineDetCounterLeft  ==0)
+			}
+			else
+			{
+				if( HAL_GetTick() - isOnLeftRightAngleProbingTimer > RequiredConfirmationMagicValue_u32)
 				{
-					if(false == isOnRightRightAngleProbingFlag)
-					{
-						isOnRightRightAngleProbingFlag = true;
-						isOnRightRightAngleProbingTimer = HAL_GetTick();
-
-					}
-					else
-					{
-						if( HAL_GetTick() - isOnRightRightAngleProbingTimer > RequiredConfirmationMagicValue_u32)
-						{
-							isOnRightRightAngleProbingTimer = HAL_GetTick();
-							isOnRightRightAngleProbingFlag = false;
-							travelledDistanceEvent = travelledDistanceCurr;
-							lastEventDetectedTimer = HAL_GetTick();
-							LinePosEstimatorEvent = Event_RightRightAngle;
-							BLU_DbgMsgTransmit("Right|| RightAngleDetected TrvD: %.3f",travelledDistanceCurr);
-						}
-					}
+					isOnLeftRightAngleProbingTimer = HAL_GetTick();
+					isOnLeftRightAngleProbingFlag = false;
+					travelledDistanceEvent = travelledDistanceCurr;
+					lastEventDetectedTimer = HAL_GetTick();
+					LinePosEstimatorEvent = Event_LeftRightAngle;
+					// BLU_DbgMsgTransmit("Left|| RightAngleDetected TrvD: %.3f",travelledDistanceCurr);
 				}
 			}
 		}
-		else
+		else if(CrossLineDetCounterRight >= LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE  && CrossLineDetCounterLeft  <= 1)
 		{
-			isOnRightRightAngleProbingFlag = false;
-			isOnLeftRightAngleProbingFlag = false;
-			// isOnCrossProbingFlag = false;
-		}
-	}
+			if(false == isOnRightRightAngleProbingFlag)
+			{
+				isOnRightRightAngleProbingFlag = true;
+				isOnRightRightAngleProbingTimer = HAL_GetTick();
 
+			}
+			else
+			{
+				if( HAL_GetTick() - isOnRightRightAngleProbingTimer > RequiredConfirmationMagicValue_u32)
+				{
+					isOnRightRightAngleProbingTimer = HAL_GetTick();
+					isOnRightRightAngleProbingFlag = false;
+					travelledDistanceEvent = travelledDistanceCurr;
+					lastEventDetectedTimer = HAL_GetTick();
+					LinePosEstimatorEvent = Event_RightRightAngle;
+					// BLU_DbgMsgTransmit("Right|| RightAngleDetected TrvD: %.3f",travelledDistanceCurr);
+				}
+			}
+		}
+
+			
+	}
+	else
+	{
+		isOnRightRightAngleProbingFlag = false;
+		isOnLeftRightAngleProbingFlag = false;
+	}
+	
 	return LinePosEstimatorEvent;
 	
 }
@@ -644,7 +606,7 @@ void LPE_Task(void)
 	if(LinePosEstEv != Event_None && LineEventCorruptedCallBack_p != NULL){
 		LineEventCorruptedCallBack_p(LinePosEstEv);
 	}
-	TryDetectStrigthLine(LinePosEstEv,LineEstimator.PositionErrorValue);
+	// TryDetectStrigthLine(LinePosEstEv,LineEstimator.PositionErrorValue);
 
 }
 

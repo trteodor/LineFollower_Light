@@ -8,7 +8,6 @@ typedef enum
 	Event_None,
 	Event_RightRightAngle,
 	Event_LeftRightAngle,
-	Event_Cross,
 }LinePosEstimatorEvent_t;
 
 

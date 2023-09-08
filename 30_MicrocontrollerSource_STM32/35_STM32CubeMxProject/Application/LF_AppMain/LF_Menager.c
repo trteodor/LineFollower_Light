@@ -43,6 +43,9 @@ typedef struct Robot_Cntrl_t
 	float input_EncLeftWhSpeed;
 	float input_EncRightWhSpeed;
 
+	bool RightRightAngleDetectedFlag;
+	bool LeftRightAngleDetectedFlag;
+
 }Robot_Cntrl_t;
 /*************************************************************************/
 typedef struct LinePidReg_t
@@ -415,6 +418,103 @@ void ManualDrivingCallBackRequest(float VecXVal, float VecYVal)
 	Robot_Cntrl.ReqMandrivTimeStamp = HAL_GetTick();
 }
 
+void LfMngr_LineEventCallBack(LinePosEstimatorEvent_t LinePosEstEv)
+{
+	
+	
+	
+	/*To do: handle :) */
+	if(LinePosEstEv == Event_RightRightAngle)
+	{
+		BLU_DbgMsgTransmit("Right || RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
+		Robot_Cntrl.RightRightAngleDetectedFlag = true;
+	}
+	if(LinePosEstEv == Event_LeftRightAngle)
+	{
+		BLU_DbgMsgTransmit("Left|| RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
+		Robot_Cntrl.LeftRightAngleDetectedFlag = true;
+	}
+	
+}
+
+void HandleRightAngle(void)
+{
+	static bool RightAngleHandlingStartedFlag = false;
+	static float expectedOrientation = 0U;
+
+	// static bool brakingFlag = false;
+	// static uint32_t brakingTimer= 0U;
+
+
+	if(false == RightAngleHandlingStartedFlag)
+	{
+		if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
+		{
+			expectedOrientation =  ENC_GetCurrentOrientation() + (LF_M_PI_VAL/ 1.3); //+90deg
+			BLU_DbgMsgTransmit("HandleRightAngle:  RR_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
+		}
+		else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
+		{
+			expectedOrientation = ENC_GetCurrentOrientation() - (LF_M_PI_VAL/ 1.3F); //-90deg
+			BLU_DbgMsgTransmit("HandleRightAngle:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
+
+		}
+
+		// brakingFlag = true;
+		// brakingTimer = HAL_GetTick();
+		RightAngleHandlingStartedFlag = true;
+	}
+
+	// if(true == brakingFlag && true == RightAngleHandlingStartedFlag)
+	// {
+	// 	if(HAL_GetTick() - brakingTimer > 30)
+	// 	{
+	// 		brakingFlag = false;
+	// 	}else{
+	// 		SetMotorSpeeds(-1.5F,-1.5F);
+	// 	}
+	// }
+
+
+	if(true == RightAngleHandlingStartedFlag ) //&& false == brakingFlag
+	{
+		static uint32_t SavedTimeR_AgDriv_PID=0;
+		static float PreviousPositionErrorValueR_AgDrivPid=0;
+		static float R_AgDrivPid_P,R_AgDrivPid_D;
+		static float PidR_AgDrivResult;
+		static const uint32_t ProbeTimeR_AgDrivPid = 20;
+		static const float R_AgDrivPid_Kp = 1.5F;
+		static const float R_AgDrivPid_Kd = 1.0F;
+		static const float BaseSpdR_AgMove = 0.5F;
+
+		R_AgDrivPid_P = ( ENC_GetCurrentOrientation() - expectedOrientation ); /*Tract needed rotation as error*/
+
+		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > ProbeTimeR_AgDrivPid ){
+			R_AgDrivPid_D= R_AgDrivPid_P - PreviousPositionErrorValueR_AgDrivPid;
+			PreviousPositionErrorValueR_AgDrivPid=R_AgDrivPid_P;
+			SavedTimeR_AgDriv_PID=HAL_GetTick();
+		}
+		PidR_AgDrivResult = (R_AgDrivPid_Kp * R_AgDrivPid_P)+(R_AgDrivPid_Kd * R_AgDrivPid_D);
+
+		SetMotorSpeeds(BaseSpdR_AgMove-PidR_AgDrivResult,BaseSpdR_AgMove+PidR_AgDrivResult);
+
+		static uint32_t RightAngleOrientationLoggingTimer= 0;
+
+		if(HAL_GetTick() - RightAngleOrientationLoggingTimer > 100)
+		{
+			RightAngleOrientationLoggingTimer = HAL_GetTick();
+			BLU_DbgMsgTransmit("RightAnglePrLogging:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
+		}
+
+		if( (fabs(ENC_GetCurrentOrientation() - expectedOrientation) < 0.1F) || (LPE_GetPosError() == 0))
+		{
+			Robot_Cntrl.RightRightAngleDetectedFlag = false;
+			Robot_Cntrl.LeftRightAngleDetectedFlag = false;
+			RightAngleHandlingStartedFlag = false;
+		}
+	}
+}
+
 void userRequestManualMoveHandler(void)
 {
 	static uint32_t SavedTimeManDriv_PID;
@@ -496,7 +596,14 @@ void ManageRobotMovingState(void)
 	if(true == ExpectedrDrivingState)
 	{
 		SpeedProfiler();
-		SetMotorSpeedsBaseOnLinePid(); /**/
+		if(true == Robot_Cntrl.RightRightAngleDetectedFlag || true == Robot_Cntrl.LeftRightAngleDetectedFlag)
+		{
+			HandleRightAngle();
+		}
+		else
+		{
+			SetMotorSpeedsBaseOnLinePid(); /**/
+		}
 	}
 	else{
 		// MotorsForceStop();
@@ -515,6 +622,7 @@ void LF_MngrInit(void) /*Line Following Menager init */
 	LinePidNvmDataRead();
 	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
 	BLU_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackRequest);
+	LPE_RegisterLineEventCallBack(LfMngr_LineEventCallBack);
 	MotorsPwmInit();
 }
 
