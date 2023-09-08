@@ -88,7 +88,7 @@ typedef enum LoggingState_t
  * *******************************************************************************************
  * */
 
-#define BLU_NVM_UPDATE_MAX_CALL_BACKS_COUNT 10
+#define BLU_NVM_UPDATE_MAX_CALL_BACKS_COUNT 15
 
 static void (*NvmUpdateCallBacks[BLU_NVM_UPDATE_MAX_CALL_BACKS_COUNT])(void) = {0};
 
@@ -605,8 +605,6 @@ void ReceiveSpeedProfileData(BLU_NvM_SpdProfileData_t *NewSpeedProfileData)
 		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp09_F32, NewSpeedProfileData->BaseSpeedValue[8]);
 		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp10_F32, NewSpeedProfileData->BaseSpeedValue[9]);
 		EE_WriteVariableF32(EE_NvmAddr_SpPofileBase_Sp11_F32, NewSpeedProfileData->BaseSpeedValue[10]);
-
-		
 }
 
 

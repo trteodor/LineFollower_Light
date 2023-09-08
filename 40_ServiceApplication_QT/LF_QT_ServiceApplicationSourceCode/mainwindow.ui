@@ -617,7 +617,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Scan BLE</string>
+          <string>Scan BLU</string>
          </property>
         </widget>
        </item>

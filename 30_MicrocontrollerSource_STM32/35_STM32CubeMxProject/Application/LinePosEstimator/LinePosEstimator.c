@@ -19,7 +19,7 @@
 #define LINE_EVENT_CONFIRMATION_MAGIC_VALUE_MS 2 //TODO:(explanation) (10 / 2.0m/s = 5ms )
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE 5
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 4
-#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.01F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
+#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.05F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
 
 
 #define LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT  0.2 //m

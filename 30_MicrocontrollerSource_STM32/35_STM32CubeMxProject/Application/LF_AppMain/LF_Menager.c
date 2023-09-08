@@ -78,10 +78,20 @@ typedef struct LinePidReg_t
 
 }LinePidReg_t;
 
+typedef struct SpeedProfiler_Tag
+{
+	uint32_t EnabledFlag;
+	float TrvDistance[11];
+	float BaseSpeedValue[11];
+}SpeedProfiler_t;
+
+
 /*************************************************************************/
 /*Static variables..*/
 static Robot_Cntrl_t Robot_Cntrl;
 static LinePidReg_t LinePid;
+static SpeedProfiler_t SpeedProfilerData;
+
 
 /*************************************************************************/
 /*Prototypes*/
@@ -107,6 +117,36 @@ static void LinePidNvmDataRead(void)
 	EE_ReadVariableU32(EE_NvmAddr_ProbeTime_U32,&LinePid.DerivativeTime);
 	EE_ReadVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32,&LinePid.BaseMotorSpeed);
 }
+
+static void SpeedProfileNvMDataRead(void)
+{
+		EE_ReadVariableU32(EE_NvmAddr_SpProfileEnableFlag_U32,&SpeedProfilerData.EnabledFlag);
+
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD01_F32, &SpeedProfilerData.TrvDistance[0]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD02_F32, &SpeedProfilerData.TrvDistance[1]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD03_F32, &SpeedProfilerData.TrvDistance[2]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD04_F32, &SpeedProfilerData.TrvDistance[3]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD05_F32, &SpeedProfilerData.TrvDistance[4]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD06_F32, &SpeedProfilerData.TrvDistance[5]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD07_F32, &SpeedProfilerData.TrvDistance[6]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD08_F32, &SpeedProfilerData.TrvDistance[7]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD09_F32, &SpeedProfilerData.TrvDistance[8]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD10_F32, &SpeedProfilerData.TrvDistance[9]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileD11_F32, &SpeedProfilerData.TrvDistance[10]);
+
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp01_F32, &SpeedProfilerData.BaseSpeedValue[0]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp02_F32, &SpeedProfilerData.BaseSpeedValue[1]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp03_F32, &SpeedProfilerData.BaseSpeedValue[2]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp04_F32, &SpeedProfilerData.BaseSpeedValue[3]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp05_F32, &SpeedProfilerData.BaseSpeedValue[4]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp06_F32, &SpeedProfilerData.BaseSpeedValue[5]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp07_F32, &SpeedProfilerData.BaseSpeedValue[6]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp08_F32, &SpeedProfilerData.BaseSpeedValue[7]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp09_F32, &SpeedProfilerData.BaseSpeedValue[8]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp10_F32, &SpeedProfilerData.BaseSpeedValue[9]);
+		EE_ReadVariableF32(EE_NvmAddr_SpPofileBase_Sp11_F32, &SpeedProfilerData.BaseSpeedValue[10]);
+}
+
 /**************************************************************************************************/
 static void MotorsPwmInit()
 {
@@ -320,16 +360,53 @@ static void SetMotorSpeeds(float MotSpeedLeft, float MotSpeedRight)
 
 static void SpeedProfiler(void)
 {
-	static uint8_t speedprofilenumer=0;
 
-	if (speedprofilenumer==1)
+	if (true == SpeedProfilerData.EnabledFlag)
 	{
-		//		if(Enc_Module.TakenDistance > 0)
-		//			{
-		//			//actions
-		//			PID_Module.BaseMotorSpeed=1.0;
-		//			}
-		//actions
+		if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[10])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[10];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[9])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[9];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[8])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[8];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[7])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[7];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[6])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[6];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[5])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[5];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[4])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[4];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[3])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[3];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[2])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[2];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[1])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[1];
+		}
+		else if(ENC_GetTravelledDistance() > SpeedProfilerData.TrvDistance[0])
+		{
+			LinePid.BaseMotorSpeed = SpeedProfilerData.BaseSpeedValue[0];
+		}
 	}
 }
 /**************************************************************************************************/
@@ -420,18 +497,14 @@ void ManualDrivingCallBackRequest(float VecXVal, float VecYVal)
 
 void LfMngr_LineEventCallBack(LinePosEstimatorEvent_t LinePosEstEv)
 {
-	
-	
-	
-	/*To do: handle :) */
 	if(LinePosEstEv == Event_RightRightAngle)
 	{
-		BLU_DbgMsgTransmit("Right || RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
+		BLU_DbgMsgTransmit("Right|| RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
 		Robot_Cntrl.RightRightAngleDetectedFlag = true;
 	}
 	if(LinePosEstEv == Event_LeftRightAngle)
 	{
-		BLU_DbgMsgTransmit("Left|| RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
+		BLU_DbgMsgTransmit("Left || RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
 		Robot_Cntrl.LeftRightAngleDetectedFlag = true;
 	}
 	
@@ -595,13 +668,14 @@ void ManageRobotMovingState(void)
 
 	if(true == ExpectedrDrivingState)
 	{
-		SpeedProfiler();
+
 		if(true == Robot_Cntrl.RightRightAngleDetectedFlag || true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 		{
 			HandleRightAngle();
 		}
 		else
 		{
+			SpeedProfiler();
 			SetMotorSpeedsBaseOnLinePid(); /**/
 		}
 	}
@@ -620,7 +694,9 @@ void LF_MngrInit(void) /*Line Following Menager init */
 {
 	// EEPROM_ReadTryDetectEndLineMarkState();
 	LinePidNvmDataRead();
+	SpeedProfileNvMDataRead();
 	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
+	BLU_RegisterNvMdataUpdateInfoCallBack(SpeedProfileNvMDataRead);
 	BLU_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackRequest);
 	LPE_RegisterLineEventCallBack(LfMngr_LineEventCallBack);
 	MotorsPwmInit();
