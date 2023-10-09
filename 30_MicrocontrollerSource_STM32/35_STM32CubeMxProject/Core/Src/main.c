@@ -123,7 +123,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
     LF_AppTask();
     /* USER CODE END WHILE */
 

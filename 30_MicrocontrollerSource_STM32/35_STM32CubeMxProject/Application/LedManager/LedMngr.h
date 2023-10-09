@@ -7,4 +7,6 @@
 void LED_Init();
 void LED_MngrTask();
 
+void  LED_DoQuickBlinks(uint32_t qBlinksCount);
+
 #endif //INC_BlinkLedMod_H_

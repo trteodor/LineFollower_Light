@@ -891,14 +891,12 @@ static void ReceiveDataHandler(void)
 				{
 					InternalRobotState = Driving;
 					LoggingState = TrueDataLogging;
-					BLU_DbgMsgTransmit("LineFollower start!");
 					break;
 				}
 				case BLU_RobotStop:
 				{
 					InternalRobotState = Standstill;
 					LoggingState = Suspended;
-					BLU_DbgMsgTransmit("LineFollower stop");
 					break;
 				}
 
@@ -1129,31 +1127,33 @@ void BLU_Init(void)
 	if(true == DevNameUpdateFlag)
 	{
 
-		char DevName[16];
-		char FakeRecBuf[20];
-		char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
+		static char DevName[16] = "WUKONG";
+		static char FakeRecBuf[20];
+		static char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
 		uint8_t DevNameSize =7;
 
-		EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart1_U32_, (uint32_t *)&DevName[0]);
-		EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart2_U32_, (uint32_t *)&DevName[4]);
-		EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart3_U32_, (uint32_t *)&DevName[8]);
-		EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart4_U32_, (uint32_t *)&DevName[12]);
+		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart1_U32_, (uint32_t *)&DevName[0]);
+		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart2_U32_, (uint32_t *)&DevName[4]);
+		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart3_U32_, (uint32_t *)&DevName[8]);
+		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart4_U32_, (uint32_t *)&DevName[12]);
+		
 
-		for(int i=0; i<16; i++)
-		{
-			if(DevName[i] == '\0'){
-				break;
-			}
-			DevNameSize++;
-		}
 
-		for(int i=7; i<(DevNameSize+7); i++){
-			DevNameFullCommandBuffor[i] = DevName[i-7];
-		}
+		// for(int i=0; i<16; i++)
+		// {
+		// 	if(DevName[i] == '\0'){
+		// 		break;
+		// 	}
+		// 	DevNameSize++;
+		// }
 
-		HAL_UART_Transmit_DMA(&huart2, (uint8_t *)DevNameFullCommandBuffor, BLU_SINGLE_MESSAGE_SIZE);
-		HAL_UART_Receive(&huart2, (uint8_t *)FakeRecBuf, 20,100);
-		//	HAL_Delay(50); /*Short delay to ignore answer :) */
+		// for(int i=7; i<(DevNameSize+7); i++){
+		// 	DevNameFullCommandBuffor[i] = DevName[i-7];
+		// }
+
+		// HAL_UART_Transmit_DMA(&huart2, (uint8_t *)DevNameFullCommandBuffor, DevNameSize);
+		// HAL_UART_Receive(&huart2, (uint8_t *)FakeRecBuf, 20,100);
+		// HAL_Delay(50); /*Short delay to ignore answer :) */
 
 		EE_ReadVariableU32(EE_NvmAddr_DevNameUpdatedFlag_U32,false);
 	}

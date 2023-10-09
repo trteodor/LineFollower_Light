@@ -85,6 +85,14 @@ typedef struct SpeedProfiler_Tag
 	float BaseSpeedValue[11];
 }SpeedProfiler_t;
 
+typedef enum
+{
+	BTN_UNKNOWN,
+	BTN_CHANGE_LF_STATE_REQ,
+	BTN_START_LF_PROCESSING,
+	BTN_STOP_LF_REQ,
+
+}UsrBtnReq_t;
 
 /*************************************************************************/
 /*Static variables..*/
@@ -92,6 +100,9 @@ static Robot_Cntrl_t Robot_Cntrl;
 static LinePidReg_t LinePid;
 static SpeedProfiler_t SpeedProfilerData;
 
+static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
+
+static bool RobotLineFollowingState = false;
 
 /*************************************************************************/
 /*Prototypes*/
@@ -636,10 +647,45 @@ void userRequestManualMoveHandler(void)
 void ManageRobotMovingState(void)
 {
 	static uint32_t DrivingStartTime = 0U;
-	static bool prevExpectedrDrivingState = false;
-	bool ExpectedrDrivingState = BLU_isExpectedStateDriving();
+	static bool prevExpectedrDrivingStateBluetooth = false;
+	bool ExpectedrDrivingStateBluetooth = BLU_isExpectedStateDriving();
+	static uint32_t usrBtnDelayTimer;
+	static bool usrBtnForcedFollowState = false;
+	static bool usrBtnForcedFollowState_prev = false;
 
-	if(false == ExpectedrDrivingState ){
+
+
+	if(UsrBtnReqState == BTN_CHANGE_LF_STATE_REQ)
+	{
+		if(true == usrBtnForcedFollowState)
+		{
+			usrBtnForcedFollowState = false;
+		}
+		else{
+			usrBtnDelayTimer = HAL_GetTick();
+			UsrBtnReqState = BTN_START_LF_PROCESSING;
+		}
+	}
+	else if(UsrBtnReqState == BTN_START_LF_PROCESSING 
+	   && HAL_GetTick() - usrBtnDelayTimer > 3000)
+	{
+		usrBtnForcedFollowState = true;
+		UsrBtnReqState = BTN_UNKNOWN;
+	}
+	else if(UsrBtnReqState == BTN_STOP_LF_REQ )
+	{
+		usrBtnForcedFollowState = false;
+		UsrBtnReqState = BTN_UNKNOWN;
+	}
+
+	if(true == ExpectedrDrivingStateBluetooth || true == usrBtnForcedFollowState)
+	{
+		RobotLineFollowingState = true;
+	}else{
+		RobotLineFollowingState = false;
+	}
+
+	if(false == ExpectedrDrivingStateBluetooth && false == usrBtnForcedFollowState){
 		/*Handle manual driving reqeust by user only if robot state is standstill*/
 		if(true == Robot_Cntrl.manualDrivingReqFlag )
 		{
@@ -647,26 +693,33 @@ void ManageRobotMovingState(void)
 		}
 	}
 
-	if(prevExpectedrDrivingState != ExpectedrDrivingState)
+	if( (prevExpectedrDrivingStateBluetooth != ExpectedrDrivingStateBluetooth) 
+	    || usrBtnForcedFollowState != usrBtnForcedFollowState_prev)
 	{
-		if(true == prevExpectedrDrivingState)
+
+		if(true == prevExpectedrDrivingStateBluetooth || true == usrBtnForcedFollowState_prev)
 		{/*Changed from driving to standstill*/
+			BLU_DbgMsgTransmit("LineFollower stop");
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
 			BLU_DbgMsgTransmit("Following mS: %d takeDist: %.3f AvSpd: %.3f ", 
 										DrivingTime, Robot_Cntrl.input_TravelledDistance,Robot_Cntrl.input_AverageSpeed);
 
 			MotorsForceStop();
 
+			if(usrBtnForcedFollowState == true){
+				usrBtnForcedFollowState = false;
+			}
 		}
 		else
 		{
+			BLU_DbgMsgTransmit("LineFollower start!");
 			/*Changed from standstill to driving */
 			ENC_Init();/*re-init Encoder data*/ 
 			DrivingStartTime = HAL_GetTick();
 		}
 	}
 
-	if(true == ExpectedrDrivingState)
+	if(true == ExpectedrDrivingStateBluetooth || true == usrBtnForcedFollowState)
 	{
 
 		if(true == Robot_Cntrl.RightRightAngleDetectedFlag || true == Robot_Cntrl.LeftRightAngleDetectedFlag)
@@ -683,7 +736,8 @@ void ManageRobotMovingState(void)
 		// MotorsForceStop();
 	}
 
-	prevExpectedrDrivingState = ExpectedrDrivingState;
+	prevExpectedrDrivingStateBluetooth = ExpectedrDrivingStateBluetooth;
+	usrBtnForcedFollowState_prev = usrBtnForcedFollowState;
 }
 
 
@@ -702,12 +756,39 @@ void LF_MngrInit(void) /*Line Following Menager init */
 	MotorsPwmInit();
 }
 
+void CheckUserButtonState(void)
+{
+	static uint32_t buttonStateDebounceTimer = 0;
+	static bool alreadyClickHandledFlag = false;
+										/*Reset mean button pushed..*/
+	if(HAL_GPIO_ReadPin(USER_BUTTON_GPIO_Port,USER_BUTTON_Pin) == GPIO_PIN_RESET )
+	{
+		if(HAL_GetTick() - buttonStateDebounceTimer > 1500 && alreadyClickHandledFlag == false)
+		{
+			LED_DoQuickBlinks(30);
+			alreadyClickHandledFlag = true;
+			UsrBtnReqState = BTN_CHANGE_LF_STATE_REQ;
+		}
+		else if(RobotLineFollowingState == true)
+		{
+			UsrBtnReqState = BTN_STOP_LF_REQ;
+			alreadyClickHandledFlag = true;
+		}
+	}
+	else{
+		buttonStateDebounceTimer = HAL_GetTick();
+		alreadyClickHandledFlag = false;
+	}
+	
+}
+
+
 void LF_MngrTask(void) /*Line Following Menager task */
 {
 	UpdateInputData();
 	ComputeLinePidVal();
 	ComputeExpectedPwmValues();
-	
+	CheckUserButtonState();
 
 	ManageRobotMovingState(); /* Totally highest function of robot moving controlling :) */
 }

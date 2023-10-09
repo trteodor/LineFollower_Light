@@ -5,5 +5,4 @@
 extern void LF_AppInit(void);
 extern void LF_AppTask(void);
 
-
 #endif //INC_LF_RUNNABLE_H_
