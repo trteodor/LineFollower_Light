@@ -1127,18 +1127,16 @@ void BLU_Init(void)
 	if(true == DevNameUpdateFlag)
 	{
 
-		static char DevName[16] = "WUKONG";
-		static char FakeRecBuf[20];
-		static char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
-		uint8_t DevNameSize =7;
+		// static char DevName[16] = "WUKONG";
+		// static char FakeRecBuf[20];
+		// static char DevNameFullCommandBuffor[16+7+2] = "AT+NAME";
+		// uint8_t DevNameSize =7;
 
-		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart1_U32_, (uint32_t *)&DevName[0]);
-		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart2_U32_, (uint32_t *)&DevName[4]);
-		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart3_U32_, (uint32_t *)&DevName[8]);
-		// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart4_U32_, (uint32_t *)&DevName[12]);
-		
-
-
+			// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart1_U32_, (uint32_t *)&DevName[0]);
+			// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart2_U32_, (uint32_t *)&DevName[4]);
+			// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart3_U32_, (uint32_t *)&DevName[8]);
+			// EE_ReadVariableU32(EE_NvmAddr_BluDevNamePart4_U32_, (uint32_t *)&DevName[12]);
+			
 		// for(int i=0; i<16; i++)
 		// {
 		// 	if(DevName[i] == '\0'){
@@ -1174,6 +1172,12 @@ void BLU_Task(void)
 void BLU_ReportMapData(BLU_MapDataReport_t *MapData)
 {
 	NewestLfDataReport.CurrMapData = *MapData;
+}
+
+
+void BLU_ReportLinePid(BLU_PidRegData_t *PidRegData)
+{
+	NewestLfDataReport.LinePidRegData = *PidRegData;
 }
 
 void BLU_ReportSensorData(BLU_SensorDataReport_t *SensorData)

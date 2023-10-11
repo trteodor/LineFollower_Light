@@ -97,8 +97,9 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Application"/>
-						<entry excluding="CMSIS/Core/Template|CMSIS/RTOS2|CMSIS/DSP|CMSIS/NN|EEPROM_M24C16|CMSIS/Core_A|CMSIS/RTOS" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="CMSIS/Core/Template|CMSIS/RTOS2|CMSIS/DSP|CMSIS/NN|EEPROM_M24C16|CMSIS/Core_A|CMSIS/RTOS" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Middlewares"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

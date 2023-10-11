@@ -216,6 +216,12 @@ void BLU_ReportSensorData(BLU_SensorDataReport_t *SensorData);
 */
 void BLU_ReportMapData(BLU_MapDataReport_t *MapData);
 
+/* brief BLU_ReportLinePid
+*LF_Menager: Dedicated interface to report current Pid Reg. data
+*/
+void BLU_ReportLinePid(BLU_PidRegData_t *PidRegData);
+
+
 /* brief BLU_RegisterNvMdataUpdateInfoCallBack
 * Register call back if you want be informed that Non Volatile data has been updated
 * by BLE communication module

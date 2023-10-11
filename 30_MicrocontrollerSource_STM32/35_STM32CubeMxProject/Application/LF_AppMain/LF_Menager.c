@@ -782,6 +782,14 @@ void CheckUserButtonState(void)
 	
 }
 
+void ReportPidRegValue(void)
+{
+	BLU_PidRegData_t LinePidRegData;
+	LinePidRegData.LinePidRegVal = LinePid.PID_value;
+
+	BLU_ReportLinePid(&LinePidRegData);
+}
+
 
 void LF_MngrTask(void) /*Line Following Menager task */
 {
@@ -791,6 +799,8 @@ void LF_MngrTask(void) /*Line Following Menager task */
 	CheckUserButtonState();
 
 	ManageRobotMovingState(); /* Totally highest function of robot moving controlling :) */
+
+	ReportPidRegValue();
 }
 
 
