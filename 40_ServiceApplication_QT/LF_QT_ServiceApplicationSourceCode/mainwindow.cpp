@@ -1609,7 +1609,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         float ExpectedAvSpdFloat = ExpectedAvSpdText.toFloat();
 
         uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
-        uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+        uint32_t ThemeBlackType    = (uint32_t) ui->ThemeBlackTypeCheckBox->isChecked();
         uint32_t isIrSensorEnabled = (uint32_t) ui->IrSensorCheckBox->isChecked();
 
         ////    qDebug() << "BlinkingLedsState" << BlinkingLedsState;
@@ -1620,7 +1620,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         command[1] = SyncID;
         std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
         std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
-        std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
+        std::memcpy(&command[10], &ThemeBlackType, sizeof(uint32_t));
         std::memcpy(&command[14], &isIrSensorEnabled, sizeof(uint32_t));
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
@@ -1785,7 +1785,7 @@ void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()
 //    qDebug() << "NvM_BlinkLedSt" << NvM_BlinkLedSt;
 //    qDebug() << "NvM_TryDetEndLinSt" << NvM_TryDetEndLinSt;
     (NvM_isIrSensorEnabled== 0)?  ui->IrSensorCheckBox->setChecked(false) : ui->IrSensorCheckBox->setChecked(true);
-    (NvM_TryDetEndLinSt == 0)  ?  ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
+    (NvM_TryDetEndLinSt == 0)  ?  ui->ThemeBlackTypeCheckBox->setChecked(false) : ui->ThemeBlackTypeCheckBox->setChecked(true);
     (NvM_BlinkLedSt == 0)      ?  ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
 }
 
@@ -1900,7 +1900,7 @@ void MainWindow::on_UpdateExpectedAvSpd_clicked()
         float ExpectedAvSpdFloat = ExpectedAvSpdText.toFloat();
 
         uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
-        uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+        uint32_t ThemeBlackType = (uint32_t) ui->ThemeBlackTypeCheckBox->isChecked();
 
 
         char command[BLU_SINGLE_TR_MESSAGE_SIZE-2] = {'B'};
@@ -1910,7 +1910,7 @@ void MainWindow::on_UpdateExpectedAvSpd_clicked()
         command[1] = 0; //SyncID
         std::memcpy(&command[2],  &ExpectedAvSpdFloat, sizeof(float));
         std::memcpy(&command[6],  &BlinkingLedsState, sizeof(uint32_t));
-        std::memcpy(&command[10], &TryDetEndLineMark, sizeof(uint32_t));
+        std::memcpy(&command[10], &ThemeBlackType, sizeof(uint32_t));
         Helper = QByteArray::fromRawData(command,(BLU_SINGLE_TR_MESSAGE_SIZE-2));
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
@@ -2223,7 +2223,7 @@ void MainWindow::on_SaveAppState_pb_clicked()
 
 
         uint32_t BlinkingLedsState = (uint32_t) ui->BlinkingLedsStateCheckBox->isChecked();
-        uint32_t TryDetEndLineMark = (uint32_t) ui->TryDetEndLineMarkCheckBox->isChecked();
+        uint32_t TryDetEndLineMark = (uint32_t) ui->ThemeBlackTypeCheckBox->isChecked();
         uint32_t isIrSensorEnabled = (uint32_t) ui->IrSensorCheckBox->isChecked();
 
         DataToStore["BlinkingLedsState"]= (int)BlinkingLedsState;
@@ -2353,7 +2353,7 @@ void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
         ui->ExpectedAvSpdText->setText(QString::number(NvmDataObject["ExpectedAvSpdFloat"].toDouble() ,'f',2) );
 
         (NvmDataObject["BlinkingLedsState"].toInt() == 0)   ? ui->BlinkingLedsStateCheckBox->setChecked(false) : ui->BlinkingLedsStateCheckBox->setChecked(true);
-        (NvmDataObject["TryDetEndLineMark"].toInt() == 0)   ? ui->TryDetEndLineMarkCheckBox->setChecked(false) : ui->TryDetEndLineMarkCheckBox->setChecked(true);
+        (NvmDataObject["TryDetEndLineMark"].toInt() == 0)   ? ui->ThemeBlackTypeCheckBox->setChecked(false) : ui->ThemeBlackTypeCheckBox->setChecked(true);
         (NvmDataObject["isIrSensorEnabled"].toInt() == 0)   ? ui->IrSensorCheckBox->setChecked(false) : ui->IrSensorCheckBox->setChecked(true);
         (NvmDataObject["isSpdProfileEnabled"].toInt() == 0) ? ui->SpdProfileEnabled->setChecked(false) : ui->SpdProfileEnabled->setChecked(true);
 
