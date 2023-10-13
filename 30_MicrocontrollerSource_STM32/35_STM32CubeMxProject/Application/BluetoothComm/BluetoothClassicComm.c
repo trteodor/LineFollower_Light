@@ -441,19 +441,19 @@ static BLU_CallStatus_t TransmitVehCfgData(void)
 	BLU_CallStatus_t retval = BLU_Ok;
 
 	float BaseMSpd;
-	uint32_t BlinkLedSt,TryDetEndLineMFlag, isIrSensorEnabled;
+	uint32_t BlinkLedSt,BlackThemeFlag, isIrSensorEnabled;
 
 	/***********************************************************************/
 	EE_ReadVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, &BaseMSpd);
 	EE_ReadVariableU32(EE_NvmAddr_BlinkLadeState_U32, &BlinkLedSt);
-	EE_ReadVariableU32(EE_NvmAddr_TryDetectEndLine_U32, &TryDetEndLineMFlag);
+	EE_ReadVariableU32(EE_NvmAddr_BlackThemeFlag_U32, &BlackThemeFlag);
 	EE_ReadVariableU32(EE_NvmAddr_IrSensorState_U32, &isIrSensorEnabled);
 
 	DataBuffer[0] = BLU_NvM_VehCfgData;
 	DataBuffer[1] = _SyncID;
 	memcpy(&DataBuffer[2],&BaseMSpd,4);
 	memcpy(&DataBuffer[6],&BlinkLedSt,4);
-	memcpy(&DataBuffer[10],&TryDetEndLineMFlag,4);
+	memcpy(&DataBuffer[10],&BlackThemeFlag,4);
 	memcpy(&DataBuffer[14],&isIrSensorEnabled,4);
 
 	if(RB_Transmit_Write(&BluMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLU_SINGLE_MESSAGE_SIZE) != RB_OK)
@@ -868,21 +868,21 @@ static void ReceiveDataHandler(void)
 				case BLU_NvM_VehCfgData:
 				{
 					static float BaseMotSpd  = 0.0F;
-					static uint32_t LedState = 0U, TryDetEndLine = 0U,isIrSensorEnabled=0U;
+					static uint32_t LedState = 0U, BlackThemeFlag = 0U,isIrSensorEnabled=0U;
 
 	    			memcpy(&BaseMotSpd,  &ReceivedMessageBuff[2], sizeof(float));
 	    			memcpy(&LedState,  &ReceivedMessageBuff[6], sizeof(uint32_t));
-					memcpy(&TryDetEndLine,  &ReceivedMessageBuff[10], sizeof(uint32_t));
+					memcpy(&BlackThemeFlag,  &ReceivedMessageBuff[10], sizeof(uint32_t));
 					memcpy(&isIrSensorEnabled,  &ReceivedMessageBuff[14], sizeof(uint32_t));
 
 					EE_WriteVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32, BaseMotSpd);
 					EE_WriteVariableU32(EE_NvmAddr_BlinkLadeState_U32, LedState);
-					EE_WriteVariableU32(EE_NvmAddr_TryDetectEndLine_U32, TryDetEndLine);
+					EE_WriteVariableU32(EE_NvmAddr_BlackThemeFlag_U32, BlackThemeFlag);
 					EE_WriteVariableU32(EE_NvmAddr_IrSensorState_U32, isIrSensorEnabled);
 
 					NvmDataUpdatedFlag= true;
 					// BLU_DbgMsgTransmit("Received BaseMotSpd: %f, LedSt %d, EndLMark %d",
-					// 		BaseMotSpd,LedState,TryDetEndLine );
+					// 		BaseMotSpd,LedState,BlackThemeFlag );
 
 					break;
 				}

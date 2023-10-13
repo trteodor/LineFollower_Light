@@ -161,7 +161,7 @@ typedef struct
 {
 	float ExpectedAvSpeed;
 	uint8_t BlinkLedState;
-	uint8_t TryDetectEndLineMark;
+	uint8_t BlackThemeFlag;
 	uint8_t IrSensorIsEnabled;
 }BLU_NvM_VehCfgData_t; /*Current size 6*4 = 24*/
 

@@ -38,7 +38,7 @@ typedef enum
 
 	EE_NvmAddr_ExpectedMotorSpdValue_F32,
 	EE_NvmAddr_BlinkLadeState_U32,
-	EE_NvmAddr_TryDetectEndLine_U32,
+	EE_NvmAddr_BlackThemeFlag_U32,
 	
 	EE_NvmAddr_MotAtoPwmFacLeft_U32,
 	EE_NvmAddr_MotAtoPwmFacRight_U32,

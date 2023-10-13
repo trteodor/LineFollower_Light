@@ -746,7 +746,6 @@ void ManageRobotMovingState(void)
 /************************************************************************************/
 void LF_MngrInit(void) /*Line Following Menager init */
 {
-	// EEPROM_ReadTryDetectEndLineMarkState();
 	LinePidNvmDataRead();
 	SpeedProfileNvMDataRead();
 	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);

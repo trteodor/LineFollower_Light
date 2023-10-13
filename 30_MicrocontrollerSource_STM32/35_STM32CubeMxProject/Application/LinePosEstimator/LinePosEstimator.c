@@ -50,6 +50,7 @@ typedef struct
 	int LineDetectValue;
 	uint16_t LeftLinePosConfidence;
 	uint16_t RightLinePosConfidence;
+	bool isThemeBlackFlag;
 }LineEstimatorDesc_t;
 
 static LineEstimatorDesc_t LineEstimator;
@@ -153,10 +154,16 @@ static void GetErrorWeightsFromNvm(void)
 	EE_ReadVariableF32(EE_NvmAddr_SenErrWeigthMax_F32,&LineEstimator.SensorErrorMaxValue);
 }
 
+static void GetTypeOfThemeFromNvm(void)
+{
+	EE_ReadVariableU32(EE_NvmAddr_BlackThemeFlag_U32,(uint32_t *)&LineEstimator.isThemeBlackFlag);
+}
+
 /**********************************************************************/
 static void BleUpdateNvmDataCallBack(void)
 {
 	GetErrorWeightsFromNvm();
+	GetTypeOfThemeFromNvm();
 }
 /**********************************************************************/
 
@@ -168,117 +175,226 @@ static void BleUpdateNvmDataCallBack(void)
  */
 static float EstimatePositionError(void)
 {
+	if(false == LineEstimator.isThemeBlackFlag)
+	{
+		/************************************************/
+		if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER2*/
+					&& SideL1 > LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[1];
+		}
 
-	/************************************************/
-	if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER2*/
-				&& SideL1 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[1];
-	}
+		if(  Mid2 > LINE_DETECTED_ADC_VALUE/*+ER2*/
+					&& SideR1 > LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[1];
+		}
+		/************************************************/
 
-	if(  Mid2 > LINE_DETECTED_ADC_VALUE/*+ER2*/
+		/************************************************/
+		if( Mid1 > LINE_DETECTED_ADC_VALUE /*Error not detected*/
+				&& Mid2 > LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.PositionErrorValue=0;
+		}
+		/************************************************/
+
+		if( Mid2 > LINE_DETECTED_ADC_VALUE /*+ER1*/){
+			return -LineEstimator.ErrorWeightValueTable[0];
+		}
+		if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER1*/){
+			return LineEstimator.ErrorWeightValueTable[0];
+		}
+
+
+		if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER4*/
 				&& SideR1 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[1];
-	}
-	/************************************************/
+			return -LineEstimator.ErrorWeightValueTable[3];
+		}
+		if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER4*/
+				&& SideL1 > LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[3];
+		}
 
-	/************************************************/
-	if( Mid1 > LINE_DETECTED_ADC_VALUE /*Error not detected*/
-			&& Mid2 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.PositionErrorValue=0;
-	}
-	/************************************************/
-
-	if( Mid2 > LINE_DETECTED_ADC_VALUE /*+ER1*/){
-		return -LineEstimator.ErrorWeightValueTable[0];
-	}
-	if( Mid1 > LINE_DETECTED_ADC_VALUE /*-ER1*/){
-		return LineEstimator.ErrorWeightValueTable[0];
-	}
+		/************************************************/
+		if( SideR1 > LINE_DETECTED_ADC_VALUE /*+ER3*/){
+			return -LineEstimator.ErrorWeightValueTable[2];
+		}
+		if( SideL1 > LINE_DETECTED_ADC_VALUE /*-ER3*/){
+			return LineEstimator.ErrorWeightValueTable[2];
+		}
+		/************************************************/
 
 
-	if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER4*/
-			&& SideR1 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[3];
-	}
-	if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER4*/
-			&& SideL1 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[3];
-	}
+		if( SideR3 > LINE_DETECTED_ADC_VALUE /*+ER6*/
+				&& SideR2 > LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[5];
+		}
+		if( SideL3 > LINE_DETECTED_ADC_VALUE /*-ER6*/
+				&& SideL2 > LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[5];
+		}
 
-	/************************************************/
-	if( SideR1 > LINE_DETECTED_ADC_VALUE /*+ER3*/){
-		return -LineEstimator.ErrorWeightValueTable[2];
-	}
-	if( SideL1 > LINE_DETECTED_ADC_VALUE /*-ER3*/){
-		return LineEstimator.ErrorWeightValueTable[2];
-	}
-	/************************************************/
+		if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER5*/){
+			return -LineEstimator.ErrorWeightValueTable[4];
+		}
+		if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER5*/){
+			return LineEstimator.ErrorWeightValueTable[4];
+		}
 
 
-	if( SideR3 > LINE_DETECTED_ADC_VALUE /*+ER6*/
-			&& SideR2 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[5];
-	}
-	if( SideL3 > LINE_DETECTED_ADC_VALUE /*-ER6*/
-			&& SideL2 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[5];
-	}
-
-	if( SideR2 > LINE_DETECTED_ADC_VALUE /*+ER5*/){
-		return -LineEstimator.ErrorWeightValueTable[4];
-	}
-	if( SideL2 > LINE_DETECTED_ADC_VALUE /*-ER5*/){
-		return LineEstimator.ErrorWeightValueTable[4];
-	}
+		if( SideR4 > LINE_DETECTED_ADC_VALUE /*+ER8*/
+				&& SideR3 > LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[7];
+		}
+		if( SideL4 > LINE_DETECTED_ADC_VALUE /*-ER8*/
+				&& SideL3 > LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[7];
+		}
 
 
-	if( SideR4 > LINE_DETECTED_ADC_VALUE /*+ER8*/
-			&& SideR3 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[7];
-	}
-	if( SideL4 > LINE_DETECTED_ADC_VALUE /*-ER8*/
-			&& SideL3 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[7];
-	}
+		if( SideR3 > LINE_DETECTED_ADC_VALUE /*+ER7*/){
+			return -LineEstimator.ErrorWeightValueTable[6];
+		}
+		if( SideL3 > LINE_DETECTED_ADC_VALUE /*-ER7*/){
+			return LineEstimator.ErrorWeightValueTable[6];
+		}
 
 
-	if( SideR3 > LINE_DETECTED_ADC_VALUE /*+ER7*/){
-		return -LineEstimator.ErrorWeightValueTable[6];
+		if( SideR_Max > LINE_DETECTED_ADC_VALUE /*+ER10*/
+				&& SideR4 > LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[9];
+		}
+		if( SideL_Max > LINE_DETECTED_ADC_VALUE /*-ER10*/
+				&& SideL4 > LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[9];
+		}
+
+		if( SideR4 > LINE_DETECTED_ADC_VALUE /*+ER9*/){
+			return -LineEstimator.ErrorWeightValueTable[8];
+		}
+		if( SideL4 > LINE_DETECTED_ADC_VALUE /*-ER9*/){
+			return LineEstimator.ErrorWeightValueTable[8];
+		}
+
+		if( SideR_Max > LINE_DETECTED_ADC_VALUE /*+ER11*/){
+			return -LineEstimator.ErrorWeightValueTable[10];
+		}
+		if( SideL_Max > LINE_DETECTED_ADC_VALUE /*-ER11*/){
+			return LineEstimator.ErrorWeightValueTable[10];
+		}
+
+		/*
+		* +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
+		* | S1        | S2     | S3     | S4     | S5     | S6   | S7   | S8     | S9     | S10    | S11    | S12       |
+		* | SideL_Max | SideL4 | SideL3 | SideL2 | SideL1 | Mid1 | Mid2 | SideR1 | SideR2 | SideR3 | SideR4 | SideR_Max |
+		* +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
+		*/
 	}
-	if( SideL3 > LINE_DETECTED_ADC_VALUE /*-ER7*/){
-		return LineEstimator.ErrorWeightValueTable[6];
-	}
+	else{
+		/*white line on black theme*/
+				/************************************************/
+		if( Mid1 < LINE_DETECTED_ADC_VALUE /*-ER2*/
+					&& SideL1 < LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[1];
+		}
+
+		if(  Mid2 < LINE_DETECTED_ADC_VALUE/*+ER2*/
+					&& SideR1 < LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[1];
+		}
+		/************************************************/
+
+		/************************************************/
+		if( Mid1 < LINE_DETECTED_ADC_VALUE /*Error not detected*/
+				&& Mid2 < LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.PositionErrorValue=0;
+		}
+		/************************************************/
+
+		if( Mid2 < LINE_DETECTED_ADC_VALUE /*+ER1*/){
+			return -LineEstimator.ErrorWeightValueTable[0];
+		}
+		if( Mid1 < LINE_DETECTED_ADC_VALUE /*-ER1*/){
+			return LineEstimator.ErrorWeightValueTable[0];
+		}
 
 
-	if( SideR_Max > LINE_DETECTED_ADC_VALUE /*+ER10*/
-			&& SideR4 > LINE_DETECTED_ADC_VALUE){
-		return -LineEstimator.ErrorWeightValueTable[9];
-	}
-	if( SideL_Max > LINE_DETECTED_ADC_VALUE /*-ER10*/
-			&& SideL4 > LINE_DETECTED_ADC_VALUE){
-		return LineEstimator.ErrorWeightValueTable[9];
+		if( SideR2 < LINE_DETECTED_ADC_VALUE /*+ER4*/
+				&& SideR1 < LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[3];
+		}
+		if( SideL2 < LINE_DETECTED_ADC_VALUE /*-ER4*/
+				&& SideL1 < LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[3];
+		}
+
+		/************************************************/
+		if( SideR1 < LINE_DETECTED_ADC_VALUE /*+ER3*/){
+			return -LineEstimator.ErrorWeightValueTable[2];
+		}
+		if( SideL1 < LINE_DETECTED_ADC_VALUE /*-ER3*/){
+			return LineEstimator.ErrorWeightValueTable[2];
+		}
+		/************************************************/
+
+
+		if( SideR3 < LINE_DETECTED_ADC_VALUE /*+ER6*/
+				&& SideR2 < LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[5];
+		}
+		if( SideL3 < LINE_DETECTED_ADC_VALUE /*-ER6*/
+				&& SideL2 < LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[5];
+		}
+
+		if( SideR2 < LINE_DETECTED_ADC_VALUE /*+ER5*/){
+			return -LineEstimator.ErrorWeightValueTable[4];
+		}
+		if( SideL2 < LINE_DETECTED_ADC_VALUE /*-ER5*/){
+			return LineEstimator.ErrorWeightValueTable[4];
+		}
+
+
+		if( SideR4 < LINE_DETECTED_ADC_VALUE /*+ER8*/
+				&& SideR3 < LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[7];
+		}
+		if( SideL4 < LINE_DETECTED_ADC_VALUE /*-ER8*/
+				&& SideL3 < LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[7];
+		}
+
+
+		if( SideR3 < LINE_DETECTED_ADC_VALUE /*+ER7*/){
+			return -LineEstimator.ErrorWeightValueTable[6];
+		}
+		if( SideL3 < LINE_DETECTED_ADC_VALUE /*-ER7*/){
+			return LineEstimator.ErrorWeightValueTable[6];
+		}
+
+
+		if( SideR_Max < LINE_DETECTED_ADC_VALUE /*+ER10*/
+				&& SideR4 < LINE_DETECTED_ADC_VALUE){
+			return -LineEstimator.ErrorWeightValueTable[9];
+		}
+		if( SideL_Max < LINE_DETECTED_ADC_VALUE /*-ER10*/
+				&& SideL4 < LINE_DETECTED_ADC_VALUE){
+			return LineEstimator.ErrorWeightValueTable[9];
+		}
+
+		if( SideR4 < LINE_DETECTED_ADC_VALUE /*+ER9*/){
+			return -LineEstimator.ErrorWeightValueTable[8];
+		}
+		if( SideL4 < LINE_DETECTED_ADC_VALUE /*-ER9*/){
+			return LineEstimator.ErrorWeightValueTable[8];
+		}
+
+		if( SideR_Max < LINE_DETECTED_ADC_VALUE /*+ER11*/){
+			return -LineEstimator.ErrorWeightValueTable[10];
+		}
+		if( SideL_Max < LINE_DETECTED_ADC_VALUE /*-ER11*/){
+			return LineEstimator.ErrorWeightValueTable[10];
+		}
 	}
 
-	if( SideR4 > LINE_DETECTED_ADC_VALUE /*+ER9*/){
-		return -LineEstimator.ErrorWeightValueTable[8];
-	}
-	if( SideL4 > LINE_DETECTED_ADC_VALUE /*-ER9*/){
-		return LineEstimator.ErrorWeightValueTable[8];
-	}
-
-	if( SideR_Max > LINE_DETECTED_ADC_VALUE /*+ER11*/){
-		return -LineEstimator.ErrorWeightValueTable[10];
-	}
-	if( SideL_Max > LINE_DETECTED_ADC_VALUE /*-ER11*/){
-		return LineEstimator.ErrorWeightValueTable[10];
-	}
-
-	/*
-	* +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
-	* | S1        | S2     | S3     | S4     | S5     | S6   | S7   | S8     | S9     | S10    | S11    | S12       |
-	* | SideL_Max | SideL4 | SideL3 | SideL2 | SideL1 | Mid1 | Mid2 | SideR1 | SideR2 | SideR3 | SideR4 | SideR_Max |
-	* +-----------+--------+--------+--------+--------+------+------+--------+--------+--------+--------+-----------+
-	*/
 
 	/*Line not detected */
 	return LINE_NOT_DETECTED_MAGIC_NUMBER;
@@ -511,25 +627,48 @@ LinePostionEnum_t LinePositionEstimator(void)
 	static int SavedLineSide;
 	static uint32_t SavedBigErrorTime; /*Big error is when _PosErrorValue > ErrorWeightValueTable[7] */
 
+	if(false == LineEstimator.isThemeBlackFlag)
+	{
+				/*Try detect big error position*/
+		for(int i=LeftMax; i<LeftW2; i++)
+		{
+			if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+			{
+				SavedBigErrorTime = HAL_GetTick();
+				SavedLineSide = LineOnRightSide;
+			}
+		}
 
+		for(int i=RightMax; i>RightW2; i--)
+		{
+			if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+			{
+				SavedBigErrorTime = HAL_GetTick();
+				SavedLineSide = LineOnLeftSide ;
+			}
+		}
+	}
+	else{
 		/*Try detect big error position*/
-	for(int i=LeftMax; i<LeftW2; i++)
-	{
-		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
+		for(int i=LeftMax; i<LeftW2; i++)
 		{
-			SavedBigErrorTime = HAL_GetTick();
-			SavedLineSide = LineOnRightSide;
+			if(LineEstimator.LineSensorsADCVal[i] < LINE_DETECTED_ADC_VALUE)
+			{
+				SavedBigErrorTime = HAL_GetTick();
+				SavedLineSide = LineOnRightSide;
+			}
+		}
+
+		for(int i=RightMax; i>RightW2; i--)
+		{
+			if(LineEstimator.LineSensorsADCVal[i] < LINE_DETECTED_ADC_VALUE)
+			{
+				SavedBigErrorTime = HAL_GetTick();
+				SavedLineSide = LineOnLeftSide ;
+			}
 		}
 	}
 
-	for(int i=RightMax; i>RightW2; i--)
-	{
-		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
-		{
-			SavedBigErrorTime = HAL_GetTick();
-			SavedLineSide = LineOnLeftSide ;
-		}
-	}
 
 	if( SavedLineSide != LineSideClear && (SavedBigErrorTime + TimeMSToClearBigErrorFlag) < HAL_GetTick() )
 	{
@@ -591,6 +730,7 @@ void LPE_Init(void)
 {
 	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)LineEstimator.LineSensorsADCVal,12); //Turn on Sensor Read
 	GetErrorWeightsFromNvm();
+	GetTypeOfThemeFromNvm();
 	BLU_RegisterNvMdataUpdateInfoCallBack( (void *)BleUpdateNvmDataCallBack);
 }
 
