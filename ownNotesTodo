@@ -1,0 +1,11 @@
+For next competitions:
+Order new wheels: https://www.jsumo.com/js2042-silicone-wheel-set-20-x-42mm-pair
+Solarbotics wheels are not best option in my opinion..
+
+Smaller wheels diameters will significantly put lower the center of gravity..
+
+Right Angles handling must be updated as follow:
+Currently orientation is changed by pi/2 rad, 
+instead of that it should be better to limit angle speed to teoretical yawRate values.. and steer it probably only by PID? or still keep something similar to current solution with small updates
+
+It is very simple, special handling of right angles still must be kept
