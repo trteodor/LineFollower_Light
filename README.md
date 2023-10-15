@@ -2,7 +2,7 @@
 
 Demonstration video:
 
-https://youtu.be/CcTioGpEkXc
+https://www.youtube.com/watch?v=OcwFzTCTTZQ
 
 Real word prototype:
 
