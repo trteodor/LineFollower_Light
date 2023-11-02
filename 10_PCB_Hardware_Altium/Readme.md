@@ -17,3 +17,6 @@ Some of the most important items or items not shown in the altium schematics:
 * https://www.tme.eu/pl/details/cmj2101/dlawiki-smd-pozostale/talema/cmj-2-101/
 * Distance sensor VL53
 * https://kamami.pl/moduly-bluetooth/211365-modul-bluetooth-hc-06-20edr.html
+
+Currently wheels are created using tires ordered here:
+https://www.jsumo.com/js2042-silicone-wheel-without-rim-1-pair

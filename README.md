@@ -13,6 +13,8 @@ Simulated assembly izometric view:
 ![Izometric3D_View](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/IzometricAssemblySimu.jpg)
 
   * You will need to spend around 200$ if you want recreate this design (PCB order included)
+  * most important parts list: 10_PCB_Hardware_Altium\Readme.md
+
 
 In Embedded source code is implemented many algorithms, PID Controller is used to follow for the black line on white theme. 
 
