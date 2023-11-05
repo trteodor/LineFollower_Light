@@ -316,7 +316,7 @@ void BluDataManager::BluDatMngr_DebugMessagerHandler(char *data,uint32_t size, B
 
 
 
-void BluDataManager::BluDatMngr_PidDataHandler( char* data, uint32_t Size)
+void BluDataManager::BluDatMngr_PidDataHandler(char* data, uint32_t Size)
 {
     (void)Size;
     float KpVal    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[2]));
@@ -325,6 +325,19 @@ void BluDataManager::BluDatMngr_PidDataHandler( char* data, uint32_t Size)
     uint32_t ProbeTim = ConvToUint32(&data[14]);
 
     emit BluDatMngrSignal_UpdatePidData(KpVal,KiVal,KdVal,ProbeTim);
+}
+
+void BluDataManager::BluDatMngr_RightAngleDataHandler(char* data, uint32_t Size)
+{
+    (void)Size;
+    float rAgPidKp    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[2]));
+    float rAgPidKd    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[6]));
+    float rAgBaseSpd    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[10]));
+    float rAgMaxYawRate = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[14]));
+    uint32_t rAgProbeTime = ConvToUint32(&data[18]);
+
+    emit BluDatMngrSignal_UpdateRgAngleHndlrData(rAgPidKp,rAgPidKd,
+                                                 rAgBaseSpd,rAgMaxYawRate,rAgProbeTime);
 }
 
 void BluDataManager::BluDatMngr_VehCfgDataHandler( char* data, uint32_t Size)
@@ -404,7 +417,11 @@ void BluDataManager::BluDatMngr_InputHanlder( char* data, uint32_t Size)
             BluDatMngr_PidDataHandler(data,BLU_MessageID);
             break;
         }
-
+        case BLU_NvM_RightAgHndlrData:
+        {
+            BluDatMngr_RightAngleDataHandler(data,BLU_MessageID);
+            break;
+        }
         case BLU_NvM_MotorsFactorsData:
         {
             BluDatMngr_MotorsFactorsDataHandler(data,BLU_MessageID);

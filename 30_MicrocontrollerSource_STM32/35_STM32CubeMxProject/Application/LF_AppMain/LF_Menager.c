@@ -78,6 +78,14 @@ typedef struct LinePidReg_t
 
 }LinePidReg_t;
 
+typedef struct RightAnglePid_Tag{
+    uint32_t NVM_RightAgPrTime; //= 20;
+	float NVM_RightAgBaseSpdHndlr;
+	float NVM_Kp_rAg;
+	float NVM_Kd_rAg;
+	float NVM_RightAgMaxYawRate;
+}RightAnglePid_t;
+
 typedef struct SpeedProfiler_Tag
 {
 	uint32_t EnabledFlag;
@@ -98,6 +106,7 @@ typedef enum
 /*Static variables..*/
 static Robot_Cntrl_t Robot_Cntrl;
 static LinePidReg_t LinePid;
+static RightAnglePid_t RightAnglePidCfgData;
 static SpeedProfiler_t SpeedProfilerData;
 
 static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
@@ -121,12 +130,17 @@ static void LinePidNvmDataRead(void)
 	EE_ReadVariableU32(EE_NvmAddr_MotBtoPwmFacLeft_U32, &LinePid.NVM_MotBFacPwmToSpdLeft);
 	EE_ReadVariableU32(EE_NvmAddr_MotBtoPwmFacRight_U32, &LinePid.NVM_MotBFacPwmToSpdRight);
 
-	
-	EE_ReadVariableF32(EE_NvmAddr_PidKp_F32,&LinePid.Kp);
-	EE_ReadVariableF32(EE_NvmAddr_PidKi_F32,&LinePid.Ki);
-	EE_ReadVariableF32(EE_NvmAddr_PidKd_F32,&LinePid.Kd);
-	EE_ReadVariableU32(EE_NvmAddr_ProbeTime_U32,&LinePid.DerivativeTime);
+	EE_ReadVariableF32(EE_NvmAddr_LinePidKp_F32,&LinePid.Kp);
+	EE_ReadVariableF32(EE_NvmAddr_LinePidKi_F32,&LinePid.Ki);
+	EE_ReadVariableF32(EE_NvmAddr_LinePidKd_F32,&LinePid.Kd);
+	EE_ReadVariableU32(EE_NvmAddr_ProbeTimeLinePid_U32,&LinePid.DerivativeTime);
 	EE_ReadVariableF32(EE_NvmAddr_ExpectedMotorSpdValue_F32,&LinePid.BaseMotorSpeed);
+
+	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKp_F32,&RightAnglePidCfgData.NVM_Kp_rAg);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKd_F32,&RightAnglePidCfgData.NVM_Kd_rAg);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgBaseSpeed_F32,&RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32,&RightAnglePidCfgData.NVM_RightAgMaxYawRate);
+	EE_ReadVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32,&RightAnglePidCfgData.NVM_RightAgPrTime);
 }
 
 static void SpeedProfileNvMDataRead(void)
@@ -518,7 +532,7 @@ void LfMngr_LineEventCallBack(LinePosEstimatorEvent_t LinePosEstEv)
 		BLU_DbgMsgTransmit("Left || RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
 		Robot_Cntrl.LeftRightAngleDetectedFlag = true;
 	}
-	
+
 }
 
 void HandleRightAngle(void)
@@ -559,28 +573,24 @@ void HandleRightAngle(void)
 	// 	}
 	// }
 
-
 	if(true == RightAngleHandlingStartedFlag ) //&& false == brakingFlag
 	{
 		static uint32_t SavedTimeR_AgDriv_PID=0;
 		static float PreviousPositionErrorValueR_AgDrivPid=0;
 		static float R_AgDrivPid_P,R_AgDrivPid_D;
 		static float PidR_AgDrivResult;
-		static const uint32_t ProbeTimeR_AgDrivPid = 20;
-		static const float R_AgDrivPid_Kp = 1.5F;
-		static const float R_AgDrivPid_Kd = 1.0F;
-		static const float BaseSpdR_AgMove = 0.5F;
 
 		R_AgDrivPid_P = ( ENC_GetCurrentOrientation() - expectedOrientation ); /*Tract needed rotation as error*/
 
-		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > ProbeTimeR_AgDrivPid ){
+		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > RightAnglePidCfgData.NVM_RightAgPrTime ){
 			R_AgDrivPid_D= R_AgDrivPid_P - PreviousPositionErrorValueR_AgDrivPid;
 			PreviousPositionErrorValueR_AgDrivPid=R_AgDrivPid_P;
 			SavedTimeR_AgDriv_PID=HAL_GetTick();
 		}
-		PidR_AgDrivResult = (R_AgDrivPid_Kp * R_AgDrivPid_P)+(R_AgDrivPid_Kd * R_AgDrivPid_D);
+		PidR_AgDrivResult = (RightAnglePidCfgData.NVM_Kp_rAg * R_AgDrivPid_P)+(RightAnglePidCfgData.NVM_Kd_rAg * R_AgDrivPid_D);
 
-		SetMotorSpeeds(BaseSpdR_AgMove-PidR_AgDrivResult,BaseSpdR_AgMove+PidR_AgDrivResult);
+		SetMotorSpeeds(RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr-PidR_AgDrivResult,
+							RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr+PidR_AgDrivResult);
 
 		static uint32_t RightAngleOrientationLoggingTimer= 0;
 
@@ -609,7 +619,7 @@ void userRequestManualMoveHandler(void)
 	static const float ManDrivPid_Kp = 0.45F;
 	static const float ManDrivPid_Kd = 0.3F;
 	static const float BaseSpdManMove = 0.5F;
-	
+
 	if(Robot_Cntrl.input_ReqYvectorVal != 0.0F && Robot_Cntrl.input_ReqXvectorVal != 0.0F)
 	{
 		float neededRot = estimateNeededRotation(Robot_Cntrl.input_ReqXvectorVal, Robot_Cntrl.input_ReqYvectorVal);

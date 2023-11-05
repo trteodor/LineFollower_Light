@@ -30,16 +30,22 @@ typedef enum
 	EE_NvmAddr_SenErrWeigthMax_F32,
 	EE_NvmAddr_SenErrWeigthSecEnd,
 
-	EE_NvmAddr_PidKp_F32,
-	EE_NvmAddr_PidKi_F32,
-	EE_NvmAddr_PidKd_F32,
-	
-	EE_NvmAddr_ProbeTime_U32,
+	EE_NvmAddr_LinePidKp_F32,
+	EE_NvmAddr_LinePidKi_F32,
+	EE_NvmAddr_LinePidKd_F32,
+
+	EE_NvmAddr_ProbeTimeLinePid_U32,
+
+	EE_NvmAddr_RightAgPidKp_F32,
+	EE_NvmAddr_RightAgPidKd_F32,
+	EE_NvmAddr_RightAgBaseSpeed_F32,
+	EE_NvmAddr_RightAgMaxYawRate_F32,
+	EE_NvmAddr_PrTimRghtAgPid_U32,
 
 	EE_NvmAddr_ExpectedMotorSpdValue_F32,
 	EE_NvmAddr_BlinkLadeState_U32,
 	EE_NvmAddr_BlackThemeFlag_U32,
-	
+
 	EE_NvmAddr_MotAtoPwmFacLeft_U32,
 	EE_NvmAddr_MotAtoPwmFacRight_U32,
 	EE_NvmAddr_MotBtoPwmFacLeft_U32,
@@ -49,7 +55,7 @@ typedef enum
 	EE_NvmAddr_EncodersWheelBaseInfo_F32,
 
 	EE_NvmAddr_IrSensorState_U32,
-	
+
 	EE_NvmAddr_SpProfileEnableFlag_U32,
 
 	EE_NvmAddr_SpPofileD01_F32,

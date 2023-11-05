@@ -42,7 +42,7 @@ typedef enum BluRingBufferStatus_t
  * \brief BluRingBufferTransmit_t
  * \details ---
  * */
-typedef struct
+typedef struct BluRingBufferTransmit_Tag
 {
 	uint16_t Head; // Pointer to write
 	uint16_t Tail; // Pointer to read
@@ -53,7 +53,7 @@ typedef struct
  * \brief BluRingBufferReceive_t
  * \details ---
  * */
-typedef struct
+typedef struct BluRingBufferReceive_Tag
 {
 
 	uint16_t Head; // Pointer to write
@@ -62,20 +62,20 @@ typedef struct
 	bool ReadyToRead[BLU_RECEIVE_RING_BUFFER_SIZE];
 } BluRingBufferReceive_t;
 
-typedef struct
+typedef struct Sim_PositionOnTruck_Tag
 {
 	float X[SIMULATOR_PROBES_COUNT];
 	float Y[SIMULATOR_PROBES_COUNT];
 	uint16_t T[SIMULATOR_PROBES_COUNT];
 }Sim_PositionOnTruck_t;
 
-typedef enum InternalRobotState_t
+typedef enum InternalRobotState_Tag
 {
 	Standstill,
 	Driving,
 }InternalRobotState_t;
 
-typedef enum LoggingState_t
+typedef enum LoggingState_Tag
 {
 	Suspended,
 	TrueDataLogging,
@@ -411,10 +411,10 @@ static BLU_CallStatus_t TransmitPidData(void)
 	uint32_t ProbeT;
 
 	/***********************************************************************/
-	EE_ReadVariableF32(EE_NvmAddr_PidKp_F32, &PidKp);
-	EE_ReadVariableF32(EE_NvmAddr_PidKi_F32, &PidKi);
-	EE_ReadVariableF32(EE_NvmAddr_PidKd_F32, &PidKd);
-	EE_ReadVariableU32(EE_NvmAddr_ProbeTime_U32, &ProbeT);
+	EE_ReadVariableF32(EE_NvmAddr_LinePidKp_F32, &PidKp);
+	EE_ReadVariableF32(EE_NvmAddr_LinePidKi_F32, &PidKi);
+	EE_ReadVariableF32(EE_NvmAddr_LinePidKd_F32, &PidKd);
+	EE_ReadVariableU32(EE_NvmAddr_ProbeTimeLinePid_U32, &ProbeT);
 
 	DataBuffer[0] = BLU_NvM_LinePidRegData;
 	DataBuffer[1] = _SyncID;
@@ -422,6 +422,43 @@ static BLU_CallStatus_t TransmitPidData(void)
 	memcpy(&DataBuffer[6],&PidKi,4);
 	memcpy(&DataBuffer[10],&PidKd,4);
 	memcpy(&DataBuffer[14],&ProbeT,4);
+
+	if(RB_Transmit_Write(&BluMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLU_SINGLE_MESSAGE_SIZE) != RB_OK)
+	{
+		LogDroppedFlag = true;
+		retval = BLU_Error;
+	}
+
+	_SyncID++;
+	return retval;
+}
+
+static BLU_CallStatus_t TransmitRightAgHndlrData(void)
+{
+	uint8_t DataBuffer[BLU_SINGLE_MESSAGE_SIZE] = {0};
+	static uint8_t _SyncID = 0;
+
+	BLU_CallStatus_t retval = BLU_Ok;
+
+	float rAgPidKp  = 0.0F,  rAgPidKd = 0.0F;
+	float rAgBaseSpd = 0.0F;
+	float maxYawRate = 0.0F;
+	uint32_t rAgProbeTime  = 0.0F;
+
+	/***********************************************************************/
+	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKp_F32, &rAgPidKp);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKd_F32, &rAgPidKd);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgBaseSpeed_F32, &rAgBaseSpd);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32, &maxYawRate);
+	EE_ReadVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32, &rAgProbeTime);
+
+	DataBuffer[0] = BLU_NvM_RightAgHndlrData;
+	DataBuffer[1] = _SyncID;
+	memcpy(&DataBuffer[2],&rAgPidKp,4);
+	memcpy(&DataBuffer[6],&rAgPidKd,4);
+	memcpy(&DataBuffer[10],&rAgBaseSpd,4);
+	memcpy(&DataBuffer[14],&maxYawRate,4);
+	memcpy(&DataBuffer[18],&rAgProbeTime,4);
 
 	if(RB_Transmit_Write(&BluMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLU_SINGLE_MESSAGE_SIZE) != RB_OK)
 	{
@@ -848,16 +885,42 @@ static void ReceiveDataHandler(void)
 	    			memcpy(&PidKp,  &ReceivedMessageBuff[2], sizeof(float));
 	    			memcpy(&PidKi,  &ReceivedMessageBuff[6], sizeof(float));
 					memcpy(&PidKd,  &ReceivedMessageBuff[10], sizeof(float));
-					memcpy(&ProbeTime,  &ReceivedMessageBuff[14], sizeof(float));
+					memcpy(&ProbeTime,  &ReceivedMessageBuff[14], sizeof(uint32_t));
 
-					EE_WriteVariableF32(EE_NvmAddr_PidKp_F32, PidKp);
-					EE_WriteVariableF32(EE_NvmAddr_PidKi_F32, PidKi);
-					EE_WriteVariableF32(EE_NvmAddr_PidKd_F32, PidKd);
-					EE_WriteVariableU32(EE_NvmAddr_ProbeTime_U32, ProbeTime);
+					EE_WriteVariableF32(EE_NvmAddr_LinePidKp_F32, PidKp);
+					EE_WriteVariableF32(EE_NvmAddr_LinePidKi_F32, PidKi);
+					EE_WriteVariableF32(EE_NvmAddr_LinePidKd_F32, PidKd);
+					EE_WriteVariableU32(EE_NvmAddr_ProbeTimeLinePid_U32, ProbeTime);
 					NvmDataUpdatedFlag= true;
 					break;
 				}
 
+				case BLU_NvM_RightAgHndlrDataReq:
+				{
+					TransmitRightAgHndlrData();
+					break;
+				}
+				case BLU_NvM_RightAgHndlrData:
+				{
+					float rAgPidKp  = 0.0F,  rAgPidKd = 0.0F;
+					float rAgBaseSpd = 0.0F;
+					float maxYawRate = 0.0F;
+					uint32_t rAgProbeTime  = 0.0F;
+
+	    			memcpy(&rAgPidKp,  &ReceivedMessageBuff[2], sizeof(float));
+					memcpy(&rAgPidKd,  &ReceivedMessageBuff[6], sizeof(float));
+					memcpy(&rAgBaseSpd,  &ReceivedMessageBuff[10], sizeof(float));
+					memcpy(&maxYawRate,  &ReceivedMessageBuff[14], sizeof(float));
+					memcpy(&rAgProbeTime,  &ReceivedMessageBuff[18], sizeof(uint32_t));
+
+					EE_WriteVariableF32(EE_NvmAddr_RightAgPidKp_F32, rAgPidKp);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgPidKd_F32, rAgPidKd);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgBaseSpeed_F32, rAgBaseSpd);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32, maxYawRate);
+					EE_WriteVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32, rAgProbeTime);
+					NvmDataUpdatedFlag= true;
+					break;
+				}
 				case BLU_NvM_VehCfgReq:
 				{
 	//				BLU_DbgMsgTransmit("VehCfgReq");

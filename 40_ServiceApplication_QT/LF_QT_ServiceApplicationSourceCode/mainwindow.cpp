@@ -249,6 +249,12 @@ void MainWindow::ConfigureTextLineAndNvMConnections(void)
     ui->TextWheelBase->setValidator(&dblValidator);
     ui->TextOneImpDist->setValidator(&dblValidator);
 
+    ui->textRightAgKp->setValidator(&dblValidator);
+    ui->textRightAgKd->setValidator(&dblValidator);
+    ui->textRightAgBaseSpd->setValidator(&dblValidator);
+    ui->textRightAgMaxYr->setValidator(&dblValidator);
+    ui->textRightAgPrTim->setValidator(&dblValidator);
+
     ui->TextPwmToSpAFacL->setValidator(&dblValidator);
     ui->TextPwmToSpAFacR->setValidator(&dblValidator);
     ui->TextPwmToSpBFacL->setValidator(&dblValidator);
@@ -280,6 +286,7 @@ void MainWindow::ConfigureTextLineAndNvMConnections(void)
 
     connect(&NvM_ErrWeigthUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_ErrWeigthUpdateDelayTimerTimeout()));
     connect(&NvM_PidDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_PidDatahUpdateDelayTimerTimeout()));
+    connect(&NvM_rAgDatahUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_rAgDatahUpdateDelayTimerTimeout()));
     connect(&NvM_VehCfghUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_VehCfgDataUpdateDelayTimerTimeout()));
     connect(&NvM_MotorsFactorsUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_MotorsFactorsDataUpdateDelayTimerTimeout()));
     connect(&NvM_EncoderCfgUpdateDelayTimer, SIGNAL(timeout()), this, SLOT(NvM_EncodersConfigDataUpdateDelayTimerTimeout()));
@@ -631,6 +638,11 @@ void MainWindow::BLU_InitializeQTConnections(void)
         ,this
         ,SLOT(MainWin_UpdateNvM_PidData(float,float,float,uint32_t) ) );
 
+    connect(
+        &BluInputDataProcessingWrapper,
+        SIGNAL(BluDatMngrSignal_UpdateRgAngleHndlrData(float,float,float,float,uint32_t) )
+        ,this
+        ,SLOT(MainWin_UpdateNvM_RgAngleHndlrData(float,float,float,float,uint32_t) ) );
 
     connect(
         &BluInputDataProcessingWrapper,
@@ -1067,6 +1079,19 @@ void MainWindow::MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_
     NvM_PidDatahUpdateDelayTimer.start(100);
 }
 
+void MainWindow::MainWin_UpdateNvM_RgAngleHndlrData(float rAgPidKp, float rAgPidKd, float rAgBaseSpd,
+                                                    float rAgMaxYawRate, uint32_t rAgProbeTime)
+{
+    NvM_rAgHndlr_Kp = rAgPidKp;
+    NvM_rAgHndlr_Kd = rAgPidKd;
+    NvM_rAgBaseSpd = rAgBaseSpd;
+    NVM_rAgMaxYawRate = rAgMaxYawRate;
+    NvM_rAgProbeTime = rAgProbeTime;
+
+    NvM_rAgDatahUpdateDelayTimer.setSingleShot(true);
+    NvM_rAgDatahUpdateDelayTimer.start(100);
+}
+
 void MainWindow::MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd, uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled)
 {
     NvM_ExpectedAvSpeed = ExpectedAvSpd;
@@ -1447,6 +1472,12 @@ void MainWindow::ReadNvMDataFromLineFollower()
     ui->PID_KD_text->clear();
     ui->ProbeTimeText->clear();
 
+    ui->textRightAgKp->clear();
+    ui->textRightAgKd->clear();
+    ui->textRightAgBaseSpd->clear();
+    ui->textRightAgMaxYr->clear();
+    ui->textRightAgPrTim->clear();
+
     ui->TextPwmToSpAFacL->clear();
     ui->TextPwmToSpAFacR->clear();
     ui->TextPwmToSpBFacL->clear();
@@ -1495,6 +1526,11 @@ void MainWindow::ReadNvMDataFromLineFollower()
     Helper.append("\n\r");
     BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
 
+    command[0] = (char)BluDataManager::BLU_NvM_RightAgHndlrDataReq;
+    Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+    Helper.append("\n\r");
+    BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+
     command[0] = (char)BluDataManager::BLU_NvM_MotorsFactorsReq;
     Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
     Helper.append("\n\r");
@@ -1516,8 +1552,6 @@ void MainWindow::on_ReadNvM_Button_clicked()
 {
     ReadNvMDataFromLineFollower();
 }
-
-
 
 void MainWindow::on_UpdateNvM_Button_clicked()
 {
@@ -1626,6 +1660,37 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
         QThread::msleep(25);
+
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        /*********************************************************************************************************/
+        QString rAgHndlrKpText = ui->textRightAgKp->text();
+        float rAgHndlrKpFloat = rAgHndlrKpText.toFloat();
+
+        QString rAgHndlrKdText = ui->textRightAgKd->text();
+        float rAgHndlrKdFloat = rAgHndlrKdText.toFloat();
+
+        QString rAgHndlrBaseSpdText = ui->textRightAgBaseSpd->text();
+        float rAgHndlrBaseSpdFloat = rAgHndlrBaseSpdText.toFloat();
+
+        QString rAgHndlrMaxYawRateText = ui->textRightAgMaxYr->text();
+        float rAgHndlrMaxYawRateFloat = rAgHndlrMaxYawRateText.toFloat();
+
+        QString rAgHndlrProbeTimText = ui->textRightAgPrTim->text();
+        uint32_t rAgHndlrProbeTimU32 = rAgHndlrProbeTimText.toInt();
+
+        command[0] = (char)BluDataManager::BLU_NvM_RightAgHndlrData;
+        command[1] = SyncID;
+        std::memcpy(&command[2],  &rAgHndlrKpFloat, sizeof(float));
+        std::memcpy(&command[6],  &rAgHndlrKdFloat, sizeof(float));
+        std::memcpy(&command[10], &rAgHndlrBaseSpdFloat, sizeof(float));
+        std::memcpy(&command[14], &rAgHndlrMaxYawRateFloat, sizeof(float));
+        std::memcpy(&command[18], &rAgHndlrProbeTimU32, sizeof(uint32_t));
+        Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
+        Helper.append("\n\r");
+        BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
+        QThread::msleep(25);
+
 
         /*********************************************************************************************************/
         /*********************************************************************************************************/
@@ -1751,7 +1816,7 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         SyncID++;
     }
 
-
+    ReadNvMDataFromLineFollower();
 }
 
 void MainWindow::NvM_ErrWeigthUpdateDelayTimerTimeout()
@@ -1772,10 +1837,19 @@ void MainWindow::NvM_ErrWeigthUpdateDelayTimerTimeout()
 
 void MainWindow::NvM_PidDatahUpdateDelayTimerTimeout()
 {
-        ui->PID_KP_text->setText(QString::number(NvM_PID_Kp,'f',2) );
-        ui->PID_KI_text->setText(QString::number(NvM_PID_Ki,'f',2) );
-        ui->PID_KD_text->setText(QString::number(NvM_PID_Kd,'f',2) );
-        ui->ProbeTimeText->setText(QString::number(NvM_ProbeTim,10) );
+    ui->PID_KP_text->setText(QString::number(NvM_PID_Kp,'f',2) );
+    ui->PID_KI_text->setText(QString::number(NvM_PID_Ki,'f',2) );
+    ui->PID_KD_text->setText(QString::number(NvM_PID_Kd,'f',2) );
+    ui->ProbeTimeText->setText(QString::number(NvM_ProbeTim,10) );
+}
+
+void MainWindow::NvM_rAgDatahUpdateDelayTimerTimeout()
+{
+    ui->textRightAgKp->setText(QString::number(NvM_rAgHndlr_Kp,'f',2));
+    ui->textRightAgKd->setText(QString::number(NvM_rAgHndlr_Kd,'f',2));
+    ui->textRightAgBaseSpd->setText(QString::number(NvM_rAgBaseSpd,'f',2));
+    ui->textRightAgMaxYr->setText(QString::number(NVM_rAgMaxYawRate,'f',2));
+    ui->textRightAgPrTim->setText(QString::number(NvM_rAgProbeTime,10));
 }
 
 void MainWindow::NvM_VehCfgDataUpdateDelayTimerTimeout()
@@ -2231,6 +2305,26 @@ void MainWindow::on_SaveAppState_pb_clicked()
         DataToStore["isIrSensorEnabled"]= (int)isIrSensorEnabled;
 
 
+        QString rAgHndlrKpText = ui->textRightAgKp->text();
+        float rAgHndlrKpFloat = rAgHndlrKpText.toFloat();
+        DataToStore["rAgHndlrKpFloat"]= rAgHndlrKpFloat;
+
+        QString rAgHndlrKdText = ui->textRightAgKd->text();
+        float rAgHndlrKdFloat = rAgHndlrKdText.toFloat();
+        DataToStore["rAgHndlrKdFloat"]= rAgHndlrKdFloat;
+
+        QString rAgHndlrBaseSpdText = ui->textRightAgBaseSpd->text();
+        float rAgHndlrBaseSpdFloat = rAgHndlrBaseSpdText.toFloat();
+        DataToStore["rAgHndlrBaseSpdFloat"]= rAgHndlrBaseSpdFloat;
+
+        QString rAgHndlrMaxYawRateText = ui->textRightAgMaxYr->text();
+        float rAgHndlrMaxYawRateFloat = rAgHndlrMaxYawRateText.toFloat();
+        DataToStore["rAgHndlrMaxYawRateFloat"]= rAgHndlrMaxYawRateFloat;
+
+        QString rAgHndlrProbeTimText = ui->textRightAgPrTim->text();
+        uint32_t rAgHndlrProbeTimU32 = rAgHndlrProbeTimText.toInt();
+        DataToStore["rAgHndlrProbeTimU32"]= (int)rAgHndlrProbeTimU32;
+
         QString FacA_LftText = ui->TextPwmToSpAFacL->text();
         uint32_t FacA_LftU32 = FacA_LftText.toInt();
         QString FacA_RhtText = ui->TextPwmToSpAFacR->text();
@@ -2356,6 +2450,12 @@ void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
         (NvmDataObject["TryDetEndLineMark"].toInt() == 0)   ? ui->ThemeBlackTypeCheckBox->setChecked(false) : ui->ThemeBlackTypeCheckBox->setChecked(true);
         (NvmDataObject["isIrSensorEnabled"].toInt() == 0)   ? ui->IrSensorCheckBox->setChecked(false) : ui->IrSensorCheckBox->setChecked(true);
         (NvmDataObject["isSpdProfileEnabled"].toInt() == 0) ? ui->SpdProfileEnabled->setChecked(false) : ui->SpdProfileEnabled->setChecked(true);
+
+        ui->textRightAgKp->setText(QString::number(NvmDataObject["rAgHndlrKpFloat"].toDouble() ,'f',2) );
+        ui->textRightAgKd->setText(QString::number(NvmDataObject["rAgHndlrKdFloat"].toDouble() ,'f',2) );
+        ui->textRightAgBaseSpd->setText(QString::number(NvmDataObject["rAgHndlrBaseSpdFloat"].toDouble() ,'f',2) );
+        ui->textRightAgMaxYr->setText(QString::number(NvmDataObject["rAgHndlrMaxYawRateFloat"].toDouble() ,'f',2) );
+        ui->textRightAgPrTim->setText(QString::number(NvmDataObject["rAgHndlrProbeTimU32"].toInt() ) );
 
         ui->TextPwmToSpAFacL->setText(QString::number(NvmDataObject["FacA_LftU32"].toInt()) );
         ui->TextPwmToSpAFacR->setText(QString::number(NvmDataObject["FacA_RhtU32"].toInt()) );

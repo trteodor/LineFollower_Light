@@ -58,7 +58,7 @@ typedef enum
 
     BLU_RobotStart,
     BLU_RobotStop,
-	
+
     BLU_SimulatorStart,
     BLU_TrueBaseLoggingStart,
     BLU_SimuAndTrueDataLoggingStop,
@@ -71,6 +71,9 @@ typedef enum
 
     BLU_NvM_LinePidRegDataReq,
     BLU_NvM_LinePidRegData,
+
+    BLU_NvM_RightAgHndlrDataReq,
+    BLU_NvM_RightAgHndlrData,
 
     BLU_NvM_VehCfgReq,
     BLU_NvM_VehCfgData,

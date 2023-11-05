@@ -1490,10 +1490,10 @@ color: rgb(255, 255, 255);</string>
         <widget class="QWidget" name="layoutWidget_lab24">
          <property name="geometry">
           <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>171</width>
-           <height>178</height>
+           <x>10</x>
+           <y>150</y>
+           <width>155</width>
+           <height>161</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_20">
@@ -1562,6 +1562,164 @@ color: rgb(255, 255, 255);</string>
             </item>
             <item>
              <widget class="QLineEdit" name="TextPwmToSpBFacR"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>161</width>
+           <height>124</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_22">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>rAgBaseSpd</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightAgBaseSpd">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>m/s</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_23">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="maximumSize">
+               <size>
+                <width>45</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>rAg: Kp:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightAgKp">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="maximumSize">
+               <size>
+                <width>20</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Kd:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightAgKd">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_24">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>rAgProbeTim:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightAgPrTim">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>ms</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_25">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>rAgMaxYr:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightAgMaxYr">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="text">
+               <string>rad/s</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -2135,15 +2293,92 @@ color: rgb(255, 255, 255);</string>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>DebugDataTable</tabstop>
-  <tabstop>GeneraReplotAllPlots_pb</tabstop>
-  <tabstop>SaveAppState_pb</tabstop>
-  <tabstop>GeneralPlotDataClear_pb</tabstop>
-  <tabstop>MainTabWidget</tabstop>
+  <tabstop>BLU_ScanButton</tabstop>
   <tabstop>BLU_DetectedDeviceComboBox</tabstop>
-  <tabstop>LoadProject_pb</tabstop>
+  <tabstop>BLU_ConnectButton</tabstop>
+  <tabstop>BLU_DisconnectButton</tabstop>
+  <tabstop>BLU_AutoConnCheckBox</tabstop>
+  <tabstop>BLU_AutoConnDevNameL</tabstop>
+  <tabstop>BLU_RobotStart_Button</tabstop>
+  <tabstop>BLU_RobotStop_Button</tabstop>
+  <tabstop>BLU_SimulatorSuspendButton</tabstop>
+  <tabstop>BLU_TrueLogStartButton</tabstop>
+  <tabstop>BLU_SimulatorStartButton</tabstop>
+  <tabstop>UpdateNvM_Button</tabstop>
+  <tabstop>ReadNvM_Button</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>ExpectedAvSpdText</tabstop>
+  <tabstop>UpdateExpectedAvSpd</tabstop>
+  <tabstop>PID_KP_text</tabstop>
+  <tabstop>PID_KI_text</tabstop>
+  <tabstop>PID_KD_text</tabstop>
+  <tabstop>ProbeTimeText</tabstop>
+  <tabstop>ThemeBlackTypeCheckBox</tabstop>
+  <tabstop>BlinkingLedsStateCheckBox</tabstop>
+  <tabstop>IrSensorCheckBox</tabstop>
+  <tabstop>ErrW1_Text</tabstop>
+  <tabstop>ErrW7_Text</tabstop>
+  <tabstop>ErrW2_Text</tabstop>
+  <tabstop>ErrW8_Text</tabstop>
+  <tabstop>ErrW3_Text</tabstop>
+  <tabstop>ErrW9_Text</tabstop>
+  <tabstop>ErrW4_Text</tabstop>
+  <tabstop>ErrW10_Text</tabstop>
+  <tabstop>ErrW5_Text</tabstop>
+  <tabstop>ErrW11_Text</tabstop>
+  <tabstop>ErrW6_Text</tabstop>
+  <tabstop>ErrWM_Text</tabstop>
+  <tabstop>MainTabWidget</tabstop>
+  <tabstop>IndicatorVieEnableChBox</tabstop>
   <tabstop>PlotWidgetTab1</tabstop>
   <tabstop>tabWidget_4</tabstop>
+  <tabstop>GeneralPlotDataClear_pb</tabstop>
+  <tabstop>GeneraReplotAllPlots_pb</tabstop>
+  <tabstop>RemoveMarkers_pb</tabstop>
+  <tabstop>SaveAppState_pb</tabstop>
+  <tabstop>LoadProject_pb</tabstop>
+  <tabstop>ClearLoggerButton</tabstop>
+  <tabstop>pushButton_8</tabstop>
+  <tabstop>pushButton_7</tabstop>
+  <tabstop>DebugDataTable</tabstop>
+  <tabstop>EnableBaseDataLogging</tabstop>
+  <tabstop>DebugTable_DisableBaseDataLogging</tabstop>
+  <tabstop>textRightAgBaseSpd</tabstop>
+  <tabstop>textRightAgKp</tabstop>
+  <tabstop>textRightAgKd</tabstop>
+  <tabstop>textRightAgPrTim</tabstop>
+  <tabstop>textRightAgMaxYr</tabstop>
+  <tabstop>TextOneImpDist</tabstop>
+  <tabstop>TextWheelBase</tabstop>
+  <tabstop>TextPwmToSpAFacL</tabstop>
+  <tabstop>TextPwmToSpAFacR</tabstop>
+  <tabstop>TextPwmToSpBFacL</tabstop>
+  <tabstop>TextPwmToSpBFacR</tabstop>
+  <tabstop>SpdProfileEnabled</tabstop>
+  <tabstop>SpdProfileTrvD1</tabstop>
+  <tabstop>SpdProfileBspd1</tabstop>
+  <tabstop>SpdProfileTrvD2</tabstop>
+  <tabstop>SpdProfileBspd2</tabstop>
+  <tabstop>SpdProfileTrvD3</tabstop>
+  <tabstop>SpdProfileBspd3</tabstop>
+  <tabstop>SpdProfileTrvD4</tabstop>
+  <tabstop>SpdProfileBspd4</tabstop>
+  <tabstop>SpdProfileTrvD5</tabstop>
+  <tabstop>SpdProfileBspd5</tabstop>
+  <tabstop>SpdProfileTrvD6</tabstop>
+  <tabstop>SpdProfileBspd6</tabstop>
+  <tabstop>SpdProfileTrvD7</tabstop>
+  <tabstop>SpdProfileBspd7</tabstop>
+  <tabstop>SpdProfileTrvD8</tabstop>
+  <tabstop>SpdProfileBspd8</tabstop>
+  <tabstop>SpdProfileTrvD9</tabstop>
+  <tabstop>SpdProfileBspd9</tabstop>
+  <tabstop>SpdProfileTrvD10</tabstop>
+  <tabstop>SpdProfileBspd10</tabstop>
+  <tabstop>SpdProfileTrvD11</tabstop>
+  <tabstop>SpdProfileBspd11</tabstop>
+  <tabstop>NewLfNameText</tabstop>
+  <tabstop>UpdateLfNameButton</tabstop>
  </tabstops>
  <resources>
   <include location="RobotOriRes.qrc"/>

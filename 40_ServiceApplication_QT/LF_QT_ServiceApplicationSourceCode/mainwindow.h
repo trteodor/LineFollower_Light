@@ -63,6 +63,10 @@ private slots:
 
 
     void MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_t ProbeTime);
+
+    void MainWin_UpdateNvM_RgAngleHndlrData( float rAgPidKp, float rAgPidKd,
+                                                 float rAgBaseSpd, float rAgMaxYawRate, uint32_t rAgProbeTime);
+
     void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled);
 
     void MainWin_UpdateEncoderCfgData(float OneImpDist, float WheelBase);
@@ -119,6 +123,7 @@ private slots:
 
     void NvM_ErrWeigthUpdateDelayTimerTimeout();
     void NvM_PidDatahUpdateDelayTimerTimeout();
+    void NvM_rAgDatahUpdateDelayTimerTimeout();
     void NvM_VehCfgDataUpdateDelayTimerTimeout();
     void NvM_MotorsFactorsDataUpdateDelayTimerTimeout();
     void NvM_EncodersConfigDataUpdateDelayTimerTimeout();
@@ -158,6 +163,7 @@ private:
 
     QTimer NvM_ErrWeigthUpdateDelayTimer;
     QTimer NvM_PidDatahUpdateDelayTimer;
+    QTimer NvM_rAgDatahUpdateDelayTimer;
     QTimer NvM_VehCfghUpdateDelayTimer;
 
     QTimer NvM_EncoderCfgUpdateDelayTimer;
@@ -172,6 +178,13 @@ private:
     float  NvM_PID_Ki;
     float  NvM_PID_Kd;
     uint32_t  NvM_ProbeTim;
+
+    float    NvM_rAgHndlr_Kp;
+    float    NvM_rAgHndlr_Kd;
+    float    NvM_rAgBaseSpd;
+    float    NVM_rAgMaxYawRate;
+    uint32_t NvM_rAgProbeTime;
+
 
     float  NvM_ExpectedAvSpeed;
     uint32_t  NvM_BlinkLedSt;
