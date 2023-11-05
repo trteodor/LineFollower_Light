@@ -1,0 +1,1897 @@
+{
+    "NvmData": [
+        {
+            "BlinkingLedsState": 1,
+            "Err10ValueFloat": 7,
+            "Err11ValueFloat": 8,
+            "Err1ValueFloat": 0.20000000298023224,
+            "Err2ValueFloat": 0.4000000059604645,
+            "Err3ValueFloat": 0.800000011920929,
+            "Err4ValueFloat": 1.2000000476837158,
+            "Err5ValueFloat": 2,
+            "Err6ValueFloat": 3,
+            "Err7ValueFloat": 4,
+            "Err8ValueFloat": 5,
+            "Err9ValueFloat": 6,
+            "ErrMValueFloat": 10,
+            "ExpectedAvSpdFloat": 1.2000000476837158,
+            "FacA_LftU32": 170,
+            "FacA_RhtU32": 170,
+            "FacB_LftU32": 51,
+            "FacB_RhtU32": 51,
+            "OneImpDistF32": 0.0005384000251069665,
+            "PID_KDfloat": 0.20000000298023224,
+            "PID_KIfloat": 0,
+            "PID_KPfloat": 0.20000000298023224,
+            "ProbeTimeInt": 20,
+            "SpdProfileBaseSpd_0": 0.699999988079071,
+            "SpdProfileBaseSpd_1": 0.800000011920929,
+            "SpdProfileBaseSpd_10": 1,
+            "SpdProfileBaseSpd_2": 1,
+            "SpdProfileBaseSpd_3": 1,
+            "SpdProfileBaseSpd_4": 1,
+            "SpdProfileBaseSpd_5": 1,
+            "SpdProfileBaseSpd_6": 1,
+            "SpdProfileBaseSpd_7": 1,
+            "SpdProfileBaseSpd_8": 1,
+            "SpdProfileBaseSpd_9": 1,
+            "SpdProfileTrvDist_0": 1.2000000476837158,
+            "SpdProfileTrvDist_1": 2,
+            "SpdProfileTrvDist_10": 11,
+            "SpdProfileTrvDist_2": 3,
+            "SpdProfileTrvDist_3": 4,
+            "SpdProfileTrvDist_4": 5,
+            "SpdProfileTrvDist_5": 6,
+            "SpdProfileTrvDist_6": 7,
+            "SpdProfileTrvDist_7": 8,
+            "SpdProfileTrvDist_8": 9,
+            "SpdProfileTrvDist_9": 10,
+            "TryDetEndLineMark": 0,
+            "WheelBaseF32": 0.1509999930858612,
+            "isIrSensorEnabled": 0,
+            "isSpdProfileEnabled": 0,
+            "rAgHndlrBaseSpdFloat": 0.5,
+            "rAgHndlrKdFloat": 1,
+            "rAgHndlrKpFloat": 1.5,
+            "rAgHndlrMaxYawRateFloat": 8,
+            "rAgHndlrProbeTimU32": 20
+        }
+    ],
+    "PlotLinePosConfidenceL_Y": [
+    ],
+    "PlotLinePosConfidenceR_Y": [
+    ],
+    "PlotMap_PosX": [
+    ],
+    "PlotMap_PosY": [
+    ],
+    "PlotOrientation_Y": [
+    ],
+    "PlotPidRegVal_Y": [
+    ],
+    "PlotPosErr_Y": [
+    ],
+    "PlotSpdL_Y": [
+    ],
+    "PlotSpdR_Y": [
+    ],
+    "PlotTrvDistance_Y": [
+    ],
+    "YawRate_Y": [
+    ],
+    "mDebugDataLogger": [
+        {
+            "Data": "DevNameMatched:Connecting ",
+            "FrameCounter": "",
+            "SyncId": "",
+            "sysTime": "",
+            "ucTimeStamp": ""
+        },
+        {
+            "Data": "DevNameMatched:Connecting ",
+            "FrameCounter": "",
+            "SyncId": "",
+            "sysTime": "",
+            "ucTimeStamp": ""
+        },
+        {
+            "Data": "Logger stop",
+            "FrameCounter": "2",
+            "SyncId": "0",
+            "sysTime": "23/10/14 11:39:02.816",
+            "ucTimeStamp": "90068"
+        },
+        {
+            "Data": "True data logger start",
+            "FrameCounter": "2",
+            "SyncId": "1",
+            "sysTime": "23/10/14 11:39:02.840",
+            "ucTimeStamp": "90091"
+        },
+        {
+            "Data": "LineFollower start!",
+            "FrameCounter": "2",
+            "SyncId": "2",
+            "sysTime": "23/10/14 11:39:02.872",
+            "ucTimeStamp": "90100"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 0.473",
+            "FrameCounter": "2",
+            "SyncId": "3",
+            "sysTime": "23/10/14 11:39:03.704",
+            "ucTimeStamp": "90984"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 3.242134 CurrO: 0.825524",
+            "FrameCounter": "2",
+            "SyncId": "4",
+            "sysTime": "23/10/14 11:39:03.713",
+            "ucTimeStamp": "90984"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.242134 CurrO: 0.825524",
+            "FrameCounter": "2",
+            "SyncId": "5",
+            "sysTime": "23/10/14 11:39:03.713",
+            "ucTimeStamp": "90984"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 1.266",
+            "FrameCounter": "2",
+            "SyncId": "6",
+            "sysTime": "23/10/14 11:39:05.235",
+            "ucTimeStamp": "92388"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -0.728039 CurrO: 1.688571",
+            "FrameCounter": "2",
+            "SyncId": "7",
+            "sysTime": "23/10/14 11:39:05.243",
+            "ucTimeStamp": "92388"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.728039 CurrO: 1.688571",
+            "FrameCounter": "2",
+            "SyncId": "8",
+            "sysTime": "23/10/14 11:39:05.251",
+            "ucTimeStamp": "92388"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.728039 CurrO: 0.016082",
+            "FrameCounter": "2",
+            "SyncId": "9",
+            "sysTime": "23/10/14 11:39:05.332",
+            "ucTimeStamp": "92489"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 1.454",
+            "FrameCounter": "2",
+            "SyncId": "10",
+            "sysTime": "23/10/14 11:39:05.527",
+            "ucTimeStamp": "92798"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 3.654896 CurrO: 1.238286",
+            "FrameCounter": "2",
+            "SyncId": "11",
+            "sysTime": "23/10/14 11:39:05.575",
+            "ucTimeStamp": "92798"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.654896 CurrO: 1.238286",
+            "FrameCounter": "2",
+            "SyncId": "12",
+            "sysTime": "23/10/14 11:39:05.591",
+            "ucTimeStamp": "92798"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 1.628",
+            "FrameCounter": "2",
+            "SyncId": "13",
+            "sysTime": "23/10/14 11:39:05.927",
+            "ucTimeStamp": "93194"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -0.722677 CurrO: 1.693933",
+            "FrameCounter": "2",
+            "SyncId": "14",
+            "sysTime": "23/10/14 11:39:05.927",
+            "ucTimeStamp": "93194"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.722677 CurrO: 1.693933",
+            "FrameCounter": "2",
+            "SyncId": "15",
+            "sysTime": "23/10/14 11:39:05.943",
+            "ucTimeStamp": "93194"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.722677 CurrO: 0.042885",
+            "FrameCounter": "2",
+            "SyncId": "16",
+            "sysTime": "23/10/14 11:39:06.040",
+            "ucTimeStamp": "93295"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 1.840",
+            "FrameCounter": "2",
+            "SyncId": "17",
+            "sysTime": "23/10/14 11:39:06.333",
+            "ucTimeStamp": "93620"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -2.309399 CurrO: 0.107211",
+            "FrameCounter": "2",
+            "SyncId": "18",
+            "sysTime": "23/10/14 11:39:06.341",
+            "ucTimeStamp": "93620"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -2.309399 CurrO: 0.107211",
+            "FrameCounter": "2",
+            "SyncId": "19",
+            "sysTime": "23/10/14 11:39:06.357",
+            "ucTimeStamp": "93620"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -2.309399 CurrO: -1.538476",
+            "FrameCounter": "2",
+            "SyncId": "20",
+            "sysTime": "23/10/14 11:39:06.446",
+            "ucTimeStamp": "93721"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 2.879",
+            "FrameCounter": "2",
+            "SyncId": "21",
+            "sysTime": "23/10/14 11:39:08.186",
+            "ucTimeStamp": "95475"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.894216 CurrO: -1.522394",
+            "FrameCounter": "2",
+            "SyncId": "22",
+            "sysTime": "23/10/14 11:39:08.186",
+            "ucTimeStamp": "95475"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.894216 CurrO: -1.522394",
+            "FrameCounter": "2",
+            "SyncId": "23",
+            "sysTime": "23/10/14 11:39:08.203",
+            "ucTimeStamp": "95475"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 3.080",
+            "FrameCounter": "2",
+            "SyncId": "24",
+            "sysTime": "23/10/14 11:39:08.599",
+            "ucTimeStamp": "95883"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.003848 CurrO: -0.412762",
+            "FrameCounter": "2",
+            "SyncId": "25",
+            "sysTime": "23/10/14 11:39:08.616",
+            "ucTimeStamp": "95883"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.003848 CurrO: -0.412762",
+            "FrameCounter": "2",
+            "SyncId": "26",
+            "sysTime": "23/10/14 11:39:08.632",
+            "ucTimeStamp": "95883"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 3.187",
+            "FrameCounter": "2",
+            "SyncId": "27",
+            "sysTime": "23/10/14 11:39:08.834",
+            "ucTimeStamp": "96125"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 3.231413 CurrO: 0.814803",
+            "FrameCounter": "2",
+            "SyncId": "28",
+            "sysTime": "23/10/14 11:39:08.834",
+            "ucTimeStamp": "96125"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.231413 CurrO: 0.814803",
+            "FrameCounter": "2",
+            "SyncId": "29",
+            "sysTime": "23/10/14 11:39:08.850",
+            "ucTimeStamp": "96125"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 4.169",
+            "FrameCounter": "2",
+            "SyncId": "30",
+            "sysTime": "23/10/14 11:39:10.557",
+            "ucTimeStamp": "97853"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -1.553562 CurrO: 0.863048",
+            "FrameCounter": "2",
+            "SyncId": "31",
+            "sysTime": "23/10/14 11:39:10.578",
+            "ucTimeStamp": "97853"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -1.553562 CurrO: 0.863048",
+            "FrameCounter": "2",
+            "SyncId": "32",
+            "sysTime": "23/10/14 11:39:10.593",
+            "ucTimeStamp": "97853"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 4.364",
+            "FrameCounter": "2",
+            "SyncId": "33",
+            "sysTime": "23/10/14 11:39:10.914",
+            "ucTimeStamp": "98213"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -3.054514 CurrO: -0.637904",
+            "FrameCounter": "2",
+            "SyncId": "34",
+            "sysTime": "23/10/14 11:39:10.922",
+            "ucTimeStamp": "98213"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.054514 CurrO: -0.637904",
+            "FrameCounter": "2",
+            "SyncId": "35",
+            "sysTime": "23/10/14 11:39:10.930",
+            "ucTimeStamp": "98213"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 4.568",
+            "FrameCounter": "2",
+            "SyncId": "36",
+            "sysTime": "23/10/14 11:39:11.342",
+            "ucTimeStamp": "98612"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -4.271358 CurrO: -1.854748",
+            "FrameCounter": "2",
+            "SyncId": "37",
+            "sysTime": "23/10/14 11:39:11.350",
+            "ucTimeStamp": "98612"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -4.271358 CurrO: -1.854748",
+            "FrameCounter": "2",
+            "SyncId": "38",
+            "sysTime": "23/10/14 11:39:11.359",
+            "ucTimeStamp": "98612"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 4.654",
+            "FrameCounter": "2",
+            "SyncId": "39",
+            "sysTime": "23/10/14 11:39:11.464",
+            "ucTimeStamp": "98770"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: -0.778274 CurrO: -3.194884",
+            "FrameCounter": "2",
+            "SyncId": "40",
+            "sysTime": "23/10/14 11:39:11.480",
+            "ucTimeStamp": "98770"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.778274 CurrO: -3.194884",
+            "FrameCounter": "2",
+            "SyncId": "41",
+            "sysTime": "23/10/14 11:39:11.480",
+            "ucTimeStamp": "98770"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 4.748",
+            "FrameCounter": "2",
+            "SyncId": "42",
+            "sysTime": "23/10/14 11:39:11.698",
+            "ucTimeStamp": "99002"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.202706 CurrO: -2.213904",
+            "FrameCounter": "2",
+            "SyncId": "43",
+            "sysTime": "23/10/14 11:39:11.707",
+            "ucTimeStamp": "99002"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.202706 CurrO: -2.213904",
+            "FrameCounter": "2",
+            "SyncId": "44",
+            "sysTime": "23/10/14 11:39:11.715",
+            "ucTimeStamp": "99002"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.202706 CurrO: -0.777278",
+            "FrameCounter": "2",
+            "SyncId": "45",
+            "sysTime": "23/10/14 11:39:11.804",
+            "ucTimeStamp": "99103"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 4.904",
+            "FrameCounter": "2",
+            "SyncId": "46",
+            "sysTime": "23/10/14 11:39:12.038",
+            "ucTimeStamp": "99346"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -3.933643 CurrO: -1.517033",
+            "FrameCounter": "2",
+            "SyncId": "47",
+            "sysTime": "23/10/14 11:39:12.055",
+            "ucTimeStamp": "99346"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.933643 CurrO: -1.517033",
+            "FrameCounter": "2",
+            "SyncId": "48",
+            "sysTime": "23/10/14 11:39:12.063",
+            "ucTimeStamp": "99346"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.933643 CurrO: -3.135918",
+            "FrameCounter": "2",
+            "SyncId": "49",
+            "sysTime": "23/10/14 11:39:12.136",
+            "ucTimeStamp": "99447"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 5.081",
+            "FrameCounter": "2",
+            "SyncId": "50",
+            "sysTime": "23/10/14 11:39:12.411",
+            "ucTimeStamp": "99712"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.717318 CurrO: -1.699292",
+            "FrameCounter": "2",
+            "SyncId": "51",
+            "sysTime": "23/10/14 11:39:12.411",
+            "ucTimeStamp": "99712"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.717318 CurrO: -1.699292",
+            "FrameCounter": "2",
+            "SyncId": "52",
+            "sysTime": "23/10/14 11:39:12.427",
+            "ucTimeStamp": "99712"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.717318 CurrO: -0.101849",
+            "FrameCounter": "2",
+            "SyncId": "53",
+            "sysTime": "23/10/14 11:39:12.517",
+            "ucTimeStamp": "99813"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 5.242",
+            "FrameCounter": "2",
+            "SyncId": "54",
+            "sysTime": "23/10/14 11:39:12.751",
+            "ucTimeStamp": "100065"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -3.665616 CurrO: -1.249006",
+            "FrameCounter": "2",
+            "SyncId": "55",
+            "sysTime": "23/10/14 11:39:12.768",
+            "ucTimeStamp": "100065"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.665616 CurrO: -1.249006",
+            "FrameCounter": "2",
+            "SyncId": "56",
+            "sysTime": "23/10/14 11:39:12.776",
+            "ucTimeStamp": "100065"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 5.417",
+            "FrameCounter": "2",
+            "SyncId": "57",
+            "sysTime": "23/10/14 11:39:13.119",
+            "ucTimeStamp": "100425"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 1.006788 CurrO: -1.409822",
+            "FrameCounter": "2",
+            "SyncId": "58",
+            "sysTime": "23/10/14 11:39:13.135",
+            "ucTimeStamp": "100425"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.006788 CurrO: -1.409822",
+            "FrameCounter": "2",
+            "SyncId": "59",
+            "sysTime": "23/10/14 11:39:13.151",
+            "ucTimeStamp": "100425"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.006788 CurrO: 0.316274",
+            "FrameCounter": "2",
+            "SyncId": "60",
+            "sysTime": "23/10/14 11:39:13.238",
+            "ucTimeStamp": "100526"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 5.862",
+            "FrameCounter": "2",
+            "SyncId": "61",
+            "sysTime": "23/10/14 11:39:14.001",
+            "ucTimeStamp": "101277"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.700720 CurrO: 0.284110",
+            "FrameCounter": "2",
+            "SyncId": "62",
+            "sysTime": "23/10/14 11:39:14.017",
+            "ucTimeStamp": "101277"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.700720 CurrO: 0.284110",
+            "FrameCounter": "2",
+            "SyncId": "63",
+            "sysTime": "23/10/14 11:39:14.034",
+            "ucTimeStamp": "101277"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.700720 CurrO: 1.844029",
+            "FrameCounter": "2",
+            "SyncId": "64",
+            "sysTime": "23/10/14 11:39:14.099",
+            "ucTimeStamp": "101378"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 8.472",
+            "FrameCounter": "2",
+            "SyncId": "65",
+            "sysTime": "23/10/14 11:39:18.613",
+            "ucTimeStamp": "105805"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 5.697264 CurrO: 3.280654",
+            "FrameCounter": "2",
+            "SyncId": "66",
+            "sysTime": "23/10/14 11:39:18.613",
+            "ucTimeStamp": "105805"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 5.697264 CurrO: 3.280654",
+            "FrameCounter": "2",
+            "SyncId": "67",
+            "sysTime": "23/10/14 11:39:18.629",
+            "ucTimeStamp": "105805"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 5.697264 CurrO: 4.786967",
+            "FrameCounter": "2",
+            "SyncId": "68",
+            "sysTime": "23/10/14 11:39:18.686",
+            "ucTimeStamp": "105906"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 8.555",
+            "FrameCounter": "2",
+            "SyncId": "69",
+            "sysTime": "23/10/14 11:39:18.743",
+            "ucTimeStamp": "105994"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 7.058842 CurrO: 4.642232",
+            "FrameCounter": "2",
+            "SyncId": "70",
+            "sysTime": "23/10/14 11:39:18.759",
+            "ucTimeStamp": "105994"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 7.058842 CurrO: 4.636871",
+            "FrameCounter": "2",
+            "SyncId": "71",
+            "sysTime": "23/10/14 11:39:18.775",
+            "ucTimeStamp": "106007"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 8.747",
+            "FrameCounter": "2",
+            "SyncId": "72",
+            "sysTime": "23/10/14 11:39:19.180",
+            "ucTimeStamp": "106381"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 4.133976 CurrO: 6.550586",
+            "FrameCounter": "2",
+            "SyncId": "73",
+            "sysTime": "23/10/14 11:39:19.196",
+            "ucTimeStamp": "106381"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.133976 CurrO: 6.550586",
+            "FrameCounter": "2",
+            "SyncId": "74",
+            "sysTime": "23/10/14 11:39:19.212",
+            "ucTimeStamp": "106381"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.133976 CurrO: 5.087157",
+            "FrameCounter": "2",
+            "SyncId": "75",
+            "sysTime": "23/10/14 11:39:19.422",
+            "ucTimeStamp": "106482"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 9.162",
+            "FrameCounter": "2",
+            "SyncId": "76",
+            "sysTime": "23/10/14 11:39:20.021",
+            "ucTimeStamp": "107238"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 2.793840 CurrO: 5.210450",
+            "FrameCounter": "2",
+            "SyncId": "77",
+            "sysTime": "23/10/14 11:39:20.037",
+            "ucTimeStamp": "107238"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.793840 CurrO: 5.210450",
+            "FrameCounter": "2",
+            "SyncId": "78",
+            "sysTime": "23/10/14 11:39:20.037",
+            "ucTimeStamp": "107238"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.793840 CurrO: 3.618368",
+            "FrameCounter": "2",
+            "SyncId": "79",
+            "sysTime": "23/10/14 11:39:20.094",
+            "ucTimeStamp": "107339"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 9.374",
+            "FrameCounter": "2",
+            "SyncId": "80",
+            "sysTime": "23/10/14 11:39:20.369",
+            "ucTimeStamp": "107673"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 0.788996 CurrO: 3.205606",
+            "FrameCounter": "2",
+            "SyncId": "81",
+            "sysTime": "23/10/14 11:39:20.369",
+            "ucTimeStamp": "107673"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.788996 CurrO: 3.205606",
+            "FrameCounter": "2",
+            "SyncId": "82",
+            "sysTime": "23/10/14 11:39:20.386",
+            "ucTimeStamp": "107673"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.788996 CurrO: 1.688572",
+            "FrameCounter": "2",
+            "SyncId": "83",
+            "sysTime": "23/10/14 11:39:20.483",
+            "ucTimeStamp": "107774"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 9.586",
+            "FrameCounter": "2",
+            "SyncId": "84",
+            "sysTime": "23/10/14 11:39:20.790",
+            "ucTimeStamp": "108094"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 3.815713 CurrO: 1.399103",
+            "FrameCounter": "2",
+            "SyncId": "85",
+            "sysTime": "23/10/14 11:39:20.790",
+            "ucTimeStamp": "108094"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.815713 CurrO: 1.399103",
+            "FrameCounter": "2",
+            "SyncId": "86",
+            "sysTime": "23/10/14 11:39:20.809",
+            "ucTimeStamp": "108094"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.815713 CurrO: 2.985824",
+            "FrameCounter": "2",
+            "SyncId": "87",
+            "sysTime": "23/10/14 11:39:20.899",
+            "ucTimeStamp": "108195"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 9.774",
+            "FrameCounter": "2",
+            "SyncId": "88",
+            "sysTime": "23/10/14 11:39:21.174",
+            "ucTimeStamp": "108491"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 5.263060 CurrO: 2.846450",
+            "FrameCounter": "2",
+            "SyncId": "89",
+            "sysTime": "23/10/14 11:39:21.190",
+            "ucTimeStamp": "108491"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 5.263060 CurrO: 2.846450",
+            "FrameCounter": "2",
+            "SyncId": "90",
+            "sysTime": "23/10/14 11:39:21.207",
+            "ucTimeStamp": "108491"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 5.263060 CurrO: 4.347402",
+            "FrameCounter": "2",
+            "SyncId": "91",
+            "sysTime": "23/10/14 11:39:21.304",
+            "ucTimeStamp": "108592"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 9.855",
+            "FrameCounter": "2",
+            "SyncId": "92",
+            "sysTime": "23/10/14 11:39:21.376",
+            "ucTimeStamp": "108674"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 6.747930 CurrO: 4.331320",
+            "FrameCounter": "2",
+            "SyncId": "93",
+            "sysTime": "23/10/14 11:39:21.384",
+            "ucTimeStamp": "108674"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 6.747930 CurrO: 4.309878",
+            "FrameCounter": "2",
+            "SyncId": "94",
+            "sysTime": "23/10/14 11:39:21.417",
+            "ucTimeStamp": "108693"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 10.148",
+            "FrameCounter": "2",
+            "SyncId": "95",
+            "sysTime": "23/10/14 11:39:21.992",
+            "ucTimeStamp": "109275"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 6.780094 CurrO: 4.363484",
+            "FrameCounter": "2",
+            "SyncId": "96",
+            "sysTime": "23/10/14 11:39:22.000",
+            "ucTimeStamp": "109275"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 6.780094 CurrO: 4.363484",
+            "FrameCounter": "2",
+            "SyncId": "97",
+            "sysTime": "23/10/14 11:39:22.016",
+            "ucTimeStamp": "109275"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 6.780094 CurrO: 5.757226",
+            "FrameCounter": "2",
+            "SyncId": "98",
+            "sysTime": "23/10/14 11:39:22.099",
+            "ucTimeStamp": "109376"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 10.421",
+            "FrameCounter": "2",
+            "SyncId": "99",
+            "sysTime": "23/10/14 11:39:22.544",
+            "ucTimeStamp": "109831"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 7.578815 CurrO: 5.162206",
+            "FrameCounter": "2",
+            "SyncId": "100",
+            "sysTime": "23/10/14 11:39:22.544",
+            "ucTimeStamp": "109831"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 7.578815 CurrO: 5.162206",
+            "FrameCounter": "2",
+            "SyncId": "101",
+            "sysTime": "23/10/14 11:39:22.552",
+            "ucTimeStamp": "109831"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 7.578815 CurrO: 6.507702",
+            "FrameCounter": "2",
+            "SyncId": "102",
+            "sysTime": "23/10/14 11:39:22.657",
+            "ucTimeStamp": "109932"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 10.636",
+            "FrameCounter": "2",
+            "SyncId": "103",
+            "sysTime": "23/10/14 11:39:22.965",
+            "ucTimeStamp": "110286"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 2.986821 CurrO: 5.403431",
+            "FrameCounter": "2",
+            "SyncId": "104",
+            "sysTime": "23/10/14 11:39:22.981",
+            "ucTimeStamp": "110286"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.986821 CurrO: 5.403431",
+            "FrameCounter": "2",
+            "SyncId": "105",
+            "sysTime": "23/10/14 11:39:22.989",
+            "ucTimeStamp": "110286"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.986821 CurrO: 3.747023",
+            "FrameCounter": "2",
+            "SyncId": "106",
+            "sysTime": "23/10/14 11:39:23.101",
+            "ucTimeStamp": "110387"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 10.830",
+            "FrameCounter": "2",
+            "SyncId": "107",
+            "sysTime": "23/10/14 11:39:23.390",
+            "ucTimeStamp": "110698"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 1.105270 CurrO: 3.521880",
+            "FrameCounter": "2",
+            "SyncId": "108",
+            "sysTime": "23/10/14 11:39:23.406",
+            "ucTimeStamp": "110698"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.105270 CurrO: 3.521880",
+            "FrameCounter": "2",
+            "SyncId": "109",
+            "sysTime": "23/10/14 11:39:23.406",
+            "ucTimeStamp": "110698"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.105270 CurrO: 1.876193",
+            "FrameCounter": "2",
+            "SyncId": "110",
+            "sysTime": "23/10/14 11:39:23.517",
+            "ucTimeStamp": "110799"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 11.051",
+            "FrameCounter": "2",
+            "SyncId": "111",
+            "sysTime": "23/10/14 11:39:23.856",
+            "ucTimeStamp": "111163"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 4.099823 CurrO: 1.683213",
+            "FrameCounter": "2",
+            "SyncId": "112",
+            "sysTime": "23/10/14 11:39:23.880",
+            "ucTimeStamp": "111163"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.099823 CurrO: 1.683213",
+            "FrameCounter": "2",
+            "SyncId": "113",
+            "sysTime": "23/10/14 11:39:23.896",
+            "ucTimeStamp": "111163"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.099823 CurrO: 2.991186",
+            "FrameCounter": "2",
+            "SyncId": "114",
+            "sysTime": "23/10/14 11:39:23.960",
+            "ucTimeStamp": "111264"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 11.141",
+            "FrameCounter": "2",
+            "SyncId": "115",
+            "sysTime": "23/10/14 11:39:24.049",
+            "ucTimeStamp": "111353"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 5.456041 CurrO: 3.039431",
+            "FrameCounter": "2",
+            "SyncId": "116",
+            "sysTime": "23/10/14 11:39:24.066",
+            "ucTimeStamp": "111353"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 5.456041 CurrO: 3.039431",
+            "FrameCounter": "2",
+            "SyncId": "117",
+            "sysTime": "23/10/14 11:39:24.082",
+            "ucTimeStamp": "111365"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 11.371",
+            "FrameCounter": "2",
+            "SyncId": "118",
+            "sysTime": "23/10/14 11:39:24.537",
+            "ucTimeStamp": "111825"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 2.070168 CurrO: 4.486778",
+            "FrameCounter": "2",
+            "SyncId": "119",
+            "sysTime": "23/10/14 11:39:24.553",
+            "ucTimeStamp": "111825"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.070168 CurrO: 4.486778",
+            "FrameCounter": "2",
+            "SyncId": "120",
+            "sysTime": "23/10/14 11:39:24.561",
+            "ucTimeStamp": "111825"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 11.465",
+            "FrameCounter": "2",
+            "SyncId": "121",
+            "sysTime": "23/10/14 11:39:24.698",
+            "ucTimeStamp": "112008"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 0.703229 CurrO: 3.119839",
+            "FrameCounter": "2",
+            "SyncId": "122",
+            "sysTime": "23/10/14 11:39:24.706",
+            "ucTimeStamp": "112008"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.703229 CurrO: 3.119839",
+            "FrameCounter": "2",
+            "SyncId": "123",
+            "sysTime": "23/10/14 11:39:24.724",
+            "ucTimeStamp": "112008"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 11.787",
+            "FrameCounter": "2",
+            "SyncId": "124",
+            "sysTime": "23/10/14 11:39:25.326",
+            "ucTimeStamp": "112657"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -0.647628 CurrO: 1.768982",
+            "FrameCounter": "2",
+            "SyncId": "125",
+            "sysTime": "23/10/14 11:39:25.351",
+            "ucTimeStamp": "112657"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.647628 CurrO: 1.768982",
+            "FrameCounter": "2",
+            "SyncId": "126",
+            "sysTime": "23/10/14 11:39:25.351",
+            "ucTimeStamp": "112657"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 12.139",
+            "FrameCounter": "2",
+            "SyncId": "127",
+            "sysTime": "23/10/14 11:39:26.000",
+            "ucTimeStamp": "113297"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 3.419033 CurrO: 1.002424",
+            "FrameCounter": "2",
+            "SyncId": "128",
+            "sysTime": "23/10/14 11:39:26.008",
+            "ucTimeStamp": "113297"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.419033 CurrO: 1.002424",
+            "FrameCounter": "2",
+            "SyncId": "129",
+            "sysTime": "23/10/14 11:39:26.024",
+            "ucTimeStamp": "113297"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.419033 CurrO: 2.288954",
+            "FrameCounter": "2",
+            "SyncId": "130",
+            "sysTime": "23/10/14 11:39:26.098",
+            "ucTimeStamp": "113398"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 12.337",
+            "FrameCounter": "2",
+            "SyncId": "131",
+            "sysTime": "23/10/14 11:39:26.365",
+            "ucTimeStamp": "113709"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 4.802053 CurrO: 2.385444",
+            "FrameCounter": "2",
+            "SyncId": "132",
+            "sysTime": "23/10/14 11:39:26.381",
+            "ucTimeStamp": "113709"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.802053 CurrO: 2.385444",
+            "FrameCounter": "2",
+            "SyncId": "133",
+            "sysTime": "23/10/14 11:39:26.389",
+            "ucTimeStamp": "113709"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.802053 CurrO: 4.020410",
+            "FrameCounter": "2",
+            "SyncId": "134",
+            "sysTime": "23/10/14 11:39:26.494",
+            "ucTimeStamp": "113810"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 12.417",
+            "FrameCounter": "2",
+            "SyncId": "135",
+            "sysTime": "23/10/14 11:39:26.607",
+            "ucTimeStamp": "113897"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 6.201156 CurrO: 3.784546",
+            "FrameCounter": "2",
+            "SyncId": "136",
+            "sysTime": "23/10/14 11:39:26.607",
+            "ucTimeStamp": "113897"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 6.201156 CurrO: 3.848872",
+            "FrameCounter": "2",
+            "SyncId": "137",
+            "sysTime": "23/10/14 11:39:26.615",
+            "ucTimeStamp": "113911"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 12.714",
+            "FrameCounter": "2",
+            "SyncId": "138",
+            "sysTime": "23/10/14 11:39:27.224",
+            "ucTimeStamp": "114497"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 1.308969 CurrO: 3.725580",
+            "FrameCounter": "2",
+            "SyncId": "139",
+            "sysTime": "23/10/14 11:39:27.232",
+            "ucTimeStamp": "114497"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.308969 CurrO: 3.725580",
+            "FrameCounter": "2",
+            "SyncId": "140",
+            "sysTime": "23/10/14 11:39:27.232",
+            "ucTimeStamp": "114497"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 12.818",
+            "FrameCounter": "2",
+            "SyncId": "141",
+            "sysTime": "23/10/14 11:39:27.385",
+            "ucTimeStamp": "114694"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -0.004364 CurrO: 2.412246",
+            "FrameCounter": "2",
+            "SyncId": "142",
+            "sysTime": "23/10/14 11:39:27.401",
+            "ucTimeStamp": "114694"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.004364 CurrO: 2.412246",
+            "FrameCounter": "2",
+            "SyncId": "143",
+            "sysTime": "23/10/14 11:39:27.426",
+            "ucTimeStamp": "114694"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 12.993",
+            "FrameCounter": "2",
+            "SyncId": "144",
+            "sysTime": "23/10/14 11:39:27.806",
+            "ucTimeStamp": "115108"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 4.437537 CurrO: 2.020927",
+            "FrameCounter": "2",
+            "SyncId": "145",
+            "sysTime": "23/10/14 11:39:27.830",
+            "ucTimeStamp": "115108"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.437537 CurrO: 2.020927",
+            "FrameCounter": "2",
+            "SyncId": "146",
+            "sysTime": "23/10/14 11:39:27.830",
+            "ucTimeStamp": "115108"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.437537 CurrO: 3.639811",
+            "FrameCounter": "2",
+            "SyncId": "147",
+            "sysTime": "23/10/14 11:39:27.928",
+            "ucTimeStamp": "115209"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 13.176",
+            "FrameCounter": "2",
+            "SyncId": "148",
+            "sysTime": "23/10/14 11:39:28.235",
+            "ucTimeStamp": "115514"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 0.017079 CurrO: 2.433689",
+            "FrameCounter": "2",
+            "SyncId": "149",
+            "sysTime": "23/10/14 11:39:28.251",
+            "ucTimeStamp": "115514"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.017079 CurrO: 2.433689",
+            "FrameCounter": "2",
+            "SyncId": "150",
+            "sysTime": "23/10/14 11:39:28.275",
+            "ucTimeStamp": "115514"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.017079 CurrO: 0.798723",
+            "FrameCounter": "2",
+            "SyncId": "151",
+            "sysTime": "23/10/14 11:39:28.357",
+            "ucTimeStamp": "115615"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 13.377",
+            "FrameCounter": "2",
+            "SyncId": "152",
+            "sysTime": "23/10/14 11:39:28.632",
+            "ucTimeStamp": "115950"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -1.414187 CurrO: 1.002423",
+            "FrameCounter": "2",
+            "SyncId": "153",
+            "sysTime": "23/10/14 11:39:28.656",
+            "ucTimeStamp": "115950"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -1.414187 CurrO: 1.002423",
+            "FrameCounter": "2",
+            "SyncId": "154",
+            "sysTime": "23/10/14 11:39:28.697",
+            "ucTimeStamp": "115950"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -1.414187 CurrO: -0.578937",
+            "FrameCounter": "2",
+            "SyncId": "155",
+            "sysTime": "23/10/14 11:39:28.947",
+            "ucTimeStamp": "116051"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 13.465",
+            "FrameCounter": "2",
+            "SyncId": "156",
+            "sysTime": "23/10/14 11:39:29.061",
+            "ucTimeStamp": "116153"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 1.580366 CurrO: -0.836243",
+            "FrameCounter": "2",
+            "SyncId": "157",
+            "sysTime": "23/10/14 11:39:29.069",
+            "ucTimeStamp": "116153"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.580366 CurrO: -0.836243",
+            "FrameCounter": "2",
+            "SyncId": "158",
+            "sysTime": "23/10/14 11:39:29.077",
+            "ucTimeStamp": "116153"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 13.553",
+            "FrameCounter": "2",
+            "SyncId": "159",
+            "sysTime": "23/10/14 11:39:29.158",
+            "ucTimeStamp": "116380"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.534543 CurrO: 0.117933",
+            "FrameCounter": "2",
+            "SyncId": "160",
+            "sysTime": "23/10/14 11:39:29.166",
+            "ucTimeStamp": "116380"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.534543 CurrO: 0.117933",
+            "FrameCounter": "2",
+            "SyncId": "161",
+            "sysTime": "23/10/14 11:39:29.182",
+            "ucTimeStamp": "116380"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.534543 CurrO: 1.710015",
+            "FrameCounter": "2",
+            "SyncId": "162",
+            "sysTime": "23/10/14 11:39:29.263",
+            "ucTimeStamp": "116481"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 13.721",
+            "FrameCounter": "2",
+            "SyncId": "163",
+            "sysTime": "23/10/14 11:39:29.449",
+            "ucTimeStamp": "116761"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -1.430269 CurrO: 0.986341",
+            "FrameCounter": "2",
+            "SyncId": "164",
+            "sysTime": "23/10/14 11:39:29.474",
+            "ucTimeStamp": "116761"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -1.430269 CurrO: 0.986341",
+            "FrameCounter": "2",
+            "SyncId": "165",
+            "sysTime": "23/10/14 11:39:29.490",
+            "ucTimeStamp": "116761"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -1.430269 CurrO: -0.407400",
+            "FrameCounter": "2",
+            "SyncId": "166",
+            "sysTime": "23/10/14 11:39:29.587",
+            "ucTimeStamp": "116862"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 13.924",
+            "FrameCounter": "2",
+            "SyncId": "167",
+            "sysTime": "23/10/14 11:39:29.881",
+            "ucTimeStamp": "117204"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 1.816230 CurrO: -0.600380",
+            "FrameCounter": "2",
+            "SyncId": "168",
+            "sysTime": "23/10/14 11:39:29.889",
+            "ucTimeStamp": "117204"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.816230 CurrO: -0.600380",
+            "FrameCounter": "2",
+            "SyncId": "169",
+            "sysTime": "23/10/14 11:39:29.905",
+            "ucTimeStamp": "117204"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.816230 CurrO: 0.879130",
+            "FrameCounter": "2",
+            "SyncId": "170",
+            "sysTime": "23/10/14 11:39:30.001",
+            "ucTimeStamp": "117305"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 14.011",
+            "FrameCounter": "2",
+            "SyncId": "171",
+            "sysTime": "23/10/14 11:39:30.081",
+            "ucTimeStamp": "117399"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.909781 CurrO: 0.493171",
+            "FrameCounter": "2",
+            "SyncId": "172",
+            "sysTime": "23/10/14 11:39:30.097",
+            "ucTimeStamp": "117399"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.909781 CurrO: 0.493171",
+            "FrameCounter": "2",
+            "SyncId": "173",
+            "sysTime": "23/10/14 11:39:30.105",
+            "ucTimeStamp": "117406"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 14.211",
+            "FrameCounter": "2",
+            "SyncId": "174",
+            "sysTime": "23/10/14 11:39:30.481",
+            "ucTimeStamp": "117815"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -0.438568 CurrO: 1.978042",
+            "FrameCounter": "2",
+            "SyncId": "175",
+            "sysTime": "23/10/14 11:39:30.489",
+            "ucTimeStamp": "117815"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.438568 CurrO: 1.978042",
+            "FrameCounter": "2",
+            "SyncId": "176",
+            "sysTime": "23/10/14 11:39:30.513",
+            "ucTimeStamp": "117815"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.438568 CurrO: 0.444926",
+            "FrameCounter": "2",
+            "SyncId": "177",
+            "sysTime": "23/10/14 11:39:30.625",
+            "ucTimeStamp": "117916"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 14.380",
+            "FrameCounter": "2",
+            "SyncId": "178",
+            "sysTime": "23/10/14 11:39:30.923",
+            "ucTimeStamp": "118197"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 1.097917 CurrO: -1.318693",
+            "FrameCounter": "2",
+            "SyncId": "179",
+            "sysTime": "23/10/14 11:39:30.947",
+            "ucTimeStamp": "118197"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.097917 CurrO: -1.318693",
+            "FrameCounter": "2",
+            "SyncId": "180",
+            "sysTime": "23/10/14 11:39:30.947",
+            "ucTimeStamp": "118197"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 14.471",
+            "FrameCounter": "2",
+            "SyncId": "181",
+            "sysTime": "23/10/14 11:39:31.101",
+            "ucTimeStamp": "118429"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.228992 CurrO: -0.187618",
+            "FrameCounter": "2",
+            "SyncId": "182",
+            "sysTime": "23/10/14 11:39:31.117",
+            "ucTimeStamp": "118429"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.228992 CurrO: -0.187618",
+            "FrameCounter": "2",
+            "SyncId": "183",
+            "sysTime": "23/10/14 11:39:31.141",
+            "ucTimeStamp": "118429"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 14.642",
+            "FrameCounter": "2",
+            "SyncId": "184",
+            "sysTime": "23/10/14 11:39:31.465",
+            "ucTimeStamp": "118808"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -2.234351 CurrO: 0.182259",
+            "FrameCounter": "2",
+            "SyncId": "185",
+            "sysTime": "23/10/14 11:39:31.473",
+            "ucTimeStamp": "118808"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -2.234351 CurrO: 0.182259",
+            "FrameCounter": "2",
+            "SyncId": "186",
+            "sysTime": "23/10/14 11:39:31.481",
+            "ucTimeStamp": "118808"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -2.234351 CurrO: -1.297251",
+            "FrameCounter": "2",
+            "SyncId": "187",
+            "sysTime": "23/10/14 11:39:31.587",
+            "ucTimeStamp": "118909"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 14.953",
+            "FrameCounter": "2",
+            "SyncId": "188",
+            "sysTime": "23/10/14 11:39:32.161",
+            "ucTimeStamp": "119420"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.384964 CurrO: -2.031646",
+            "FrameCounter": "2",
+            "SyncId": "189",
+            "sysTime": "23/10/14 11:39:32.161",
+            "ucTimeStamp": "119420"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.384964 CurrO: -2.031646",
+            "FrameCounter": "2",
+            "SyncId": "190",
+            "sysTime": "23/10/14 11:39:32.185",
+            "ucTimeStamp": "119420"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.384964 CurrO: -0.595020",
+            "FrameCounter": "2",
+            "SyncId": "191",
+            "sysTime": "23/10/14 11:39:32.314",
+            "ucTimeStamp": "119521"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 15.042",
+            "FrameCounter": "2",
+            "SyncId": "192",
+            "sysTime": "23/10/14 11:39:32.411",
+            "ucTimeStamp": "119621"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 1.757263 CurrO: -0.659346",
+            "FrameCounter": "2",
+            "SyncId": "193",
+            "sysTime": "23/10/14 11:39:32.420",
+            "ucTimeStamp": "119621"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.757263 CurrO: -0.659346",
+            "FrameCounter": "2",
+            "SyncId": "194",
+            "sysTime": "23/10/14 11:39:32.428",
+            "ucTimeStamp": "119622"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 15.591",
+            "FrameCounter": "2",
+            "SyncId": "195",
+            "sysTime": "23/10/14 11:39:33.334",
+            "ucTimeStamp": "120618"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 3.435114 CurrO: 1.018504",
+            "FrameCounter": "2",
+            "SyncId": "196",
+            "sysTime": "23/10/14 11:39:33.342",
+            "ucTimeStamp": "120618"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.435114 CurrO: 1.018504",
+            "FrameCounter": "2",
+            "SyncId": "197",
+            "sysTime": "23/10/14 11:39:33.350",
+            "ucTimeStamp": "120618"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 3.435114 CurrO: 2.658831",
+            "FrameCounter": "2",
+            "SyncId": "198",
+            "sysTime": "23/10/14 11:39:33.472",
+            "ucTimeStamp": "120719"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 16.592",
+            "FrameCounter": "2",
+            "SyncId": "199",
+            "sysTime": "23/10/14 11:39:35.103",
+            "ucTimeStamp": "122418"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 0.408397 CurrO: 2.825007",
+            "FrameCounter": "2",
+            "SyncId": "200",
+            "sysTime": "23/10/14 11:39:35.119",
+            "ucTimeStamp": "122418"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.408397 CurrO: 2.825007",
+            "FrameCounter": "2",
+            "SyncId": "201",
+            "sysTime": "23/10/14 11:39:35.127",
+            "ucTimeStamp": "122418"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 16.898",
+            "FrameCounter": "2",
+            "SyncId": "202",
+            "sysTime": "23/10/14 11:39:35.758",
+            "ucTimeStamp": "123031"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 4.078378 CurrO: 1.661769",
+            "FrameCounter": "2",
+            "SyncId": "203",
+            "sysTime": "23/10/14 11:39:35.766",
+            "ucTimeStamp": "123031"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.078378 CurrO: 1.661769",
+            "FrameCounter": "2",
+            "SyncId": "204",
+            "sysTime": "23/10/14 11:39:35.774",
+            "ucTimeStamp": "123031"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 18.146",
+            "FrameCounter": "2",
+            "SyncId": "205",
+            "sysTime": "23/10/14 11:39:37.933",
+            "ucTimeStamp": "125196"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -3.853236 CurrO: -1.436626",
+            "FrameCounter": "2",
+            "SyncId": "206",
+            "sysTime": "23/10/14 11:39:37.933",
+            "ucTimeStamp": "125196"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.853236 CurrO: -1.436626",
+            "FrameCounter": "2",
+            "SyncId": "207",
+            "sysTime": "23/10/14 11:39:37.957",
+            "ucTimeStamp": "125196"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.853236 CurrO: -3.055511",
+            "FrameCounter": "2",
+            "SyncId": "208",
+            "sysTime": "23/10/14 11:39:38.086",
+            "ucTimeStamp": "125297"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 19.142",
+            "FrameCounter": "2",
+            "SyncId": "209",
+            "sysTime": "23/10/14 11:39:39.743",
+            "ucTimeStamp": "127016"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.685155 CurrO: -1.731455",
+            "FrameCounter": "2",
+            "SyncId": "210",
+            "sysTime": "23/10/14 11:39:39.751",
+            "ucTimeStamp": "127016"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.685155 CurrO: -1.731455",
+            "FrameCounter": "2",
+            "SyncId": "211",
+            "sysTime": "23/10/14 11:39:39.759",
+            "ucTimeStamp": "127016"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.685155 CurrO: -0.101849",
+            "FrameCounter": "2",
+            "SyncId": "212",
+            "sysTime": "23/10/14 11:39:39.840",
+            "ucTimeStamp": "127117"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 19.351",
+            "FrameCounter": "2",
+            "SyncId": "213",
+            "sysTime": "23/10/14 11:39:40.147",
+            "ucTimeStamp": "127446"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.507740 CurrO: 0.091130",
+            "FrameCounter": "2",
+            "SyncId": "214",
+            "sysTime": "23/10/14 11:39:40.155",
+            "ucTimeStamp": "127446"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.507740 CurrO: 0.091130",
+            "FrameCounter": "2",
+            "SyncId": "215",
+            "sysTime": "23/10/14 11:39:40.163",
+            "ucTimeStamp": "127446"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.507740 CurrO: 1.747538",
+            "FrameCounter": "2",
+            "SyncId": "216",
+            "sysTime": "23/10/14 11:39:40.269",
+            "ucTimeStamp": "127547"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 19.430",
+            "FrameCounter": "2",
+            "SyncId": "217",
+            "sysTime": "23/10/14 11:39:40.382",
+            "ucTimeStamp": "127646"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 4.341046 CurrO: 1.924436",
+            "FrameCounter": "2",
+            "SyncId": "218",
+            "sysTime": "23/10/14 11:39:40.398",
+            "ucTimeStamp": "127646"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 4.341046 CurrO: 1.865470",
+            "FrameCounter": "2",
+            "SyncId": "219",
+            "sysTime": "23/10/14 11:39:40.406",
+            "ucTimeStamp": "127648"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 19.870",
+            "FrameCounter": "2",
+            "SyncId": "220",
+            "sysTime": "23/10/14 11:39:41.160",
+            "ucTimeStamp": "128449"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: 1.185676 CurrO: 3.602286",
+            "FrameCounter": "2",
+            "SyncId": "221",
+            "sysTime": "23/10/14 11:39:41.168",
+            "ucTimeStamp": "128449"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 1.185676 CurrO: 3.602286",
+            "FrameCounter": "2",
+            "SyncId": "222",
+            "sysTime": "23/10/14 11:39:41.177",
+            "ucTimeStamp": "128449"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 21.343",
+            "FrameCounter": "2",
+            "SyncId": "223",
+            "sysTime": "23/10/14 11:39:43.760",
+            "ucTimeStamp": "131042"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -2.899059 CurrO: -0.482449",
+            "FrameCounter": "2",
+            "SyncId": "224",
+            "sysTime": "23/10/14 11:39:43.768",
+            "ucTimeStamp": "131042"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -2.899059 CurrO: -0.482449",
+            "FrameCounter": "2",
+            "SyncId": "225",
+            "sysTime": "23/10/14 11:39:43.776",
+            "ucTimeStamp": "131042"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -2.899059 CurrO: -2.085252",
+            "FrameCounter": "2",
+            "SyncId": "226",
+            "sysTime": "23/10/14 11:39:43.865",
+            "ucTimeStamp": "131143"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 21.423",
+            "FrameCounter": "2",
+            "SyncId": "227",
+            "sysTime": "23/10/14 11:39:43.995",
+            "ucTimeStamp": "131250"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: -0.258302 CurrO: -2.674912",
+            "FrameCounter": "2",
+            "SyncId": "228",
+            "sysTime": "23/10/14 11:39:43.995",
+            "ucTimeStamp": "131250"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -0.258302 CurrO: -2.674912",
+            "FrameCounter": "2",
+            "SyncId": "229",
+            "sysTime": "23/10/14 11:39:44.003",
+            "ucTimeStamp": "131250"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 21.526",
+            "FrameCounter": "2",
+            "SyncId": "230",
+            "sysTime": "23/10/14 11:39:44.213",
+            "ucTimeStamp": "131492"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.770922 CurrO: -1.645687",
+            "FrameCounter": "2",
+            "SyncId": "231",
+            "sysTime": "23/10/14 11:39:44.221",
+            "ucTimeStamp": "131492"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.770922 CurrO: -1.645687",
+            "FrameCounter": "2",
+            "SyncId": "232",
+            "sysTime": "23/10/14 11:39:44.229",
+            "ucTimeStamp": "131492"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.770922 CurrO: -0.091130",
+            "FrameCounter": "2",
+            "SyncId": "233",
+            "sysTime": "23/10/14 11:39:44.342",
+            "ucTimeStamp": "131593"
+        },
+        {
+            "Data": "Left || RightAngleDetected TrvD: 21.705",
+            "FrameCounter": "2",
+            "SyncId": "234",
+            "sysTime": "23/10/14 11:39:44.617",
+            "ucTimeStamp": "131893"
+        },
+        {
+            "Data": "HandleRightAngle:  RL_NewExpOr: -3.022352 CurrO: -0.605742",
+            "FrameCounter": "2",
+            "SyncId": "235",
+            "sysTime": "23/10/14 11:39:44.625",
+            "ucTimeStamp": "131893"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.022352 CurrO: -0.605742",
+            "FrameCounter": "2",
+            "SyncId": "236",
+            "sysTime": "23/10/14 11:39:44.633",
+            "ucTimeStamp": "131893"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: -3.022352 CurrO: -2.272871",
+            "FrameCounter": "2",
+            "SyncId": "237",
+            "sysTime": "23/10/14 11:39:44.746",
+            "ucTimeStamp": "131994"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 21.789",
+            "FrameCounter": "2",
+            "SyncId": "238",
+            "sysTime": "23/10/14 11:39:44.869",
+            "ucTimeStamp": "132114"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.015085 CurrO: -2.401524",
+            "FrameCounter": "2",
+            "SyncId": "239",
+            "sysTime": "23/10/14 11:39:44.877",
+            "ucTimeStamp": "132114"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.015085 CurrO: -2.401524",
+            "FrameCounter": "2",
+            "SyncId": "240",
+            "sysTime": "23/10/14 11:39:44.877",
+            "ucTimeStamp": "132114"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 21.895",
+            "FrameCounter": "2",
+            "SyncId": "241",
+            "sysTime": "23/10/14 11:39:45.103",
+            "ucTimeStamp": "132354"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 0.711956 CurrO: -1.704654",
+            "FrameCounter": "2",
+            "SyncId": "242",
+            "sysTime": "23/10/14 11:39:45.111",
+            "ucTimeStamp": "132354"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.711956 CurrO: -1.704654",
+            "FrameCounter": "2",
+            "SyncId": "243",
+            "sysTime": "23/10/14 11:39:45.128",
+            "ucTimeStamp": "132354"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 0.711956 CurrO: -0.171538",
+            "FrameCounter": "2",
+            "SyncId": "244",
+            "sysTime": "23/10/14 11:39:45.216",
+            "ucTimeStamp": "132455"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: 22.079",
+            "FrameCounter": "2",
+            "SyncId": "245",
+            "sysTime": "23/10/14 11:39:45.483",
+            "ucTimeStamp": "132771"
+        },
+        {
+            "Data": "HandleRightAngle:  RR_NewExpOr: 2.936582 CurrO: 0.519972",
+            "FrameCounter": "2",
+            "SyncId": "246",
+            "sysTime": "23/10/14 11:39:45.507",
+            "ucTimeStamp": "132771"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.936582 CurrO: 0.519972",
+            "FrameCounter": "2",
+            "SyncId": "247",
+            "sysTime": "23/10/14 11:39:45.515",
+            "ucTimeStamp": "132771"
+        },
+        {
+            "Data": "RightAnglePrLogging:  RL_NewExpOr: 2.936582 CurrO: 2.004843",
+            "FrameCounter": "2",
+            "SyncId": "248",
+            "sysTime": "23/10/14 11:39:45.628",
+            "ucTimeStamp": "132872"
+        },
+        {
+            "Data": "LineFollower stop",
+            "FrameCounter": "2",
+            "SyncId": "249",
+            "sysTime": "23/10/14 11:39:52.096",
+            "ucTimeStamp": "139420"
+        },
+        {
+            "Data": "Following mS: 49318 takeDist: 25.917 AvSpd: 1.077 ",
+            "FrameCounter": "2",
+            "SyncId": "250",
+            "sysTime": "23/10/14 11:39:52.120",
+            "ucTimeStamp": "139420"
+        },
+        {
+            "Data": "Nvm Data updated and commited",
+            "FrameCounter": "2",
+            "SyncId": "0",
+            "sysTime": "23/11/05 13:35:12.533",
+            "ucTimeStamp": "21392"
+        },
+        {
+            "Data": "Nvm Data updated and commited",
+            "FrameCounter": "2",
+            "SyncId": "1",
+            "sysTime": "23/11/05 13:35:56.698",
+            "ucTimeStamp": "65667"
+        },
+        {
+            "Data": "Nvm Data updated and commited",
+            "FrameCounter": "2",
+            "SyncId": "2",
+            "sysTime": "23/11/05 13:36:07.859",
+            "ucTimeStamp": "76845"
+        },
+        {
+            "Data": "Nvm Data updated and commited",
+            "FrameCounter": "2",
+            "SyncId": "3",
+            "sysTime": "23/11/05 13:36:11.514",
+            "ucTimeStamp": "80518"
+        },
+        {
+            "Data": "True data logger start",
+            "FrameCounter": "2",
+            "SyncId": "4",
+            "sysTime": "23/11/05 13:36:17.014",
+            "ucTimeStamp": "86045"
+        },
+        {
+            "Data": "Right|| RightAngleDetected TrvD: -0.967",
+            "FrameCounter": "2",
+            "SyncId": "5",
+            "sysTime": "23/11/05 13:38:46.873",
+            "ucTimeStamp": "236245"
+        }
+    ]
+}

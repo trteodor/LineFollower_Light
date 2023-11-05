@@ -113,6 +113,9 @@ static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
 
 static bool RobotLineFollowingState = false;
 
+static const float NVM_rAgIsBrakeNeedForRightAgThHndlr = 1.5F;
+static bool IsBrakingNeededForRightAg = false;
+
 /*************************************************************************/
 /*Prototypes*/
 static void MotorsPwmInit();
@@ -222,6 +225,15 @@ static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
 {
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue); //-->> Forward
 	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue - RightMotorSpeed );
+
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue - LeftMotorSpeed);
+	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue );  //-->> Reverse
+
+}
+static void MotorBothDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed)
+{
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_2,MaxPWMValue - RightMotorSpeed );
+	  __HAL_TIM_SET_COMPARE(&htim15,TIM_CHANNEL_1,MaxPWMValue);  //-->> Reverse
 
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,MaxPWMValue - LeftMotorSpeed);
 	  __HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,MaxPWMValue );  //-->> Reverse
@@ -368,7 +380,7 @@ static void SetMotorSpeeds(float MotSpeedLeft, float MotSpeedRight)
 
 
 	if(L_ComputedLeftWhPwmVal<0 && (L_ComputedRightWhPwmVal<0) ){
-		/*Not handled now*/
+		MotorBothDrivingReverse(L_ComputedLeftWhPwmVal,L_ComputedRightWhPwmVal);
 	}
 	else if(L_ComputedLeftWhPwmVal <= 0){
 		int _CalculatedLeftMotorSpeed=L_ComputedLeftWhPwmVal*(-1);
@@ -535,45 +547,101 @@ void LfMngr_LineEventCallBack(LinePosEstimatorEvent_t LinePosEstEv)
 
 }
 
+static void MonitorVehSpdToHandleRightAg(void)
+{
+	static float vehSpdBuffer[10];
+	static uint8_t vehSpdBufferIterator = 0;
+	static uint32_t monitorVehSpdTimer = 0;
+	float currVehSpd = ENC_GetVehicleSpeed();
+
+	if(currVehSpd > NVM_rAgIsBrakeNeedForRightAgThHndlr)
+	{
+		float averageVehSpeed = 0.0F;
+
+		if(vehSpdBufferIterator > 10){
+			vehSpdBufferIterator = 0;
+		}
+		if(HAL_GetTick() - monitorVehSpdTimer > 10)
+		{
+			vehSpdBuffer[vehSpdBufferIterator] = currVehSpd;
+		}
+		vehSpdBufferIterator++;
+
+		for(int i=0; i<10; i++)
+		{
+			averageVehSpeed += vehSpdBuffer[i] / 10.0F;
+		}
+		if(averageVehSpeed > NVM_rAgIsBrakeNeedForRightAgThHndlr)
+		{
+			IsBrakingNeededForRightAg = true;
+		}
+	}
+	else
+	{
+		for(int i=0; i<10; i++){
+			vehSpdBuffer[i] = 0.0F;
+		}
+
+		IsBrakingNeededForRightAg = false;
+	}
+
+
+}
+
 void HandleRightAngle(void)
 {
 	static bool RightAngleHandlingStartedFlag = false;
 	static float expectedOrientation = 0U;
 
-	// static bool brakingFlag = false;
-	// static uint32_t brakingTimer= 0U;
+	static bool brakingFlag = false;
+	static uint32_t brakingTimer= 0U;
 
+	static bool PrevIsBrakingNeededForRightAg = false;
 
 	if(false == RightAngleHandlingStartedFlag)
 	{
 		if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
 		{
-			expectedOrientation =  ENC_GetCurrentOrientation() + (LF_M_PI_VAL/ 1.3); //+90deg
+			expectedOrientation =  ENC_GetCurrentOrientation() + (LF_M_PI_VAL/ 1.45); //+90deg
 			BLU_DbgMsgTransmit("HandleRightAngle:  RR_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
 		}
 		else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 		{
-			expectedOrientation = ENC_GetCurrentOrientation() - (LF_M_PI_VAL/ 1.3F); //-90deg
+			expectedOrientation = ENC_GetCurrentOrientation() - (LF_M_PI_VAL/ 1.45F); //-90deg
 			BLU_DbgMsgTransmit("HandleRightAngle:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
 
 		}
-
-		// brakingFlag = true;
-		// brakingTimer = HAL_GetTick();
+		if(IsBrakingNeededForRightAg)
+		{
+			PrevIsBrakingNeededForRightAg = IsBrakingNeededForRightAg;
+			brakingFlag = true;
+			brakingTimer = HAL_GetTick();
+		}
 		RightAngleHandlingStartedFlag = true;
 	}
 
-	// if(true == brakingFlag && true == RightAngleHandlingStartedFlag)
-	// {
-	// 	if(HAL_GetTick() - brakingTimer > 30)
-	// 	{
-	// 		brakingFlag = false;
-	// 	}else{
-	// 		SetMotorSpeeds(-1.5F,-1.5F);
-	// 	}
-	// }
+	if( (true == brakingFlag) &&
+		(true == RightAngleHandlingStartedFlag) &&
+		(true == PrevIsBrakingNeededForRightAg) )
+	{
+		if(HAL_GetTick() - brakingTimer > 80)
+		{
+			brakingFlag = false;
+			PrevIsBrakingNeededForRightAg = false;
+		}else
+		{
+			if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
+			{
+				SetMotorSpeeds(-1.5F,-5.0F);
+			}
+			else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
+			{
+				SetMotorSpeeds(-5.0F,-1.5F);
+			}
+		}
+	}
 
-	if(true == RightAngleHandlingStartedFlag ) //&& false == brakingFlag
+	if(true == RightAngleHandlingStartedFlag && false == brakingFlag) //
 	{
 		static uint32_t SavedTimeR_AgDriv_PID=0;
 		static float PreviousPositionErrorValueR_AgDrivPid=0;
@@ -806,6 +874,7 @@ void LF_MngrTask(void) /*Line Following Menager task */
 	ComputeLinePidVal();
 	ComputeExpectedPwmValues();
 	CheckUserButtonState();
+	MonitorVehSpdToHandleRightAg();
 
 	ManageRobotMovingState(); /* Totally highest function of robot moving controlling :) */
 

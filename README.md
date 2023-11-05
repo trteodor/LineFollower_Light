@@ -4,6 +4,10 @@ Demonstration video:
 
 https://www.youtube.com/watch?v=OcwFzTCTTZQ
 
+New JSumo Tires test:
+
+https://youtu.be/Sj1vxMwn7Ys (achived average speed 1.8m/s!)
+
 Real word prototype:
 
 ![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/FotoIzoFront.jpg)

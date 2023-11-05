@@ -1,0 +1,98 @@
+{
+    "NvmData": [
+        {
+            "BlinkingLedsState": 1,
+            "Err10ValueFloat": 7,
+            "Err11ValueFloat": 8,
+            "Err1ValueFloat": 0.20000000298023224,
+            "Err2ValueFloat": 0.4000000059604645,
+            "Err3ValueFloat": 0.800000011920929,
+            "Err4ValueFloat": 1.2000000476837158,
+            "Err5ValueFloat": 2,
+            "Err6ValueFloat": 3,
+            "Err7ValueFloat": 4,
+            "Err8ValueFloat": 5,
+            "Err9ValueFloat": 6,
+            "ErrMValueFloat": 10,
+            "ExpectedAvSpdFloat": 1.7999999523162842,
+            "FacA_LftU32": 230,
+            "FacA_RhtU32": 280,
+            "FacB_LftU32": 51,
+            "FacB_RhtU32": 51,
+            "OneImpDistF32": 0.0005384000251069665,
+            "PID_KDfloat": 0.20000000298023224,
+            "PID_KIfloat": 0,
+            "PID_KPfloat": 0.20000000298023224,
+            "ProbeTimeInt": 20,
+            "SpdProfileBaseSpd_0": 0.699999988079071,
+            "SpdProfileBaseSpd_1": 0.800000011920929,
+            "SpdProfileBaseSpd_10": 1,
+            "SpdProfileBaseSpd_2": 1,
+            "SpdProfileBaseSpd_3": 1,
+            "SpdProfileBaseSpd_4": 1,
+            "SpdProfileBaseSpd_5": 1,
+            "SpdProfileBaseSpd_6": 1,
+            "SpdProfileBaseSpd_7": 1,
+            "SpdProfileBaseSpd_8": 1,
+            "SpdProfileBaseSpd_9": 1,
+            "SpdProfileTrvDist_0": 1.2000000476837158,
+            "SpdProfileTrvDist_1": 2,
+            "SpdProfileTrvDist_10": 11,
+            "SpdProfileTrvDist_2": 3,
+            "SpdProfileTrvDist_3": 4,
+            "SpdProfileTrvDist_4": 5,
+            "SpdProfileTrvDist_5": 6,
+            "SpdProfileTrvDist_6": 7,
+            "SpdProfileTrvDist_7": 8,
+            "SpdProfileTrvDist_8": 9,
+            "SpdProfileTrvDist_9": 10,
+            "TryDetEndLineMark": 0,
+            "WheelBaseF32": 0.1509999930858612,
+            "isIrSensorEnabled": 0,
+            "isSpdProfileEnabled": 0,
+            "rAgHndlrBaseSpdFloat": 1.2999999523162842,
+            "rAgHndlrKdFloat": 1.5,
+            "rAgHndlrKpFloat": 3,
+            "rAgHndlrMaxYawRateFloat": 8,
+            "rAgHndlrProbeTimU32": 15
+        }
+    ],
+    "PlotLinePosConfidenceL_Y": [
+    ],
+    "PlotLinePosConfidenceR_Y": [
+    ],
+    "PlotMap_PosX": [
+    ],
+    "PlotMap_PosY": [
+    ],
+    "PlotOrientation_Y": [
+    ],
+    "PlotPidRegVal_Y": [
+    ],
+    "PlotPosErr_Y": [
+    ],
+    "PlotSpdL_Y": [
+    ],
+    "PlotSpdR_Y": [
+    ],
+    "PlotTrvDistance_Y": [
+    ],
+    "YawRate_Y": [
+    ],
+    "mDebugDataLogger": [
+        {
+            "Data": "DevNameMatched:Connecting ",
+            "FrameCounter": "",
+            "SyncId": "",
+            "sysTime": "",
+            "ucTimeStamp": ""
+        },
+        {
+            "Data": "EE_ReadVariableU32: PidRegData Kp: 0.200000",
+            "FrameCounter": "2",
+            "SyncId": "0",
+            "sysTime": "23/11/05 16:11:17.483",
+            "ucTimeStamp": "13635"
+        }
+    ]
+}
