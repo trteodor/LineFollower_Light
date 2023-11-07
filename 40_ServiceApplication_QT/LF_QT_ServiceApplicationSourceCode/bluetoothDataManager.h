@@ -151,8 +151,12 @@ signals:
                                                 float ErrW8,float ErrW9,float ErrW10,float ErrW11,float ErrWM);
 
     void BluDatMngrSignal_UpdatePidData(float Kp,float Ki,float Kd,uint32_t ProbeTime);
+
     void BluDatMngrSignal_UpdateRgAngleHndlrData( float rAgPidKp, float rAgPidKd,
-                                                 float rAgBaseSpd, float rAgMaxYawRate, uint32_t rAgProbeTime);
+                                                 float rAgBaseSpd, float rAgMaxYawRate,
+                                                 float rAgBrakeSpeedTh, float rAgBrakingTime,
+                                                 float rAgOriChange, float rAgOriChangeAfterBrake,
+                                                 uint32_t rAgProbeTime);
 
     void BluDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled);
 

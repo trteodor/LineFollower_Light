@@ -79,11 +79,15 @@ typedef struct LinePidReg_t
 }LinePidReg_t;
 
 typedef struct RightAnglePid_Tag{
-    uint32_t NVM_RightAgPrTime; //= 20;
+    uint32_t NVM_RightAgPrTime;
 	float NVM_RightAgBaseSpdHndlr;
 	float NVM_Kp_rAg;
 	float NVM_Kd_rAg;
 	float NVM_RightAgMaxYawRate;
+    float NVM_rAgBrakeSpeedTh;
+    uint32_t NVM_rAgBrakingTime;
+    float NVM_rAgOriChange;
+    float NVM_rAgOriChangeAfterBrake;
 }RightAnglePid_t;
 
 typedef struct SpeedProfiler_Tag
@@ -112,18 +116,16 @@ static SpeedProfiler_t SpeedProfilerData;
 static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
 
 static bool RobotLineFollowingState = false;
-
-static const float NVM_rAgIsBrakeNeedForRightAgThHndlr = 1.5F;
 static bool IsBrakingNeededForRightAg = false;
 
 /*************************************************************************/
 /*Prototypes*/
-static void MotorsPwmInit();
-static void MotorsForceStop();
+static void MotorsPwmInit(void);
+static void MotorsForceStop(void);
 static void MotorsForwardDriving(int LeftMotorSpeed, int RightMotorSpeed);
 static void MotorRightDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed);
 static void MotorLeftDrivingReverse(int LeftMotorSpeed, int RightMotorSpeed);
-static void SpeedProfiler();
+static void SpeedProfiler(void);
 
 /*************************************************************************/
 static void LinePidNvmDataRead(void)
@@ -143,6 +145,12 @@ static void LinePidNvmDataRead(void)
 	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKd_F32,&RightAnglePidCfgData.NVM_Kd_rAg);
 	EE_ReadVariableF32(EE_NvmAddr_RightAgBaseSpeed_F32,&RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr);
 	EE_ReadVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32,&RightAnglePidCfgData.NVM_RightAgMaxYawRate);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgBrakeSpeedTh_F32,&RightAnglePidCfgData.NVM_rAgBrakeSpeedTh);
+	float brakingTimeFloat;
+	EE_ReadVariableF32(EE_NvmAddr_RightAgBrakingTime_F32,&brakingTimeFloat);
+	RightAnglePidCfgData.NVM_rAgBrakingTime = brakingTimeFloat; /* I'm lazy :) */
+	EE_ReadVariableF32(EE_NvmAddr_RightAgOriChange_F32,&RightAnglePidCfgData.NVM_rAgOriChange);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgOriChangeAfterBrake_F32,&RightAnglePidCfgData.NVM_rAgOriChangeAfterBrake);
 	EE_ReadVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32,&RightAnglePidCfgData.NVM_RightAgPrTime);
 }
 
@@ -370,7 +378,7 @@ static void SetMotorSpeeds(float MotSpeedLeft, float MotSpeedRight)
 	else if(L_ComputedLeftWhPwmVal < -MaxPWMValue){
 		L_ComputedLeftWhPwmVal = -MaxPWMValue;
 	}
-	
+
 	if(L_ComputedRightWhPwmVal > MaxPWMValue){
 		L_ComputedRightWhPwmVal = MaxPWMValue;
 	}
@@ -554,7 +562,7 @@ static void MonitorVehSpdToHandleRightAg(void)
 	static uint32_t monitorVehSpdTimer = 0;
 	float currVehSpd = ENC_GetVehicleSpeed();
 
-	if(currVehSpd > NVM_rAgIsBrakeNeedForRightAgThHndlr)
+	if(currVehSpd > RightAnglePidCfgData.NVM_rAgBrakeSpeedTh)
 	{
 		float averageVehSpeed = 0.0F;
 
@@ -571,7 +579,7 @@ static void MonitorVehSpdToHandleRightAg(void)
 		{
 			averageVehSpeed += vehSpdBuffer[i] / 10.0F;
 		}
-		if(averageVehSpeed > NVM_rAgIsBrakeNeedForRightAgThHndlr)
+		if(averageVehSpeed > RightAnglePidCfgData.NVM_rAgBrakeSpeedTh)
 		{
 			IsBrakingNeededForRightAg = true;
 		}
@@ -592,22 +600,29 @@ void HandleRightAngle(void)
 {
 	static bool RightAngleHandlingStartedFlag = false;
 	static float expectedOrientation = 0U;
-
 	static bool brakingFlag = false;
 	static uint32_t brakingTimer= 0U;
-
 	static bool PrevIsBrakingNeededForRightAg = false;
+
+	float neededOrientationChange = 0.0F;
+
+	if(true == IsBrakingNeededForRightAg)
+	{
+		neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChangeAfterBrake;
+	}else{
+		neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChange;
+	}
 
 	if(false == RightAngleHandlingStartedFlag)
 	{
 		if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
 		{
-			expectedOrientation =  ENC_GetCurrentOrientation() + (LF_M_PI_VAL/ 1.45); //+90deg
+			expectedOrientation =  ENC_GetCurrentOrientation() + neededOrientationChange;
 			BLU_DbgMsgTransmit("HandleRightAngle:  RR_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
 		}
 		else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 		{
-			expectedOrientation = ENC_GetCurrentOrientation() - (LF_M_PI_VAL/ 1.45F); //-90deg
+			expectedOrientation = ENC_GetCurrentOrientation() - neededOrientationChange;
 			BLU_DbgMsgTransmit("HandleRightAngle:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
 
 		}
@@ -624,7 +639,7 @@ void HandleRightAngle(void)
 		(true == RightAngleHandlingStartedFlag) &&
 		(true == PrevIsBrakingNeededForRightAg) )
 	{
-		if(HAL_GetTick() - brakingTimer > 80)
+		if(HAL_GetTick() - brakingTimer > RightAnglePidCfgData.NVM_rAgBrakingTime)
 		{
 			brakingFlag = false;
 			PrevIsBrakingNeededForRightAg = false;
@@ -632,17 +647,18 @@ void HandleRightAngle(void)
 		{
 			if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
 			{
-				SetMotorSpeeds(-1.5F,-5.0F);
+				SetMotorSpeeds(3.0F,-5.0F);
 			}
 			else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 			{
-				SetMotorSpeeds(-5.0F,-1.5F);
+				SetMotorSpeeds(-5.0F,3.0F);
 			}
 		}
 	}
 
 	if(true == RightAngleHandlingStartedFlag && false == brakingFlag) //
 	{
+		/*Use dedicated PID regulator to handle the right angle*/
 		static uint32_t SavedTimeR_AgDriv_PID=0;
 		static float PreviousPositionErrorValueR_AgDrivPid=0;
 		static float R_AgDrivPid_P,R_AgDrivPid_D;

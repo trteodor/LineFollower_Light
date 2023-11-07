@@ -64,8 +64,11 @@ private slots:
 
     void MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_t ProbeTime);
 
-    void MainWin_UpdateNvM_RgAngleHndlrData( float rAgPidKp, float rAgPidKd,
-                                                 float rAgBaseSpd, float rAgMaxYawRate, uint32_t rAgProbeTime);
+    void MainWin_UpdateNvM_RgAngleHndlrData(float rAgPidKp, float rAgPidKd,
+                                             float rAgBaseSpd, float rAgMaxYawRate,
+                                             float rAgBrakeSpeedTh, float rAgBrakingTime,
+                                             float rAgOriChange, float rAgOriChangeAfterBrake,
+                                             uint32_t rAgProbeTime);
 
     void MainWin_UpdateNvM_VehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled);
 
@@ -183,6 +186,10 @@ private:
     float    NvM_rAgHndlr_Kd;
     float    NvM_rAgBaseSpd;
     float    NVM_rAgMaxYawRate;
+    float    NVM_rAgBrakeSpeedTh;
+    float    NVM_rAgBrakingTime;
+    float    NVM_rAgOriChange;
+    float    NVM_rAgOriChangeAfterBrake;
     uint32_t NvM_rAgProbeTime;
 
 

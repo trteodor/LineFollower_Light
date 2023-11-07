@@ -253,6 +253,10 @@ void MainWindow::ConfigureTextLineAndNvMConnections(void)
     ui->textRightAgKd->setValidator(&dblValidator);
     ui->textRightAgBaseSpd->setValidator(&dblValidator);
     ui->textRightAgMaxYr->setValidator(&dblValidator);
+    ui->textRightBrThr->setValidator(&dblValidator);
+    ui->textRightBrTim->setValidator(&dblValidator);
+    ui->textRightOriCh->setValidator(&dblValidator);
+    ui->textRightOriChAftBr->setValidator(&dblValidator);
     ui->textRightAgPrTim->setValidator(&dblValidator);
 
     ui->TextPwmToSpAFacL->setValidator(&dblValidator);
@@ -640,9 +644,9 @@ void MainWindow::BLU_InitializeQTConnections(void)
 
     connect(
         &BluInputDataProcessingWrapper,
-        SIGNAL(BluDatMngrSignal_UpdateRgAngleHndlrData(float,float,float,float,uint32_t) )
+        SIGNAL(BluDatMngrSignal_UpdateRgAngleHndlrData(float,float,float,float,float,float,float,float,uint32_t) )
         ,this
-        ,SLOT(MainWin_UpdateNvM_RgAngleHndlrData(float,float,float,float,uint32_t) ) );
+        ,SLOT(MainWin_UpdateNvM_RgAngleHndlrData(float,float,float,float,float,float,float,float,uint32_t) ) );
 
     connect(
         &BluInputDataProcessingWrapper,
@@ -1079,13 +1083,20 @@ void MainWindow::MainWin_UpdateNvM_PidData(float Kp, float Ki, float Kd, uint32_
     NvM_PidDatahUpdateDelayTimer.start(100);
 }
 
-void MainWindow::MainWin_UpdateNvM_RgAngleHndlrData(float rAgPidKp, float rAgPidKd, float rAgBaseSpd,
-                                                    float rAgMaxYawRate, uint32_t rAgProbeTime)
+void MainWindow::MainWin_UpdateNvM_RgAngleHndlrData(float rAgPidKp, float rAgPidKd,
+                                                    float rAgBaseSpd, float rAgMaxYawRate,
+                                                    float rAgBrakeSpeedTh, float rAgBrakingTime,
+                                                    float rAgOriChange, float rAgOriChangeAfterBrake,
+                                                    uint32_t rAgProbeTime)
 {
     NvM_rAgHndlr_Kp = rAgPidKp;
     NvM_rAgHndlr_Kd = rAgPidKd;
     NvM_rAgBaseSpd = rAgBaseSpd;
     NVM_rAgMaxYawRate = rAgMaxYawRate;
+    NVM_rAgBrakeSpeedTh = rAgBrakeSpeedTh;
+    NVM_rAgBrakingTime = rAgBrakingTime;
+    NVM_rAgOriChange = rAgOriChange;
+    NVM_rAgOriChangeAfterBrake = rAgOriChangeAfterBrake;
     NvM_rAgProbeTime = rAgProbeTime;
 
     NvM_rAgDatahUpdateDelayTimer.setSingleShot(true);
@@ -1476,6 +1487,10 @@ void MainWindow::ReadNvMDataFromLineFollower()
     ui->textRightAgKd->clear();
     ui->textRightAgBaseSpd->clear();
     ui->textRightAgMaxYr->clear();
+    ui->textRightBrThr->clear();
+    ui->textRightBrTim->clear();
+    ui->textRightOriCh->clear();
+    ui->textRightOriChAftBr->clear();
     ui->textRightAgPrTim->clear();
 
     ui->TextPwmToSpAFacL->clear();
@@ -1676,6 +1691,23 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         QString rAgHndlrMaxYawRateText = ui->textRightAgMaxYr->text();
         float rAgHndlrMaxYawRateFloat = rAgHndlrMaxYawRateText.toFloat();
 
+
+        QString textRightBrThrText = ui->textRightBrThr->text();
+        float rAgHndlrBrThrFloat = textRightBrThrText.toFloat();
+
+
+        QString textRightBrTimText = ui->textRightBrTim->text();
+        float rAgHndlrBrTimFloat = textRightBrTimText.toFloat();
+
+
+        QString textRightOriChText = ui->textRightOriCh->text();
+        float rAgHndlrOriChFloat = textRightOriChText.toFloat();
+
+
+        QString textRightOriChAftBrText = ui->textRightOriChAftBr->text();;
+        float rAgHndlrOriChAftBrFloat = textRightOriChAftBrText.toFloat();
+
+
         QString rAgHndlrProbeTimText = ui->textRightAgPrTim->text();
         uint32_t rAgHndlrProbeTimU32 = rAgHndlrProbeTimText.toInt();
 
@@ -1685,7 +1717,11 @@ void MainWindow::on_UpdateNvM_Button_clicked()
         std::memcpy(&command[6],  &rAgHndlrKdFloat, sizeof(float));
         std::memcpy(&command[10], &rAgHndlrBaseSpdFloat, sizeof(float));
         std::memcpy(&command[14], &rAgHndlrMaxYawRateFloat, sizeof(float));
-        std::memcpy(&command[18], &rAgHndlrProbeTimU32, sizeof(uint32_t));
+        std::memcpy(&command[18], &rAgHndlrBrThrFloat, sizeof(float));
+        std::memcpy(&command[22], &rAgHndlrBrTimFloat, sizeof(float));
+        std::memcpy(&command[26], &rAgHndlrOriChFloat, sizeof(float));
+        std::memcpy(&command[30], &rAgHndlrOriChAftBrFloat, sizeof(float));
+        std::memcpy(&command[34], &rAgHndlrProbeTimU32, sizeof(uint32_t));
         Helper = QByteArray::fromRawData(command,BLU_SINGLE_TR_MESSAGE_SIZE -2);
         Helper.append("\n\r");
         BluInputDataProcessingWrapper.bleutoothClassicConnection.bluetoothSendDataToDevice(Helper);
@@ -1849,6 +1885,11 @@ void MainWindow::NvM_rAgDatahUpdateDelayTimerTimeout()
     ui->textRightAgKd->setText(QString::number(NvM_rAgHndlr_Kd,'f',2));
     ui->textRightAgBaseSpd->setText(QString::number(NvM_rAgBaseSpd,'f',2));
     ui->textRightAgMaxYr->setText(QString::number(NVM_rAgMaxYawRate,'f',2));
+    ui->textRightBrThr->setText(QString::number(NVM_rAgBrakeSpeedTh,'f',2));
+    uint32_t brakingTimeInt = NVM_rAgBrakingTime; /* I'm lazy :) */
+    ui->textRightBrTim->setText(QString::number(brakingTimeInt,10));
+    ui->textRightOriCh->setText(QString::number(NVM_rAgOriChange,'f',2));
+    ui->textRightOriChAftBr->setText(QString::number(NVM_rAgOriChangeAfterBrake,'f',2));
     ui->textRightAgPrTim->setText(QString::number(NvM_rAgProbeTime,10));
 }
 
@@ -2321,6 +2362,22 @@ void MainWindow::on_SaveAppState_pb_clicked()
         float rAgHndlrMaxYawRateFloat = rAgHndlrMaxYawRateText.toFloat();
         DataToStore["rAgHndlrMaxYawRateFloat"]= rAgHndlrMaxYawRateFloat;
 
+        QString textRightBrThrText = ui->textRightBrThr->text();
+        float rAgHndlrBrThrFloat = textRightBrThrText.toFloat();
+        DataToStore["rAgHndlrBrThrFloat"]= rAgHndlrBrThrFloat;
+
+        QString textRightBrTimText = ui->textRightBrTim->text();
+        float rAgHndlrBrTimFloat = textRightBrTimText.toFloat();
+        DataToStore["rAgHndlrBrTimFloat"]= rAgHndlrBrTimFloat;
+
+        QString textRightOriChText = ui->textRightOriCh->text();
+        float rAgHndlrOriChFloat = textRightOriChText.toFloat();
+        DataToStore["rAgHndlrOriChFloat"]= rAgHndlrOriChFloat;
+
+        QString textRightOriChAftBrText = ui->textRightOriChAftBr->text();
+        float rAgHndlrOriChAftBrFloat = textRightOriChAftBrText.toFloat();
+        DataToStore["rAgHndlrOriChAftBrFloat"]= rAgHndlrOriChAftBrFloat;
+
         QString rAgHndlrProbeTimText = ui->textRightAgPrTim->text();
         uint32_t rAgHndlrProbeTimU32 = rAgHndlrProbeTimText.toInt();
         DataToStore["rAgHndlrProbeTimU32"]= (int)rAgHndlrProbeTimU32;
@@ -2455,6 +2512,10 @@ void MainWindow::LoadDataLineFollowerProjecrOrJson(QString FilePath)
         ui->textRightAgKd->setText(QString::number(NvmDataObject["rAgHndlrKdFloat"].toDouble() ,'f',2) );
         ui->textRightAgBaseSpd->setText(QString::number(NvmDataObject["rAgHndlrBaseSpdFloat"].toDouble() ,'f',2) );
         ui->textRightAgMaxYr->setText(QString::number(NvmDataObject["rAgHndlrMaxYawRateFloat"].toDouble() ,'f',2) );
+        ui->textRightBrThr->setText(QString::number(NvmDataObject["rAgHndlrBrThrFloat"].toDouble() ,'f',2) );
+        ui->textRightBrTim->setText(QString::number(NvmDataObject["rAgHndlrBrTimFloat"].toDouble() ,'f',2) );
+        ui->textRightOriCh->setText(QString::number(NvmDataObject["rAgHndlrOriChFloat"].toDouble() ,'f',2) );
+        ui->textRightOriChAftBr->setText(QString::number(NvmDataObject["rAgHndlrOriChAftBrFloat"].toDouble() ,'f',2) );
         ui->textRightAgPrTim->setText(QString::number(NvmDataObject["rAgHndlrProbeTimU32"].toInt() ) );
 
         ui->TextPwmToSpAFacL->setText(QString::number(NvmDataObject["FacA_LftU32"].toInt()) );

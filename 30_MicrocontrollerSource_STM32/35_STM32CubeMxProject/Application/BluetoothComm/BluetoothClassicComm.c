@@ -442,14 +442,22 @@ static BLU_CallStatus_t TransmitRightAgHndlrData(void)
 
 	float rAgPidKp  = 0.0F,  rAgPidKd = 0.0F;
 	float rAgBaseSpd = 0.0F;
-	float maxYawRate = 0.0F;
+	float rAgMaxYawRate = 0.0F;
+	float rAgBrakeSpeedTh = 0.0F;
+	float rAgBrakingTime = 0.0F;
+	float rAgOriChange = 0.0F;
+	float rAgOriChangeAfterBrake = 0.0F;
 	uint32_t rAgProbeTime  = 0.0F;
 
 	/***********************************************************************/
 	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKp_F32, &rAgPidKp);
 	EE_ReadVariableF32(EE_NvmAddr_RightAgPidKd_F32, &rAgPidKd);
 	EE_ReadVariableF32(EE_NvmAddr_RightAgBaseSpeed_F32, &rAgBaseSpd);
-	EE_ReadVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32, &maxYawRate);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32, &rAgMaxYawRate);
+	EE_ReadVariableF32(EE_NvmAddr_RightAgBrakeSpeedTh_F32,&rAgBrakeSpeedTh);
+    EE_ReadVariableF32(EE_NvmAddr_RightAgBrakingTime_F32,&rAgBrakingTime);
+    EE_ReadVariableF32(EE_NvmAddr_RightAgOriChange_F32,&rAgOriChange);
+    EE_ReadVariableF32(EE_NvmAddr_RightAgOriChangeAfterBrake_F32,&rAgOriChangeAfterBrake);
 	EE_ReadVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32, &rAgProbeTime);
 
 	DataBuffer[0] = BLU_NvM_RightAgHndlrData;
@@ -457,8 +465,12 @@ static BLU_CallStatus_t TransmitRightAgHndlrData(void)
 	memcpy(&DataBuffer[2],&rAgPidKp,4);
 	memcpy(&DataBuffer[6],&rAgPidKd,4);
 	memcpy(&DataBuffer[10],&rAgBaseSpd,4);
-	memcpy(&DataBuffer[14],&maxYawRate,4);
-	memcpy(&DataBuffer[18],&rAgProbeTime,4);
+	memcpy(&DataBuffer[14],&rAgMaxYawRate,4);
+	memcpy(&DataBuffer[18],&rAgBrakeSpeedTh,4);
+	memcpy(&DataBuffer[22],&rAgBrakingTime,4);
+	memcpy(&DataBuffer[26],&rAgOriChange,4);
+	memcpy(&DataBuffer[30],&rAgOriChangeAfterBrake,4);
+	memcpy(&DataBuffer[34],&rAgProbeTime,4);
 
 	if(RB_Transmit_Write(&BluMainTransmitRingBuffer, (uint8_t *)DataBuffer, BLU_SINGLE_MESSAGE_SIZE) != RB_OK)
 	{
@@ -904,19 +916,31 @@ static void ReceiveDataHandler(void)
 				{
 					float rAgPidKp  = 0.0F,  rAgPidKd = 0.0F;
 					float rAgBaseSpd = 0.0F;
-					float maxYawRate = 0.0F;
+					float rAgMaxYawRate = 0.0F;
+					float rAgBrakeSpeedTh = 0.0F;
+					float rAgBrakingTime = 0.0F;
+					float rAgOriChange = 0.0F;
+					float rAgOriChangeAfterBrake = 0.0F;
 					uint32_t rAgProbeTime  = 0.0F;
 
-	    			memcpy(&rAgPidKp,  &ReceivedMessageBuff[2], sizeof(float));
-					memcpy(&rAgPidKd,  &ReceivedMessageBuff[6], sizeof(float));
-					memcpy(&rAgBaseSpd,  &ReceivedMessageBuff[10], sizeof(float));
-					memcpy(&maxYawRate,  &ReceivedMessageBuff[14], sizeof(float));
-					memcpy(&rAgProbeTime,  &ReceivedMessageBuff[18], sizeof(uint32_t));
+	    			memcpy(&rAgPidKp,                &ReceivedMessageBuff[2], sizeof(float));
+					memcpy(&rAgPidKd,                &ReceivedMessageBuff[6], sizeof(float));
+					memcpy(&rAgBaseSpd,              &ReceivedMessageBuff[10], sizeof(float));
+					memcpy(&rAgMaxYawRate,              &ReceivedMessageBuff[14], sizeof(float));
+	    			memcpy(&rAgBrakeSpeedTh,         &ReceivedMessageBuff[18], sizeof(float));
+					memcpy(&rAgBrakingTime,          &ReceivedMessageBuff[22], sizeof(float));
+					memcpy(&rAgOriChange,            &ReceivedMessageBuff[26], sizeof(float));
+					memcpy(&rAgOriChangeAfterBrake,  &ReceivedMessageBuff[30], sizeof(float));
+					memcpy(&rAgProbeTime,            &ReceivedMessageBuff[34], sizeof(uint32_t));
 
 					EE_WriteVariableF32(EE_NvmAddr_RightAgPidKp_F32, rAgPidKp);
 					EE_WriteVariableF32(EE_NvmAddr_RightAgPidKd_F32, rAgPidKd);
 					EE_WriteVariableF32(EE_NvmAddr_RightAgBaseSpeed_F32, rAgBaseSpd);
-					EE_WriteVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32, maxYawRate);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgMaxYawRate_F32, rAgMaxYawRate);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgBrakeSpeedTh_F32,rAgBrakeSpeedTh);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgBrakingTime_F32,rAgBrakingTime);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgOriChange_F32,rAgOriChange);
+					EE_WriteVariableF32(EE_NvmAddr_RightAgOriChangeAfterBrake_F32,rAgOriChangeAfterBrake);
 					EE_WriteVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32, rAgProbeTime);
 					NvmDataUpdatedFlag= true;
 					break;

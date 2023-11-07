@@ -330,14 +330,21 @@ void BluDataManager::BluDatMngr_PidDataHandler(char* data, uint32_t Size)
 void BluDataManager::BluDatMngr_RightAngleDataHandler(char* data, uint32_t Size)
 {
     (void)Size;
-    float rAgPidKp    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[2]));
-    float rAgPidKd    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[6]));
-    float rAgBaseSpd    = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[10]));
-    float rAgMaxYawRate = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[14]));
-    uint32_t rAgProbeTime = ConvToUint32(&data[18]);
+    float rAgPidKp               = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[2]));
+    float rAgPidKd               = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[6]));
+    float rAgBaseSpd             = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[10]));
+    float rAgMaxYawRate          = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[14]));
+    float rAgBrakeSpeedTh        = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[18]));
+    float rAgBrakingTime         = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[22]));
+    float rAgOriChange           = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[26]));
+    float rAgOriChangeAfterBrake = ieee_uint32_AsBitsTo_float32(ConvToUint32(&data[30]));
+    uint32_t rAgProbeTime        =                              ConvToUint32(&data[34]);
 
     emit BluDatMngrSignal_UpdateRgAngleHndlrData(rAgPidKp,rAgPidKd,
-                                                 rAgBaseSpd,rAgMaxYawRate,rAgProbeTime);
+                                                 rAgBaseSpd,rAgMaxYawRate,
+                                                 rAgBrakeSpeedTh, rAgBrakingTime,
+                                                 rAgOriChange, rAgOriChangeAfterBrake,
+                                                 rAgProbeTime);
 }
 
 void BluDataManager::BluDatMngr_VehCfgDataHandler( char* data, uint32_t Size)

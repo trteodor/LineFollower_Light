@@ -1491,14 +1491,20 @@ color: rgb(255, 255, 255);</string>
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>150</y>
+           <y>200</y>
            <width>155</width>
-           <height>161</height>
+           <height>111</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_20">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="LabOneImpDist">
               <property name="text">
@@ -1545,6 +1551,9 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLineEdit" name="TextOneImpDist"/>
             </item>
@@ -1567,16 +1576,19 @@ color: rgb(255, 255, 255);</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>0</y>
+           <y>1</y>
            <width>161</width>
-           <height>124</height>
+           <height>161</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_22">
             <property name="spacing">
@@ -1723,7 +1735,104 @@ color: rgb(255, 255, 255);</string>
             </item>
            </layout>
           </item>
+          <item row="4" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_26">
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="text">
+               <string>rAgBrThr</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightBrThr"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>m/s</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="5" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_29">
+            <item>
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>rAgBrTim:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightBrTim"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>ms</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_28">
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>rAgOriCh:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightOriCh"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_23">
+              <property name="text">
+               <string>rad</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="7" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_27">
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="text">
+               <string>rAgOriChAftBr:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textRightOriChAftBr"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_22">
+              <property name="text">
+               <string>rad</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
+        </widget>
+        <widget class="QLabel" name="label_25">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>180</y>
+           <width>101</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>MotorsFactors:</string>
+         </property>
         </widget>
        </widget>
        <widget class="QWidget" name="tab_3">
