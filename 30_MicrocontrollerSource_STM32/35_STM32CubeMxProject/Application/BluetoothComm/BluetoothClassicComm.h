@@ -202,11 +202,10 @@ void BLU_Task(void); /*Runnable of BLE communication module (Call as often as po
 
 /* API  functions: */
 
-/** @brief BLU_isExpectedStateDriving
-* @details 
-* @return Expected driving by user (follow line or stop)
+/** @brief BLU_RegisterEventCbNewDrivStateExpctd
+* Register call back if you want be informed that QT app user is expecting new robot state
 */
-bool BLU_isExpectedStateDriving(void);
+void BLU_RegisterEventCbNewDrivStateExpctd(void NewDrivingStateExpctFun(bool IsDrivingExpected));
 
 
 /* brief BLU_ReportSensorData
@@ -230,7 +229,7 @@ void BLU_ReportLinePid(BLU_PidRegData_t *PidRegData);
 * by BLE communication module
 * CallBack function will be called always if NvM data will be updated
 */
-void BLU_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) );
+void BLU_RegisterNvMdataUpdateInfoCallBack(void IrRecNewDataCb(void) );
 
 /* brief BLU_RegisterNvMdataUpdateInfoCallBack
 * Register call back if, interface dedicated for handler in LF_Menager to cntrl manually 

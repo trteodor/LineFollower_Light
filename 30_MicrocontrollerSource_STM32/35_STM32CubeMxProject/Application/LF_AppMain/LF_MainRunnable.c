@@ -1,6 +1,7 @@
 
 #include "EEmu.h"
 #include "LedMngr.h"
+#include "Irda.h"
 #include "EncodersHandler.h"
 #include "LinePosEstimator.h"
 
@@ -25,6 +26,7 @@ void LF_AppInit(void)
 
 	EE_Init();	 /*EEPROM Emulation module init*/
 	BLU_Init();  /*Bluetooth low energy module init*/
+	IR_Init();
 	LED_Init();  /*Led module init*/
 	ENC_Init();  /*Encoder module init*/
 	LPE_Init();  /*Line Position estimator init*/
@@ -54,7 +56,7 @@ void LF_AppTask(void) //only one Task without any RTOS, all works fine -- for no
 		{
 			LED_MngrTask();
 			BLU_Task();
-
+			IR_Task();
 			LPE_Task();
 			ENC_Task();
 

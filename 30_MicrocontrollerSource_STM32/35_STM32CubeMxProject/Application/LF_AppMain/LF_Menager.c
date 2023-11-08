@@ -15,7 +15,7 @@
 #include "EncodersHandler.h"
 #include "LinePosEstimator.h"
 #include "BluetoothClassicComm.h"
-
+#include "Irda.h"
 
 
 #define LF_M_PI_VAL		((float)3.14159265F)
@@ -115,7 +115,9 @@ static SpeedProfiler_t SpeedProfilerData;
 
 static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
 
+
 static bool RobotLineFollowingState = false;
+
 static bool IsBrakingNeededForRightAg = false;
 
 static bool RightAngleHandlingStartedFlag = false;
@@ -742,49 +744,36 @@ void userRequestManualMoveHandler(void)
 	} 
 }
 
+
+
 /**************************************************************************************************/
 void ManageRobotMovingState(void)
 {
 	static uint32_t DrivingStartTime = 0U;
-	static bool prevExpectedrDrivingStateBluetooth = false;
-	bool ExpectedrDrivingStateBluetooth = BLU_isExpectedStateDriving();
+	static bool prevExpectedrDrivingState = false;
+
 	static uint32_t usrBtnDelayTimer;
-	static bool usrBtnForcedFollowState = false;
-	static bool usrBtnForcedFollowState_prev = false;
-
-
 
 	if(UsrBtnReqState == BTN_CHANGE_LF_STATE_REQ)
 	{
-		if(true == usrBtnForcedFollowState)
-		{
-			usrBtnForcedFollowState = false;
-		}
-		else{
-			usrBtnDelayTimer = HAL_GetTick();
-			UsrBtnReqState = BTN_START_LF_PROCESSING;
-		}
+		usrBtnDelayTimer = HAL_GetTick();
+		UsrBtnReqState = BTN_START_LF_PROCESSING;
 	}
 	else if(UsrBtnReqState == BTN_START_LF_PROCESSING 
 	   && HAL_GetTick() - usrBtnDelayTimer > 3000)
 	{
-		usrBtnForcedFollowState = true;
+		RobotLineFollowingState = true;
 		UsrBtnReqState = BTN_UNKNOWN;
 	}
 	else if(UsrBtnReqState == BTN_STOP_LF_REQ )
 	{
-		usrBtnForcedFollowState = false;
+		RobotLineFollowingState = false;
 		UsrBtnReqState = BTN_UNKNOWN;
 	}
 
-	if(true == ExpectedrDrivingStateBluetooth || true == usrBtnForcedFollowState)
-	{
-		RobotLineFollowingState = true;
-	}else{
-		RobotLineFollowingState = false;
-	}
 
-	if(false == ExpectedrDrivingStateBluetooth && false == usrBtnForcedFollowState){
+	if(false == RobotLineFollowingState)
+	{
 		/*Handle manual driving reqeust by user only if robot state is standstill*/
 		if(true == Robot_Cntrl.manualDrivingReqFlag )
 		{
@@ -792,11 +781,9 @@ void ManageRobotMovingState(void)
 		}
 	}
 
-	if( (prevExpectedrDrivingStateBluetooth != ExpectedrDrivingStateBluetooth) 
-	    || usrBtnForcedFollowState != usrBtnForcedFollowState_prev)
+	if(prevExpectedrDrivingState != RobotLineFollowingState)
 	{
-
-		if(true == prevExpectedrDrivingStateBluetooth || true == usrBtnForcedFollowState_prev)
+		if(true == prevExpectedrDrivingState)
 		{/*Changed from driving to standstill*/
 			BLU_DbgMsgTransmit("LineFollower stop");
 			uint32_t DrivingTime = HAL_GetTick() - DrivingStartTime;
@@ -804,10 +791,6 @@ void ManageRobotMovingState(void)
 										DrivingTime, Robot_Cntrl.input_TravelledDistance,Robot_Cntrl.input_AverageSpeed);
 
 			MotorsForceStop();
-
-			if(usrBtnForcedFollowState == true){
-				usrBtnForcedFollowState = false;
-			}
 		}
 		else
 		{
@@ -818,9 +801,8 @@ void ManageRobotMovingState(void)
 		}
 	}
 
-	if(true == ExpectedrDrivingStateBluetooth || true == usrBtnForcedFollowState)
+	if(true == RobotLineFollowingState)
 	{
-
 		if(true == Robot_Cntrl.RightRightAngleDetectedFlag || true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 		{
 			HandleRightAngle();
@@ -838,8 +820,7 @@ void ManageRobotMovingState(void)
 		// MotorsForceStop();
 	}
 
-	prevExpectedrDrivingStateBluetooth = ExpectedrDrivingStateBluetooth;
-	usrBtnForcedFollowState_prev = usrBtnForcedFollowState;
+	prevExpectedrDrivingState = RobotLineFollowingState;
 }
 
 void CheckUserButtonState(void)
@@ -876,11 +857,29 @@ void ReportPidRegValue(void)
 	BLU_ReportLinePid(&LinePidRegData);
 }
 
+void IrRecEventCb(IrCommands_t IrCommand)
+{
+	if(IrCommand == IR_RobotStart)
+	{
+		RobotLineFollowingState = true;
+	}
+	else if(IrCommand == IR_RobotStop){
+		RobotLineFollowingState = false;
+	}
+}
+
+void NewBluetoothFollowingExpectedSt(bool isExpectedFollowing)
+{
+	RobotLineFollowingState = isExpectedFollowing;
+}
+
 /************************************************************************************/
 #define API_FUNCTIONS
 /************************************************************************************/
 void LF_MngrInit(void) /*Line Following Menager init */
 {
+	IR_RegisterEventCommandCb(IrRecEventCb);
+	BLU_RegisterEventCbNewDrivStateExpctd(NewBluetoothFollowingExpectedSt);
 	LinePidNvmDataRead();
 	SpeedProfileNvMDataRead();
 	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);

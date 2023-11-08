@@ -22,7 +22,9 @@
 
 uint32_t RC5_Time;
 
-RC5_Status RC5_DecodeData(RC5Struct *RC5_Handle);
+static void (*IrRecDataInfoCbP)(uint32_t IrRecData);
+
+
 RC5_Status RC5_Get_Signal(RC5Struct *RC5_Handle);
 
 RC5_Status RC5_INIT(RC5Struct *RC5_Handle)  //nothing to init :/
@@ -73,6 +75,10 @@ RC5_Status RC5_IR_EXTI_GPIO_ReceiveAndDecodeFunction(RC5Struct *RC5_Handle)
    		RC5_Handle->DataTableIndex=0;
    		RC5_Get_Signal(RC5_Handle);
    		RC5_Handle->Status=RC5_READY;
+		if(IrRecDataInfoCbP != NULL)
+		{
+			IrRecDataInfoCbP(RC5_Handle->Rc_Data & 0x0000FFFF);
+		}
    		return RC5_READY;
    	   }
 
@@ -144,4 +150,7 @@ RC5_Status RC5_ReadNormal(RC5Struct *RC5_Handle, uint16_t *RC5_Data)
 	return RC5_Error;
 }
 
-
+extern void RC5_RegisterCallBackNewMessage(void IrRecNewDataCb(uint32_t IrRecData) )
+{
+	IrRecDataInfoCbP = IrRecNewDataCb;
+}

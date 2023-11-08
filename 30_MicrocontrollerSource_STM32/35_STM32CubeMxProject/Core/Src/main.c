@@ -32,10 +32,6 @@
 
 #include "stdio.h"
 
-#include "RC5_TSOP2236.h"
-
-#include "BluetoothClassicComm.h"
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,8 +51,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static RC5Struct TSOP2236;
-static uint16_t TSOP_NormRecData;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -69,18 +64,6 @@ void PeriphCommonClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin==IR_PIN_INPUT_Pin)
-	{
-		RC5_IR_EXTI_GPIO_ReceiveAndDecodeFunction(&TSOP2236);
-	}
-}
-
-void HW_IR_TIM_100usElapsed(void)
-{
-		RC5_100usTimer();
-}
 
 /* USER CODE END 0 */
 
@@ -135,7 +118,7 @@ int main(void)
 
   LF_AppInit();
 
-  static uint32_t IrLoggingDataTimer = 0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -143,14 +126,6 @@ int main(void)
   while (1)
   {
     LF_AppTask();
-
-    if(HAL_GetTick() - IrLoggingDataTimer > 300)
-    {
-      IrLoggingDataTimer = HAL_GetTick();
-
-      RC5_ReadNormal(&TSOP2236, &TSOP_NormRecData);
-      BLU_DbgMsgTransmit("RecVal:0x%x ",TSOP_NormRecData);
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

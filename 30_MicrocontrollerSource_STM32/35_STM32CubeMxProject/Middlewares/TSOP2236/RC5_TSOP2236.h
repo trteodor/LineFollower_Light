@@ -52,6 +52,7 @@ typedef struct __RC5Struct{
 
 extern RC5_Status RC5_IR_EXTI_GPIO_ReceiveAndDecodeFunction(RC5Struct *RC5_Handle); //You need call this function on evry falling edge on IR PIN
 extern RC5_Status RC5_100usTimer();      //This function have to be called evry 100us --lib tick
+extern void RC5_RegisterCallBackNewMessage(void IrRecNewDataCb(uint32_t IrRecData) );
 extern RC5_Status RC5_ReadNormal(RC5Struct *RC5_Handle, uint16_t *RC5_Data);
 extern RC5_Status RC5_ReadAddresAndData(RC5Struct *RC5_Handle, uint8_t *RC5_Data, uint8_t *RC5_Adresss);
 extern RC5_Status RC5_Read_AllReceived_Data(RC5Struct *RC5_Handle, uint32_t *Data);

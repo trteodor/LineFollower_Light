@@ -94,6 +94,8 @@ static void (*NvmUpdateCallBacks[BLU_NVM_UPDATE_MAX_CALL_BACKS_COUNT])(void) = {
 
 static void (*ManualCtrlRequestCallBackPointer)(float vecV_X, float vecV_Y);
 
+static void (*NewRobotStateExpectedCbPointer)(bool IsDrivingExpected);
+
 static LoggingState_t LoggingState = Suspended;
 static InternalRobotState_t InternalRobotState = Standstill;
 
@@ -976,12 +978,20 @@ static void ReceiveDataHandler(void)
 
 				case BLU_RobotStart:
 				{
+					if(NewRobotStateExpectedCbPointer != NULL)
+					{
+						NewRobotStateExpectedCbPointer(true);
+					}
 					InternalRobotState = Driving;
 					LoggingState = TrueDataLogging;
 					break;
 				}
 				case BLU_RobotStop:
 				{
+					if(NewRobotStateExpectedCbPointer != NULL)
+					{
+						NewRobotStateExpectedCbPointer(false);
+					}
 					InternalRobotState = Standstill;
 					LoggingState = Suspended;
 					break;
@@ -1272,34 +1282,27 @@ void BLU_ReportSensorData(BLU_SensorDataReport_t *SensorData)
 	NewestLfDataReport.CurrSensorData = *SensorData;
 }
 
-void BLU_RegisterNvMdataUpdateInfoCallBack(void UpdateInfoCb(void) )
+void BLU_RegisterNvMdataUpdateInfoCallBack(void IrRecNewDataCb(void) )
 {
 	for(int i=0; i<BLU_NVM_UPDATE_MAX_CALL_BACKS_COUNT; i++)
 	{
 		if(NvmUpdateCallBacks[i] == 0)
 		{
-			NvmUpdateCallBacks[i] = UpdateInfoCb;
+			NvmUpdateCallBacks[i] = IrRecNewDataCb;
 			break;
 		}
 	}
+}
+
+void BLU_RegisterEventCbNewDrivStateExpctd(void NewDrivingStateExpctFun(bool IsDrivingExpected))
+{
+	NewRobotStateExpectedCbPointer = NewDrivingStateExpctFun;
 }
 
 void BLU_RegisterManualCntrlRequestCallBack(void ManualCtrlReqCb(float vecV_X, float vecV_Y) )
 {
 	ManualCtrlRequestCallBackPointer = ManualCtrlReqCb;
 }
-
-bool BLU_isExpectedStateDriving(void)
-{
-	bool retVal = false;
-
-	if(InternalRobotState ==  Driving)
-	{
-		retVal = true;
-	}
-	return retVal;
-}
-
 
 void BLU_DbgMsgTransmit(char *DbgString, ...)
 {
