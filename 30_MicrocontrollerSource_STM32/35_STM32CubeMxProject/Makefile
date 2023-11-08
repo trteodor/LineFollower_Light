@@ -94,7 +94,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_gpio.c \
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_dma.c \
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c \
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c \
-Middlewares/EEPROM_Emul/EEmu.c
+Middlewares/EEPROM_Emul/EEmu.c \
+Middlewares/TSOP2236/RC5_TSOP2236.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -162,6 +163,7 @@ C_INCLUDES =  \
 -IIMiddlewares/VL53L0/platform/inc \
 -IIMiddlewares/VL53L0/core/inc \
 -IMiddlewares/EEPROM_Emul \
+-IMiddlewares/TSOP2236 \
 $(APP_INC)
 
 

@@ -66,7 +66,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void HW_IR_TIM_100usElapsed(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -84,14 +84,16 @@ void Error_Handler(void);
 #define SenD2_GPIO_Port GPIOE
 #define VL53_INT_Pin GPIO_PIN_14
 #define VL53_INT_GPIO_Port GPIOE
+#define VL53_INT_EXTI_IRQn EXTI15_10_IRQn
 #define VL53_XSHUT_Pin GPIO_PIN_15
 #define VL53_XSHUT_GPIO_Port GPIOE
 #define I2C2_SCL_VL53_Pin GPIO_PIN_10
 #define I2C2_SCL_VL53_GPIO_Port GPIOB
 #define I2C2_SDA_VL53_Pin GPIO_PIN_11
 #define I2C2_SDA_VL53_GPIO_Port GPIOB
-#define IR_INPUT_DATA_Pin GPIO_PIN_12
-#define IR_INPUT_DATA_GPIO_Port GPIOB
+#define IR_PIN_INPUT_Pin GPIO_PIN_12
+#define IR_PIN_INPUT_GPIO_Port GPIOB
+#define IR_PIN_INPUT_EXTI_IRQn EXTI15_10_IRQn
 #define TIM12_CH1_MotPWM2_2_Pin GPIO_PIN_14
 #define TIM12_CH1_MotPWM2_2_GPIO_Port GPIOB
 #define TIM12_CH2_MotPWM2_1_Pin GPIO_PIN_15

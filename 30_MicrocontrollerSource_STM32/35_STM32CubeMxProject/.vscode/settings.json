@@ -78,7 +78,8 @@
         "tim.h": "c",
         "lf_appconfig.h": "c",
         "math.h": "c",
-        "stm32h7xx_it.h": "c"
+        "stm32h7xx_it.h": "c",
+        "rc5_tsop2236.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }
