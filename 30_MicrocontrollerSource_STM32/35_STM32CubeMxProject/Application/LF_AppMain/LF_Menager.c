@@ -118,6 +118,11 @@ static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
 static bool RobotLineFollowingState = false;
 static bool IsBrakingNeededForRightAg = false;
 
+static bool RightAngleHandlingStartedFlag = false;
+
+static const uint32_t rAgPidRegActivTime = 150;
+static uint32_t rAgHndlrPidRegStartTime = 0;
+
 /*************************************************************************/
 /*Prototypes*/
 static void MotorsPwmInit(void);
@@ -553,6 +558,11 @@ void LfMngr_LineEventCallBack(LinePosEstimatorEvent_t LinePosEstEv)
 		Robot_Cntrl.LeftRightAngleDetectedFlag = true;
 	}
 
+	if(RightAngleHandlingStartedFlag == true)
+	{
+		rAgHndlrPidRegStartTime = HAL_GetTick();
+	}
+
 }
 
 static void MonitorVehSpdToHandleRightAg(void)
@@ -598,34 +608,35 @@ static void MonitorVehSpdToHandleRightAg(void)
 
 void HandleRightAngle(void)
 {
-	static bool RightAngleHandlingStartedFlag = false;
 	static float expectedOrientation = 0U;
 	static bool brakingFlag = false;
 	static uint32_t brakingTimer= 0U;
 	static bool PrevIsBrakingNeededForRightAg = false;
+	static uint32_t rAgHndlrPidRegStartTime = 0;
 
-	float neededOrientationChange = 0.0F;
+	//float neededOrientationChange = 0.0F;
 
 	if(true == IsBrakingNeededForRightAg)
 	{
-		neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChangeAfterBrake;
+		//neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChangeAfterBrake;
 	}else{
-		neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChange;
+		//neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChange;
 	}
 
 	if(false == RightAngleHandlingStartedFlag)
 	{
 		if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
 		{
-			expectedOrientation =  ENC_GetCurrentOrientation() + neededOrientationChange;
+			// expectedOrientation =  ENC_GetCurrentOrientation() + neededOrientationChange;
 			BLU_DbgMsgTransmit("HandleRightAngle:  RR_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
 		}
 		else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 		{
-			expectedOrientation = ENC_GetCurrentOrientation() - neededOrientationChange;
+			// expectedOrientation = ENC_GetCurrentOrientation() - neededOrientationChange;
 			BLU_DbgMsgTransmit("HandleRightAngle:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
 
 		}
+
 		if(IsBrakingNeededForRightAg)
 		{
 			PrevIsBrakingNeededForRightAg = IsBrakingNeededForRightAg;
@@ -643,15 +654,16 @@ void HandleRightAngle(void)
 		{
 			brakingFlag = false;
 			PrevIsBrakingNeededForRightAg = false;
+			rAgHndlrPidRegStartTime = HAL_GetTick();
 		}else
 		{
 			if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
 			{
-				SetMotorSpeeds(3.0F,-5.0F);
+				SetMotorSpeeds(-5.0F,-5.0F);
 			}
 			else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 			{
-				SetMotorSpeeds(-5.0F,3.0F);
+				SetMotorSpeeds(-5.0F,-5.0F);
 			}
 		}
 	}
@@ -664,7 +676,7 @@ void HandleRightAngle(void)
 		static float R_AgDrivPid_P,R_AgDrivPid_D;
 		static float PidR_AgDrivResult;
 
-		R_AgDrivPid_P = ( ENC_GetCurrentOrientation() - expectedOrientation ); /*Tract needed rotation as error*/
+		R_AgDrivPid_P = LPE_GetPosError();
 
 		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > RightAnglePidCfgData.NVM_RightAgPrTime ){
 			R_AgDrivPid_D= R_AgDrivPid_P - PreviousPositionErrorValueR_AgDrivPid;
@@ -673,18 +685,11 @@ void HandleRightAngle(void)
 		}
 		PidR_AgDrivResult = (RightAnglePidCfgData.NVM_Kp_rAg * R_AgDrivPid_P)+(RightAnglePidCfgData.NVM_Kd_rAg * R_AgDrivPid_D);
 
-		SetMotorSpeeds(RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr-PidR_AgDrivResult,
-							RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr+PidR_AgDrivResult);
+		SetMotorSpeeds(RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr + PidR_AgDrivResult,
+							RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr - PidR_AgDrivResult);
 
-		static uint32_t RightAngleOrientationLoggingTimer= 0;
 
-		if(HAL_GetTick() - RightAngleOrientationLoggingTimer > 100)
-		{
-			RightAngleOrientationLoggingTimer = HAL_GetTick();
-			BLU_DbgMsgTransmit("RightAnglePrLogging:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
-		}
-
-		if( (fabs(ENC_GetCurrentOrientation() - expectedOrientation) < 0.1F) || (LPE_GetPosError() == 0))
+		if(HAL_GetTick() - rAgHndlrPidRegStartTime > rAgPidRegActivTime)
 		{
 			Robot_Cntrl.RightRightAngleDetectedFlag = false;
 			Robot_Cntrl.LeftRightAngleDetectedFlag = false;
@@ -808,7 +813,7 @@ void ManageRobotMovingState(void)
 		{
 			BLU_DbgMsgTransmit("LineFollower start!");
 			/*Changed from standstill to driving */
-			ENC_Init();/*re-init Encoder data*/ 
+			ENC_Init();/*re-init Encoder data*/
 			DrivingStartTime = HAL_GetTick();
 		}
 	}
@@ -827,26 +832,14 @@ void ManageRobotMovingState(void)
 		}
 	}
 	else{
+		RightAngleHandlingStartedFlag = false;
+		Robot_Cntrl.RightRightAngleDetectedFlag = false;
+		Robot_Cntrl.LeftRightAngleDetectedFlag = false;
 		// MotorsForceStop();
 	}
 
 	prevExpectedrDrivingStateBluetooth = ExpectedrDrivingStateBluetooth;
 	usrBtnForcedFollowState_prev = usrBtnForcedFollowState;
-}
-
-
-/************************************************************************************/
-#define API_FUNCTIONS
-/************************************************************************************/
-void LF_MngrInit(void) /*Line Following Menager init */
-{
-	LinePidNvmDataRead();
-	SpeedProfileNvMDataRead();
-	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
-	BLU_RegisterNvMdataUpdateInfoCallBack(SpeedProfileNvMDataRead);
-	BLU_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackRequest);
-	LPE_RegisterLineEventCallBack(LfMngr_LineEventCallBack);
-	MotorsPwmInit();
 }
 
 void CheckUserButtonState(void)
@@ -872,7 +865,7 @@ void CheckUserButtonState(void)
 		buttonStateDebounceTimer = HAL_GetTick();
 		alreadyClickHandledFlag = false;
 	}
-	
+
 }
 
 void ReportPidRegValue(void)
@@ -883,6 +876,19 @@ void ReportPidRegValue(void)
 	BLU_ReportLinePid(&LinePidRegData);
 }
 
+/************************************************************************************/
+#define API_FUNCTIONS
+/************************************************************************************/
+void LF_MngrInit(void) /*Line Following Menager init */
+{
+	LinePidNvmDataRead();
+	SpeedProfileNvMDataRead();
+	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
+	BLU_RegisterNvMdataUpdateInfoCallBack(SpeedProfileNvMDataRead);
+	BLU_RegisterManualCntrlRequestCallBack(ManualDrivingCallBackRequest);
+	LPE_RegisterLineEventCallBack(LfMngr_LineEventCallBack);
+	MotorsPwmInit();
+}
 
 void LF_MngrTask(void) /*Line Following Menager task */
 {

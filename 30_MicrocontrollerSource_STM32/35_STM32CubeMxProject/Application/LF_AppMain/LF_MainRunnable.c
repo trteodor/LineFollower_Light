@@ -12,12 +12,12 @@
 #define MEAS_ENABLE 1
 #define MEAS_DISABLE 0
 #define MEASURE_EXECUTION_TIME MEAS_DISABLE
-/*Supposdly if i did it correctly in cases when i sending few longest exeuction time has been around ~0.5ms
-* If you will send much more logs then usage RTOS or other time managment strategies may be required
+/*Supposdly if i did it correctly in cases when I was sending few debug logs longest exeuction time has been around ~0.5ms
+* If you will send much more debug logs then usage of RTOS or any other time execution managment strategy may be required
 */
 
 /** @brief LF_AppTask
-*  @details Called after power on cycle from main function (file main.c)
+*  @details Called one time after power on cycle from main function (file main.c)
 */
 void LF_AppInit(void)
 {
@@ -37,7 +37,7 @@ void LF_AppInit(void)
 /** @brief LF_AppTask
 *   @details Called continously from an infinity loop in main function (file main.c)
 */
-void LF_AppTask(void) //only one Task without any RTOS, all works fine -- for now the solution is inaf :)
+void LF_AppTask(void) //only one Task without any RTOS, all works fine -- for now this solution is inaf :)
 {
 #if MEASURE_EXECUTION_TIME == MEAS_ENABLE
 	static uint32_t ExecutionTimerLogIntervalTimer = 0U;
@@ -54,10 +54,10 @@ void LF_AppTask(void) //only one Task without any RTOS, all works fine -- for no
 		{
 			LED_MngrTask();
 			BLU_Task();
-			
+
 			LPE_Task();
 			ENC_Task();
-			
+
 			/*Highest layer Line Follower Application Task: */
 			LF_MngrTask(); /*Line Following Menager task */
 		}

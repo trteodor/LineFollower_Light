@@ -607,17 +607,14 @@ LinePosEstimatorEvent_t TryDetectRightAnglesAndCrosses(void)
 				}
 			}
 		}
-
-			
 	}
 	else
 	{
 		isOnRightRightAngleProbingFlag = false;
 		isOnLeftRightAngleProbingFlag = false;
 	}
-	
+
 	return LinePosEstimatorEvent;
-	
 }
 
 LinePostionEnum_t LinePositionEstimator(void)

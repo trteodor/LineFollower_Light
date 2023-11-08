@@ -926,7 +926,7 @@ static void ReceiveDataHandler(void)
 	    			memcpy(&rAgPidKp,                &ReceivedMessageBuff[2], sizeof(float));
 					memcpy(&rAgPidKd,                &ReceivedMessageBuff[6], sizeof(float));
 					memcpy(&rAgBaseSpd,              &ReceivedMessageBuff[10], sizeof(float));
-					memcpy(&rAgMaxYawRate,              &ReceivedMessageBuff[14], sizeof(float));
+					memcpy(&rAgMaxYawRate,           &ReceivedMessageBuff[14], sizeof(float));
 	    			memcpy(&rAgBrakeSpeedTh,         &ReceivedMessageBuff[18], sizeof(float));
 					memcpy(&rAgBrakingTime,          &ReceivedMessageBuff[22], sizeof(float));
 					memcpy(&rAgOriChange,            &ReceivedMessageBuff[26], sizeof(float));
