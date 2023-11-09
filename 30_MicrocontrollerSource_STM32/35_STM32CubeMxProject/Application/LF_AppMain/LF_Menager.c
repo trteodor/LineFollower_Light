@@ -122,7 +122,7 @@ static bool IsBrakingNeededForRightAg = false;
 
 static bool RightAngleHandlingStartedFlag = false;
 
-static const uint32_t rAgPidRegActivTime = 150;
+static const uint32_t rAgPidRegActivTime = 420;
 static uint32_t rAgHndlrPidRegStartTime = 0;
 
 /*************************************************************************/
@@ -584,16 +584,16 @@ static void MonitorVehSpdToHandleRightAg(void)
 		if(HAL_GetTick() - monitorVehSpdTimer > 10)
 		{
 			vehSpdBuffer[vehSpdBufferIterator] = currVehSpd;
-		}
-		vehSpdBufferIterator++;
-
-		for(int i=0; i<10; i++)
-		{
-			averageVehSpeed += vehSpdBuffer[i] / 10.0F;
-		}
-		if(averageVehSpeed > RightAnglePidCfgData.NVM_rAgBrakeSpeedTh)
-		{
-			IsBrakingNeededForRightAg = true;
+			vehSpdBufferIterator++;
+		
+			for(int i=0; i<10; i++)
+			{
+				averageVehSpeed += vehSpdBuffer[i] / 10.0F;
+			}
+			if(averageVehSpeed > RightAnglePidCfgData.NVM_rAgBrakeSpeedTh)
+			{
+				IsBrakingNeededForRightAg = true;
+			}
 		}
 	}
 	else
@@ -610,40 +610,22 @@ static void MonitorVehSpdToHandleRightAg(void)
 
 void HandleRightAngle(void)
 {
-	static float expectedOrientation = 0U;
 	static bool brakingFlag = false;
 	static uint32_t brakingTimer= 0U;
 	static bool PrevIsBrakingNeededForRightAg = false;
-	static uint32_t rAgHndlrPidRegStartTime = 0;
-
-	//float neededOrientationChange = 0.0F;
-
-	if(true == IsBrakingNeededForRightAg)
-	{
-		//neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChangeAfterBrake;
-	}else{
-		//neededOrientationChange = RightAnglePidCfgData.NVM_rAgOriChange;
-	}
 
 	if(false == RightAngleHandlingStartedFlag)
 	{
-		if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
-		{
-			// expectedOrientation =  ENC_GetCurrentOrientation() + neededOrientationChange;
-			BLU_DbgMsgTransmit("HandleRightAngle:  RR_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
-		}
-		else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
-		{
-			// expectedOrientation = ENC_GetCurrentOrientation() - neededOrientationChange;
-			BLU_DbgMsgTransmit("HandleRightAngle:  RL_NewExpOr: %f CurrO: %f", expectedOrientation,ENC_GetCurrentOrientation() );
-
-		}
-
 		if(IsBrakingNeededForRightAg)
 		{
 			PrevIsBrakingNeededForRightAg = IsBrakingNeededForRightAg;
 			brakingFlag = true;
 			brakingTimer = HAL_GetTick();
+		}
+		else
+		{
+			brakingFlag = false;
+			rAgHndlrPidRegStartTime = HAL_GetTick();
 		}
 		RightAngleHandlingStartedFlag = true;
 	}
@@ -657,14 +639,12 @@ void HandleRightAngle(void)
 			brakingFlag = false;
 			PrevIsBrakingNeededForRightAg = false;
 			rAgHndlrPidRegStartTime = HAL_GetTick();
-		}else
-		{
-			if(true == Robot_Cntrl.RightRightAngleDetectedFlag)
-			{
+		}
+		else{
+			if(true == Robot_Cntrl.RightRightAngleDetectedFlag){
 				SetMotorSpeeds(-5.0F,-5.0F);
 			}
-			else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag)
-			{
+			else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag){
 				SetMotorSpeeds(-5.0F,-5.0F);
 			}
 		}
@@ -691,12 +671,12 @@ void HandleRightAngle(void)
 							RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr - PidR_AgDrivResult);
 
 
-		if(HAL_GetTick() - rAgHndlrPidRegStartTime > rAgPidRegActivTime)
-		{
-			Robot_Cntrl.RightRightAngleDetectedFlag = false;
-			Robot_Cntrl.LeftRightAngleDetectedFlag = false;
-			RightAngleHandlingStartedFlag = false;
-		}
+		// if(HAL_GetTick() - rAgHndlrPidRegStartTime > rAgPidRegActivTime)
+		// {
+		// 	Robot_Cntrl.RightRightAngleDetectedFlag = false;
+		// 	Robot_Cntrl.LeftRightAngleDetectedFlag = false;
+		// 	RightAngleHandlingStartedFlag = false;
+		// }
 	}
 }
 
@@ -873,6 +853,16 @@ void NewBluetoothFollowingExpectedSt(bool isExpectedFollowing)
 	RobotLineFollowingState = isExpectedFollowing;
 }
 
+void VehOnAtStrightLineInfoCbLpe(void)
+{
+	if(true == Robot_Cntrl.RightRightAngleDetectedFlag || true == Robot_Cntrl.LeftRightAngleDetectedFlag)
+	{
+		Robot_Cntrl.RightRightAngleDetectedFlag = false; 
+		Robot_Cntrl.LeftRightAngleDetectedFlag = false;
+		RightAngleHandlingStartedFlag = false;
+	}
+}
+
 /************************************************************************************/
 #define API_FUNCTIONS
 /************************************************************************************/
@@ -880,6 +870,7 @@ void LF_MngrInit(void) /*Line Following Menager init */
 {
 	IR_RegisterEventCommandCb(IrRecEventCb);
 	BLU_RegisterEventCbNewDrivStateExpctd(NewBluetoothFollowingExpectedSt);
+	LPE_RegisterDrivingAtStrightLineCallBack(VehOnAtStrightLineInfoCbLpe);
 	LinePidNvmDataRead();
 	SpeedProfileNvMDataRead();
 	BLU_RegisterNvMdataUpdateInfoCallBack(LinePidNvmDataRead);
