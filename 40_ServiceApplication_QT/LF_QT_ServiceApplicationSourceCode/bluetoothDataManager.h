@@ -155,7 +155,7 @@ signals:
     void BluDatMngrSignal_UpdateRgAngleHndlrData( float rAgPidKp, float rAgPidKd,
                                                  float rAgBaseSpd, float rAgMaxYawRate,
                                                  float rAgBrakeSpeedTh, float rAgBrakingTime,
-                                                 float rAgOriChange, float rAgOriChangeAfterBrake,
+                                                 float StrghtLineMinLght, float StrghtLineMaxYawRate,
                                                  uint32_t rAgProbeTime);
 
     void BluDatMngrSignal_UpdateVehCfgData(float ExpectedAvSpd,uint32_t BlinkLedSt, uint32_t TryDetEndLin,uint32_t IrSensorIsEnabled);

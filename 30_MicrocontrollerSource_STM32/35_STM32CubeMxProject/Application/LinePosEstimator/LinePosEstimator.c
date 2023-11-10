@@ -21,13 +21,11 @@
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 4
 #define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.05F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
 
-
-#define LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT  0.10 //m
-
 #define LINE_NOT_DETECTED_MAGIC_NUMBER        999
 #define LINE_DETECTED_ADC_VALUE               3000
 #define LINE_SENSOR_DATA_COUNT 				  12
 
+#define LF_DRIV_SRIGHT_MEAS_PERIOD_MS         20
 
 /**********************************************************************/
 /**********************************************************************/
@@ -54,6 +52,9 @@ typedef struct
 }LineEstimatorDesc_t;
 
 static LineEstimatorDesc_t LineEstimator;
+
+float NVM_StrghtLineMinLght;
+float NVM_StrghtLineMaxYawRate;
 
 static void (*LineEventCorruptedCallBack_p)(LinePosEstimatorEvent_t LinePosEstEv);
 static void (*DrivingAtStrightLineCallBack_p)(void);
@@ -159,11 +160,18 @@ static void GetTypeOfThemeFromNvm(void)
 	EE_ReadVariableU32(EE_NvmAddr_BlackThemeFlag_U32,(uint32_t *)&LineEstimator.isThemeBlackFlag);
 }
 
+static void GetStrghtLineParams(void)
+{
+	EE_ReadVariableF32(EE_NvmAddr_StrghtLineMinLght_F32,&NVM_StrghtLineMinLght);
+	EE_ReadVariableF32(EE_NvmAddr_StrghtLineMaxYawRate_F32,&NVM_StrghtLineMaxYawRate);
+}
+
 /**********************************************************************/
 static void BleUpdateNvmDataCallBack(void)
 {
 	GetErrorWeightsFromNvm();
 	GetTypeOfThemeFromNvm();
+	GetStrghtLineParams();
 }
 /**********************************************************************/
 
@@ -402,8 +410,8 @@ static float EstimatePositionError(void)
 
 
 
-#define LF_DRIVING_STRIGHT_YAW_RATE_VALUE     1.4
-#define LF_DRIV_SRIGHT_MEAS_PERIOD_MS         20
+
+
 
 /** @brief TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPosValue)
 * @details 
@@ -436,7 +444,7 @@ void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPos
 	if( ( (HAL_GetTick() - MesaureTimerPeriod) > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) 
 								&& (HAL_GetTick() - LastTimeOfBigError > LF_DRIV_SRIGHT_MEAS_PERIOD_MS) )
 	{
-		if(fabs(yawRateValue) < fabs(LF_DRIVING_STRIGHT_YAW_RATE_VALUE) )
+		if(fabs(yawRateValue) < fabs(NVM_StrghtLineMaxYawRate) )
 		{
 			if(PreviousStateIsStrightLine == false)
 			{
@@ -447,7 +455,8 @@ void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPos
 				LogStrightLineTimer = HAL_GetTick();
 			}
 		}
-		else{
+		else
+		{
 			if(PreviousStateIsStrightLine == true)
 			{
 				DetectedDrivAtStrightLineCommitedFlag = false;
@@ -462,13 +471,13 @@ void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPos
 	if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
 	{
 		DetectedDrivAtStrightLineCommitedFlag = false;
-		if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT)
+		if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > NVM_StrghtLineMinLght)
 		{
 			BLU_DbgMsgTransmit("Leaving StrightLine: TrvDSt: %.3f, TrvDend:%.3f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
 		}
 	}
 
-	if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT )  //m
+	if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > NVM_StrghtLineMinLght )  //m
 			&& (CurrentStateIsStrightLine == true) && (PreviousStateIsStrightLine == true)
 			&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
 	{
@@ -478,7 +487,7 @@ void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPos
 			if(DrivingAtStrightLineCallBack_p != NULL){
 				DrivingAtStrightLineCallBack_p();
 			}
-			BLU_DbgMsgTransmit("VehAtStrightLine: AtLeastBy: %f[m]",LINE_MINIMUM_DET_STRIGHT_LINE_LENGHT);
+			BLU_DbgMsgTransmit("VehAtStrightLine: AtLeastBy: %f[m]",NVM_StrghtLineMinLght);
 			DetectedDrivAtStrightLineCommitedFlag = true;
 		}
 

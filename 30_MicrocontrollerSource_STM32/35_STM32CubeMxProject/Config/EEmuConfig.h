@@ -42,10 +42,10 @@ typedef enum
 	EE_NvmAddr_RightAgMaxYawRate_F32,
     EE_NvmAddr_RightAgBrakeSpeedTh_F32,
     EE_NvmAddr_RightAgBrakingTime_F32,
-	EE_NvmAddr_BlindAddresDueToWeirdError, /*Page size max write size? Generally I won't waste time on that...*/
-    EE_NvmAddr_RightAgOriChange_F32,
-    EE_NvmAddr_RightAgOriChangeAfterBrake_F32,
+	EE_NvmAddr_BlindAddresDueToWeirdError, /*Weird error, page size max write size? Generally I won't waste time on that...*/
 	EE_NvmAddr_PrTimRghtAgPid_U32,
+	EE_NvmAddr_StrghtLineMinLght_F32,
+    EE_NvmAddr_StrghtLineMaxYawRate_F32,
 
 	EE_NvmAddr_ExpectedMotorSpdValue_F32,
 	EE_NvmAddr_BlinkLadeState_U32,

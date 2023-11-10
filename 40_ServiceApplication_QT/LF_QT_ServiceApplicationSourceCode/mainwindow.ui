@@ -589,7 +589,7 @@
    <property name="minimumSize">
     <size>
      <width>195</width>
-     <height>465</height>
+     <height>676</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -648,6 +648,33 @@
        </item>
       </layout>
      </item>
+     <item row="4" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_18">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Line Follower Robot:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
      <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <property name="spacing">
@@ -669,38 +696,18 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QCheckBox" name="BLU_AutoConnCheckBox">
-         <property name="text">
-          <string>LookFor:</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="BLU_AutoConnDevNameL">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>1</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="sizeIncrement">
-          <size>
-           <width>1</width>
-           <height>1</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>ANDRZEJ</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <item row="11" column="0">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>5</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item row="3" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_19">
@@ -719,33 +726,6 @@
        </item>
        <item>
         <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item row="4" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_18">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Line Follower Robot:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -828,12 +808,91 @@ color: rgb(255, 255, 255);</string>
        </item>
       </layout>
      </item>
+     <item row="8" column="0">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>5</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>LfDataLoggingStateChange:</string>
        </property>
       </widget>
+     </item>
+     <item row="9" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_21">
+       <item>
+        <widget class="QPushButton" name="UpdateNvM_Button">
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>UpdateNvM</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="ReadNvM_Button">
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>ReadNvM</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QCheckBox" name="BLU_AutoConnCheckBox">
+         <property name="text">
+          <string>LookFor:</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="BLU_AutoConnDevNameL">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="sizeIncrement">
+          <size>
+           <width>1</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>ANDRZEJ</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="7" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -876,52 +935,6 @@ color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string>Simulator</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="8" column="0">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>5</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="9" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_21">
-       <item>
-        <widget class="QPushButton" name="UpdateNvM_Button">
-         <property name="maximumSize">
-          <size>
-           <width>70</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>UpdateNvM</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="ReadNvM_Button">
-         <property name="maximumSize">
-          <size>
-           <width>70</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>ReadNvM</string>
          </property>
         </widget>
        </item>
@@ -1003,23 +1016,298 @@ color: rgb(255, 255, 255);</string>
          <property name="spacing">
           <number>0</number>
          </property>
-         <item row="6" column="0" colspan="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_16">
+         <item row="10" column="0" colspan="2">
+          <layout class="QGridLayout" name="gridLayout_6">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_22">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>rAgBaseSpd</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightAgBaseSpd">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>m/s</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_23">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_9">
+               <property name="maximumSize">
+                <size>
+                 <width>45</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>rAg: Kp:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightAgKp">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_10">
+               <property name="maximumSize">
+                <size>
+                 <width>20</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Kd:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightAgKd">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_24">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>rAgProbeTim:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightAgPrTim">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_14">
+               <property name="text">
+                <string>ms</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_25">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>rAgMaxYr:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightAgMaxYr">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_15">
+               <property name="text">
+                <string>rad/s</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="4" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_26">
+             <item>
+              <widget class="QLabel" name="label_16">
+               <property name="text">
+                <string>rAgBrThr</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightBrThr">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_17">
+               <property name="text">
+                <string>m/s</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="5" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_29">
+             <item>
+              <widget class="QLabel" name="label_18">
+               <property name="text">
+                <string>rAgBrTim:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textRightBrTim">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_19">
+               <property name="text">
+                <string>ms</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="6" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_28">
+             <item>
+              <widget class="QLabel" name="label_20">
+               <property name="text">
+                <string>strghtLinMinLght</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textStrghtLineMinLght">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_23">
+               <property name="text">
+                <string>m</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="7" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_27">
+             <item>
+              <widget class="QLabel" name="label_21">
+               <property name="text">
+                <string>strghtL_MaxYr</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="textStrghtLineMaxYawRate">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_22">
+               <property name="text">
+                <string>rad/s</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item row="7" column="0" colspan="2">
+          <widget class="QCheckBox" name="ThemeBlackTypeCheckBox">
+           <property name="text">
+            <string>ThemeBlackType</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="2">
+          <layout class="QHBoxLayout" name="horizontalLayout_15">
+           <property name="spacing">
+            <number>0</number>
+           </property>
            <item>
-            <widget class="QLabel" name="ProbeTimeLabel">
-             <property name="minimumSize">
+            <widget class="QLabel" name="ExpectedAvSpdLabel">
+             <property name="maximumSize">
               <size>
-               <width>0</width>
-               <height>0</height>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
-              <string>ProbeTime:</string>
+              <string>ExpectedAvSpd:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="ProbeTimeText">
+            <widget class="QLineEdit" name="ExpectedAvSpdText">
              <property name="maximumSize">
               <size>
                <width>40</width>
@@ -1029,19 +1317,39 @@ color: rgb(255, 255, 255);</string>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="ProbeTime_m_Per_sInfo">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QLabel" name="mPer_s_InfoLabel">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
              </property>
              <property name="text">
-              <string>ms</string>
+              <string>m/s</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="UpdateExpectedAvSpd">
+             <property name="maximumSize">
+              <size>
+               <width>35</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Updt</string>
              </property>
             </widget>
            </item>
           </layout>
+         </item>
+         <item row="8" column="0">
+          <widget class="QCheckBox" name="BlinkingLedsStateCheckBox">
+           <property name="text">
+            <string>BlinkLeds</string>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0" colspan="2">
           <layout class="QHBoxLayout" name="horizontalLayout_14">
@@ -1141,13 +1449,6 @@ color: rgb(255, 255, 255);</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="0" colspan="2">
-          <widget class="QCheckBox" name="ThemeBlackTypeCheckBox">
-           <property name="text">
-            <string>ThemeBlackType</string>
-           </property>
-          </widget>
-         </item>
          <item row="4" column="0" colspan="2">
           <widget class="QLabel" name="PidPositionRegCfgLabel">
            <property name="text">
@@ -1155,137 +1456,87 @@ color: rgb(255, 255, 255);</string>
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
-          <widget class="QCheckBox" name="BlinkingLedsStateCheckBox">
-           <property name="text">
-            <string>BlinkLeds</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item row="6" column="0" colspan="2">
+          <layout class="QHBoxLayout" name="horizontalLayout_16">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QLabel" name="ErrW7_Label">
-               <property name="maximumSize">
-                <size>
-                 <width>60</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Err7:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="ErrW8_Label">
-               <property name="text">
-                <string>Err8:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="ErrW9_Label">
-               <property name="text">
-                <string>Err9:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="ErrW10_Label">
-               <property name="text">
-                <string>Err10:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="ErrW11_Label">
-               <property name="text">
-                <string>Err11:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="ErrWM_Label">
-               <property name="text">
-                <string>ErrM:</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QLabel" name="ProbeTimeLabel">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>ProbeTime:</string>
+             </property>
+            </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <property name="spacing">
-              <number>3</number>
+            <widget class="QLineEdit" name="ProbeTimeText">
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>16777215</height>
+              </size>
              </property>
-             <item>
-              <widget class="QLineEdit" name="ErrW7_Text">
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="ErrW8_Text">
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="ErrW9_Text">
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="ErrW10_Text">
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="ErrW11_Text">
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="ErrWM_Text">
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="ProbeTime_m_Per_sInfo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>ms</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
-         <item row="10" column="0">
+         <item row="8" column="1">
+          <widget class="QCheckBox" name="IrSensorCheckBox">
+           <property name="text">
+            <string>IrSensor</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0" colspan="2">
+          <widget class="QLabel" name="label_26">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>RightAgHandlrRelParams:</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="NvmCfg2">
+        <attribute name="title">
+         <string>Cfg2</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0" colspan="2">
+          <widget class="QLabel" name="label_24">
+           <property name="text">
+            <string>PossitionErrorWeigths:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_13">
            <property name="spacing">
             <number>6</number>
@@ -1411,429 +1662,218 @@ color: rgb(255, 255, 255);</string>
            </item>
           </layout>
          </item>
+         <item row="1" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="ErrW7_Label">
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Err7:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ErrW8_Label">
+               <property name="text">
+                <string>Err8:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ErrW9_Label">
+               <property name="text">
+                <string>Err9:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ErrW10_Label">
+               <property name="text">
+                <string>Err10:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ErrW11_Label">
+               <property name="text">
+                <string>Err11:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ErrWM_Label">
+               <property name="text">
+                <string>ErrM:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="spacing">
+              <number>3</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="ErrW7_Text">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ErrW8_Text">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ErrW9_Text">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ErrW10_Text">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ErrW11_Text">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ErrWM_Text">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QLabel" name="label_25">
+           <property name="text">
+            <string>MotorsFactors:</string>
+           </property>
+          </widget>
+         </item>
          <item row="3" column="0" colspan="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <layout class="QHBoxLayout" name="horizontalLayout_20">
            <property name="spacing">
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="ExpectedAvSpdLabel">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="spacing">
+              <number>0</number>
              </property>
-             <property name="text">
-              <string>ExpectedAvSpd:</string>
-             </property>
-            </widget>
+             <item>
+              <widget class="QLabel" name="LabOneImpDist">
+               <property name="text">
+                <string>OneImpDist</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="LabWheelBase">
+               <property name="text">
+                <string>WheelBase</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="LabPwmToSpAFacL">
+               <property name="text">
+                <string>PwmToSpAfL</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="LabPwmToSpAFacR">
+               <property name="text">
+                <string>PwmToSpAfR</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="LabPwmToSpBFacL">
+               <property name="text">
+                <string>PwmToSpBfL</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="LabPwmToSpBFacR">
+               <property name="text">
+                <string>PwmToSpBfR</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
-            <widget class="QLineEdit" name="ExpectedAvSpdText">
-             <property name="maximumSize">
-              <size>
-               <width>40</width>
-               <height>16777215</height>
-              </size>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <property name="spacing">
+              <number>0</number>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="mPer_s_InfoLabel">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>m/s</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="UpdateExpectedAvSpd">
-             <property name="maximumSize">
-              <size>
-               <width>35</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Updt</string>
-             </property>
-            </widget>
+             <item>
+              <widget class="QLineEdit" name="TextOneImpDist"/>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="TextWheelBase"/>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="TextPwmToSpAFacL"/>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="TextPwmToSpAFacR"/>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="TextPwmToSpBFacL"/>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="TextPwmToSpBFacR"/>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>
-         <item row="9" column="0" colspan="2">
-          <widget class="QLabel" name="label_24">
-           <property name="text">
-            <string>PossitionErrorWeigths:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QCheckBox" name="IrSensorCheckBox">
-           <property name="text">
-            <string>IrSensor</string>
-           </property>
-          </widget>
-         </item>
         </layout>
-       </widget>
-       <widget class="QWidget" name="NvmCfg2">
-        <attribute name="title">
-         <string>Cfg2</string>
-        </attribute>
-        <widget class="QWidget" name="layoutWidget_lab24">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>200</y>
-           <width>155</width>
-           <height>111</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_20">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="LabOneImpDist">
-              <property name="text">
-               <string>OneImpDist</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="LabWheelBase">
-              <property name="text">
-               <string>WheelBase</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="LabPwmToSpAFacL">
-              <property name="text">
-               <string>PwmToSpAfL</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="LabPwmToSpAFacR">
-              <property name="text">
-               <string>PwmToSpAfR</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="LabPwmToSpBFacL">
-              <property name="text">
-               <string>PwmToSpBfL</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="LabPwmToSpBFacR">
-              <property name="text">
-               <string>PwmToSpBfR</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLineEdit" name="TextOneImpDist"/>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="TextWheelBase"/>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="TextPwmToSpAFacL"/>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="TextPwmToSpAFacR"/>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="TextPwmToSpBFacL"/>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="TextPwmToSpBFacR"/>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="layoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>1</y>
-           <width>161</width>
-           <height>161</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_6">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_22">
-            <property name="spacing">
-             <number>4</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>rAgBaseSpd</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightAgBaseSpd">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_13">
-              <property name="text">
-               <string>m/s</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_23">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_9">
-              <property name="maximumSize">
-               <size>
-                <width>45</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>rAg: Kp:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightAgKp">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_10">
-              <property name="maximumSize">
-               <size>
-                <width>20</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Kd:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightAgKd">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_24">
-            <property name="spacing">
-             <number>4</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>rAgProbeTim:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightAgPrTim">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_14">
-              <property name="text">
-               <string>ms</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="3" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_25">
-            <property name="spacing">
-             <number>4</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>rAgMaxYr:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightAgMaxYr">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_15">
-              <property name="text">
-               <string>rad/s</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_26">
-            <item>
-             <widget class="QLabel" name="label_16">
-              <property name="text">
-               <string>rAgBrThr</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightBrThr"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_17">
-              <property name="text">
-               <string>m/s</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="5" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_29">
-            <item>
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>rAgBrTim:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightBrTim"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>ms</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="6" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_28">
-            <item>
-             <widget class="QLabel" name="label_20">
-              <property name="text">
-               <string>rAgOriCh:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightOriCh"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>rad</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="7" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_27">
-            <item>
-             <widget class="QLabel" name="label_21">
-              <property name="text">
-               <string>rAgOriChAftBr:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="textRightOriChAftBr"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_22">
-              <property name="text">
-               <string>rad</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QLabel" name="label_25">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>180</y>
-           <width>101</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>MotorsFactors:</string>
-         </property>
-        </widget>
        </widget>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
@@ -2059,19 +2099,6 @@ color: rgb(255, 255, 255);</string>
        </widget>
       </widget>
      </item>
-     <item row="11" column="0">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>5</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -2228,7 +2255,7 @@ color: rgb(255, 255, 255);</string>
    <property name="minimumSize">
     <size>
      <width>500</width>
-     <height>167</height>
+     <height>405</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -2263,44 +2290,6 @@ color: rgb(255, 255, 255);</string>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_8">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="2">
-      <widget class="QRadioButton" name="DebugTable_DisableBaseDataLogging">
-       <property name="text">
-        <string>Disable</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="ClearLoggerButton">
-       <property name="text">
-        <string>ClearLogger</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_8">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="BaseDataLoggingInfoLabel">
-       <property name="text">
-        <string>PlotDataLogging:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton_7">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1">
       <widget class="QRadioButton" name="EnableBaseDataLogging">
        <property name="text">
@@ -2308,6 +2297,13 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="checked">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="3">
+      <widget class="QLabel" name="Label_CommunicationStat">
+       <property name="text">
+        <string>CommunicationStatistics</string>
        </property>
       </widget>
      </item>
@@ -2370,10 +2366,41 @@ color: rgb(255, 255, 255);</string>
        </column>
       </widget>
      </item>
-     <item row="3" column="0" colspan="3">
-      <widget class="QLabel" name="Label_CommunicationStat">
+     <item row="1" column="0">
+      <widget class="QLabel" name="BaseDataLoggingInfoLabel">
        <property name="text">
-        <string>CommunicationStatistics</string>
+        <string>PlotDataLogging:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton_7">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="ClearLoggerButton">
+       <property name="text">
+        <string>ClearLogger</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton_8">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QRadioButton" name="DebugTable_DisableBaseDataLogging">
+       <property name="text">
+        <string>Disable</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

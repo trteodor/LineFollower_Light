@@ -83,11 +83,9 @@ typedef struct RightAnglePid_Tag{
 	float NVM_RightAgBaseSpdHndlr;
 	float NVM_Kp_rAg;
 	float NVM_Kd_rAg;
-	float NVM_RightAgMaxYawRate;
+	float NVM_RightAgMaxYawRate; //Currently not used - I had an idea to use it as a maxTeoretical value for Pid Regular dedicated for the rAg handlers
     float NVM_rAgBrakeSpeedTh;
     uint32_t NVM_rAgBrakingTime;
-    float NVM_rAgOriChange;
-    float NVM_rAgOriChangeAfterBrake;
 }RightAnglePid_t;
 
 typedef struct SpeedProfiler_Tag
@@ -115,15 +113,9 @@ static SpeedProfiler_t SpeedProfilerData;
 
 static UsrBtnReq_t UsrBtnReqState = BTN_UNKNOWN;
 
-
 static bool RobotLineFollowingState = false;
-
 static bool IsBrakingNeededForRightAg = false;
-
 static bool RightAngleHandlingStartedFlag = false;
-
-static const uint32_t rAgPidRegActivTime = 420;
-static uint32_t rAgHndlrPidRegStartTime = 0;
 
 /*************************************************************************/
 /*Prototypes*/
@@ -156,8 +148,6 @@ static void LinePidNvmDataRead(void)
 	float brakingTimeFloat;
 	EE_ReadVariableF32(EE_NvmAddr_RightAgBrakingTime_F32,&brakingTimeFloat);
 	RightAnglePidCfgData.NVM_rAgBrakingTime = brakingTimeFloat; /* I'm lazy :) */
-	EE_ReadVariableF32(EE_NvmAddr_RightAgOriChange_F32,&RightAnglePidCfgData.NVM_rAgOriChange);
-	EE_ReadVariableF32(EE_NvmAddr_RightAgOriChangeAfterBrake_F32,&RightAnglePidCfgData.NVM_rAgOriChangeAfterBrake);
 	EE_ReadVariableU32(EE_NvmAddr_PrTimRghtAgPid_U32,&RightAnglePidCfgData.NVM_RightAgPrTime);
 }
 
@@ -269,7 +259,7 @@ static void ComputeLinePidVal(void)
 {
 		static uint32_t SavedTime_PID_Reg;
 		static float PreviousPositionErrorValue;
-		
+
 		LinePid.P = LinePid.input_PositionError;
 
 		if( (HAL_GetTick() - SavedTime_PID_Reg) > LinePid.DerivativeTime ){
@@ -334,7 +324,6 @@ static void ComputeExpectedPwmValues(void)
 	else if(LinePid.ComputedLeftWhPwmVal < -MaxPWMValue){
 		LinePid.ComputedLeftWhPwmVal = -MaxPWMValue;
 	}
-	
 	if(LinePid.ComputedRightWhPwmVal > MaxPWMValue){
 		LinePid.ComputedRightWhPwmVal = MaxPWMValue;
 	}
@@ -559,12 +548,6 @@ void LfMngr_LineEventCallBack(LinePosEstimatorEvent_t LinePosEstEv)
 		BLU_DbgMsgTransmit("Left || RightAngleDetected TrvD: %.3f",ENC_GetTravelledDistance() );
 		Robot_Cntrl.LeftRightAngleDetectedFlag = true;
 	}
-
-	if(RightAngleHandlingStartedFlag == true)
-	{
-		rAgHndlrPidRegStartTime = HAL_GetTick();
-	}
-
 }
 
 static void MonitorVehSpdToHandleRightAg(void)
@@ -625,7 +608,6 @@ void HandleRightAngle(void)
 		else
 		{
 			brakingFlag = false;
-			rAgHndlrPidRegStartTime = HAL_GetTick();
 		}
 		RightAngleHandlingStartedFlag = true;
 	}
@@ -638,7 +620,6 @@ void HandleRightAngle(void)
 		{
 			brakingFlag = false;
 			PrevIsBrakingNeededForRightAg = false;
-			rAgHndlrPidRegStartTime = HAL_GetTick();
 		}
 		else{
 			if(true == Robot_Cntrl.RightRightAngleDetectedFlag){
@@ -669,15 +650,15 @@ void HandleRightAngle(void)
 
 		SetMotorSpeeds(RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr + PidR_AgDrivResult,
 							RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr - PidR_AgDrivResult);
-
-
-		// if(HAL_GetTick() - rAgHndlrPidRegStartTime > rAgPidRegActivTime)
-		// {
-		// 	Robot_Cntrl.RightRightAngleDetectedFlag = false;
-		// 	Robot_Cntrl.LeftRightAngleDetectedFlag = false;
-		// 	RightAngleHandlingStartedFlag = false;
-		// }
 	}
+
+	// static bool IgnoreRgPid = false;
+	// if(IgnoreRgPid)
+	// {
+	// 	Robot_Cntrl.RightRightAngleDetectedFlag = false; 
+	// 	Robot_Cntrl.LeftRightAngleDetectedFlag = false;
+	// 	RightAngleHandlingStartedFlag = false;
+	// }
 }
 
 void userRequestManualMoveHandler(void)
@@ -857,7 +838,7 @@ void VehOnAtStrightLineInfoCbLpe(void)
 {
 	if(true == Robot_Cntrl.RightRightAngleDetectedFlag || true == Robot_Cntrl.LeftRightAngleDetectedFlag)
 	{
-		Robot_Cntrl.RightRightAngleDetectedFlag = false; 
+		Robot_Cntrl.RightRightAngleDetectedFlag = false;
 		Robot_Cntrl.LeftRightAngleDetectedFlag = false;
 		RightAngleHandlingStartedFlag = false;
 	}
