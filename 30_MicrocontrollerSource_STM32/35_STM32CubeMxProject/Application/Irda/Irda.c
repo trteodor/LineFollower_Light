@@ -3,9 +3,12 @@
 #include "RC5_TSOP2236.h"
 #include "Irda.h"
 #include "BluetoothClassicComm.h"
+#include "EEmu.h"
 
 #define IR_PIONEER_PILOT_ROBOT_START_COMMAND 0xA15E
 #define IR_PIONEER_PILOT_ROBOT_STOP_COMMAND 0x32CC
+
+static bool isIrSensorEnabled = false;
 
 static RC5Struct TSOP2236;
 
@@ -27,7 +30,7 @@ void HW_IR_TIM_100usElapsed(void)
 
 void IrDataReceivedCb(uint32_t RecData)
 {
-    if(IrRecCommandEventCb != NULL)
+    if(IrRecCommandEventCb != NULL && true == isIrSensorEnabled)
     {
         switch(RecData)
         {
@@ -54,9 +57,16 @@ void IR_RegisterEventCommandCb(void IrRecEventCb(IrCommands_t IrCommand))
     IrRecCommandEventCb = IrRecEventCb;
 }
 
+void IrSensorEnabledReadNvmData(void)
+{
+    EE_ReadVariableU32(EE_NvmAddr_IrSensorState_U32, (uint32_t *)&isIrSensorEnabled);
+}
+
 void IR_Init(void)
 {
     RC5_INIT(&TSOP2236);
+    BLU_RegisterNvMdataUpdateInfoCallBack(IrSensorEnabledReadNvmData);
+    IrSensorEnabledReadNvmData();
     RC5_RegisterCallBackNewMessage(IrDataReceivedCb);
 }
 

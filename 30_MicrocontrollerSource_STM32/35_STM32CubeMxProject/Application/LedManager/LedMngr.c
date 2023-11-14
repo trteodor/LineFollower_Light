@@ -7,6 +7,7 @@
 static uint32_t QuickBlinksCounter = 0;
 
 
+
 typedef enum
 {
 	LED_Idle,
