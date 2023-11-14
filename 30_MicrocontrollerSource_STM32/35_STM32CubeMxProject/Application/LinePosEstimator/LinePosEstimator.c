@@ -19,7 +19,7 @@
 #define LINE_EVENT_CONFIRMATION_MAGIC_VALUE_MS 2 //TODO:(explanation) (10 / 2.0m/s = 5ms )
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_RIGHT_ANGLE 5
 #define LINE_EVENT_MINIMUM_SENSOR_COUNT_CROSS 4
-#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.05F //TODO: 0.05 [m](at least 5cm per one event In my judgement)
+#define LINE_MINIMUM_ONE_EVENT_DIFF_DIST 0.10F //TODO: 0.10 [m](at least 5cm per one event In my judgement)
 
 #define LINE_NOT_DETECTED_MAGIC_NUMBER        999
 #define LINE_DETECTED_ADC_VALUE               3000
@@ -471,7 +471,7 @@ void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPos
 	if( (PreviousStateIsStrightLine == true) && (CurrentStateIsStrightLine == false) )
 	{
 		DetectedDrivAtStrightLineCommitedFlag = false;
-		if( fabs(DistanceStrightLineYrEnd - DistanceStrightLineYrStart) > NVM_StrghtLineMinLght)
+		if( (DistanceStrightLineYrStart - ENC_GetTravelledDistance()) > NVM_StrghtLineMinLght)
 		{
 			BLU_DbgMsgTransmit("Leaving StrightLine: TrvDSt: %.3f, TrvDend:%.3f",DistanceStrightLineYrStart ,DistanceStrightLineYrEnd );
 		}
@@ -479,7 +479,7 @@ void TryDetectStrigthLine(LinePosEstimatorEvent_t LinePosEstEv, float CurrErrPos
 
 	if( ( ( fabs( ENC_GetTravelledDistance() - DistanceStrightLineYrStart) ) > NVM_StrghtLineMinLght )  //m
 			&& (CurrentStateIsStrightLine == true) && (PreviousStateIsStrightLine == true)
-			&& (fabs( ENC_GetVehicleSpeed() ) > 0.2F) ) //m/s
+			&& (fabs( ENC_GetVehicleSpeed() ) > 0.4F) ) //m/s
 	{
 		/*Veh driving at stright line*/
 		if(false == DetectedDrivAtStrightLineCommitedFlag)
@@ -540,7 +540,7 @@ LinePosEstimatorEvent_t TryDetectRightAnglesAndCrosses(void)
 	static uint32_t lastEventDetectedTimer = 0;
 
 
-	for(int i=LeftMax; i<MidL; i++)
+	for(int i=LeftMax; i<=MidL; i++)
 	{
 		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
 		{
@@ -548,7 +548,7 @@ LinePosEstimatorEvent_t TryDetectRightAnglesAndCrosses(void)
 		}
 	}
 
-	for(int i=RightMax; i>MidR; i--)
+	for(int i=RightMax; i>=MidR; i--)
 	{
 		if(LineEstimator.LineSensorsADCVal[i] > LINE_DETECTED_ADC_VALUE)
 		{

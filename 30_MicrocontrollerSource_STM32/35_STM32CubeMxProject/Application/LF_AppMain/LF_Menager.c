@@ -117,6 +117,14 @@ static bool RobotLineFollowingState = false;
 static bool IsBrakingNeededForRightAg = false;
 static bool RightAngleHandlingStartedFlag = false;
 
+
+/*Use dedicated PID regulator to handle the right angle*/
+static uint32_t SavedTimeR_AgDriv_PID=0;
+static float PreviousPositionErrorValueR_AgDrivPid=0;
+static float R_AgDrivPid_P,R_AgDrivPid_D;
+static float PidR_AgDrivResult;
+
+
 /*************************************************************************/
 /*Prototypes*/
 static void MotorsPwmInit(void);
@@ -363,8 +371,8 @@ static void SetMotorSpeeds(float MotSpeedLeft, float MotSpeedRight)
 	float ExpectedPresetSpeed_LeftMotor=  MotSpeedLeft;
 	float ExpectedPresetSpeed_RightMotor= MotSpeedRight;
 
-	CompensateBatteryDischarge(&ExpectedPresetSpeed_LeftMotor,&ExpectedPresetSpeed_RightMotor);
-
+	//CompensateBatteryDischarge(&ExpectedPresetSpeed_LeftMotor,&ExpectedPresetSpeed_RightMotor);
+	
 	int L_ComputedLeftWhPwmVal=   (LinePid.NVM_MotAFacPwmToSpdLeft* ExpectedPresetSpeed_LeftMotor )+LinePid.NVM_MotBFacPwmToSpdLeft;
 	int L_ComputedRightWhPwmVal=  (LinePid.NVM_MotAFacPwmToSpdRight*ExpectedPresetSpeed_RightMotor )+LinePid.NVM_MotBFacPwmToSpdRight;
 
@@ -383,14 +391,16 @@ static void SetMotorSpeeds(float MotSpeedLeft, float MotSpeedRight)
 	}
 
 
-	if(L_ComputedLeftWhPwmVal<0 && (L_ComputedRightWhPwmVal<0) ){
-		MotorBothDrivingReverse(L_ComputedLeftWhPwmVal,L_ComputedRightWhPwmVal);
+	if(L_ComputedLeftWhPwmVal<=0 && (L_ComputedRightWhPwmVal<=0) ){
+		int _L_ComputedLeftWhPwmVal = L_ComputedLeftWhPwmVal * (-1);
+		int _L_ComputedRightWhPwmVal = L_ComputedRightWhPwmVal * (-1);
+		MotorBothDrivingReverse(_L_ComputedLeftWhPwmVal,_L_ComputedRightWhPwmVal);
 	}
 	else if(L_ComputedLeftWhPwmVal <= 0){
 		int _CalculatedLeftMotorSpeed=L_ComputedLeftWhPwmVal*(-1);
 		MotorLeftDrivingReverse(_CalculatedLeftMotorSpeed, L_ComputedRightWhPwmVal);
 	}
-	else if(L_ComputedRightWhPwmVal < 0){
+	else if(L_ComputedRightWhPwmVal <= 0){
 	    int _CalculatedRightMotorSpeed=L_ComputedRightWhPwmVal*(-1);
 		MotorRightDrivingReverse(L_ComputedLeftWhPwmVal, _CalculatedRightMotorSpeed);
 	}
@@ -593,64 +603,50 @@ static void MonitorVehSpdToHandleRightAg(void)
 
 void HandleRightAngle(void)
 {
-	static bool brakingFlag = false;
 	static uint32_t brakingTimer= 0U;
-	static bool PrevIsBrakingNeededForRightAg = false;
+	static bool rgAgHndlingStartBrkNeededFlag = false;
 
 	if(false == RightAngleHandlingStartedFlag)
 	{
-		if(IsBrakingNeededForRightAg)
+		if(true == IsBrakingNeededForRightAg)
 		{
-			PrevIsBrakingNeededForRightAg = IsBrakingNeededForRightAg;
-			brakingFlag = true;
+			rgAgHndlingStartBrkNeededFlag = IsBrakingNeededForRightAg;
 			brakingTimer = HAL_GetTick();
 		}
 		else
 		{
-			brakingFlag = false;
+			rgAgHndlingStartBrkNeededFlag = false;
 		}
 		RightAngleHandlingStartedFlag = true;
 	}
 
-	if( (true == brakingFlag) &&
-		(true == RightAngleHandlingStartedFlag) &&
-		(true == PrevIsBrakingNeededForRightAg) )
+	if( (true == RightAngleHandlingStartedFlag) &&
+		(true == rgAgHndlingStartBrkNeededFlag) )
 	{
 		if(HAL_GetTick() - brakingTimer > RightAnglePidCfgData.NVM_rAgBrakingTime)
 		{
-			brakingFlag = false;
-			PrevIsBrakingNeededForRightAg = false;
+			rgAgHndlingStartBrkNeededFlag = false;
 		}
-		else{
-			if(true == Robot_Cntrl.RightRightAngleDetectedFlag){
-				SetMotorSpeeds(-5.0F,-5.0F);
-			}
-			else if(true == Robot_Cntrl.LeftRightAngleDetectedFlag){
-				SetMotorSpeeds(-5.0F,-5.0F);
-			}
+		else
+		{
+			SetMotorSpeeds(-5.0F,-5.0F);
 		}
 	}
-
-	if(true == RightAngleHandlingStartedFlag && false == brakingFlag) //
+	else if(true == RightAngleHandlingStartedFlag && false == rgAgHndlingStartBrkNeededFlag) //
 	{
-		/*Use dedicated PID regulator to handle the right angle*/
-		static uint32_t SavedTimeR_AgDriv_PID=0;
-		static float PreviousPositionErrorValueR_AgDrivPid=0;
-		static float R_AgDrivPid_P,R_AgDrivPid_D;
-		static float PidR_AgDrivResult;
+
 
 
 
 		R_AgDrivPid_P = LPE_GetPosError();
 
-		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > 100 ) 
+		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > (RightAnglePidCfgData.NVM_RightAgPrTime + 10) )
 		{
 			/*If called started after handling stright line - reset Derivtate part*/
-			SavedTimeR_AgDriv_PID = HAL_GetTick();
 			PreviousPositionErrorValueR_AgDrivPid = R_AgDrivPid_P;
-			R_AgDrivPid_D = 0;
 		}
-		else if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > RightAnglePidCfgData.NVM_RightAgPrTime )
+
+		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > RightAnglePidCfgData.NVM_RightAgPrTime )
 		{
 			R_AgDrivPid_D= R_AgDrivPid_P - PreviousPositionErrorValueR_AgDrivPid;
 			PreviousPositionErrorValueR_AgDrivPid=R_AgDrivPid_P;
@@ -660,6 +656,12 @@ void HandleRightAngle(void)
 
 		SetMotorSpeeds(RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr + PidR_AgDrivResult,
 							RightAnglePidCfgData.NVM_RightAgBaseSpdHndlr - PidR_AgDrivResult);
+	}
+	else
+	{
+		Robot_Cntrl.RightRightAngleDetectedFlag = false;
+		Robot_Cntrl.LeftRightAngleDetectedFlag = false;
+		RightAngleHandlingStartedFlag = false;
 	}
 
 	// static bool IgnoreRgPid = false;
@@ -780,6 +782,7 @@ void ManageRobotMovingState(void)
 		}
 		else
 		{
+			RightAngleHandlingStartedFlag = false;
 			SpeedProfiler();
 			SetMotorSpeedsBaseOnLinePid(); /**/
 		}
