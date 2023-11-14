@@ -639,9 +639,19 @@ void HandleRightAngle(void)
 		static float R_AgDrivPid_P,R_AgDrivPid_D;
 		static float PidR_AgDrivResult;
 
+
+
 		R_AgDrivPid_P = LPE_GetPosError();
 
-		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > RightAnglePidCfgData.NVM_RightAgPrTime ){
+		if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > 100 ) 
+		{
+			/*If called started after handling stright line - reset Derivtate part*/
+			SavedTimeR_AgDriv_PID = HAL_GetTick();
+			PreviousPositionErrorValueR_AgDrivPid = R_AgDrivPid_P;
+			R_AgDrivPid_D = 0;
+		}
+		else if( (HAL_GetTick() - SavedTimeR_AgDriv_PID) > RightAnglePidCfgData.NVM_RightAgPrTime )
+		{
 			R_AgDrivPid_D= R_AgDrivPid_P - PreviousPositionErrorValueR_AgDrivPid;
 			PreviousPositionErrorValueR_AgDrivPid=R_AgDrivPid_P;
 			SavedTimeR_AgDriv_PID=HAL_GetTick();
