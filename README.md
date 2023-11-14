@@ -1,11 +1,14 @@
 # Light Follower Light
 
-Demonstration video:
+Demonstration videos:
 
+Jsumo wheels vs solarbotics:
+https://www.youtube.com/watch?v=5hosZAXFKjE
+
+X_Challange 2023, Rzeszow:
 https://www.youtube.com/watch?v=OcwFzTCTTZQ
 
 New JSumo Tires test:
-
 https://youtu.be/Sj1vxMwn7Ys (achived average speed 1.8m/s!)
 
 Real word prototype:
