@@ -11,9 +11,9 @@ https://www.youtube.com/watch?v=OcwFzTCTTZQ
 New JSumo Tires test:
 https://youtu.be/Sj1vxMwn7Ys (achived average speed 1.8m/s!)
 
-Real word prototype:
+Real word prototypes:    ( Jsumo and Solarbotics wheels )
 
-![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/FotoIzoFront.jpg)
+![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/BothRobotsIzoView.png)
 
 Simulated assembly izometric view:
 
@@ -48,7 +48,7 @@ QT service app overview screen shot:
 
 
 Installer wizard:  (created using Inno Compiler)
-https://github.com/trteodor/LineFollower_Light/blob/master/40_ServiceApplication_QT/LF_ServiceApp_1.3_Installer.exe
+https://github.com/trteodor/LineFollower_Light/blob/master/40_ServiceApplication_QT/LF_ServiceApp_1.35_Installer.exe
 
 After installation associated "*.lfp" extension should be opened by default by LF_ServiceApp"
 
