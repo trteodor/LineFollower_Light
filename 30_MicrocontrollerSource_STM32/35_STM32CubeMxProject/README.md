@@ -1,7 +1,7 @@
 # FAST_Line_Follower_STM32H7
-* All MCU Source files was compiled using STM32CubeIDE
+* MCU Source files may be compiled using STM32CubeIDE or using makefiles
 
-* Second suggested option and recommended by me is to use "makefile" for compilation. If you are familiar with compilation process with makefiles the I suppose that you are with me with this though :) 
+* Suggested and recommended by me is usage of "makefiles" for compilation. If you are familiar with compilation process and makefiles then I suppose that you agree with me :)
 
 
 Used MCU: STM32H743VITx

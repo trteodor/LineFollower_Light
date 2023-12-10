@@ -1,7 +1,7 @@
 
-Altium Designer viewer - is free, so you could be able to open this files, and view schematic and PCB.
+Altium Designer viewer - is free, use it to view schematics and PCB.
 
-Production files are attached in the appropriate folders.
+Production files are attached in appropriate folders.
 
 Attached data is sufficient to create production files for PCB (Gerber Files) or for reverse engineering. Modifications to schematics and PCBs are also possible.
 
@@ -19,4 +19,5 @@ Some of the most important items or items not shown in the altium schematics:
 * https://kamami.pl/moduly-bluetooth/211365-modul-bluetooth-hc-06-20edr.html
 
 Currently wheels are created using tires ordered here:
-https://www.jsumo.com/js2042-silicone-wheel-without-rim-1-pair
+* https://www.jsumo.com/js2042-silicone-wheel-without-rim-1-pair
+Although, I would recommend you to start with solarbotics wheels

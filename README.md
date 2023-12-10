@@ -1,5 +1,7 @@
 # Light Follower Light
 
+⭐ Collecting stars ⭐ - If you liked this project, please leave a star here
+
 Demonstration videos:
 
 Jsumo wheels vs solarbotics:
@@ -23,9 +25,9 @@ Simulated assembly izometric view:
   * most important parts list: 10_PCB_Hardware_Altium\Readme.md
 
 
-In Embedded source code is implemented many algorithms, PID Controller is used to follow for the black line on white theme. 
+In Embedded source code is implemented many algorithms, PID Controller is used to follow for the black line on white theme.
 
-Nevertheless many things still can be done much better - Let's be honest - the prepared Control Code in my opinion is somewhere between a draft and a prototype
+Nevertheless many things still can be done better. Let's be honest - the prepared Control Code in my opinion is somewhere between a draft and a prototype
 
 # You can also check my previous Line Follower Project:
 * https://github.com/trteodor/Line_Follower_STM32H7
@@ -64,4 +66,4 @@ QT_AppIco
 * https://kcir.pwr.edu.pl/~mucha/Pracki/Rafal_Cyminski_praca_magisterska.pdf
 * https://forbot.pl/forum/topic/13552-cukiereczek/
 
-**_If you have question please open issue to this repository, or write comment under video on youtube._**
+**_If you have questions, please open an issue in this repository or comment below the YouTube video._**
