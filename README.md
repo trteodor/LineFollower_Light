@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=OcwFzTCTTZQ
 New JSumo Tires test:
 https://youtu.be/Sj1vxMwn7Ys (achived average speed 1.8m/s!)
 
-Real word prototypes:    ( Jsumo and Solarbotics wheels )
+Real world prototypes:    ( Jsumo and Solarbotics wheels )
 
 ![FristPrototypePhoto](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/BothRobotsIzoView.png)
 
@@ -28,9 +28,6 @@ Simulated assembly izometric view:
 In Embedded source code is implemented many algorithms, PID Controller is used to follow for the black line on white theme.
 
 Nevertheless many things still can be done better. Let's be honest - the prepared Control Code in my opinion is somewhere between a draft and a prototype
-
-# You can also check my previous Line Follower Project:
-* https://github.com/trteodor/Line_Follower_STM32H7
 
 # In this project:
 
