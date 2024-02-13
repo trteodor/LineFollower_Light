@@ -1,5 +1,7 @@
 # Light Follower Light
 
+**_ "Robot" which follow for a black line on a white theme _**
+
 ⭐ Collecting stars ⭐ - If you liked this project, please leave a star here
 
 Demonstration videos:
@@ -54,6 +56,10 @@ After installation associated "*.lfp" extension should be opened by default by L
 QT_AppIco
 
 ![QtAppIco](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyBackSideRightIco.png)
+
+Repository size:
+
+ ~500MB
 
 # References
 * https://github.com/trteodor/Line_Follower_STM32H7
