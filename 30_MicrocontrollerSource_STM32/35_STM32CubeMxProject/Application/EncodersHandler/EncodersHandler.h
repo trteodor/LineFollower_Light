@@ -1,3 +1,9 @@
+/*
+ * EncodersHandler.c
+ *
+ *  Created on: Jan 11, 2021
+ *      Author: Teodor
+ */
 #ifndef _Encoders_Module_H
 #define _Encoders_Module_H
 

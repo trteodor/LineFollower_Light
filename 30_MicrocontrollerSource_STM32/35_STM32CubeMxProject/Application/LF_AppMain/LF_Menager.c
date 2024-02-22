@@ -18,14 +18,11 @@
 #include "Irda.h"
 
 
-#define LF_M_PI_VAL		((float)3.14159265F)
-#define MaxPID_DerivativeTime 200
-#define MaxPWMValue 1000 //Depends on the PWM value of the timer 
-							//counter (Max Timer Count Value dk how to explain :( )
-#define CountStatesWhenLineBy4SenDetToEndLapMark 25
-#define MaxDerivativeTime 200
-#define MaxPWMValue 1000 //Depends on the PWM value of the timer counter (Max Timer Count Value dk how to explain :( )
-
+#define LF_M_PI_VAL		                           ((float)3.14159265F)
+#define MaxPID_DerivativeTime                      200
+#define MaxPWMValue                                1000
+#define CountStatesWhenLineBy4SenDetToEndLapMark   25
+#define MaxDerivativeTime                          200
 
 
 
@@ -362,7 +359,7 @@ static void SetMotorSpeedsBaseOnLinePid(void)
 /*!
  ************************************************************************************************
  * \brief SetMotorSpeed(float MotSpeedLeft, float MotSpeedRight)
- * \details -- This function sets the Pwm values of the motor based on the input of expected speed in m/s
+ * \details -- This function sets the motor driving signal(PWM) based on the input of expected speed in m/s
  * \param in MotSpeedLeft - left motor speed passed as expected m/s
  * \param in MotSpeedRight - right motor speed passed as expected m/s
  * */
@@ -469,7 +466,7 @@ static void SpeedProfiler(void)
  * \param RingBuffer_t *Buf - pointer to Ring Buffer structure
  * \param in VecXVal
  * \param in VecXVal
- * \return Returned positive value is meaning that vehicle should rotate to right to achive expected orientation
+ * \return if returned positive value mean that vehicle should rotate to right to achive expected orientation
  * */
 float estimateNeededRotation(float VecXVal, float VecYVal)
 {
@@ -882,7 +879,9 @@ void LF_MngrTask(void) /*Line Following Menager task */
 	CheckUserButtonState();
 	MonitorVehSpdToHandleRightAg();
 
-	ManageRobotMovingState(); /* Totally highest function of robot moving controlling :) */
+	/**/
+	ManageRobotMovingState();
+	/**/
 
 	ReportPidRegValue();
 }

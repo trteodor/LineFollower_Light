@@ -3,12 +3,9 @@
  * @author teodor
 
  * @brief This file is a part of Line follower application
- * This is Bluetooth module to communicate wireless with Line Follower
- * I used module HC-06 - if you are interested about information of the modules please find data sheets in internet.
+ * This is Bluetooth low energy module to communicate wirelessly between PC and LineFollower robot
+ * Bluetooth Module: HC-06
  */
-
-
-
 
 
 #ifndef _BLE_ServiceModule_H
@@ -96,7 +93,7 @@ typedef enum
 
 
 /*
- * Modules should report the newest data then BLE module will transmit it
+ * Modules should report the newest data
  * */
 
 

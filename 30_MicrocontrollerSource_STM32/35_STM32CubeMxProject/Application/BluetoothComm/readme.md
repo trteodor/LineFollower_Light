@@ -1,3 +1,3 @@
-This is Bluetooth low energy module to communicate wireless with Line Follower
+This is Bluetooth low energy module to communicate wirelessly between PC and LineFollower robot
 
-I used module HC-06- if you are interested about the modules please find data sheets in internet.
+Bluetooth Module: HC-06

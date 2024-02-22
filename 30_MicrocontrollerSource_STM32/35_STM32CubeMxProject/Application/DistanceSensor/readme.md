@@ -1,2 +1,3 @@
-To implement, it's possible to mount a VL53 to detected for example obstacles. 
-Not supported yet
+Not supported(todo)
+
+It's possible to mount a VL53 sensor to detected and omit obstacles.

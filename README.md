@@ -41,6 +41,7 @@ TODO:
 * Development of QT service application..
 * Generally much things..
 
+# -------------------------------------------------------
 The repository contains all the files used to create this project (PCB, Mechanic models, Embedded source Code, QT serv. App code)
 
 QT service app overview screen shot:
@@ -53,9 +54,9 @@ https://github.com/trteodor/LineFollower_Light/blob/master/40_ServiceApplication
 
 After installation associated "*.lfp" extension should be opened by default by LF_ServiceApp"
 
-QT_AppIco
+Highlevel Overview:
 
-![QtAppIco](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/LF_SimuAsseblyBackSideRightIco.png)
+![HighLevelOverview](https://github.com/trteodor/LineFollower_Light/blob/master/60_Pictures/HighLevelOverview_.png)
 
 Repository size:
 

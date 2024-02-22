@@ -13,8 +13,8 @@
 #define MEAS_ENABLE 1
 #define MEAS_DISABLE 0
 #define MEASURE_EXECUTION_TIME MEAS_DISABLE
-/*Supposdly if i did it correctly in cases when I was sending few debug logs longest exeuction time has been around ~0.5ms
-* If you will send much more debug logs then usage of RTOS or any other time execution managment strategy may be required
+/* In cases, when I was sending few debug logs, longest exeuction time has been around ~0.5ms
+* If you planning send more debug logs, then usage of RTOS, or any other time execution managment strategy may be required
 */
 
 /** @brief LF_AppTask

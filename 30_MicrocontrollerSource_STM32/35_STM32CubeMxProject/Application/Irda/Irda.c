@@ -23,7 +23,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 
-void HW_IR_TIM_100usElapsed(void)
+void HW_IR_TIM_100usElapsed(void) /*Called by TIM2_IRQHandler()*/
 {
 	RC5_100usTimer();
 }

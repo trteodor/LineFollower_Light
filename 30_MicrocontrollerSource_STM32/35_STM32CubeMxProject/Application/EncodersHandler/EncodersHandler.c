@@ -1,5 +1,5 @@
 /*
- * ENKODERY.c
+ * EncodersHandler.c
  *
  *  Created on: Jan 11, 2021
  *      Author: Teodor
